@@ -1,0 +1,13 @@
+{
+  "name": "bob",
+  "version": "1.0.0",
+  "description": "Brainless Operating Bot",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "beepboop-botkit": "^1.4.0",
+    "botkit": "~0.1.1"
+  }
+}
