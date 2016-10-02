@@ -103,7 +103,7 @@ controller.hears(["(\\btest1\\b)"],['ambient', 'direct_message', 'direct_mention
   raid_info[raid_marker] = {test1 : raid_marker};
 
   raid_marker++;
-  bot.reply(message, raid_info[raid_marker].test1);
+  bot.reply(message, raid_info[raid_marker-1].test1);
 });
 
 controller.hears(["(\\braid test\\b)"],['ambient', 'direct_message', 'direct_mention', 'mention'],function(bot, message) {
