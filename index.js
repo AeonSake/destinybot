@@ -25,14 +25,14 @@ if (token) {
     }
 
     console.log('Connected to Slack RTM');
-  })
+  });
 // Otherwise assume multi-team mode - setup beep boop resourcer connection
 } else {
   console.log('Starting in Beep Boop multi-team mode');
   require('beepboop-botkit').start(controller, { debug: true });
 }
 
-controller.setupWebserver(3000, function(err, webserver) {
+controller.setupWebserver(3000, function (err, webserver) {
     controller.createWebhookEndpoints(webserver);
 });
 
@@ -105,7 +105,7 @@ controller.hears(["(\\btest1\\b)"],['ambient', 'direct_message', 'direct_mention
   raid_marker++;
   bot.reply(message, raid_info[raid_marker-1].test1.toString);
   bot.reply(message, "test");
-  bot.reply(message, "test"+raid_marker.toString);
+  bot.reply(message, "test"+raid_marker);
 });
 
 controller.hears(["(\\braid test\\b)"],['ambient', 'direct_message', 'direct_mention', 'mention'],function(bot, message) {
