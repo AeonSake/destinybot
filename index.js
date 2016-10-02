@@ -12,24 +12,24 @@ var controller = Botkit.slackbot({
   //json_file_store: 'path_to_json_database',
   retry: Infinity,
   debug: false
-})
+});
 
 // Assume single team mode if we have a SLACK_TOKEN
 if (token) {
-  console.log('Starting in single-team mode')
+  console.log('Starting in single-team mode');
   controller.spawn({
     token: token
   }).startRTM(function (err, bot, payload) {
     if (err) {
-      throw new Error(err)
+      throw new Error(err);
     }
 
-    console.log('Connected to Slack RTM')
+    console.log('Connected to Slack RTM');
   })
 // Otherwise assume multi-team mode - setup beep boop resourcer connection
 } else {
-  console.log('Starting in Beep Boop multi-team mode')
-  require('beepboop-botkit').start(controller, { debug: true })
+  console.log('Starting in Beep Boop multi-team mode');
+  require('beepboop-botkit').start(controller, { debug: true });
 }
 
 controller.setupWebserver(3000, function(err, webserver) {
@@ -104,6 +104,8 @@ controller.hears(["(\\btest1\\b)"],['ambient', 'direct_message', 'direct_mention
 
   raid_marker++;
   bot.reply(message, raid_info[raid_marker-1].test1.toString);
+  bot.reply(message, "test");
+  bot.reply(message, "test"+raid_marker.toString);
 });
 
 controller.hears(["(\\braid test\\b)"],['ambient', 'direct_message', 'direct_mention', 'mention'],function(bot, message) {
