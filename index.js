@@ -136,7 +136,7 @@ askRaidTime = function(response, convo, raid_type, raid_date) {
         {
           'fallback': raid_type + ", am " + raid_date + " um " + raid_time + ".",
           'title': "Raid #1",
-          'text': raid_type + ", am " + raid_date + " um " + raid_time + ".",
+          'text': raid_type + ", am " + raid_date + " um " + raid_time + ".\nErstellt von <@" + response.user + ">.",
           'color': '#7CD197'
         }
       ]
