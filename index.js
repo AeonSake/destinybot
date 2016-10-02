@@ -123,7 +123,8 @@ askRaidType = function(response, convo) {
 askRaidDate = function(response, convo, raid_type) {
   convo.ask("Wann findet der Raid statt (DD.MM.YY)?", function(response, convo) {
     var raid_date = response.text;
-    if (response.text !== "exit") askRaidTime(response, convo, raid_type, raid_date);
+    if (response.text == "test") askRaidDate(response, convo, raid_type);
+    else askRaidTime(response, convo, raid_type, raid_date);
     convo.next();
   });
 }
@@ -134,7 +135,7 @@ askRaidTime = function(response, convo, raid_type, raid_date) {
       'attachments': [
         {
           'fallback': raid_type + ", am " + raid_date + " um " + raid_time + ".",
-          'title': raid_type + " #1",
+          'title': "Raid #1",
           'text': raid_type + ", am " + raid_date + " um " + raid_time + ".",
           'color': '#7CD197'
         }
