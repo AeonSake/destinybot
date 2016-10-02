@@ -103,7 +103,7 @@ controller.hears(["(\\btest1\\b)"],['ambient', 'direct_message', 'direct_mention
   raid_info[raid_marker] = {test1 : raid_marker};
 
   raid_marker++;
-  bot.reply(message, raid_info[0].test1);
+  bot.reply(message, raid_info[raid_marker].test1);
 });
 
 controller.hears(["(\\braid test\\b)"],['ambient', 'direct_message', 'direct_mention', 'mention'],function(bot, message) {
@@ -113,18 +113,8 @@ controller.hears(["(\\braid test\\b)"],['ambient', 'direct_message', 'direct_men
     time : "15:00",
     creator : message.user
   });
-  var raid_msg = {
-    'attachments': [
-      {
-        'fallback': raid_types[raid_info[raid_marker].type] + ", am " + raid_info[raid_marker].date + " um " + raid_info[raid_marker].time + ".",
-        'title': "Raid Info #" + (raid_marker+1).toString,
-        'text': raid_types[raid_info[raid_marker].type] + ", am " + raid_info[raid_marker].date + " um " + raid_info[raid_marker].time + ".\nErstellt von <@" + response.user + ">.",
-        'color': '#7CD197'
-      }
-    ]
-  }
   raid_marker++;
-  bot.reply(message, raid_msg);
+  bot.reply(message, raid_info[raid_marker-1].date);
 });
 
 
