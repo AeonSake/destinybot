@@ -9,6 +9,7 @@ var token = process.env.SLACK_TOKEN;
 
 var controller = Botkit.slackbot({
   // reconnect to Slack RTM when connection goes bad
+  //json_file_store: 'path_to_json_database',
   retry: Infinity,
   debug: false
 })
@@ -30,6 +31,11 @@ if (token) {
   console.log('Starting in Beep Boop multi-team mode')
   require('beepboop-botkit').start(controller, { debug: true })
 }
+
+
+controller.setupWebserver(3000, function(err, webserver) {
+    controller.createWebhookEndpoints(webserver);
+});
 
 // ===============================
 // ========== Responses ==========
@@ -410,14 +416,14 @@ controller.hears(["(\\bchallenge\\b)"], ['ambient', 'direct_message', 'direct_me
 })
 
 controller.hears(["(\\bmahlzeit\\b)", "(\\bmoizeit\\b)"], ['ambient', 'direct_message', 'direct_mention', 'mention'], function (bot, message) {
-  var responses = ["Mal dir deine Zeit doch selbst.", "Hab keine Stifte dabei!", "Darauf ein Bier."];
+  var responses = ["Mal dir deine Zeit doch selbst.", "Hab keine Stifte dabei!", "Darauf ein Bier.b"];
     
   if (muted == false) bot.reply(message, multi_res(responses))
 })
 
 // insert here
 
-controller.hears(["(\\bb(o*)b\\b)", "(\\bbob(.)\\b)"], ['ambient', 'direct_message', 'direct_mention', 'mention'], function (bot, message) {
+controller.hears(["(\\bb(o*)b\\b)", "(\\bbob(by|i|y)\\b)"], ['ambient', 'direct_message', 'direct_mention', 'mention'], function (bot, message) {
   var responses = ["Für dich immer noch Herr Bob.", "Wadap dumbass?", "Was willst du jetzt schon wieder?!", "Lass mich in Ruhe.", "Sprich mich nicht an.", "Du hast kein Recht meinen Namen zu benutzen."];
     
   if (muted == false) bot.reply(message, multi_res(responses))
@@ -470,3 +476,16 @@ controller.hears(["(\\bbobtest4\\b)"], ['ambient', 'direct_message', 'direct_men
   }
 })
 */
+
+controller.on('slash_command', function(bot, message) {
+    // check message.command
+    // and maybe message.text...
+    // use EITHER replyPrivate or replyPublic...
+    bot.replyPrivate(message, 'This is a private reply to the ' + message.command + ' slash command!');
+
+    // and then continue to use replyPublicDelayed or replyPrivateDelayed
+    bot.replyPublicDelayed(message, 'This is a public reply to the ' + message.command + ' slash command!');
+
+    bot.replyPrivateDelayed(message, ':dash:');
+
+});
