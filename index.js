@@ -116,7 +116,7 @@ controller.hears(["(\\braid (setup|planung)\\b)", "(\\brambo raid\\b)"],['ambien
 askRaidType = function(response, convo) {
   convo.ask("Um welchen Raid handelt es sich?", function(response, convo) {
     convo.say(response.text);
-    askRaidDate(response, convo);
+    if (response.text !== "exit") askRaidDate(response, convo);
     convo.next();
   });
 }
