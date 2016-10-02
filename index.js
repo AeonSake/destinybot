@@ -115,15 +115,33 @@ controller.hears(["(\\braid (setup|planung)\\b)", "(\\brambo raid\\b)"],['ambien
 
 askRaidType = function(response, convo) {
   convo.ask("Um welchen Raid handelt es sich?", function(response, convo) {
-    convo.say(response.text);
-    if (response.text !== "exit") askRaidDate(response, convo);
+    var raid_type = response.text;
+    if (response.text !== "exit") askRaidDate(response, convo, raid_type);
     convo.next();
   });
 }
-askRaidDate = function(response, convo) {
-  convo.ask("Wann findet der Raid statt (DD.MM.YY hh:mm)?", function(response, convo) {
-    convo.say(response.text);
-    convo.say("Alles klar.");
+askRaidDate = function(response, convo, raid_type) {
+  convo.ask("Wann findet der Raid statt (DD.MM.YY)?", function(response, convo) {
+    var raid_date = response.text;
+    if (response.text !== "exit") askRaidDate(response, convo, raid_type, raid_date);
+    convo.next();
+  });
+}
+askRaidTime = function(response, convo, raid_type, raid_date) {
+  convo.ask("Um welche Uhrzeit (hh:mm)?", function(response, convo) {
+    var raid_time = response.text;
+    var raid_info = {
+      'attachments': [
+        {
+          'fallback': raid_type + ", am " + raid_date + " um " + raid_time + ".",
+          'title': raid_type + " #1",
+          'text': raid_type + ", am " + raid_date + " um " + raid_time + ".",
+          'color': '#7CD197'
+        }
+      ]
+    }
+    
+    convo.say(raid_info);
     convo.next();
   });
 }
