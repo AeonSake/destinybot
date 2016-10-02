@@ -124,7 +124,7 @@ askRaidDate = function(response, convo, raid_type) {
       if (raid_date == "test") askRaidTime(response, convo, raid_type, raid_date);
       else {
         convo.say("Falsche Eingabe, bitte wiederholen oder mit 'exit' abbrechen.");
-        askRaidDate(message, convo, raid_type);
+        askRaidDate(response, convo, raid_type);
       }
     }
     convo.next();
@@ -156,7 +156,7 @@ askRaidTime = function(response, convo, raid_type, raid_date) {
       }
       else {
         convo.say("Falsche Eingabe, bitte wiederholen oder mit 'exit' abbrechen.");
-        askRaidTime(message, convo, raid_type, raid_date);
+        askRaidTime(response, convo, raid_type, raid_date);
       }
     }
     convo.next();
