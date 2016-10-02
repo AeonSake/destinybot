@@ -107,7 +107,7 @@ controller.hears(["(\\braid test\\b)"],['ambient', 'direct_message', 'direct_men
     time : "15:00",
     creator : message.user
   });
-  var raid_info = {
+  var raid_msg = {
     'attachments': [
       {
         'fallback': raid_types[raid_info[raid_marker].type] + ", am " + raid_info[raid_marker].date + " um " + raid_info[raid_marker].time + ".",
@@ -118,7 +118,7 @@ controller.hears(["(\\braid test\\b)"],['ambient', 'direct_message', 'direct_men
     ]
   }
   raid_marker++;
-  bot.reply(message, raid_info);
+  bot.reply(message, raid_msg);
 });
 
 
