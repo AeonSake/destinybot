@@ -101,12 +101,12 @@ controller.hears(["(\\bbobtest4\\b)"], ['ambient', 'direct_message', 'direct_men
 */
 
 controller.hears(["(\\braid test\\b)"],['ambient', 'direct_message', 'direct_mention', 'mention'],function(bot, message) {
-  raid_info[raid_marker] = {
+  raid_info.push({
     type : 1,
     date : "03.10.16",
     time : "15:00",
     creator : message.user
-  };
+  });
   var raid_info = {
     'attachments': [
       {
