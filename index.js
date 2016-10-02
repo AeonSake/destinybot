@@ -99,14 +99,6 @@ controller.hears(["(\\bbobtest4\\b)"], ['ambient', 'direct_message', 'direct_men
   }
 })
 */
-controller.hears(["(\\btest1\\b)"],['ambient', 'direct_message', 'direct_mention', 'mention'],function(bot, message) {
-  raid_info[raid_marker] = {test1 : raid_marker};
-
-  raid_marker++;
-  bot.reply(message, ""+raid_info[raid_marker-1].test1);
-  bot.reply(message, "test");
-  bot.reply(message, "test"+raid_marker);
-});
 
 controller.hears(["(\\braid test\\b)"],['ambient', 'direct_message', 'direct_mention', 'mention'],function(bot, message) {
   raid_info.push({
@@ -162,18 +154,18 @@ askRaidTime = function(response, convo, raid_type, raid_date) {
           time : raid_time,
           creator : response.user
         };
-        var raid_info = {
+        var raid_msg = {
           'attachments': [
             {
-              'fallback': raid_types[raid_info[raid_marker].type] + ", am " + raid_info[raid_marker].date + " um " + raid_info[raid_marker].time + ".",
-              'title': "Raid Info #" + (raid_marker+1).toString,
-              'text': raid_types[raid_info[raid_marker].type] + ", am " + raid_info[raid_marker].date + " um " + raid_info[raid_marker].time + ".\nErstellt von <@" + response.user + ">.",
+              'fallback': "" + raid_types[raid_info[raid_marker].type] + ", am " + raid_info[raid_marker].date + " um " + raid_info[raid_marker].time + ".",
+              'title': "Raid Info #" + (raid_marker+1),
+              'text': "" + raid_types[raid_info[raid_marker].type] + ", am " + raid_info[raid_marker].date + " um " + raid_info[raid_marker].time + ".\nErstellt von <@" + raid_info[raid_marker].creator + ">.",
               'color': '#7CD197'
             }
           ]
         }
         raid_marker++;
-        convo.say(raid_info);
+        convo.say(raid_msg);
       }
       else {
         convo.say("Falsche Eingabe, bitte wiederholen oder mit 'exit' abbrechen.");
