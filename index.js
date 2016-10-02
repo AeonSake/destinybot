@@ -108,3 +108,26 @@ controller.hears(["(\\bbobtest4\\b)"], ['ambient', 'direct_message', 'direct_men
   }
 })
 */
+
+controller.hears(["(\\braid (setup|planung)\\b)", "(\\brambo raid\\b)"],['ambient', 'direct_message', 'direct_mention', 'mention'],function(bot, message) {
+  bot.startConversation(message, askRaidType);
+});
+
+askRaidType = function(response, convo) {
+  convo.ask("Um welchen Raid handelt es sich?", function(response, convo) {
+    convo.say(response.text);
+    askRaidDate(response, convo);
+    convo.next();
+  });
+}
+askRaidDate = function(response, convo) {
+  convo.ask("Wann findet der Raid statt (DD.MM.YY hh:mm)?", function(response, convo) {
+    convo.say(response.text);
+    convo.say("Alles klar.");
+    convo.next();
+  });
+}
+
+
+
+
