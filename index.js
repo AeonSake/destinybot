@@ -113,19 +113,6 @@ startRaidSetup = function(response, convo) {
         convo.say("Falsche Eingabe, bitte wiederholen oder mit 'exit' abbrechen.");
         startRaidSetup(message, convo);
       }
-      
-      var raid_info = {
-        'attachments': [
-          {
-            'fallback': raid_types[raid_info[raid_marker].type] + ", am " + raid_info[raid_marker].date + " um " + raid_info[raid_marker].time + ".",
-            'title': "Raid Info #" + (raid_marker+1).toString,
-            'text': raid_types[raid_info[raid_marker].type] + ", am " + raid_info[raid_marker].date + " um " + raid_info[raid_marker].time + ".\nErstellt von <@" + response.user + ">.",
-            'color': '#7CD197'
-          }
-        ]
-      }
-      raid_marker++;
-      convo.say(raid_info);
     }
     convo.next();
   });
@@ -154,6 +141,18 @@ askRaidTime = function(response, convo, raid_type, raid_date) {
           time : raid_time,
           creator : response.user
         }
+        var raid_info = {
+          'attachments': [
+            {
+              'fallback': raid_types[raid_info[raid_marker].type] + ", am " + raid_info[raid_marker].date + " um " + raid_info[raid_marker].time + ".",
+              'title': "Raid Info #" + (raid_marker+1).toString,
+              'text': raid_types[raid_info[raid_marker].type] + ", am " + raid_info[raid_marker].date + " um " + raid_info[raid_marker].time + ".\nErstellt von <@" + response.user + ">.",
+              'color': '#7CD197'
+            }
+          ]
+        }
+        raid_marker++;
+        convo.say(raid_info);
       }
       else {
         convo.say("Falsche Eingabe, bitte wiederholen oder mit 'exit' abbrechen.");
