@@ -46,6 +46,18 @@ var raid_info = [];
 var raid_types = ["Gläserne Kammer (Atheon)", "Crotas Ende (Crota)", "Skolas' Rache (Skolas)", "Königsfall (Oryx)", "Zorn der Maschine (SIVA)"];
 var raid_marker = 0;
 
+function = isDate(value) {
+  var dateFormat;
+  if (toString.call(value) === '[object Date]') {
+    return true;
+  }
+  if (typeof value.replace === 'function') {
+    value.replace(/^\s+|\s+$/gm, '');
+  }
+  dateFormat = /(^\d{1,4}[\.|\\/|-]\d{1,2}[\.|\\/|-]\d{1,4})(\s*(?:0?[1-9]:[0-5]|1(?=[012])\d:[0-5])\d\s*[ap]m)?$/;
+  return dateFormat.test(value);
+}
+
 //raid_info contains:
 //type - raid type
 //date - event date dd.mm.yy
@@ -100,19 +112,6 @@ controller.hears(["(\\bbobtest4\\b)"], ['ambient', 'direct_message', 'direct_men
 })
 */
 
-controller.hears(["(\\braid test\\b)"],['ambient', 'direct_message', 'direct_mention', 'mention'],function(bot, message) {
-  raid_info.push({
-    type : 1,
-    date : "03.10.16",
-    time : "15:00",
-    creator : message.user
-  });
-  raid_marker++;
-  bot.reply(message, raid_info[raid_marker-1].date);
-});
-
-
-
 controller.hears(["(\\braid (setup|planung)\\b)", "(\\brambo raid\\b)"],['ambient', 'direct_message', 'direct_mention', 'mention'],function(bot, message) {
   bot.startConversation(message, startRaidSetup);
 });
@@ -157,9 +156,9 @@ askRaidTime = function(response, convo, raid_type, raid_date) {
         var raid_msg = {
           'attachments': [
             {
-              'fallback': "" + raid_types[raid_info[raid_marker].type] + ", am " + raid_info[raid_marker].date + " um " + raid_info[raid_marker].time + ".",
+              'fallback': "*" + raid_types[raid_info[raid_marker].type] + "*, am *" + raid_info[raid_marker].date + "* um *" + raid_info[raid_marker].time + "*.",
               'title': "Raid Info #" + (raid_marker+1),
-              'text': "" + raid_types[raid_info[raid_marker].type] + ", am " + raid_info[raid_marker].date + " um " + raid_info[raid_marker].time + ".\nErstellt von <@" + raid_info[raid_marker].creator + ">.",
+              'text': "*" + raid_types[raid_info[raid_marker].type] + "*, am *" + raid_info[raid_marker].date + "* um *" + raid_info[raid_marker].time + "*.\nErstellt von <@" + raid_info[raid_marker].creator + ">.",
               'color': '#7CD197'
             }
           ]
