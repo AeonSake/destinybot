@@ -100,6 +100,29 @@ controller.hears(["(\\bbobtest4\\b)"], ['ambient', 'direct_message', 'direct_men
 })
 */
 
+controller.hears(["(\\braid test\\b)"],['ambient', 'direct_message', 'direct_mention', 'mention'],function(bot, message) {
+  raid_info[raid_marker] = {
+    type : 1,
+    date : "03.10.16",
+    time : "15:00",
+    creator : message.user
+  };
+  var raid_info = {
+    'attachments': [
+      {
+        'fallback': raid_types[raid_info[raid_marker].type] + ", am " + raid_info[raid_marker].date + " um " + raid_info[raid_marker].time + ".",
+        'title': "Raid Info #" + (raid_marker+1).toString,
+        'text': raid_types[raid_info[raid_marker].type] + ", am " + raid_info[raid_marker].date + " um " + raid_info[raid_marker].time + ".\nErstellt von <@" + response.user + ">.",
+        'color': '#7CD197'
+      }
+    ]
+  }
+  raid_marker++;
+  bot.reply(message, raid_info);
+});
+
+
+
 controller.hears(["(\\braid (setup|planung)\\b)", "(\\brambo raid\\b)"],['ambient', 'direct_message', 'direct_mention', 'mention'],function(bot, message) {
   bot.startConversation(message, startRaidSetup);
 });
@@ -140,7 +163,7 @@ askRaidTime = function(response, convo, raid_type, raid_date) {
           date : raid_date,
           time : raid_time,
           creator : response.user
-        }
+        };
         var raid_info = {
           'attachments': [
             {
