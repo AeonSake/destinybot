@@ -40,26 +40,17 @@ controller.setupWebserver(3000, function(err, webserver) {
 // ========== Responses ==========
 // ===============================
 
-// ===== General stuff =====
+// ===== Raid Managing =====
 
-var muted = false;
+var raid_info = [];
+var raid_types = ["Gläserne Kammer (Atheon)", "Crotas Ende (Crota)", "Skolas' Rache (Skolas)", "Königsfall (Oryx)", "Zorn der Maschine (SIVA)"];
+var raid_marker = 0;
 
-function multi_res(res) {
-  return res[Math.floor(Math.random() * res.length)];
-}
-
-controller.hears(["(\\bwer (bist|bistn) du\\b)", "(\\bwho are you\\b)", "(\\bwie (heißt|heisst|haßt|hasst|hast) du\\b)"], ['direct_message', 'direct_mention', 'mention'], function(bot, message) {
-
-  bot.reply(message, "Mein Name ist B.O.B. - kurz für Brainless Operating Bot.")
-})
-
-controller.on('bot_channel_join', function (bot, message) {
-  bot.reply(message, "Hello world!")
-})
-
-controller.on('user_channel_join', function (bot, message) {
-  if (muted == false) bot.reply(message, "Hallo und willkommen in unserer Selbsthilfegruppe.")
-})
+//raid_info contains:
+//type - raid type
+//date - event date dd.mm.yy
+//time - event time hh:mm
+//creator - event creator
 
 // ===== Testing =====
 // Syntax:
@@ -110,39 +101,65 @@ controller.hears(["(\\bbobtest4\\b)"], ['ambient', 'direct_message', 'direct_men
 */
 
 controller.hears(["(\\braid (setup|planung)\\b)", "(\\brambo raid\\b)"],['ambient', 'direct_message', 'direct_mention', 'mention'],function(bot, message) {
-  bot.startConversation(message, askRaidType);
+  bot.startConversation(message, startRaidSetup);
 });
 
-askRaidType = function(response, convo) {
-  convo.ask("Um welchen Raid handelt es sich?", function(response, convo) {
+startRaidSetup = function(response, convo) {
+  convo.ask("Um welchen Raid handelt es sich?\n1 : "+raid_types[0]+"\n2 : "+raid_types[1]+"\n3 : "+raid_types[2]+"\n4 : "+raid_types[3]+"\n5 : "+raid_types[4], function(response, convo) {
     var raid_type = response.text;
-    if (response.text !== "exit") askRaidDate(response, convo, raid_type);
+    if (raid_type !== "exit") {
+      if (raid_type >= 1 && raid_type <= raid_types.length) askRaidDate(response, convo, raid_type);
+      else {
+        convo.say("Falsche Eingabe, bitte wiederholen oder mit 'exit' abbrechen.");
+        startRaidSetup(message, convo);
+      }
+      
+      var raid_info = {
+        'attachments': [
+          {
+            'fallback': raid_types[raid_info[raid_marker].type] + ", am " + raid_info[raid_marker].date + " um " + raid_info[raid_marker].time + ".",
+            'title': "Raid Info #" + (raid_marker+1).toString,
+            'text': raid_types[raid_info[raid_marker].type] + ", am " + raid_info[raid_marker].date + " um " + raid_info[raid_marker].time + ".\nErstellt von <@" + response.user + ">.",
+            'color': '#7CD197'
+          }
+        ]
+      }
+      raid_marker++;
+      convo.say(raid_info);
+    }
     convo.next();
   });
 }
 askRaidDate = function(response, convo, raid_type) {
   convo.ask("Wann findet der Raid statt (DD.MM.YY)?", function(response, convo) {
     var raid_date = response.text;
-    if (response.text == "test") askRaidDate(response, convo, raid_type);
-    else askRaidTime(response, convo, raid_type, raid_date);
+    if (raid_date !== "exit") {
+      if (raid_date == "test") askRaidTime(response, convo, raid_type, raid_date);
+      else {
+        convo.say("Falsche Eingabe, bitte wiederholen oder mit 'exit' abbrechen.");
+        askRaidDate(message, convo, raid_type);
+      }
+    }
     convo.next();
   });
 }
 askRaidTime = function(response, convo, raid_type, raid_date) {
   convo.ask("Um welche Uhrzeit (hh:mm)?", function(response, convo) {
     var raid_time = response.text;
-    var raid_info = {
-      'attachments': [
-        {
-          'fallback': raid_type + ", am " + raid_date + " um " + raid_time + ".",
-          'title': "Raid #1",
-          'text': raid_type + ", am " + raid_date + " um " + raid_time + ".\nErstellt von <@" + response.user + ">.",
-          'color': '#7CD197'
+    if (raid_date !== "exit") {
+      if (raid_date == "test") {
+        raid_info[raid_marker] = {
+          type : raid_type,
+          date : raid_date,
+          time : raid_time,
+          creator : response.user
         }
-      ]
+      }
+      else {
+        convo.say("Falsche Eingabe, bitte wiederholen oder mit 'exit' abbrechen.");
+        askRaidTime(message, convo, raid_type, raid_date);
+      }
     }
-    
-    convo.say(raid_info);
     convo.next();
   });
 }
