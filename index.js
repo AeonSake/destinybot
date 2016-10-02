@@ -108,7 +108,3 @@ controller.hears(["(\\bbobtest4\\b)"], ['ambient', 'direct_message', 'direct_men
   }
 })
 */
-
-controller.on('hello', function(bot, message) {
-    bot.replyPrivate(message, "Test.");
-});
