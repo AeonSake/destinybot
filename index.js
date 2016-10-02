@@ -99,7 +99,7 @@ controller.hears(["(\\bbobtest4\\b)"], ['ambient', 'direct_message', 'direct_men
   }
 })
 */
-controller.hears(["(\\braid test1\\b)"],['ambient', 'direct_message', 'direct_mention', 'mention'],function(bot, message) {
+controller.hears(["(\\btest1\\b)"],['ambient', 'direct_message', 'direct_mention', 'mention'],function(bot, message) {
   raid_info[raid_marker] = {test1 : raid_marker};
 
   raid_marker++;
