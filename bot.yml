@@ -1,3 +1,44 @@
-name: bob_test
-description: Brainless Operating Bot (Test)
+name: destinybot
+description: Destiny Bot
+author: AeonSake
 avatar: resources/avatar.png
+config:
+  - name: admin
+    friendly_name: Admin ID
+    type: secret
+    global: true
+  - name: bot_id
+    friendly_name: Bot ID
+    type: secret
+    global: true
+  - name: app_token
+    friendly_name: App Token
+    type: secret
+    global: true
+  - name: bot_token
+    friendly_name: Bot Token
+    type: secret
+    global: true
+  - name: event_channel
+    friendly_name: Event channel ID
+    type: secret
+    global: true
+  - name: server_time_offset
+    friendly_name: Server-Time offset
+    type: text
+    global: true
+slackscopes:
+  - bot
+  - commands
+  - users:read
+  - team:read
+  - channels:history
+  - channels:read
+  - channels:write
+  - chat:write:bot
+  - chat:write:user
+  - reactions:read
+  - reactions:write
+  - emoji:read
+  - reminders:read
+  - reminders:write

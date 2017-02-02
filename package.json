@@ -1,13 +1,17 @@
 {
-  "name": "bob",
+  "name": "destinybot",
   "version": "1.0.0",
-  "description": "Brainless Operating Bot",
-  "main": "index.js",
-  "scripts": {
-    "start": "node index.js"
+  "description": "Destiny Bot",
+  "author": "AeonSake",
+  "main": "main.js",
+    "scripts": {
+    "start": "node main.js"
   },
   "dependencies": {
-    "beepboop-botkit": "^1.4.0",
-    "botkit": "~0.1.1"
+    "beepboop-slapp-presence-polyfill": "^1.1.1",
+    "express": "^4.14.0",
+    "slapp": "^1.2.0",
+    "slapp-context-beepboop": "^1.0.0",
+    "slapp-convo-beepboop": "^1.0.0"
   }
 }
