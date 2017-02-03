@@ -34,7 +34,7 @@ let config = module.exports = {
   bb_persist_provider: process.env.PERSIST_PROVIDER || 'beepboop',
   
   //Project config
-  version: "v5.0.0",
+  version: "5.0.0",
   title: "DestinyBot",
   admin_id: process.env.admin_id,
   bot_id: process.env.bot_id,

@@ -5,6 +5,7 @@
 'use strict';
 
 const os = require('os');
+const config = require('./config');
 const func = require('./func');
 
 var emoji_num = [":one:", ":two:", ":three:", ":four:", ":five:", ":six:", ":seven:", ":eight:", ":nine:", ":keycap_ten:"];

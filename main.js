@@ -37,6 +37,6 @@ require('./src/polls')(app);
 //require('./src/events')(app);
 
 //require('beepboop-slapp-presence-polyfill')(slapp, { debug: true });
-console.log('Running' + config.title + " on version " + config.version + ".");
+console.log("Running " + config.title + " on version " + config.version + ".");
 console.log('Listening on :' + process.env.PORT);
 server.listen(process.env.PORT);
