@@ -146,7 +146,7 @@ var lang_poll = {
         text: lang_poll.newpoll,
         fallback: lang_poll.newpoll,
         attachments: [],
-        delete_original: true
+        //delete_original: true
       }
       
       msg.attachments[0] = this.generateAttachment(slot);
@@ -186,11 +186,10 @@ module.exports = (app) => {
     return;
   });
   
-  slapp.action('poll_answer_callback', (msg, value) => {
-    console.log(msg);
-    console.log("=============================================")
-    console.log(msg.body);
-    console.log(value);
+  slapp.action('poll_answer_callback', (msg) => {
+    var answer_id = parseInt(msg.body.actions[0].name);
+    console.log(answer_id);
+    console.log(msg.body.original_message);
   });
   
   
