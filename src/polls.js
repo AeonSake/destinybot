@@ -76,7 +76,7 @@ var lang_poll = {
       this.posts.push({ch: ch, ts: ts});
     }
     
-    var attachmentBuilder = function(slot) {
+    generateAttachment(slot) {
       var att_fields = [];
       
       var max_votes = 0;
@@ -120,10 +120,6 @@ var lang_poll = {
       };
     }
     
-    generateAttachment(slot) {
-      return attachmentBuilder(slot);
-    }
-    
     generatePoll(slot) {
       var btn1 = {
         text: "",
@@ -154,7 +150,7 @@ var lang_poll = {
         delete_original: true
       }
       
-      msg.attachments[0] = attachmentBuilder(slot);
+      msg.attachments[0] = this.generateAttachment(slot);
       if (this.state == 0) {
         msg.attachments[1] = btn1;
         if (btn2.actions.length > 0) msg.attachments[2] = btn2;
