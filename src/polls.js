@@ -182,7 +182,7 @@ module.exports = (app) => {
     
     let poll = new Poll(data);
     
-    msg.respond(poll.generatePoll(0));
+    msg.say(poll.generatePoll(0));
     return;
   });
   
