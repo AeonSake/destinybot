@@ -181,12 +181,6 @@ class Poll {
 }
 
 
-// ==============================
-// ========== COMMANDS ==========
-// ==============================
-
-var poll_db = [];
-
 
 // ==============================
 // ========== COMMANDS ==========
@@ -195,6 +189,8 @@ var poll_db = [];
 module.exports = (app) => {
   let slapp = app.slapp;
   let kv = app.kv;
+  
+  let poll_db = [];
   
 // ===== /poll, /poll create =====
   
