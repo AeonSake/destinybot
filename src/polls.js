@@ -118,7 +118,8 @@ class Poll {
 
       if (this.options.names) votes = votes.slice(0, -2);
       else  votes += " " + lang_poll.user;
-      votes += " *(" + Math.round((this.answers[i].votes.length / max_votes) * 100)+ "%)*";
+      if (this.answers[i].votes.length == 0) votes += " *(0%)*";
+      else votes += " *(" + Math.round((this.answers[i].votes.length / max_votes) * 100)+ "%)*";
 
       att_fields[i] = {
         title: emoji_num[i] + " " + this.answers[i].text,
@@ -212,12 +213,11 @@ module.exports = (app) => {
     data.answers[1] = {text: "Test 2", votes: []};
     data.answers[2] = {text: "Test 3", votes: []};
     
-    poll_db[poll_db.length] = new Poll(data);
+    var slot = poll_db.length;
     
-    console.log(poll_db.length - 1);
-    console.log(poll_db);
+    poll_db[slot] = new Poll(data);
     
-    msg.say(poll_db[poll_db.length - 1].generatePoll(poll_db.length - 1));
+    msg.say(poll_db[slot].generatePoll(slot));
     return;
   });
   
