@@ -182,6 +182,14 @@ class Poll {
 
 
 
+// ===================================
+// ========== POLL DATABASE ==========
+// ===================================
+
+  var poll_db = [];
+
+
+
 // ==============================
 // ========== COMMANDS ==========
 // ==============================
@@ -190,7 +198,6 @@ module.exports = (app) => {
   let slapp = app.slapp;
   let kv = app.kv;
   
-  let poll_db = [];
   
 // ===== /poll, /poll create =====
   
@@ -205,9 +212,9 @@ module.exports = (app) => {
     data.answers[1] = {text: "Test 2", votes: []};
     data.answers[2] = {text: "Test 3", votes: []};
     
-    poll_db[poll_dp.length] = new Poll(data);
+    poll_db[poll_db.length] = new Poll(data);
     
-    msg.say(poll_db[poll_dp.length - 1].generatePoll(0));
+    msg.say(poll_db[poll_db.length - 1].generatePoll(0));
     return;
   });
   
