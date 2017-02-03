@@ -87,7 +87,7 @@ var lang_poll = {
       for (var i = 0; i < this.answers.length; i++) {
         
         var votes = "";
-        for (var j = 0; j < this.answers[i].votes.length; i++) {
+        for (var j = 0; j < this.answers[i].votes.length; j++) {
           if (this.options.names) {
             votes += "<@" + this.answers[i].votes[j] + ">, ";
           } else {
