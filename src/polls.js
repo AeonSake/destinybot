@@ -191,10 +191,10 @@ module.exports = (app) => {
     console.log(data);
   });
   
-  slapp.action('poll_answer_callback', (msg, data) => {
+  /*slapp.action('poll_answer_callback', (msg, data) => {
     console.log(msg);
     console.log(data);
-  });
+  });*/
   
   
   
