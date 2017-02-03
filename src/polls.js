@@ -81,7 +81,7 @@ module.exports = (app) => {
       this.posts.push({ch: ch, ts: ts});
     }
     
-    attachmentBuilder = function(slot) {
+    var attachmentBuilder = function(slot) {
       var att_fields = [];
       
       var max_votes = 0;
