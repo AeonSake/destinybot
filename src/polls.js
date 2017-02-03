@@ -188,8 +188,9 @@ module.exports = (app) => {
   
   slapp.action('poll_answer_callback', (msg) => {
     var answer_id = parseInt(msg.body.actions[0].name);
+    var poll_title = msg.body.original_message.author_name.split('#').pop();
     console.log(answer_id);
-    console.log(msg.body.original_message);
+    console.log(poll_title);
   });
   
   
