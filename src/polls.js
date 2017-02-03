@@ -24,11 +24,6 @@ var lang_poll = {
   answers: "Antworten"
 }
 
-
-module.exports = (app) => {
-  let slapp = app.slapp;
-  let kv = app.kv;
-
 // ===== TODO =====
 // ---
 
@@ -173,6 +168,10 @@ module.exports = (app) => {
 // ========== COMMANDS ==========
 // ==============================
 
+module.exports = (app) => {
+  let slapp = app.slapp;
+  let kv = app.kv;
+  
 // ===== /poll, /poll create =====
   
   
