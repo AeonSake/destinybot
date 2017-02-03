@@ -40,7 +40,7 @@ let config = module.exports = {
   server_time_offset: 1,
   
   //Destiny config
-  destiny_ch: process.env.destiny_ch,
+  //destiny_ch: process.env.destiny_ch,
   
   //Poll config
   poll_ch: process.env.poll_ch,

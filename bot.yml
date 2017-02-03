@@ -3,7 +3,7 @@ description: Destiny Bot
 author: AeonSake
 avatar: resources/avatar.png
 config:
-  - name: admin
+  - name: admin_id
     friendly_name: Admin ID
     type: secret
     global: true
@@ -19,13 +19,13 @@ config:
     friendly_name: Bot Token
     type: secret
     global: true
-  - name: event_channel
+  - name: event_ch
     friendly_name: Event channel ID
     type: secret
     global: true
-  - name: server_time_offset
-    friendly_name: Server-Time offset
-    type: text
+  - name: poll_ch
+    friendly_name: Poll channel ID
+    type: secret
     global: true
 slackscopes:
   - bot
