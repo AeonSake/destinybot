@@ -11,6 +11,7 @@ const BeepBoopConvoStore = require('slapp-convo-beepboop');
 const BeepBoopContext = require('slapp-context-beepboop');
 const BeepBoopPersist = require('beepboop-persist');
 const config = require('./src/config').validate();
+const func = require('./src/func');
 if (!process.env.PORT) throw Error('PORT missing but required');
 
 var slapp = Slapp({
