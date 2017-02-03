@@ -84,6 +84,8 @@ var lang_poll = {
         if (this.answers[i].votes.length > max_votes) max_votes = this.answers[i].votes.length;
       }
       
+      console.log(max_votes);
+      
       for (var i = 0; i < this.answers.length; i++) {
         
         var votes = "";
@@ -95,8 +97,10 @@ var lang_poll = {
           }
         }
         
+        console.log(votes + " --- " + votes.slice(0, -2));
+        
         if (this.options.names) votes.slice(0, -2);
-        else  votes += lang_poll.user;
+        else  votes += " " + lang_poll.user;
         votes += " *(" + Math.round((this.answers[i].votes.length / max_votes) * 100)+ "%)*";
         
         att_fields[i] = {
@@ -151,6 +155,7 @@ var lang_poll = {
       }
       
       msg.attachments[0] = this.generateAttachment(slot);
+      console.log(this.state);                                            //===========
       if (this.state == 0) {
         msg.attachments[1] = btn1;
         if (btn2.actions.length > 0) msg.attachments[2] = btn2;
@@ -180,6 +185,8 @@ module.exports = (app) => {
     data.answers[0] = {text: lang_poll.answers, votes: [msg.body.user_id, config.bot_id]};
     
     let poll = new Poll(data);
+    
+      console.log(msg.body);
     
     msg.respond(msg.body.response_url, poll.generatePoll(0));
     return;
