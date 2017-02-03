@@ -33,8 +33,8 @@ var app = {
 };
 
 //require('./src/destiny')(app);
-require('/src/polls')(app);
-//require('/src/events')(app);
+require('./src/polls')(app);
+//require('./src/events')(app);
 
 //require('beepboop-slapp-presence-polyfill')(slapp, { debug: true });
 console.log('Running' + config.title + " on version " + config.version + ".");
