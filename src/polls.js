@@ -27,138 +27,167 @@ var lang_poll = {
 // ===== TODO =====
 // ---
 
+
 // ===========================
 // ========== CLASS ==========
 // ===========================
   
-  class Poll {
-    constructor (obj) {
-      this.title = obj.title || "<title>";
-      this.text = obj.text || "<text>";
-      this.answers = obj.answers || [{text: "<answer>", votes: []}];
-      this.creator = obj.creator || "";
-      this.ts = obj.ts || {created: 0, edited: 0};
-      this.posts = [];
-      this.state = 0; //0 = default, 1 = vote closed, 2 = deleted
-      this.options = obj.options || {max: 1, names: true, color: func.getRandomColor()}; //max: 0 = all, etc; names: true = show user names, false = don't show user names
-    }
-    
-    edit(obj) {
-      this.title = obj.title || this.title;
-      this.text = obj.text || this.text;
-      this.ts.edited = obj.ts || this.ts.edited;
-      this.options.max = obj.max || this.options.max;
-      this.options.names = obj.names || this.options.names;
-    }
-    
-    close() {
-      this.state = 1;
-    }
-    
-    delete() {
-      this.state = 2;
-      this.posts = [];
-    }
-    
-    addAnswer(text) {
-      this.answers.push({text: text, votes: []});
-    }
-    
-    removeAnswer(slot) {
-      this.answers.splice(slot, 1);
-    }
-    
-    editAnswer(slot, text) {
-      this.answers[slot].text = text;
-    }
-    
-    addPost(ch, ts) {
-      this.posts.push({ch: ch, ts: ts});
-    }
-    
-    generateAttachment(slot) {
-      var att_fields = [];
-      
-      var max_votes = 0;
-      for (var i = 0; i < this.answers.length; i++) {
-        if (this.answers[i].votes.length > max_votes) max_votes = this.answers[i].votes.length;
-      }
-      
-      for (var i = 0; i < this.answers.length; i++) {
-        
-        var votes = "";
-        for (var j = 0; j < this.answers[i].votes.length; j++) {
-          if (this.options.names) {
-            votes += "<@" + this.answers[i].votes[j] + ">, ";
-          } else {
-            votes = (j + 1);
-          }
-        }
-        
-        if (this.options.names) votes = votes.slice(0, -2);
-        else  votes += " " + lang_poll.user;
-        votes += " *(" + Math.round((this.answers[i].votes.length / max_votes) * 100)+ "%)*";
-        
-        att_fields[i] = {
-          title: emoji_num[i] + " " + this.answers[i].text,
-          value: votes,
-          short: false
-        };
-      }
-      
-      return {
-        author_name: lang_poll.poll + " #" + (slot + 1),
-        title: this.title,
-        text: this.text,
-        fallback: this.text,
-        fields: att_fields,
-        footer: "<@" + this.creator + ">",
-        ts: this.ts.created,
-        color: this.options.color,
-        mrkdwn_in: ["text", "pretext", "fields"]
-      };
-    }
-    
-    generatePoll(slot) {
-      var btn1 = {
-        text: "",
-        fallback: "",
-        callback_id: 'poll_answer_callback',
-        actions: [],
-        color: "#CCCCCC",
-        mrkdwn_in: ["text", "pretext"]
-      };
-      var btn2 = {
-        text: "",
-        fallback: "",
-        callback_id: 'poll_answer_callback',
-        actions: [],
-        color: "#CCCCCC",
-        mrkdwn_in: ["text", "pretext"]
-      };
-      
-      for (var i = 0; i < this.answers.length; i++) {
-        if (i < 5) btn1.actions[i] = {name: i, text: emoji_num[i], type: 'button'};
-        else btn2.actions[i - 5] = {name: i, text: emoji_num[i], type: 'button'};
-      }
-      
-      var msg = {
-        text: lang_poll.newpoll,
-        fallback: lang_poll.newpoll,
-        attachments: [],
-        delete_original: true
-      }
-      
-      msg.attachments[0] = this.generateAttachment(slot);
-      if (this.state == 0) {
-        msg.attachments[1] = btn1;
-        if (btn2.actions.length > 0) msg.attachments[2] = btn2;
-      }
-      
-      return msg;
-    }
+class Poll {
+  constructor (obj) {
+    this.title = obj.title || "<title>";
+    this.text = obj.text || "<text>";
+    this.answers = obj.answers || [{text: "<answer>", votes: []}];
+    this.creator = obj.creator || "";
+    this.ts = obj.ts || {created: 0, edited: 0};
+    this.posts = [];
+    this.state = 0; //0 = default, 1 = vote closed, 2 = deleted
+    this.options = obj.options || {max: 1, names: true, color: func.getRandomColor()}; //max: 0 = all, etc; names: true = show user names, false = don't show user names
+  }
+
+  edit(obj) {
+    this.title = obj.title || this.title;
+    this.text = obj.text || this.text;
+    this.ts.edited = obj.ts || this.ts.edited;
+    this.options.max = obj.max || this.options.max;
+    this.options.names = obj.names || this.options.names;
+  }
+
+  close() {
+    this.state = 1;
+  }
+
+  delete() {
+    this.state = 2;
+    this.posts = [];
+  }
+
+  addAnswer(text) {
+    this.answers.push({text: text, votes: []});
+  }
+
+  removeAnswer(slot) {
+    this.answers.splice(slot, 1);
+  }
+
+  editAnswer(slot, text) {
+    this.answers[slot].text = text;
+  }
+
+  vote(slot, user) {
+    var pos = this.answers[slot].votes.indexOf(user);
+    if (pos == -1) this.answers[slot].votes.push(user);
+    else this.unvote(slot, user);
+  }
+
+  unvote(slot, user) {
+    var pos = this.answers[slot].votes.indexOf(user);
+    if (pos != -1) this.answers[slot].votes.splice(pos, 1);
   }
   
+  countVotes(user) {
+    var count = 0;
+    for (var i = 0; i < this.answers.length; i++) {
+      if (this.answers[i].votes.indexOf(user) != -1) count++;
+    }
+    
+    return count;
+  }
+
+  addPost(ch, ts) {
+    this.posts.push({ch: ch, ts: ts});
+  }
+
+  generateAttachment(slot) {
+    var att_fields = [];
+
+    var max_votes = 0;
+    for (var i = 0; i < this.answers.length; i++) {
+      if (this.answers[i].votes.length > max_votes) max_votes = this.answers[i].votes.length;
+    }
+
+    for (var i = 0; i < this.answers.length; i++) {
+
+      var votes = "";
+      for (var j = 0; j < this.answers[i].votes.length; j++) {
+        if (this.options.names) {
+          votes += "<@" + this.answers[i].votes[j] + ">, ";
+        } else {
+          votes = (j + 1);
+        }
+      }
+
+      if (this.options.names) votes = votes.slice(0, -2);
+      else  votes += " " + lang_poll.user;
+      votes += " *(" + Math.round((this.answers[i].votes.length / max_votes) * 100)+ "%)*";
+
+      att_fields[i] = {
+        title: emoji_num[i] + " " + this.answers[i].text,
+        value: votes,
+        short: false
+      };
+    }
+
+    return {
+      author_name: lang_poll.poll + " #" + (slot + 1),
+      title: this.title,
+      text: this.text,
+      fallback: this.text,
+      fields: att_fields,
+      footer: "<@" + this.creator + ">",
+      ts: this.ts.created,
+      color: this.options.color,
+      mrkdwn_in: ["text", "pretext", "fields"]
+    };
+  }
+
+  generatePoll(slot) {
+    var btn1 = {
+      text: "",
+      fallback: "",
+      callback_id: 'poll_answer_callback',
+      actions: [],
+      color: "#CCCCCC",
+      mrkdwn_in: ["text", "pretext"]
+    };
+    var btn2 = {
+      text: "",
+      fallback: "",
+      callback_id: 'poll_answer_callback',
+      actions: [],
+      color: "#CCCCCC",
+      mrkdwn_in: ["text", "pretext"]
+    };
+
+    for (var i = 0; i < this.answers.length; i++) {
+      if (i < 5) btn1.actions[i] = {name: i, text: emoji_num[i], type: 'button'};
+      else btn2.actions[i - 5] = {name: i, text: emoji_num[i], type: 'button'};
+    }
+
+    var msg = {
+      text: lang_poll.newpoll,
+      fallback: lang_poll.newpoll,
+      attachments: [],
+      delete_original: true
+    }
+
+    msg.attachments[0] = this.generateAttachment(slot);
+    if (this.state == 0) {
+      msg.attachments[1] = btn1;
+      if (btn2.actions.length > 0) msg.attachments[2] = btn2;
+    }
+
+    return msg;
+  }
+}
+
+
+// ==============================
+// ========== COMMANDS ==========
+// ==============================
+
+var poll_db = [];
+
+
 // ==============================
 // ========== COMMANDS ==========
 // ==============================
@@ -174,26 +203,31 @@ module.exports = (app) => {
 // ===== /poll test =====
   
   
-  slapp.command('/poll', "test (.*)", (msg, cmd) => {
+  slapp.command('/poll', "create", (msg, cmd) => {
     var data = {title: "Poll title", text: "Poll text", answers: [], creator: msg.body.user_id, options: {max: 1, names: false, color: func.getRandomColor()}};
-    data.answers[0] = {text: "Test 1", votes: [msg.body.user_id, config.bot_id]};
-    data.answers[1] = {text: "Test 2", votes: [msg.body.user_id]};
-    data.answers[2] = {text: "Test 3", votes: [msg.body.user_id]};
+    data.answers[0] = {text: "Test 1", votes: []};
+    data.answers[1] = {text: "Test 2", votes: []};
+    data.answers[2] = {text: "Test 3", votes: []};
     
-    let poll = new Poll(data);
+    let poll_db[poll_dp.length] = new Poll(data);
     
-    msg.say(poll.generatePoll(0));
+    msg.say(poll_db[poll_dp.length - 1].generatePoll(0));
     return;
   });
   
+  slapp.command('/poll', "read", (msg, cmd) => {
+    
+    console.log(poll_db[0].countVotes(msg.body.user_id));
+  });
+  
   slapp.action('poll_answer_callback', (msg) => {
-    var answer_id = parseInt(msg.body.actions[0].name);
-    var poll_title = msg.body.original_message.attachments[0].author_name.split("#").pop();
+    var answer = parseInt(msg.body.actions[0].name);
+    var slot = parseInt(msg.body.original_message.attachments[0].author_name.split("#").pop()) - 1;
     
-    console.log(answer_id);
-    console.log(poll_title);
+    poll_db[slot].vote(answer, msg.body.user.id);
     
-    //console.log(msg.body);
+    msg.say(poll_db[slot].generatePoll(0));
+    return;
   });
   
   
