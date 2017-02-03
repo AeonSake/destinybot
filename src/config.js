@@ -4,6 +4,9 @@
 
 'use strict';
 
+const BeepBoopConvoStore = require('slapp-convo-beepboop');
+const BeepBoopContext = require('slapp-context-beepboop');
+
 // ===============================
 // ========== VARIABLES ==========
 // ===============================
