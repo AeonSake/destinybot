@@ -77,6 +77,10 @@ class Poll {
     var pos = this.answers[slot].votes.indexOf(user);
     if (pos == -1) {
       if (this.countVotes(user) < this.options.max) this.answers[slot].votes.push(user);
+      else if (this.options.max == 1) {
+        for (var i = 0; i < this.answers.length; i++) this.unvote(i, user);
+        this.answers[slot].votes.push(user);
+      }
     }
     else this.unvote(slot, user);
   }
