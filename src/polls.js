@@ -12,7 +12,7 @@ var emoji_num = [":one:", ":two:", ":three:", ":four:", ":five:", ":six:", ":sev
 
 // ===== LANGUAGE =====
 var lang_poll = {
-  title: "Umfrage",
+  poll: "Umfrage",
   user: "Nutzer",
   newpoll: "Eine neue Umfrage wurde erstellt:",
   preview: "Vorschau:",
@@ -108,7 +108,7 @@ var lang_poll = {
       
       
       return {
-        author_name: lang_poll.title + " #" + (slot + 1),
+        author_name: lang_poll.poll + " #" + (slot + 1),
         title: this.title,
         text: this.text,
         fallback: this.text,
@@ -116,7 +116,7 @@ var lang_poll = {
         footer: "<@" + this.creator + ">",
         ts: this.ts.created,
         color: this.options.color,
-        mrkdwn_in: ["text", "pretext"]
+        mrkdwn_in: ["text", "pretext", "fields"]
       };
     }
     
