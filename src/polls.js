@@ -81,7 +81,7 @@ module.exports = (app) => {
       this.posts.push({ch: ch, ts: ts});
     }
     
-    generateAttachment(slot) {
+    attachmentBuilder = function(slot) {
       var att_fields = [];
       
       var max_votes = 0;
@@ -125,6 +125,10 @@ module.exports = (app) => {
       };
     }
     
+    generateAttachment(slot) {
+      return attachmentBuilder(slot);
+    }
+    
     generatePoll(slot) {
       var btn1 = {
         text: "",
@@ -155,7 +159,7 @@ module.exports = (app) => {
         delete_original: true
       }
       
-      msg.attachments[0] = generateAttachment(slot);
+      msg.attachments[0] = attachmentBuilder(slot);
       if (this.state == 0) {
         msg.attachments[1] = btn1;
         if (btn2.actions.length > 0) msg.attachments[2] = btn2;
