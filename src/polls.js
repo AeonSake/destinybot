@@ -97,7 +97,7 @@ class Poll {
     this.posts.push({ch: ch, ts: ts});
   }
 
-  generateAttachment() {
+  generateAttachment(slot) {
     var att_fields = [];
 
     var max_votes = 0;
@@ -140,7 +140,7 @@ class Poll {
     };
   }
 
-  generatePoll() {
+  generatePoll(slot) {
     var btn1 = {
       text: "",
       fallback: "",
@@ -170,7 +170,7 @@ class Poll {
       delete_original: true
     }
 
-    msg.attachments[0] = this.generateAttachment();
+    msg.attachments[0] = this.generateAttachment(slot);
     if (this.state == 0) {
       msg.attachments[1] = btn1;
       if (btn2.actions.length > 0) msg.attachments[2] = btn2;
@@ -217,7 +217,7 @@ module.exports = (app) => {
     console.log(poll_db.length - 1);
     console.log(poll_db);
     
-    msg.say(poll_db[poll_db.length - 1].generatePoll());
+    msg.say(poll_db[poll_db.length - 1].generatePoll(poll_db.length - 1));
     return;
   });
   
@@ -232,7 +232,7 @@ module.exports = (app) => {
     
     poll_db[slot].vote(answer, msg.body.user.id);
     
-    msg.say(poll_db[slot].generatePoll());
+    msg.say(poll_db[slot].generatePoll(slot));
     return;
   });
   
