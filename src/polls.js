@@ -170,7 +170,7 @@ class Poll {
       delete_original: true
     }
 
-    msg.attachments[0] = this.generateAttachment(slot);
+    msg.attachments[0] = this.generateAttachment();
     if (this.state == 0) {
       msg.attachments[1] = btn1;
       if (btn2.actions.length > 0) msg.attachments[2] = btn2;
