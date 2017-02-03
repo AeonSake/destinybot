@@ -95,10 +95,7 @@ var lang_poll = {
           }
         }
         
-        if (this.options.names) {
-          votes.slice(0, -2);
-          console.log("yup");
-        }
+        if (this.options.names) votes = votes.slice(0, -2);
         else  votes += " " + lang_poll.user;
         votes += " *(" + Math.round((this.answers[i].votes.length / max_votes) * 100)+ "%)*";
         
@@ -184,9 +181,6 @@ module.exports = (app) => {
     data.answers[2] = {text: "Test", votes: [msg.body.user_id]};
     
     let poll = new Poll(data);
-    
-    console.log(msg.bots);
-    console.log(msg.users);
     
     msg.respond(msg.body.response_url, poll.generatePoll(0));
     return;
