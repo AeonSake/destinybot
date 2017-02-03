@@ -107,7 +107,7 @@ class Poll {
 
     for (var i = 0; i < this.answers.length; i++) {
 
-      var votes = "";
+      var votes = "0";
       for (var j = 0; j < this.answers[i].votes.length; j++) {
         if (this.options.names) {
           votes += "<@" + this.answers[i].votes[j] + ">, ";
@@ -116,8 +116,8 @@ class Poll {
         }
       }
 
-      if (this.options.names) votes = votes.slice(0, -2);
-      else  votes += " " + lang_poll.user;
+      if (this.options.names) votes = votes.slice(1, -2);
+      else votes += " " + lang_poll.user;
       if (this.answers[i].votes.length == 0) votes += " *(0%)*";
       else votes += " *(" + Math.round((this.answers[i].votes.length / max_votes) * 100)+ "%)*";
 
@@ -221,10 +221,8 @@ module.exports = (app) => {
     return;
   });
   
-  slapp.command('/poll', "read", (msg, cmd) => {
-    
-    console.log(poll_db[0].countVotes(msg.body.user_id));
-  });
+  
+// ===== Vote button callback =====
   
   slapp.action('poll_answer_callback', (msg) => {
     var answer = parseInt(msg.body.actions[0].name);
