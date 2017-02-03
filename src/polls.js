@@ -209,7 +209,7 @@ module.exports = (app) => {
     data.answers[1] = {text: "Test 2", votes: []};
     data.answers[2] = {text: "Test 3", votes: []};
     
-    let poll_db[poll_dp.length] = new Poll(data);
+    poll_db[poll_dp.length] = new Poll(data);
     
     msg.say(poll_db[poll_dp.length - 1].generatePoll(0));
     return;
