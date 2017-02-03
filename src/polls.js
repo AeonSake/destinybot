@@ -146,7 +146,7 @@ var lang_poll = {
         text: lang_poll.newpoll,
         fallback: lang_poll.newpoll,
         attachments: [],
-        //delete_original: true
+        delete_original: true
       }
       
       msg.attachments[0] = this.generateAttachment(slot);
@@ -175,14 +175,14 @@ module.exports = (app) => {
   
   
   slapp.command('/poll', "test (.*)", (msg, cmd) => {
-    var data = {title: "TITEL", answers: [], creator: msg.body.user_id, options: {max: 1, names: false, color: func.getRandomColor()}};
-    data.answers[0] = {text: lang_poll.answers, votes: [msg.body.user_id, config.bot_id]};
-    data.answers[1] = {text: lang_poll.answers, votes: [msg.body.user_id]};
-    data.answers[2] = {text: "Test", votes: [msg.body.user_id]};
+    var data = {title: "Poll title", text: "Poll text", answers: [], creator: msg.body.user_id, options: {max: 1, names: false, color: func.getRandomColor()}};
+    data.answers[0] = {text: "Test 1", votes: [msg.body.user_id, config.bot_id]};
+    data.answers[1] = {text: "Test 2", votes: [msg.body.user_id]};
+    data.answers[2] = {text: "Test 3", votes: [msg.body.user_id]};
     
     let poll = new Poll(data);
     
-    msg.respond(msg.body.response_url, poll.generatePoll(0));
+    msg.respond(poll.generatePoll(0));
     return;
   });
   
