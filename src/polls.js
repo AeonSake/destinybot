@@ -97,7 +97,7 @@ class Poll {
     this.posts.push({ch: ch, ts: ts});
   }
 
-  generateAttachment(slot) {
+  generateAttachment() {
     var att_fields = [];
 
     var max_votes = 0;
@@ -140,7 +140,7 @@ class Poll {
     };
   }
 
-  generatePoll(slot) {
+  generatePoll() {
     var btn1 = {
       text: "",
       fallback: "",
@@ -214,7 +214,10 @@ module.exports = (app) => {
     
     poll_db[poll_db.length] = new Poll(data);
     
-    msg.say(poll_db[poll_db.length - 1].generatePoll(0));
+    console.log(poll_db.length - 1);
+    console.log(poll_db);
+    
+    msg.say(poll_db[poll_db.length - 1].generatePoll());
     return;
   });
   
@@ -229,7 +232,7 @@ module.exports = (app) => {
     
     poll_db[slot].vote(answer, msg.body.user.id);
     
-    msg.say(poll_db[slot].generatePoll(0));
+    msg.say(poll_db[slot].generatePoll());
     return;
   });
   
