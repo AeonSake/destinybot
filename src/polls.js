@@ -174,7 +174,7 @@ module.exports = (app) => {
 // ===== /poll test =====
   
   
-  slapp.command("/poll", "test (.*)", (msg, cmd) => {
+  slapp.command('/poll', "test (.*)", (msg, cmd) => {
     var data = {title: "TITEL", answers: [], creator: msg.body.user_id, options: {max: 1, names: false, color: func.getRandomColor()}};
     data.answers[0] = {text: lang_poll.answers, votes: [msg.body.user_id, config.bot_id]};
     data.answers[1] = {text: lang_poll.answers, votes: [msg.body.user_id]};
@@ -186,7 +186,15 @@ module.exports = (app) => {
     return;
   });
   
+  slapp.event('poll_answer_callback', (msg, data) => {
+    console.log(msg);
+    console.log(data);
+  });
   
+  slapp.action('poll_answer_callback', (msg, data) => {
+    console.log(msg);
+    console.log(data);
+  });
   
   
   
