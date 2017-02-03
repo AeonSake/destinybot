@@ -75,7 +75,9 @@ class Poll {
 
   vote(slot, user) {
     var pos = this.answers[slot].votes.indexOf(user);
-    if (pos == -1) this.answers[slot].votes.push(user);
+    if (pos == -1) {
+      if (this.countVotes(user) < this.options.max) this.answers[slot].votes.push(user);
+    }
     else this.unvote(slot, user);
   }
 
@@ -227,8 +229,9 @@ module.exports = (app) => {
   slapp.action('poll_answer_callback', (msg) => {
     var answer = parseInt(msg.body.actions[0].name);
     var slot = parseInt(msg.body.original_message.attachments[0].author_name.split("#").pop()) - 1;
+    var user = msg.body.user.id;
     
-    poll_db[slot].vote(answer, msg.body.user.id);
+    poll_db[slot].vote(answer, user);
     
     msg.say(poll_db[slot].generatePoll(slot));
     return;
