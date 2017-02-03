@@ -84,8 +84,6 @@ var lang_poll = {
         if (this.answers[i].votes.length > max_votes) max_votes = this.answers[i].votes.length;
       }
       
-      console.log(max_votes);
-      
       for (var i = 0; i < this.answers.length; i++) {
         
         var votes = "";
@@ -97,14 +95,14 @@ var lang_poll = {
           }
         }
         
-        console.log(votes + " --- " + votes.slice(0, -2));
+        console.log(this.options.names);
         
         if (this.options.names) votes.slice(0, -2);
         else  votes += " " + lang_poll.user;
         votes += " *(" + Math.round((this.answers[i].votes.length / max_votes) * 100)+ "%)*";
         
         att_fields[i] = {
-          title: emoji_num[i + 1] + " " + this.answers[i].text,
+          title: emoji_num[i] + " " + this.answers[i].text,
           value: votes,
           short: false
         };
@@ -155,7 +153,6 @@ var lang_poll = {
       }
       
       msg.attachments[0] = this.generateAttachment(slot);
-      console.log(this.state);                                            //===========
       if (this.state == 0) {
         msg.attachments[1] = btn1;
         if (btn2.actions.length > 0) msg.attachments[2] = btn2;
@@ -183,10 +180,13 @@ module.exports = (app) => {
   slapp.command("/poll", "test (.*)", (msg, cmd) => {
     var data = {title: "TITEL", answers: [], creator: msg.body.user_id, options: {max: 1, names: true, color: func.getRandomColor()}};
     data.answers[0] = {text: lang_poll.answers, votes: [msg.body.user_id, config.bot_id]};
+    data.answers[1] = {text: lang_poll.answers, votes: [msg.body.user_id]};
+    data.answers[2] = {text: "Test", votes: [msg.body.user_id]};
     
     let poll = new Poll(data);
     
-      console.log(msg.body);
+    console.log(msg);
+    console.log(poll.generatePoll(0));
     
     msg.respond(msg.body.response_url, poll.generatePoll(0));
     return;
