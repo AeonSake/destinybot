@@ -95,9 +95,10 @@ var lang_poll = {
           }
         }
         
-        console.log(this.options.names);
-        
-        if (this.options.names) votes.slice(0, -2);
+        if (this.options.names) {
+          votes.slice(0, -2);
+          console.log("yup");
+        }
         else  votes += " " + lang_poll.user;
         votes += " *(" + Math.round((this.answers[i].votes.length / max_votes) * 100)+ "%)*";
         
@@ -107,7 +108,6 @@ var lang_poll = {
           short: false
         };
       }
-      
       
       return {
         author_name: lang_poll.poll + " #" + (slot + 1),
@@ -141,8 +141,8 @@ var lang_poll = {
       };
       
       for (var i = 0; i < this.answers.length; i++) {
-        if (i < 5) btn1.actions[i] = {name: i, text: emoji_num[i]};
-        else btn2.actions[i - 5] = {name: i, text: emoji_num[i]};
+        if (i < 5) btn1.actions[i] = {name: i, text: emoji_num[i], type: 'button'};
+        else btn2.actions[i - 5] = {name: i, text: emoji_num[i], type: 'button'};
       }
       
       var msg = {
@@ -185,8 +185,8 @@ module.exports = (app) => {
     
     let poll = new Poll(data);
     
-    console.log(msg);
-    console.log(poll.generatePoll(0));
+    console.log(msg.bots);
+    console.log(msg.users);
     
     msg.respond(msg.body.response_url, poll.generatePoll(0));
     return;
