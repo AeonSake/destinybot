@@ -55,7 +55,7 @@ let config = module.exports = {
   
   //Validation function
   validate: () => {
-    let required = ['beepboop_token'];
+    let required = ['bb_token'];
 
     required.forEach((prop) => {
       if (!config[prop]) {
