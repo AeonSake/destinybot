@@ -30,6 +30,7 @@ var lang_poll = {
     showhelp: "Hilfe anzeigen"
   },
   msg: {
+    novotes: "Keine Stimmen",
     newpollcreated: "Eine neue Umfrage wurde erstellt:",
     entertitle: "Umfragen-Titel eingeben: `/poll <title>`",
     entertext: "Umfragen-Text eingeben (optional): `/poll <text>`",
@@ -60,7 +61,7 @@ class Poll {
     this.state = 0; //0 = default, 1 = vote closed, 2 = deleted
     this.options = {max: 1, names: true, color: func.getRandomColor()}; //max: 0 = all, etc; names: true = show user names, false = don't show user names
     this.options.max = obj.max || 1;
-    this.options.names = obj.names || true;
+    if ('names' in obj) this.options.names = obj.names;
   }
 
   edit (obj) {
@@ -123,7 +124,7 @@ class Poll {
 
     for (var i = 0; i < this.answers.length; i++) {
 
-      var votes = "0";
+      var votes = "";
       for (var j = 0; j < this.answers[i].votes.length; j++) {
         if (this.options.names) {
           votes += "<@" + this.answers[i].votes[j] + ">, ";
@@ -132,9 +133,9 @@ class Poll {
         }
       }
 
-      if (this.options.names) votes = votes.slice(1, -2);
+      if (this.options.names) votes = votes.slice(0, -2);
       else votes += " " + lang_poll.wrd.user;
-      if (this.answers[i].votes.length == 0) votes += " *(0%)*";
+      if (this.answers[i].votes.length == 0) votes = lang_poll.msg.novotes + " *(0%)*";
       else votes += " *(" + Math.round((this.answers[i].votes.length / max_votes) * 100)+ "%)*";
 
       att_fields[i] = {
@@ -262,7 +263,7 @@ module.exports = (app) => {
     });
   }
   
-  savePollDB();
+  loadPollDB();
   console.log("Poll-Database loaded.");
   
   
