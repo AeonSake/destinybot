@@ -240,30 +240,29 @@ class Poll {
 // ========== POLL DATABASE ==========
 // ===================================
 
-var poll_db = [];
+module.exports = (app) => {
+  let slapp = app.slapp;
+  let kv = app.kv;
+  
+  var poll_db = [];
 
-function savePollDB () {
-  kv.set('poll_db', poll_db, function (err) {
-    if (err) console.log(err);
-  });
-}
+  function savePollDB () {
+    kv.set('poll_db', poll_db, function (err) {
+      if (err) console.log(err);
+    });
+  }
 
-function loadPollDB () {
-  kv.get('poll_db', function (err, val) {
-    if (err) console.log(err);
-    else if (typeof val !== "undefined") poll_db = val;
-  });
-}
+  function loadPollDB () {
+    kv.get('poll_db', function (err, val) {
+      if (err) console.log(err);
+      else if (typeof val !== "undefined") poll_db = val;
+    });
+  }
 
 // ==============================
 // ========== COMMANDS ==========
 // ==============================
 
-module.exports = (app) => {
-  let slapp = app.slapp;
-  let kv = app.kv;
-  
-  
 // ===== /poll, /poll create =====
   
   
