@@ -12,16 +12,32 @@ var emoji_num = [":one:", ":two:", ":three:", ":four:", ":five:", ":six:", ":sev
 
 // ===== LANGUAGE =====
 var lang_poll = {
-  poll: "Umfrage",
-  user: "Nutzer",
-  newpoll: "Eine neue Umfrage wurde erstellt:",
-  preview: "Vorschau:",
-  back: "< Zurück",
-  next: "Weiter >",
-  delete: "Löschen",
-  title: "Titel",
-  text: "Text",
-  answers: "Antworten"
+  wrd: {
+    poll: "Umfrage",
+    user: "Nutzer",
+    preview: "Vorschau"
+  },
+  btn: {
+    back: "< Zurück",
+    next: "Weiter >",
+    edit: "Bearbeiten",
+    open: "Öffnen",
+    close: "Schließen",
+    delete: "Löschen",
+    cancel: "Abbrechen",
+    createpoll: "Umfrage erstellen",
+    editpoll: "Umfrage bearbeiten",
+    showhelp: "Hilfe anzeigen"
+  },
+  msg: {
+    newpollcreated: "Eine neue Umfrage wurde erstellt:",
+    entertitle: "Umfragen-Titel eingeben: `/poll <title>`",
+    entertext: "Umfragen-Text eingeben (optional): `/poll <text>`",
+    enteranswer: "Umfragen-Antwort eingeben (mind. 2): `/poll <answer>`",
+    entermax: "Wie viele Antworten sollen auswählbar sein?",
+    shownames: "Sollen Nutzernamen angezeigt werden?",
+    selectedit: "Welche Information soll bearbeitet werden?"
+  }
 }
 
 // ===== TODO =====
@@ -44,7 +60,7 @@ class Poll {
     this.options = obj.options || {max: 1, names: true, color: func.getRandomColor()}; //max: 0 = all, etc; names: true = show user names, false = don't show user names
   }
 
-  edit(obj) {
+  edit (obj) {
     this.title = obj.title || this.title;
     this.text = obj.text || this.text;
     this.ts.edited = obj.ts || this.ts.edited;
@@ -52,28 +68,19 @@ class Poll {
     this.options.names = obj.names || this.options.names;
   }
 
-  close() {
-    this.state = 1;
-  }
-
-  delete() {
-    this.state = 2;
-    this.posts = [];
-  }
-
-  addAnswer(text) {
+  addAnswer (text) {
     this.answers.push({text: text, votes: []});
   }
 
-  removeAnswer(slot) {
+  removeAnswer (slot) {
     this.answers.splice(slot, 1);
   }
 
-  editAnswer(slot, text) {
+  editAnswer (slot, text) {
     this.answers[slot].text = text;
   }
 
-  vote(slot, user) {
+  vote (slot, user) {
     var pos = this.answers[slot].votes.indexOf(user);
     if (pos == -1) {
       if (this.countVotes(user) < this.options.max) this.answers[slot].votes.push(user);
@@ -85,12 +92,12 @@ class Poll {
     else this.unvote(slot, user);
   }
 
-  unvote(slot, user) {
+  unvote (slot, user) {
     var pos = this.answers[slot].votes.indexOf(user);
     if (pos != -1) this.answers[slot].votes.splice(pos, 1);
   }
   
-  countVotes(user) {
+  countVotes (user) {
     var count = 0;
     for (var i = 0; i < this.answers.length; i++) {
       if (this.answers[i].votes.indexOf(user) != -1) count++;
@@ -99,11 +106,11 @@ class Poll {
     return count;
   }
 
-  addPost(ch, ts) {
+  addPost (ch, ts) {
     this.posts.push({ch: ch, ts: ts});
   }
 
-  generateAttachment(slot) {
+  generateAttachment (slot) {
     var att_fields = [];
 
     var max_votes = 0;
@@ -123,7 +130,7 @@ class Poll {
       }
 
       if (this.options.names) votes = votes.slice(1, -2);
-      else votes += " " + lang_poll.user;
+      else votes += " " + lang_poll.wrd.user;
       if (this.answers[i].votes.length == 0) votes += " *(0%)*";
       else votes += " *(" + Math.round((this.answers[i].votes.length / max_votes) * 100)+ "%)*";
 
@@ -135,7 +142,7 @@ class Poll {
     }
 
     return {
-      author_name: lang_poll.poll + " #" + (slot + 1),
+      author_name: lang_poll.wrd.poll + " #" + (slot + 1),
       title: this.title,
       text: this.text,
       fallback: this.text,
@@ -147,7 +154,7 @@ class Poll {
     };
   }
 
-  generatePoll(slot) {
+  generatePoll (slot) {
     var btn1 = {
       text: "",
       fallback: "",
@@ -171,8 +178,8 @@ class Poll {
     }
 
     var msg = {
-      text: lang_poll.newpoll,
-      fallback: lang_poll.newpoll,
+      text: lang_poll.msg.newpollcreated,
+      fallback: lang_poll.msg.newpollcreated,
       attachments: [],
       delete_original: true
     }
@@ -185,6 +192,46 @@ class Poll {
 
     return msg;
   }
+  
+  update (slapp, slot) {
+    if (this.state == 0 || this.state == 1) {
+      var msg = this.generatePoll(slot);
+      
+      for (var i = 0; i < this.posts.length; i++) {
+        slapp.client.chat.update({
+          token: config.bot_token,
+          ts: this.posts[i].ts,
+          channel: this.posts[i].ch,
+          text: msg.text,
+          attachments: msg.attachments,
+          parse: 'full',
+          link_names: 1,
+          as_user: true
+        }, (err, data) => {
+          if (err) console.log(err);
+        });
+      }
+    }
+    else this.delete(slapp);
+  }
+  
+  delete (slapp) {
+    for (var i = 0; i < this.posts.length; i++) {
+      slapp.client.chat.delete({
+        token: config.bot_token,
+        ts: this.posts[i].ts,
+        channel: this.posts[i].ch,
+        as_user: true
+      }, (err, data) => {
+        if (err) console.log(err);
+      });
+    }
+  }
+
+  close (slapp, slot) {
+    this.state = 1;
+    this.update(slapp, slot);
+  }
 }
 
 
@@ -193,9 +240,20 @@ class Poll {
 // ========== POLL DATABASE ==========
 // ===================================
 
-  var poll_db = [];
+var poll_db = [];
 
+function savePollDB () {
+  kv.set('poll_db', poll_db, function (err) {
+    if (err) console.log(err);
+  });
+}
 
+function loadPollDB () {
+  kv.get('poll_db', function (err, val) {
+    if (err) console.log(err);
+    else if (typeof val !== "undefined") poll_db = val;
+  });
+}
 
 // ==============================
 // ========== COMMANDS ==========
@@ -213,17 +271,19 @@ module.exports = (app) => {
 // ===== /poll test =====
   
   
-  slapp.command('/poll', "create", (msg, cmd) => {
+  slapp.command('/dbpoll', "create", (msg, cmd) => {
     var data = {title: "Poll title", text: "Poll text", answers: [], creator: msg.body.user_id, options: {max: 1, names: false, color: func.getRandomColor()}};
     data.answers[0] = {text: "Test 1", votes: []};
     data.answers[1] = {text: "Test 2", votes: []};
     data.answers[2] = {text: "Test 3", votes: []};
     
     var slot = poll_db.length;
-    
     poll_db[slot] = new Poll(data);
     
-    msg.say(poll_db[slot].generatePoll(slot));
+    msg.say(poll_db[slot].generatePoll(slot), (err, result) => {
+      poll_db[slot].addPost(result.channel, result.ts);
+      savePollDB();
+    });
     return;
   });
   
@@ -235,9 +295,8 @@ module.exports = (app) => {
     var slot = parseInt(msg.body.original_message.attachments[0].author_name.split("#").pop()) - 1;
     var user = msg.body.user.id;
     
-    poll_db[slot].vote(answer, user);
-    
-    msg.say(poll_db[slot].generatePoll(slot));
+    poll_db[slot].vote(answer, user); //todo: show error text
+    poll_db[slot].update(slapp, slot);
     return;
   });
   
