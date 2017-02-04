@@ -54,10 +54,13 @@ class Poll {
     this.text = obj.text || "<text>";
     this.answers = obj.answers || [{text: "<answer>", votes: []}];
     this.creator = obj.creator || "";
-    this.ts = obj.ts || {created: 0, edited: 0};
+    this.ts = {created: 0, edited: 0};
+    this.ts.created = obj.tscreated || 0;
     this.posts = [];
     this.state = 0; //0 = default, 1 = vote closed, 2 = deleted
-    this.options = obj.options || {max: 1, names: true, color: func.getRandomColor()}; //max: 0 = all, etc; names: true = show user names, false = don't show user names
+    this.options = {max: 1, names: true, color: func.getRandomColor()}; //max: 0 = all, etc; names: true = show user names, false = don't show user names
+    this.options.max = obj.max || 1;
+    this.options.names = obj.names || true;
   }
 
   edit (obj) {
@@ -258,12 +261,19 @@ module.exports = (app) => {
       else if (typeof val !== "undefined") poll_db = val;
     });
   }
+  
+  savePollDB();
+  console.log("Poll-Database loaded.");
+  
+  
 
 // ==============================
 // ========== COMMANDS ==========
 // ==============================
 
-// ===== /poll, /poll create =====
+// ===== /poll =====
+  
+// ===== /poll create =====
   
   
   
@@ -271,10 +281,13 @@ module.exports = (app) => {
   
   
   slapp.command('/dbpoll', "create", (msg, cmd) => {
-    var data = {title: "Poll title", text: "Poll text", answers: [], creator: msg.body.user_id, options: {max: 1, names: false, color: func.getRandomColor()}};
+    var data = {title: "Poll title", text: "Poll text", answers: [], creator: msg.body.user_id, max: 1, names: false};
     data.answers[0] = {text: "Test 1", votes: []};
     data.answers[1] = {text: "Test 2", votes: []};
     data.answers[2] = {text: "Test 3", votes: []};
+    
+    console.log(msg.body);
+    //tscreated: msg.body.,
     
     var slot = poll_db.length;
     poll_db[slot] = new Poll(data);
