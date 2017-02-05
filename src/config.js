@@ -34,13 +34,14 @@ let config = module.exports = {
   bb_persist_provider: process.env.PERSIST_PROVIDER || 'beepboop',
   
   //Project config
-  version: "5.1.1",
+  version: "5.1.2",
   title: "DestinyBot",
   admin_id: process.env.admin_id,
   bot_id: process.env.bot_id,
   bot_token: process.env.bot_token,
   app_token: process.env.app_token,
   server_time_offset: 1,
+  att_color: "#CCCCCC",
   
   //Destiny config
   //destiny_ch: process.env.destiny_ch,
