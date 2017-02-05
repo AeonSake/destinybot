@@ -22,7 +22,7 @@ var emoji_num = [":one:", ":two:", ":three:", ":four:", ":five:", ":six:", ":sev
 var lang_poll = {
   wrd: {
     poll: "Umfrage",
-    user: "Nutzer",
+    user: "User",
     preview: "Vorschau",
     vote: "Stimme",
     votes: "Stimmen",
@@ -119,7 +119,7 @@ var poll_main_msg = {
 // ===== CREATE =====
 
 var poll_create_title_msg = {
-  text: "",
+  text: lang_poll.wrd.preview + ":",
   attachments: [
     {},
     {
@@ -147,7 +147,7 @@ var poll_create_title_msg = {
 };
 
 var poll_create_text_msg = {
-  text: "",
+  text: lang_poll.wrd.preview + ":",
   attachments: [
     {},
     {
@@ -191,7 +191,7 @@ var poll_create_text_msg = {
 };
 
 var poll_create_answers_msg = {
-  text: "",
+  text: lang_poll.wrd.preview + ":",
   attachments: [
     {},
     {
@@ -230,7 +230,7 @@ var poll_create_answers_msg = {
 };
 
 var poll_create_answers2_msg = {
-  text: "",
+  text: lang_poll.wrd.preview + ":",
   attachments: [
     {},
     {
@@ -274,7 +274,7 @@ var poll_create_answers2_msg = {
 };
 
 var poll_create_max1_msg = {
-  text: "",
+  text: lang_poll.wrd.preview + ":",
   attachments: [
     {},
     {
@@ -320,7 +320,7 @@ var poll_create_max1_msg = {
 };
 
 var poll_create_max2_msg = {
-  text: "",
+  text: lang_poll.wrd.preview + ":",
   attachments: [
     {},
     {
@@ -388,26 +388,26 @@ module.exports = (app) => {
 // ===========================
   
   class Poll {
-    constructor (obj) {
-      this.title = obj.title || "<title>";
-      this.text = obj.text || "<text>";
-      this.answers = obj.answers || [{text: "<answer>", votes: []}];
-      this.creator = obj.creator || "";
+    constructor (data) {
+      this.title = data.title;
+      this.text = data.text || "";
+      this.answers = data.answers;
+      this.creator = data.creator || "";
       this.ts = {created: 0, edited: 0};
-      this.ts.created = obj.tscreated || 0;
+      this.ts.created = data.tscreated || 0;
       this.posts = [];
       this.state = 0; //0 = default, 1 = vote closed, 2 = deleted
       this.options = {max: 1, names: true, color: func.getRandomColor()}; //max: 0 = all, etc; names: true = show user names, false = don't show user names
-      this.options.max = obj.max || 1;
-      if ('names' in obj) this.options.names = obj.names;
+      this.options.max = data.max || 1;
+      if ('names' in data) this.options.names = data.names;
     }
 
-    edit (obj) {
-      this.title = obj.title || this.title;
-      this.text = obj.text || this.text;
-      this.ts.edited = obj.ts || this.ts.edited;
-      this.options.max = obj.max || this.options.max;
-      this.options.names = obj.names || this.options.names;
+    edit (data) {
+      this.title = data.title || this.title;
+      this.text = data.text || this.text;
+      this.ts.edited = data.ts || this.ts.edited;
+      this.options.max = data.max || this.options.max;
+      this.options.names = data.names || this.options.names;
     }
 
     addAnswer (text) {
@@ -540,6 +540,41 @@ module.exports = (app) => {
 
       return msg;
     }
+    
+    static generateDummy (slot, data) {
+      var att_fields = [];
+      att_fields[0] = {
+        title: emoji_num[0] + "<answer1>",
+        value: "User1, User2 (100%)",
+        short: false
+      };
+      att_fields[1] = {
+        title: emoji_num[1] + "<answer2>",
+        value: "User2 (50%)",
+        short: false
+      };
+      if (!data.names) {
+        att_fields[0].value = "2" + lang_poll.wrd.votes + " (100%)";
+        att_fields[1].value = "1" + lang_poll.wrd.vote + " (50%)";
+      }
+      for (var i = 0; i < data.answers.length; i++) {
+        att_fields[i].title = emoji_num[i] + "<answer" + (i + 1) + ">";
+        att_fields[i].short = false;
+        if (i > 1) att_fields[i].value = lang_poll.msg.novotes + " (0%)";
+      }
+      
+      return {
+        author_name: lang_poll.wrd.poll + " #" + (slot + 1),
+        title: data.title || "<title>",
+        text: this.text || "<text>",
+        fallback: this.text || "<text>",
+        fields: att_fields,
+        footer: "<@" + data.creator + ">",
+        ts: 0,
+        color: func.getRandomColor(),
+        mrkdwn_in: ["text", "pretext", "fields"]
+      };
+    }
 
     update (slot) {
       if (this.state == 0 || this.state == 1) {
@@ -623,9 +658,8 @@ module.exports = (app) => {
   slapp.command('/dbpoll', "create", (msg, cmd) => {
     var data = {creator: msg.body.user_id};
     
-    var poll = new Poll(data);
     var msg_text = poll_create_title_msg;
-    msg_text.attachments[0] = poll.generateAttachment(poll_db.length);
+    msg_text.attachments[0] = Poll.generateDummy(poll_db.length, data);
         
     msg
       .respond(msg_text)
@@ -644,9 +678,46 @@ module.exports = (app) => {
       }
     } else {
       data.title = msg.body.text;
-      var poll = new Poll(data);
       var msg_text = poll_create_text_msg;
-      msg_text.attachments[0] = poll.generateAttachment(poll_db.length);
+      msg_text.attachments[0] = Poll.generateDummy(poll_db.length, data);
+      
+      msg
+        .respond(msg_text)
+        .route('poll_create_text_route', data, 60);
+      return;
+    }
+  });
+  
+  slapp.route('poll_create_text_route', (msg, data) => {
+    if (msg.type == 'event') {
+      msg.route('poll_create_text_route', data, 60);
+      return;
+    } else if (msg.type == 'action') {
+      switch (msg.body.actions[0].name) {
+        case 'back':
+          var msg_text = poll_create_title_msg;
+          msg_text.attachments[0] = Poll.generateDummy(poll_db.length, data);
+          msg
+            .respond(msg_text)
+            .route('poll_create_title_route');
+          break;
+        case 'next':
+          data.text = "";
+          var msg_text = poll_create_answers_msg;
+          msg_text.attachments[0] = Poll.generateDummy(poll_db.length, data);
+          msg
+            .respond(msg_text)
+            .route('poll_create_answers_route');
+          break;
+        case 'cancel':
+          msg.respond({text: "", delete_original: true});
+          break;
+      }
+      return;
+    } else {
+      data.title = msg.body.text;
+      var msg_text = poll_create_text_msg;
+      msg_text.attachments[0] = Poll.generateDummy(poll_db.length, data);
       
       msg
         .respond(msg_text)
@@ -702,9 +773,8 @@ module.exports = (app) => {
       case 'createpoll':
         msg.respond("createpoll");
         var data = {creator: msg.body.user.id};
-        var poll = new Poll(data);
         var msg_text = poll_create_title_msg;
-        msg_text.attachments[0] = poll.generateAttachment(poll_db.length);
+        msg_text.attachments[0] = Poll.generateDummy(poll_db.length, data);
         
         msg
           .respond(msg_text)
@@ -742,83 +812,8 @@ module.exports = (app) => {
 // ===== Close button callback =====
   
   slapp.action('poll_dismiss_callback', (msg) => {
-    var msg_text = {text: "", delete_original: true};
-    msg.respond(msg_text); //msg.body.response_url, 
+    msg.respond({text: "", delete_original: true});
     return;
   });
   
-  
-  
-  
-  
-  
-  
-  
-  
-
-
-
-  
-
-  /*// Method to get the timestamp of a bot message
-  function getMessageTS (slot, ch_id) {
-    var pl_id = slot + 1;
-    var check = new RegExp("^(.*) \\(#" + pl_id + "\\)$");
-
-    slapp.client.channels.history({
-      token : app_token,
-      channel : ch_id
-    }, (err, data) => {
-      if (err) console.log(err);
-      else {
-        var msgs = data.messages;
-        for (var i = 0; i < msgs.length; i++) {
-          if (msgs[i].bot_id == bot_id && check.test(msgs[i].attachments[0].title)) {
-            poll_info[slot].ts_posted[poll_info[slot].ts_posted.length] = msgs[i].ts;
-            poll_info[slot].ch_posted[poll_info[slot].ch_posted.length] = ch_id;
-            return;
-          }
-        }
-      }
-    });
-  }
-
-  // ==============================
-  // ========== COMMANDS ==========
-  // ==============================
-
-  // ----- /poll, /poll create -----
-
-  slapp.command("/poll", "(create)?(.*)", (msg, cmd) => {
-    var data = {id : 0, title : "", text : "", options : [], creator : ""};
-    var check1 = new RegExp("[^;]*(;|; )[^;]*(;|; )(.*)(;)?");
-    var check2 = new RegExp("create [^;]*(;|; )[^;]*(;|; )(.*)(;)?");
-
-    data.creator = msg.body.user_id;
-
-    if (check2.test(cmd)) {
-      var res_text = cmd.substring(7).split(";");
-      var pl_options = [];
-      for (var i = 0; i < res_text.length; i++) {
-        if (i < 2) res_text[i] = res_text[i].trim();
-        else pl_options[i - 2] = res_text[i].trim();
-      }
-
-      savePollInfo(res_text[0], res_text[1], pl_options, data.creator, msg.body.message_ts); //==============================
-
-
-      var msg_text = getPollInfo(poll_info.length - 1);
-      msg_text.text = "Vorschau:";
-      //msg_text.attachments[1] = event_create_final_btns;
-      msg
-        .respond(msg_text)
-        .route('poll_create_final_route', data, 60);
-      return;
-    } else {
-      msg
-        .respond(event_type_text_nb)
-        .route('poll_create_title_route', data, 60);
-      return;
-    }
-  });*/
 };
