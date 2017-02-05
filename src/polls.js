@@ -884,9 +884,9 @@ module.exports = (app) => {
             msg_text.attachments[0] = Poll.generateDummy(poll_db.length, data);
             
             for (var i = 0; i < data.answers.length; i++) {
-              var temp = {name: i, text: i, type: 'button'};
-              if (i < 5) msg_text.attachments[2].actions[i] = temp;
-              else msg_text.attachments[3].actions[i - 5] = temp;
+              var btn = {name: i, text: i, type: 'button'};
+              if (i < 5) msg_text.attachments[2].actions[i] = btn;
+              else msg_text.attachments[3].actions[i - 5] = btn;
             }
             msg_text.attachments[2].actions[0].text = lang_poll.btn.all;
             if (data.answers.length <= 5) msg_text.attachments.splice(3, 1);
@@ -918,9 +918,9 @@ module.exports = (app) => {
         msg_text.attachments[0] = Poll.generateDummy(poll_db.length, data);
         
         for (var i = 0; i < data.answers.length; i++) {
-          var temp = {name: i, text: i, type: 'button'};
-          if (i < 5) msg_text.attachments[2].actions[i] = temp;
-          else msg_text.attachments[3].actions[i - 5] = temp;
+          var btn = {name: i, text: i, type: 'button'};
+          if (i < 5) msg_text.attachments[2].actions[i] = btn;
+          else msg_text.attachments[3].actions[i - 5] = btn;
         }
         msg_text.attachments[2].actions[0].text = lang_poll.btn.all;
         if (data.answers.length <= 5) msg_text.attachments.splice(3, 1);
