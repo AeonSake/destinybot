@@ -661,11 +661,10 @@ module.exports = (app) => {
     var data = {creator: msg.body.user_id};
     
     var msg_text = poll_create_title_msg;
-    //msg_text.attachments[0] = Poll.generateDummy(poll_db.length, data);
+    msg_text.attachments[0] = Poll.generateDummy(poll_db.length, data);
     
-    console.log(msg);
     msg
-      .respond(msg_text)
+      //.respond(msg_text)
       .route('poll_create_title_route', data, 60);
     return;
   });
