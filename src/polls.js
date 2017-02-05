@@ -66,7 +66,7 @@ var poll_main_msg = {
   attachments: [
     {
       text: "",
-      fallback: "",
+      fallback: "test",
       callback_id: 'poll_main_callback',
       actions: [
         {
@@ -105,7 +105,7 @@ var poll_main_msg = {
   ],
   response_type: 'ephemeral',
   delete_original: true
-}
+};
 
 
 
@@ -386,9 +386,6 @@ module.exports = (app) => {
   
   slapp.command('/dbpoll', "(.*)", (msg, cmd) => {
     var temp = cmd.split(";");
-    
-      console.log(msg.meta);
-      console.log(msg);
     
     if (temp.length >= 3) {
       var data = {title: temp[0], answers: [], creator: msg.body.user_id};

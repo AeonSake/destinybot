@@ -32,11 +32,12 @@ var app = {
   func
 };
 
+//require('./src/user')(app);
 //require('./src/destiny')(app);
 require('./src/polls')(app);
 //require('./src/events')(app);
 
 //require('beepboop-slapp-presence-polyfill')(slapp, { debug: true });
 console.log("Running " + config.title + " on version " + config.version + ".");
-console.log('Listening on :' + process.env.PORT);
+console.log("Listening on port " + process.env.PORT);
 server.listen(process.env.PORT);
