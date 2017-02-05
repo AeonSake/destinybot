@@ -682,9 +682,8 @@ module.exports = (app) => {
       var msg_text = poll_create_text_msg;
       msg_text.attachments[0] = Poll.generateDummy(poll_db.length, data);
       
-      msg
-        .respond(msg_text)
-        .route('poll_create_text_route', data, 60);
+      msg.respond(msg_text);
+      msg.route('poll_create_text_route', data, 60);
       return;
     }
   });
@@ -698,17 +697,15 @@ module.exports = (app) => {
         case 'back':
           var msg_text = poll_create_title_msg;
           msg_text.attachments[0] = Poll.generateDummy(poll_db.length, data);
-          msg
-            .respond(msg_text)
-            .route('poll_create_title_route');
+          msg.respond(msg_text);
+          msg.route('poll_create_title_route');
           break;
         case 'next':
           data.text = "";
           var msg_text = poll_create_answers_msg;
           msg_text.attachments[0] = Poll.generateDummy(poll_db.length, data);
-          msg
-            .respond(msg_text)
-            .route('poll_create_answers_route');
+          msg.respond(msg_text);
+          msg.route('poll_create_answers_route');
           break;
         case 'cancel':
           msg.respond({text: "", delete_original: true});
@@ -720,9 +717,8 @@ module.exports = (app) => {
       var msg_text = poll_create_text_msg;
       msg_text.attachments[0] = Poll.generateDummy(poll_db.length, data);
       
-      msg
-        .respond(msg_text)
-        .route('poll_create_text_route', data, 60);
+      msg.respond(msg_text);
+      msg.route('poll_create_text_route', data, 60);
       return;
     }
   });
@@ -759,9 +755,8 @@ module.exports = (app) => {
       var data = {title: temp[0], answers: [], creator: msg.body.user_id};
       for (var i = 1; i < temp.length; i++) data.answers[i - 1] = temp[i];
       
-      msg
-        .respond(msg_text)
-        .route('poll_create_final_route', data, 60);
+      msg.respond(msg_text);
+      msg.route('poll_create_final_route', data, 60);
       return;
     } else {
       msg.respond(poll_main_msg);
@@ -776,9 +771,8 @@ module.exports = (app) => {
         var msg_text = poll_create_title_msg;
         msg_text.attachments[0] = Poll.generateDummy(poll_db.length, data);
         
-        msg
-          .respond(msg_text)
-          .route('poll_create_title_route', data, 60);
+        msg.respond(msg_text);
+        msg.route('poll_create_title_route', data, 60);
         break;
       case 'showpoll':
         msg.respond("showpoll");
