@@ -673,6 +673,9 @@ module.exports = (app) => {
     }
     
     static generateDummy (slot, data) {
+      var temp_text = "<text>";
+      if ('text' in data) temp_text = data.text;
+      
       var att_fields = [];
       att_fields[0] = {
         title: emoji_num[0] + " <answer1>",
@@ -684,11 +687,11 @@ module.exports = (app) => {
         value: "user2 (50%)",
         short: false
       };
-      if ('answers' in data && !data.names) {
-        att_fields[0].value = "2 " + lang_poll.wrd.votes + " (100%)";
-        att_fields[1].value = "1 " + lang_poll.wrd.vote + " (50%)";
-      }
       if ('answers' in data) {
+        if ('names' in data && !data.names) {
+          att_fields[0].value = "2 " + lang_poll.wrd.votes + " (100%)";
+          att_fields[1].value = "1 " + lang_poll.wrd.vote + " (50%)";
+        }
         for (var i = 0; i < data.answers.length; i++) {
           att_fields[i].title = emoji_num[i] + " <answer" + (i + 1) + ">";
           att_fields[i].short = false;
@@ -699,8 +702,8 @@ module.exports = (app) => {
       return {
         author_name: lang_poll.wrd.poll + " #" + (slot + 1),
         title: data.title || "<title>",
-        text: data.text || "<text>",
-        fallback: data.text || "<text>",
+        text: temp_text,
+        fallback: temp_text,
         fields: att_fields,
         footer: "<@" + data.creator + ">",
         ts: 0,
@@ -891,6 +894,7 @@ module.exports = (app) => {
       return;
     } else {
       var temp = msg.body.text.split(";");
+      console.log(temp);
       if (!('answers' in data)) data.answers = [];
       for (var i = 0; i < temp.length; i++) data.answers.push(temp[i]);
       
