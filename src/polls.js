@@ -308,52 +308,6 @@ var poll_create_answers_nb_msg = {
   delete_original: true
 };
 
-/*var poll_create_max1_msg = {
-  text: lang_poll.wrd.preview + ":",
-  attachments: [
-    {},
-    {
-      text: lang_poll.msg.enteranswer,
-      fallback: lang_poll.msg.enteranswer,
-      mrkdwn_in : ["text", "pretext"]
-    },
-    {
-      text: "",
-      fallback: "",
-      callback_id: 'poll_max_callback',
-      actions: [],
-      mrkdwn_in : ["text", "pretext"]
-    },
-    {
-      text: "",
-      fallback: "",
-      callback_id: 'poll_menu_callback',
-      actions: [
-        {
-          name: 'back',
-          text: lang_poll.btn.back,
-          type: 'button'
-        },
-        {
-          name: 'cancel',
-          text: lang_poll.btn.cancel,
-          type: 'button',
-          style: 'danger',
-          confirm: {
-            title: lang_poll.msg.confirm,
-            text: lang_poll.msg.confirmcancel,
-            ok_text: lang_poll.btn.yes,
-            dismiss_text: lang_poll.btn.no
-          }
-        }
-      ],
-      mrkdwn_in : ["text", "pretext"]
-    }
-  ],
-  response_type: 'ephemeral',
-  delete_original: true
-};*/
-
 var poll_create_max_msg = {
   text: lang_poll.wrd.preview + ":",
   attachments: [
@@ -523,6 +477,7 @@ module.exports = (app) => {
     constructor (data) {
       this.title = data.title;
       this.text = data.text || "";
+      this.answers = [];
       for (var i = 0; i < data.answers.length; i++) this.answers[i] = {text: data.answers[i], votes: []};
       this.creator = data.creator || "";
       this.ts = {created: 0, edited: 0};
