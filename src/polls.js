@@ -51,7 +51,7 @@ var lang_poll = {
     newpollcreated: "Eine neue Umfrage wurde erstellt:",
     entertitle: "Umfragen-Titel eingeben: `/poll <title>`",
     entertext: "Umfragen-Text eingeben (optional): `/poll <text>`",
-    enteranswer: "Umfragen-Antwort eingeben (mind. 2): `/poll <answer>`\nEs können auch mehrere Antworten auf einmal eingegeben werden: `/poll <answer1>;<answer2>;...",
+    enteranswer: "Umfragen-Antwort eingeben (mind. 2): `/poll <answer>`\nEs können auch mehrere Antworten auf einmal eingegeben werden: `/poll <answer1>;<answer2>;...`",
     entermax: "Wie viele Antworten sollen auswählbar sein? (Standard: 1)",
     shownames: "Sollen Nutzernamen angezeigt werden? (Standard: Ja)",
     selectedit: "Welche Information soll bearbeitet werden?",
@@ -891,6 +891,7 @@ module.exports = (app) => {
       return;
     } else {
       var temp = msg.body.text.split(";");
+      if (!('answers' in data)) data.answers = [];
       for (var i = 0; i < temp.length; i++) {
         data.answers.push({text: temp[i], votes: []}); 
       }
