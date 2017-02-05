@@ -50,9 +50,9 @@ var lang_poll = {
     newpollcreated: "Eine neue Umfrage wurde erstellt:",
     entertitle: "Umfragen-Titel eingeben: `/poll <title>`",
     entertext: "Umfragen-Text eingeben (optional): `/poll <text>`",
-    enteranswer: "Umfragen-Antwort eingeben (mind. 2): `/poll <answer>`",
-    entermax: "Wie viele Antworten sollen auswählbar sein?",
-    shownames: "Sollen Nutzernamen angezeigt werden?",
+    enteranswer: "Umfragen-Antwort eingeben (mind. 2): `/poll <answer>`\nEs können auch mehrere Antworten auf einmal eingegeben werden: `/poll <answer1>;<answer2>;...",
+    entermax: "Wie viele Antworten sollen auswählbar sein? (Standard: 1)",
+    shownames: "Sollen Nutzernamen angezeigt werden? (Standard: Ja)",
     selectedit: "Welche Information soll bearbeitet werden?",
     confirm: "Sind Sie sicher?",
     confirmcancel: "Sind Sie sicher, dass Sie den Vorgang abbrechen wollen?"
@@ -130,8 +130,41 @@ var poll_create_title_msg = {
     {
       text: "",
       fallback: "",
-      callback_id: 'poll_menu_callback',
+      callback_id: 'poll_create_menu_callback',
       actions: [
+        {
+          name: 'cancel',
+          text: lang_poll.btn.cancel,
+          type: 'button',
+          style: 'danger'
+        }
+      ],
+      mrkdwn_in : ["text", "pretext"]
+    }
+  ],
+  response_type: 'ephemeral',
+  delete_original: true
+};
+
+var poll_create_title_nb_msg = {
+  text: lang_poll.wrd.preview + ":",
+  attachments: [
+    {},
+    {
+      text: lang_poll.msg.entertitle,
+      fallback: lang_poll.msg.entertitle,
+      mrkdwn_in : ["text", "pretext"]
+    },
+    {
+      text: "",
+      fallback: "",
+      callback_id: 'poll_create_menu_callback',
+      actions: [
+        {
+          name: 'next',
+          text: lang_poll.btn.next,
+          type: 'button'
+        },
         {
           name: 'cancel',
           text: lang_poll.btn.cancel,
@@ -158,7 +191,7 @@ var poll_create_text_msg = {
     {
       text: "",
       fallback: "",
-      callback_id: 'poll_menu_callback',
+      callback_id: 'poll_create_menu_callback',
       actions: [
         {
           name: 'back',
@@ -202,7 +235,7 @@ var poll_create_answers_msg = {
     {
       text: "",
       fallback: "",
-      callback_id: 'poll_menu_callback',
+      callback_id: 'poll_create_menu_callback',
       actions: [
         {
           name: 'back',
@@ -229,7 +262,7 @@ var poll_create_answers_msg = {
   delete_original: true
 };
 
-var poll_create_answers2_msg = {
+var poll_create_answers_nb_msg = {
   text: lang_poll.wrd.preview + ":",
   attachments: [
     {},
@@ -241,7 +274,7 @@ var poll_create_answers2_msg = {
     {
       text: "",
       fallback: "",
-      callback_id: 'poll_menu_callback',
+      callback_id: 'poll_create_menu_callback',
       actions: [
         {
           name: 'back',
@@ -273,7 +306,7 @@ var poll_create_answers2_msg = {
   delete_original: true
 };
 
-var poll_create_max1_msg = {
+/*var poll_create_max1_msg = {
   text: lang_poll.wrd.preview + ":",
   attachments: [
     {},
@@ -317,9 +350,9 @@ var poll_create_max1_msg = {
   ],
   response_type: 'ephemeral',
   delete_original: true
-};
+};*/
 
-var poll_create_max2_msg = {
+var poll_create_max_msg = {
   text: lang_poll.wrd.preview + ":",
   attachments: [
     {},
@@ -331,26 +364,123 @@ var poll_create_max2_msg = {
     {
       text: "",
       fallback: "",
-      callback_id: 'poll_max_callback',
+      callback_id: 'poll_create_max_callback',
       actions: [],
       mrkdwn_in : ["text", "pretext"]
     },
     {
       text: "",
       fallback: "",
-      callback_id: 'poll_max_callback',
+      callback_id: 'poll_create_max_callback',
       actions: [],
       mrkdwn_in : ["text", "pretext"]
     },
     {
       text: "",
       fallback: "",
-      callback_id: 'poll_menu_callback',
+      callback_id: 'poll_create_menu_callback',
       actions: [
         {
           name: 'back',
           text: lang_poll.btn.back,
           type: 'button'
+        },
+        {
+          name: 'cancel',
+          text: lang_poll.btn.cancel,
+          type: 'button',
+          style: 'danger',
+          confirm: {
+            title: lang_poll.msg.confirm,
+            text: lang_poll.msg.confirmcancel,
+            ok_text: lang_poll.btn.yes,
+            dismiss_text: lang_poll.btn.no
+          }
+        }
+      ],
+      mrkdwn_in : ["text", "pretext"]
+    }
+  ],
+  response_type: 'ephemeral',
+  delete_original: true
+};
+
+var poll_create_names_msg = {
+  text: lang_poll.wrd.preview + ":",
+  attachments: [
+    {},
+    {
+      text: lang_poll.msg.shownames,
+      fallback: lang_poll.msg.shownames,
+      callback_id: 'poll_create_names_callback',
+      actions: [
+        {
+          name: 'yes',
+          text: lang_poll.btn.yes,
+          type: 'button'
+        },
+        {
+          name: 'no',
+          text: lang_poll.btn.no,
+          type: 'button'
+        }
+      ],
+      mrkdwn_in : ["text", "pretext"]
+    },
+    {
+      text: "",
+      fallback: "",
+      callback_id: 'poll_create_menu_callback',
+      actions: [
+        {
+          name: 'back',
+          text: lang_poll.btn.back,
+          type: 'button'
+        },
+        {
+          name: 'next',
+          text: lang_poll.btn.next,
+          type: 'button'
+        },
+        {
+          name: 'cancel',
+          text: lang_poll.btn.cancel,
+          type: 'button',
+          style: 'danger',
+          confirm: {
+            title: lang_poll.msg.confirm,
+            text: lang_poll.msg.confirmcancel,
+            ok_text: lang_poll.btn.yes,
+            dismiss_text: lang_poll.btn.no
+          }
+        }
+      ],
+      mrkdwn_in : ["text", "pretext"]
+    }
+  ],
+  response_type: 'ephemeral',
+  delete_original: true
+};
+
+var poll_create_final_msg = {
+  text: lang_poll.wrd.preview + ":",
+  attachments: [
+    {},
+    {
+      text: "",
+      fallback: "",
+      callback_id: 'poll_create_menu_callback',
+      actions: [
+        {
+          name: 'edit',
+          text: lang_poll.btn.edit,
+          type: 'button'
+        },
+        {
+          name: 'done',
+          text: lang_poll.btn.done,
+          type: 'button',
+          style: 'primary'
         },
         {
           name: 'cancel',
@@ -544,22 +674,22 @@ module.exports = (app) => {
     static generateDummy (slot, data) {
       var att_fields = [];
       att_fields[0] = {
-        title: emoji_num[0] + "<answer1>",
-        value: "User1, User2 (100%)",
+        title: emoji_num[0] + " <answer1>",
+        value: "user1, user2 (100%)",
         short: false
       };
       att_fields[1] = {
-        title: emoji_num[1] + "<answer2>",
-        value: "User2 (50%)",
+        title: emoji_num[1] + " <answer2>",
+        value: "user2 (50%)",
         short: false
       };
-      if (!data.names) {
-        att_fields[0].value = "2" + lang_poll.wrd.votes + " (100%)";
-        att_fields[1].value = "1" + lang_poll.wrd.vote + " (50%)";
+      if ('answers' in data && !data.names) {
+        att_fields[0].value = "2 " + lang_poll.wrd.votes + " (100%)";
+        att_fields[1].value = "1 " + lang_poll.wrd.vote + " (50%)";
       }
       if ('answers' in data) {
         for (var i = 0; i < data.answers.length; i++) {
-          att_fields[i].title = emoji_num[i] + "<answer" + (i + 1) + ">";
+          att_fields[i].title = emoji_num[i] + " <answer" + (i + 1) + ">";
           att_fields[i].short = false;
           if (i > 1) att_fields[i].value = lang_poll.msg.novotes + " (0%)";
         }
@@ -673,10 +803,18 @@ module.exports = (app) => {
       msg.route('poll_create_title_route', data, 60);
       return;
     } else if (msg.type == 'action') {
-      if (msg.body.actions[0].name == 'cancel') {
-        msg.respond({text: "", delete_original: true});
-        return;
+      switch (msg.body.actions[0].name) {
+        case 'next':
+          var msg_text = poll_create_text_msg;
+          msg_text.attachments[0] = Poll.generateDummy(poll_db.length, data);
+          msg.respond(msg_text);
+          msg.route('poll_create_text_route', data, 60);
+          break;
+        case 'cancel':
+          msg.respond({text: "", delete_original: true});
+          break;
       }
+      return;
     } else {
       data.title = msg.body.text;
       var msg_text = poll_create_text_msg;
@@ -695,17 +833,17 @@ module.exports = (app) => {
     } else if (msg.type == 'action') {
       switch (msg.body.actions[0].name) {
         case 'back':
-          var msg_text = poll_create_title_msg;
+          var msg_text = poll_create_title_nb_msg;
           msg_text.attachments[0] = Poll.generateDummy(poll_db.length, data);
           msg.respond(msg_text);
-          msg.route('poll_create_title_route');
+          msg.route('poll_create_title_route', data, 60);
           break;
         case 'next':
           data.text = "";
           var msg_text = poll_create_answers_msg;
           msg_text.attachments[0] = Poll.generateDummy(poll_db.length, data);
           msg.respond(msg_text);
-          msg.route('poll_create_answers_route');
+          msg.route('poll_create_answers_route', data, 60);
           break;
         case 'cancel':
           msg.respond({text: "", delete_original: true});
@@ -713,13 +851,157 @@ module.exports = (app) => {
       }
       return;
     } else {
-      data.title = msg.body.text;
+      data.text = msg.body.text;
       var msg_text = poll_create_text_msg;
       msg_text.attachments[0] = Poll.generateDummy(poll_db.length, data);
       
       msg.respond(msg_text);
-      msg.route('poll_create_text_route', data, 60);
+      msg.route('poll_create_answers_route', data, 60);
       return;
+    }
+  });
+  
+  slapp.route('poll_create_answers_route', (msg, data) => {
+    if (msg.type == 'event') {
+      msg.route('poll_create_answers_route', data, 60);
+      return;
+    } else if (msg.type == 'action') {
+      switch (msg.body.actions[0].name) {
+        case 'back':
+          var msg_text = poll_create_text_msg;
+          msg_text.attachments[0] = Poll.generateDummy(poll_db.length, data);
+          msg.respond(msg_text);
+          msg.route('poll_create_text_route', data, 60);
+          break;
+        case 'next':
+          if (data.answers.length >= 2) {
+            var msg_text = poll_create_max_msg;
+            msg_text.attachments[0] = Poll.generateDummy(poll_db.length, data);
+            msg.respond(msg_text);
+            msg.route('poll_create_max_route', data, 60);
+          } else {
+            msg.route('poll_create_answers_route', data, 60);
+          }
+          break;
+        case 'cancel':
+          msg.respond({text: "", delete_original: true});
+          break;
+      }
+      return;
+    } else {
+      var temp = msg.body.text.split(";");
+      for (var i = 0; i < temp.length; i++) {
+        data.answers.push({text: temp[i], votes: []}); 
+      }
+      
+      if (data.answers.length >= 2) {
+        var msg_text = poll_create_max_msg;
+        msg_text.attachments[0] = Poll.generateDummy(poll_db.length, data);
+        msg.respond(msg_text);
+        msg.route('poll_create_max_route', data, 60);
+      } else {
+        msg.route('poll_create_answers_route', data, 60);
+      }
+      return;
+    }
+  });
+  
+  slapp.route('poll_create_max_route', (msg, data) => {
+    if (msg.type != 'action') {
+      msg.route('poll_create_max_route', data, 60);
+      return;
+    } else {
+      switch (msg.body.actions[0].name) {
+        case 'back':
+          var msg_text = poll_create_answers_msg;
+          msg_text.attachments[0] = Poll.generateDummy(poll_db.length, data);
+          msg.respond(msg_text);
+          msg.route('poll_create_answers_route', data, 60);
+          return;
+        case 'next':
+          var msg_text = poll_create_names_msg;
+          msg_text.attachments[0] = Poll.generateDummy(poll_db.length, data);
+          msg.respond(msg_text);
+          msg.route('poll_create_names_route', data, 60);
+          return;
+        case 'cancel':
+          msg.respond({text: "", delete_original: true});
+          return;
+      }
+      
+      var temp = parseInt(msg.body.actions[0].name) || -1;
+      if (temp >= 0 && <= data.answers.length) {
+        data.max = temp;
+        var msg_text = poll_create_names_msg;
+        msg_text.attachments[0] = Poll.generateDummy(poll_db.length, data);
+        msg.respond(msg_text);
+        msg.route('poll_create_names_route', data, 60);
+      }
+      return;
+    }
+  });
+  
+  slapp.route('poll_create_names_route', (msg, data) => {
+    if (msg.type != 'action') {
+      msg.route('poll_create_names_route', data, 60);
+      return;
+    } else {
+      switch (msg.body.actions[0].name) {
+        case 'yes':
+          data.names = true;
+          break;
+        case 'no':
+          data.names = false;
+          break;
+        case 'back':
+          var msg_text = poll_create_max_msg;
+          msg_text.attachments[0] = Poll.generateDummy(poll_db.length, data);
+          msg.respond(msg_text);
+          msg.route('poll_create_max_route', data, 60);
+          return;
+        case 'next':
+          break;
+        case 'cancel':
+          msg.respond({text: "", delete_original: true});
+          return;
+      }
+      
+      var msg_text = poll_create_final_msg;
+      msg_text.attachments[0] = Poll.generateDummy(poll_db.length, data);
+      msg.respond(msg_text);
+      msg.route('poll_create_final_route', data, 60);
+      return;
+    }
+  });
+  
+  slapp.route('poll_create_final_route', (msg, data) => {
+    if (msg.type != 'action') {
+      msg.route('poll_create_final_route', data, 60);
+      return;
+    } else {
+      switch (msg.body.actions[0].name) {
+        case 'edit':
+          var msg_text = poll_edit_msg;
+          msg_text.attachments[0] = Poll.generateDummy(poll_db.length, data);
+          msg.respond(msg_text);
+          msg.route('poll_create_edit_route', data, 60);
+          return;
+        case 'done':
+          break;
+        case 'cancel':
+          msg.respond({text: "", delete_original: true});
+          return;
+      }
+      
+      var slot = poll_db.length;
+      poll_db[slot] = new Poll(data);
+      var msg_text = poll_db[slot].generatePoll(slot);
+      msg_text.channel = config.poll_ch;
+      
+      msg.say(msg_text, (err, result) => {
+        poll_db[slot].addPost(result.channel, result.ts);
+        savePollDB();
+      });
     }
   });
   
