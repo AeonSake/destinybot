@@ -43,7 +43,8 @@ var lang_poll = {
     editpoll: "Umfrage bearbeiten",
     showhelp: "Hilfe anzeigen",
     yes: "Ja",
-    no: "Nein"
+    no: "Nein",
+    all: "Alle"
   },
   msg: {
     novotes: "Keine Stimmen",
@@ -358,8 +359,8 @@ var poll_create_max_msg = {
   attachments: [
     {},
     {
-      text: lang_poll.msg.enteranswer,
-      fallback: lang_poll.msg.enteranswer,
+      text: lang_poll.msg.entermax,
+      fallback: lang_poll.msg.entermax,
       mrkdwn_in : ["text", "pretext"]
     },
     {
@@ -693,7 +694,7 @@ module.exports = (app) => {
           att_fields[1].value = "1 " + lang_poll.wrd.vote + " (50%)";
         }
         for (var i = 0; i < data.answers.length; i++) {
-          att_fields[i].title = emoji_num[i] + " <answer" + (i + 1) + ">";
+          att_fields[i].title = data.answers[i];
           att_fields[i].short = false;
           if (i > 1) att_fields[i].value = lang_poll.msg.novotes + " (0%)";
         }
@@ -881,6 +882,15 @@ module.exports = (app) => {
           if (data.answers.length >= 2) {
             var msg_text = poll_create_max_msg;
             msg_text.attachments[0] = Poll.generateDummy(poll_db.length, data);
+            
+            for (var i = 0; i < data.answers.length; i++) {
+              var temp = {name: i, text: i, type: 'button'};
+              if (i < 5) msg_text.attachments[2].actions[i] = temp;
+              else msg_text.attachments[3].actions[i - 5] = temp;
+            }
+            msg_text.attachments[2].actions[0].text = lang_poll.btn.all;
+            if (data.answers.length <= 5) msg_text.attachments.splice(3, 1);
+            
             msg.respond(msg_text);
             msg.route('poll_create_max_route', data, 60);
           } else {
@@ -896,13 +906,28 @@ module.exports = (app) => {
       var temp = msg.body.text.split(";");
       if (!('answers' in data)) data.answers = [];
       for (var i = 0; i < temp.length; i++) data.answers.push(temp[i]);
-      console.log(data);
       
-      if (data.answers.length >= 2) var msg_text = poll_create_answers_nb_msg;
-      else var msg_text = poll_create_answers_msg;
-      msg_text.attachments[0] = Poll.generateDummy(poll_db.length, data);
-      msg.respond(msg_text);
-      msg.route('poll_create_answers_route', data, 60);
+      if (data.answers.length < 10) {
+        if (data.answers.length >= 2) var msg_text = poll_create_answers_nb_msg;
+        else var msg_text = poll_create_answers_msg;
+        msg_text.attachments[0] = Poll.generateDummy(poll_db.length, data);
+        msg.respond(msg_text);
+        msg.route('poll_create_answers_route', data, 60);
+      } else {
+        var msg_text = poll_create_max_msg;
+        msg_text.attachments[0] = Poll.generateDummy(poll_db.length, data);
+        
+        for (var i = 0; i < data.answers.length; i++) {
+          var temp = {name: i, text: i, type: 'button'};
+          if (i < 5) msg_text.attachments[2].actions[i] = temp;
+          else msg_text.attachments[3].actions[i - 5] = temp;
+        }
+        msg_text.attachments[2].actions[0].text = lang_poll.btn.all;
+        if (data.answers.length <= 5) msg_text.attachments.splice(3, 1);
+        
+        msg.respond(msg_text);
+        msg.route('poll_create_max_route', data, 60);
+      }
       return;
     }
   });
