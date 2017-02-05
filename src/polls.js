@@ -51,8 +51,8 @@ var lang_poll = {
     pollclosed: "Umfrage wurde geschlossen.",
     newpollcreated: "Eine neue Umfrage wurde erstellt:",
     entertitle: "Umfragen-Titel eingeben: `/poll <title>`",
-    entertext: "Umfragen-Text eingeben (optional): `/poll <text>`",
-    enteranswer: "Umfragen-Antwort eingeben (mind. 2): `/poll <answer>`\nEs können auch mehrere Antworten auf einmal eingegeben werden: `/poll <answer1>;<answer2>;...`",
+    entertext: "Umfragen-Text eingeben: `/poll <text>` (optional)",
+    enteranswer: "Umfragen-Antwort eingeben: `/poll <answer>` (mind. 2, max. 10)\nEs können auch mehrere Antworten auf einmal eingegeben werden: `/poll <answer1>;<answer2>;...`",
     entermax: "Wie viele Antworten sollen auswählbar sein? (Standard: 1)",
     shownames: "Sollen Nutzernamen angezeigt werden? (Standard: Ja)",
     selectedit: "Welche Information soll bearbeitet werden?",
@@ -523,7 +523,7 @@ module.exports = (app) => {
     constructor (data) {
       this.title = data.title;
       this.text = data.text || "";
-      this.answers = data.answers;
+      for (var i = 0; i < data.answers.length; i++) this.answers[i] = {text: data.answers[i], votes: []};
       this.creator = data.creator || "";
       this.ts = {created: 0, edited: 0};
       this.ts.created = data.tscreated || 0;
@@ -689,14 +689,10 @@ module.exports = (app) => {
         short: false
       };
       if ('answers' in data) {
-        if ('names' in data && !data.names) {
-          att_fields[0].value = "2 " + lang_poll.wrd.votes + " (100%)";
-          att_fields[1].value = "1 " + lang_poll.wrd.vote + " (50%)";
-        }
         for (var i = 0; i < data.answers.length; i++) {
-          att_fields[i].title = data.answers[i];
+          att_fields[i].title = emoji_num[i] + " " data.answers[i];
+          att_fields[i].value = lang_poll.msg.novotes + " (0%)";
           att_fields[i].short = false;
-          if (i > 1) att_fields[i].value = lang_poll.msg.novotes + " (0%)";
         }
       }
       
@@ -905,7 +901,7 @@ module.exports = (app) => {
     } else {
       var temp = msg.body.text.split(";");
       if (!('answers' in data)) data.answers = [];
-      for (var i = 0; i < temp.length; i++) data.answers.push(temp[i]);
+      for (var i = 0; i < temp.length; i++) data.answers.push(temp[i].trim());
       
       if (data.answers.length < 10) {
         if (data.answers.length >= 2) var msg_text = poll_create_answers_nb_msg;
