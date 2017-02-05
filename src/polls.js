@@ -35,6 +35,7 @@ var lang_poll = {
     open: "Öffnen",
     close: "Schließen",
     delete: "Löschen",
+    done: "Fertig",
     cancel: "Abbrechen",
     dismiss: "Ausblenden",
     createpoll: "Umfrage erstellen",
