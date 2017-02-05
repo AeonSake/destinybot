@@ -894,18 +894,17 @@ module.exports = (app) => {
       return;
     } else {
       var temp = msg.body.text.split(";");
-      console.log(temp);
       if (!('answers' in data)) data.answers = [];
       for (var i = 0; i < temp.length; i++) data.answers.push(temp[i]);
+      console.log(data);
+      console.log(data.answers);
       
       if (data.answers.length >= 2) {
-        var msg_text = poll_create_max_msg;
+        var msg_text = poll_create_answers_nb_msg_msg;
         msg_text.attachments[0] = Poll.generateDummy(poll_db.length, data);
         msg.respond(msg_text);
-        msg.route('poll_create_max_route', data, 60);
-      } else {
-        msg.route('poll_create_answers_route', data, 60);
       }
+      msg.route('poll_create_answers_route', data, 60);
       return;
     }
   });
