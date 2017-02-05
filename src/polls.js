@@ -557,10 +557,12 @@ module.exports = (app) => {
         att_fields[0].value = "2" + lang_poll.wrd.votes + " (100%)";
         att_fields[1].value = "1" + lang_poll.wrd.vote + " (50%)";
       }
-      for (var i = 0; i < data.answers.length; i++) {
-        att_fields[i].title = emoji_num[i] + "<answer" + (i + 1) + ">";
-        att_fields[i].short = false;
-        if (i > 1) att_fields[i].value = lang_poll.msg.novotes + " (0%)";
+      if ('answers' in data) {
+        for (var i = 0; i < data.answers.length; i++) {
+          att_fields[i].title = emoji_num[i] + "<answer" + (i + 1) + ">";
+          att_fields[i].short = false;
+          if (i > 1) att_fields[i].value = lang_poll.msg.novotes + " (0%)";
+        }
       }
       
       return {
