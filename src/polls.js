@@ -664,7 +664,7 @@ module.exports = (app) => {
     msg_text.attachments[0] = Poll.generateDummy(poll_db.length, data);
         
     msg
-      .respond(msg_text)
+      .respond(msg.body.response_url, msg_text)
       .route('poll_create_title_route', data, 60);
     return;
   });
