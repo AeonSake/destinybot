@@ -690,7 +690,7 @@ module.exports = (app) => {
       };
       if ('answers' in data) {
         for (var i = 0; i < data.answers.length; i++) {
-          att_fields[i].title = emoji_num[i] + " " data.answers[i];
+          att_fields[i].title = emoji_num[i] + " " + data.answers[i];
           att_fields[i].value = lang_poll.msg.novotes + " (0%)";
           att_fields[i].short = false;
         }
