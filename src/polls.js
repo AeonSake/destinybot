@@ -40,7 +40,9 @@ var lang_poll = {
     createpoll: "Umfrage erstellen",
     showpolls: "Umfragen anzeigen",
     editpoll: "Umfrage bearbeiten",
-    showhelp: "Hilfe anzeigen"
+    showhelp: "Hilfe anzeigen",
+    yes: "Ja",
+    no: "Nein"
   },
   msg: {
     novotes: "Keine Stimmen",
@@ -51,7 +53,9 @@ var lang_poll = {
     enteranswer: "Umfragen-Antwort eingeben (mind. 2): `/poll <answer>`",
     entermax: "Wie viele Antworten sollen auswählbar sein?",
     shownames: "Sollen Nutzernamen angezeigt werden?",
-    selectedit: "Welche Information soll bearbeitet werden?"
+    selectedit: "Welche Information soll bearbeitet werden?",
+    confirm: "Sind Sie sicher?",
+    confirmcancel: "Sind Sie sicher, dass Sie den Vorgang abbrechen wollen?"
   }
 }
 
@@ -61,33 +65,38 @@ var lang_poll = {
 // ========== MESSAGES ==========
 // ==============================
 
+// ===== MAIN =====
+
 var poll_main_msg = {
   text: "",
   attachments: [
     {
       text: "",
-      fallback: "test",
+      fallback: "",
       callback_id: 'poll_main_callback',
       actions: [
         {
           name: 'createpoll',
-          text: lang_poll.btn.createpoll
+          text: lang_poll.btn.createpoll,
+          type: 'button'
         },
         {
           name: 'showpoll',
-          text: lang_poll.btn.showpolls
+          text: lang_poll.btn.showpolls,
+          type: 'button'
         },
         {
           name: 'editpoll',
-          text: lang_poll.btn.editpoll
+          text: lang_poll.btn.editpoll,
+          type: 'button'
         },
         {
           name: 'showhelp',
-          text: lang_poll.btn.showhelp
+          text: lang_poll.btn.showhelp,
+          type: 'button'
         }
       ],
-      mrkdwn_in : ["text", "pretext"],
-      color: config.att_color
+      mrkdwn_in : ["text", "pretext"]
     },
     {
       text: "",
@@ -96,17 +105,272 @@ var poll_main_msg = {
       actions: [
         {
           name: 'dismiss',
-          text: lang_poll.btn.dismiss
+          text: lang_poll.btn.dismiss,
+          type: 'button'
         }
       ],
-      mrkdwn_in : ["text", "pretext"],
-      color: config.att_color
+      mrkdwn_in : ["text", "pretext"]
     }
   ],
   response_type: 'ephemeral',
   delete_original: true
 };
 
+// ===== CREATE =====
+
+var poll_create_title_msg = {
+  text: "",
+  attachments: [
+    {},
+    {
+      text: lang_poll.msg.entertitle,
+      fallback: lang_poll.msg.entertitle,
+      mrkdwn_in : ["text", "pretext"]
+    },
+    {
+      text: "",
+      fallback: "",
+      callback_id: 'poll_menu_callback',
+      actions: [
+        {
+          name: 'cancel',
+          text: lang_poll.btn.cancel,
+          type: 'button',
+          style: 'danger'
+        }
+      ],
+      mrkdwn_in : ["text", "pretext"]
+    }
+  ],
+  response_type: 'ephemeral',
+  delete_original: true
+};
+
+var poll_create_text_msg = {
+  text: "",
+  attachments: [
+    {},
+    {
+      text: lang_poll.msg.entertext,
+      fallback: lang_poll.msg.entertext,
+      mrkdwn_in : ["text", "pretext"]
+    },
+    {
+      text: "",
+      fallback: "",
+      callback_id: 'poll_menu_callback',
+      actions: [
+        {
+          name: 'back',
+          text: lang_poll.btn.back,
+          type: 'button'
+        },
+        {
+          name: 'next',
+          text: lang_poll.btn.next,
+          type: 'button'
+        },
+        {
+          name: 'cancel',
+          text: lang_poll.btn.cancel,
+          type: 'button',
+          style: 'danger',
+          confirm: {
+            title: lang_poll.msg.confirm,
+            text: lang_poll.msg.confirmcancel,
+            ok_text: lang_poll.btn.yes,
+            dismiss_text: lang_poll.btn.no
+          }
+        }
+      ],
+      mrkdwn_in : ["text", "pretext"]
+    }
+  ],
+  response_type: 'ephemeral',
+  delete_original: true
+};
+
+var poll_create_answers_msg = {
+  text: "",
+  attachments: [
+    {},
+    {
+      text: lang_poll.msg.enteranswer,
+      fallback: lang_poll.msg.enteranswer,
+      mrkdwn_in : ["text", "pretext"]
+    },
+    {
+      text: "",
+      fallback: "",
+      callback_id: 'poll_menu_callback',
+      actions: [
+        {
+          name: 'back',
+          text: lang_poll.btn.back,
+          type: 'button'
+        },
+        {
+          name: 'cancel',
+          text: lang_poll.btn.cancel,
+          type: 'button',
+          style: 'danger',
+          confirm: {
+            title: lang_poll.msg.confirm,
+            text: lang_poll.msg.confirmcancel,
+            ok_text: lang_poll.btn.yes,
+            dismiss_text: lang_poll.btn.no
+          }
+        }
+      ],
+      mrkdwn_in : ["text", "pretext"]
+    }
+  ],
+  response_type: 'ephemeral',
+  delete_original: true
+};
+
+var poll_create_answers2_msg = {
+  text: "",
+  attachments: [
+    {},
+    {
+      text: lang_poll.msg.enteranswer,
+      fallback: lang_poll.msg.enteranswer,
+      mrkdwn_in : ["text", "pretext"]
+    },
+    {
+      text: "",
+      fallback: "",
+      callback_id: 'poll_menu_callback',
+      actions: [
+        {
+          name: 'back',
+          text: lang_poll.btn.back,
+          type: 'button'
+        },
+        {
+          name: 'next',
+          text: lang_poll.btn.next,
+          type: 'button'
+        },
+        {
+          name: 'cancel',
+          text: lang_poll.btn.cancel,
+          type: 'button',
+          style: 'danger',
+          confirm: {
+            title: lang_poll.msg.confirm,
+            text: lang_poll.msg.confirmcancel,
+            ok_text: lang_poll.btn.yes,
+            dismiss_text: lang_poll.btn.no
+          }
+        }
+      ],
+      mrkdwn_in : ["text", "pretext"]
+    }
+  ],
+  response_type: 'ephemeral',
+  delete_original: true
+};
+
+var poll_create_max1_msg = {
+  text: "",
+  attachments: [
+    {},
+    {
+      text: lang_poll.msg.enteranswer,
+      fallback: lang_poll.msg.enteranswer,
+      mrkdwn_in : ["text", "pretext"]
+    },
+    {
+      text: "",
+      fallback: "",
+      callback_id: 'poll_max_callback',
+      actions: [],
+      mrkdwn_in : ["text", "pretext"]
+    },
+    {
+      text: "",
+      fallback: "",
+      callback_id: 'poll_menu_callback',
+      actions: [
+        {
+          name: 'back',
+          text: lang_poll.btn.back,
+          type: 'button'
+        },
+        {
+          name: 'cancel',
+          text: lang_poll.btn.cancel,
+          type: 'button',
+          style: 'danger',
+          confirm: {
+            title: lang_poll.msg.confirm,
+            text: lang_poll.msg.confirmcancel,
+            ok_text: lang_poll.btn.yes,
+            dismiss_text: lang_poll.btn.no
+          }
+        }
+      ],
+      mrkdwn_in : ["text", "pretext"]
+    }
+  ],
+  response_type: 'ephemeral',
+  delete_original: true
+};
+
+var poll_create_max2_msg = {
+  text: "",
+  attachments: [
+    {},
+    {
+      text: lang_poll.msg.enteranswer,
+      fallback: lang_poll.msg.enteranswer,
+      mrkdwn_in : ["text", "pretext"]
+    },
+    {
+      text: "",
+      fallback: "",
+      callback_id: 'poll_max_callback',
+      actions: [],
+      mrkdwn_in : ["text", "pretext"]
+    },
+    {
+      text: "",
+      fallback: "",
+      callback_id: 'poll_max_callback',
+      actions: [],
+      mrkdwn_in : ["text", "pretext"]
+    },
+    {
+      text: "",
+      fallback: "",
+      callback_id: 'poll_menu_callback',
+      actions: [
+        {
+          name: 'back',
+          text: lang_poll.btn.back,
+          type: 'button'
+        },
+        {
+          name: 'cancel',
+          text: lang_poll.btn.cancel,
+          type: 'button',
+          style: 'danger',
+          confirm: {
+            title: lang_poll.msg.confirm,
+            text: lang_poll.msg.confirmcancel,
+            ok_text: lang_poll.btn.yes,
+            dismiss_text: lang_poll.btn.no
+          }
+        }
+      ],
+      mrkdwn_in : ["text", "pretext"]
+    }
+  ],
+  response_type: 'ephemeral',
+  delete_original: true
+};
 
 
 // ============================
@@ -246,7 +510,6 @@ module.exports = (app) => {
         fallback: "",
         callback_id: 'poll_answer_callback',
         actions: [],
-        color: config.att_color,
         mrkdwn_in: ["text", "pretext"]
       };
       var btn2 = {
@@ -254,7 +517,6 @@ module.exports = (app) => {
         fallback: "",
         callback_id: 'poll_answer_callback',
         actions: [],
-        color: config.att_color,
         mrkdwn_in: ["text", "pretext"]
       };
 
@@ -274,7 +536,7 @@ module.exports = (app) => {
       if (this.state == 0) {
         msg.attachments[1] = btn1;
         if (btn2.actions.length > 0) msg.attachments[2] = btn2;
-      } else if (this.state == 1) msg.attachments[1] = {text: lang_poll.msg.pollclosed, fallback: lang_poll.msg.pollclosed, color: config.att_color}
+      } else if (this.state == 1) msg.attachments[1] = {text: lang_poll.msg.pollclosed, fallback: lang_poll.msg.pollclosed}
 
       return msg;
     }
@@ -348,7 +610,7 @@ module.exports = (app) => {
   }
   
   loadPollDB();
-  console.log("Poll-Database loaded.");
+  console.log("Poll-Database loaded");
   
   
 
@@ -396,11 +658,31 @@ module.exports = (app) => {
         .route('poll_create_final_route', data, 60);
       return;
     } else {
-      msg
-        .respond(poll_main_msg)
-        .route('poll_main_route', 60);
+      msg.respond(poll_main_msg);
       return;
     }
+  });
+  
+  slapp.action('poll_main_callback', (msg) => {
+    switch (msg.body.actions[0].name) {
+      case 'createpoll':
+        msg.respond("createpoll");
+        //do something
+        break;
+      case 'showpoll':
+        msg.respond("showpoll");
+        //do something
+        break;
+      case 'editpoll':
+        msg.respond("editpoll");
+        //do something
+        break;
+      case 'showhelp':
+        msg.respond("showhelp");
+        //do something
+        break;
+    }
+    return;
   });
   
   
@@ -421,6 +703,7 @@ module.exports = (app) => {
   slapp.action('poll_dismiss_callback', (msg) => {
     var msg_text = {text: "", delete_original: true};
     msg.respond(msg.body.response_url, msg_text);
+    return;
   });
   
   
