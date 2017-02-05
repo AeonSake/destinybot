@@ -620,12 +620,46 @@ module.exports = (app) => {
   
 // ===== /poll create =====
   
+  slapp.command('/dbpoll', "create", (msg, cmd) => {
+    var data = {creator: msg.body.user_id};
+    
+    var poll = new Poll(data);
+    var msg_text = poll_create_title_msg;
+    msg_text.attachments[0] = poll.generateAttachment(poll_db.length);
+        
+    msg
+      .respond(msg_text)
+      .route('poll_create_title_route', data, 60);
+    return;
+  });
+  
+  slapp.route('poll_create_title_route', (msg, data) => {
+    if (msg.type == 'event') {
+      msg.route('poll_create_title_route', data, 60);
+      return;
+    } else if (msg.type == 'action') {
+      if (msg.body.actions[0].name == 'cancel') {
+        msg.respond({text: "", delete_original: true});
+        return;
+      }
+    } else {
+      data.title = msg.body.text;
+      var poll = new Poll(data);
+      var msg_text = poll_create_text_msg;
+      msg_text.attachments[0] = poll.generateAttachment(poll_db.length);
+      
+      msg
+        .respond(msg_text)
+        .route('poll_create_text_route', data, 60);
+      return;
+    }
+  });
   
   
 // ===== /poll test =====
   
   
-  slapp.command('/dbpoll', "create", (msg, cmd) => {
+  slapp.command('/dbpoll', "test", (msg, cmd) => {
     var data = {title: "Poll title", text: "Poll text", answers: [], creator: msg.body.user_id, max: 1, names: false};
     data.answers[0] = {text: "Test 1", votes: []};
     data.answers[1] = {text: "Test 2", votes: []};
@@ -667,7 +701,14 @@ module.exports = (app) => {
     switch (msg.body.actions[0].name) {
       case 'createpoll':
         msg.respond("createpoll");
-        //do something
+        var data = {creator: msg.body.user.id};
+        var poll = new Poll(data);
+        var msg_text = poll_create_title_msg;
+        msg_text.attachments[0] = poll.generateAttachment(poll_db.length);
+        
+        msg
+          .respond(msg_text)
+          .route('poll_create_title_route', data, 60);
         break;
       case 'showpoll':
         msg.respond("showpoll");
@@ -702,7 +743,7 @@ module.exports = (app) => {
   
   slapp.action('poll_dismiss_callback', (msg) => {
     var msg_text = {text: "", delete_original: true};
-    msg.respond(msg.body.response_url, msg_text);
+    msg.respond(msg_text); //msg.body.response_url, 
     return;
   });
   
