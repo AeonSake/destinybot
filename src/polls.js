@@ -699,8 +699,8 @@ module.exports = (app) => {
       return {
         author_name: lang_poll.wrd.poll + " #" + (slot + 1),
         title: data.title || "<title>",
-        text: this.text || "<text>",
-        fallback: this.text || "<text>",
+        text: data.text || "<text>",
+        fallback: data.text || "<text>",
         fields: att_fields,
         footer: "<@" + data.creator + ">",
         ts: 0,
@@ -840,7 +840,7 @@ module.exports = (app) => {
           msg.route('poll_create_title_route', data, 60);
           break;
         case 'next':
-          data.text = "";
+          if (!('text' in data)) data.text = "";
           var msg_text = poll_create_answers_msg;
           msg_text.attachments[0] = Poll.generateDummy(poll_db.length, data);
           msg.respond(msg_text);
