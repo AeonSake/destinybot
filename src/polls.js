@@ -892,9 +892,7 @@ module.exports = (app) => {
     } else {
       var temp = msg.body.text.split(";");
       if (!('answers' in data)) data.answers = [];
-      for (var i = 0; i < temp.length; i++) {
-        data.answers.push({text: temp[i], votes: []}); 
-      }
+      for (var i = 0; i < temp.length; i++) data.answers.push(temp[i]);
       
       if (data.answers.length >= 2) {
         var msg_text = poll_create_max_msg;
