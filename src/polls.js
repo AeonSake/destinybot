@@ -771,7 +771,6 @@ module.exports = (app) => {
   slapp.action('poll_main_callback', (msg) => {
     switch (msg.body.actions[0].name) {
       case 'createpoll':
-        msg.respond("createpoll");
         var data = {creator: msg.body.user.id};
         var msg_text = poll_create_title_msg;
         msg_text.attachments[0] = Poll.generateDummy(poll_db.length, data);
