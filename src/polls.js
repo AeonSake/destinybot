@@ -534,6 +534,18 @@ module.exports = (app) => {
 
       return count;
     }
+    
+    collectVoters () {
+      var voters = [];
+      
+      for (var i = 0; i < this.answers.length; i++) {
+        for (var j = 0; j < this.answers[i].votes.length; j++) {
+          if (voters.indexOf(this.answers[i].votes[j]) == -1) voters.push(this.answers[i].votes[j]);
+        }
+      }
+      
+      return voters;
+    }
 
     addPost (ch, ts) {
       this.posts.push({ch: ch, ts: ts});
@@ -541,14 +553,9 @@ module.exports = (app) => {
 
     generateAttachment (slot) {
       var att_fields = [];
-
-      var max_votes = 0;
-      for (var i = 0; i < this.answers.length; i++) {
-        if (this.answers[i].votes.length > max_votes) max_votes = this.answers[i].votes.length;
-      }
+      var voter_count = this.collectVoters().length;
 
       for (var i = 0; i < this.answers.length; i++) {
-
         var votes = "";
         for (var j = 0; j < this.answers[i].votes.length; j++) {
           if (this.options.names) {
@@ -561,8 +568,8 @@ module.exports = (app) => {
         if (this.options.names) votes = votes.slice(0, -2);
         else if (votes == 1) votes += " " + lang_poll.wrd.vote;
         else votes += " " + lang_poll.wrd.votes;
-        if (this.answers[i].votes.length == 0) votes = lang_poll.msg.novotes + " *(0%)*";
-        else votes += " *(" + Math.round((this.answers[i].votes.length / max_votes) * 100)+ "%)*";
+        if (voter_count == 0) votes = lang_poll.msg.novotes + " *(0%)*";
+        else votes += " *(" + Math.round((this.answers[i].votes.length / voter_count) * 100)+ "%)*";
 
         att_fields[i] = {
           title: emoji_num[i] + " " + this.answers[i].text,
@@ -588,7 +595,7 @@ module.exports = (app) => {
       var prtxt = "";
       if (this.options.max != 0) {
         if (this.options.max == 1) prtxt = "Max " + this.options.max + " " + lang_poll.wrd.vote + " " + lang_poll.wrd.allowed + ".";
-        else prtxt = "Max " + this.options.max + " " + lang_poll.wrd.votes + " " + lang_poll.wrd.allowed + ".";
+        else prtxt = "Max. " + this.options.max + " " + lang_poll.wrd.votes + " " + lang_poll.wrd.allowed + ".";
       }
       
       var btn1 = {
@@ -970,11 +977,13 @@ module.exports = (app) => {
           return;
       }
       
+      data.tscreated = msg.body.action_ts;
       var slot = poll_db.length;
       poll_db[slot] = new Poll(data);
       var msg_text = poll_db[slot].generatePoll(slot);
       msg_text.channel = config.poll_ch;
       
+      msg.respond({text: "", delete_original: true});
       msg.say(msg_text, (err, result) => {
         poll_db[slot].addPost(result.channel, result.ts);
         savePollDB();
@@ -1059,6 +1068,7 @@ module.exports = (app) => {
     
     poll_db[slot].vote(answer, user); //todo: show error text
     poll_db[slot].update(slot);
+    savePollDB();
     return;
   });
   
