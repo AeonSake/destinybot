@@ -76,4 +76,4 @@ function notifyAdmin () {
   })
 }
 
-setTimeout(notifyAdmin(), 3000);
+setTimeout(notifyAdmin, 3000);
