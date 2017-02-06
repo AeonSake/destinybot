@@ -69,6 +69,7 @@ module.exports = (app) => {
         });
       }
       else {
+        console.log(data);
         for (var i = 0; i < data.members.length; i++) {
           user_db[i] = {
             id: data.members[i].id,
