@@ -42,3 +42,4 @@ slackscopes:
   - emoji:read
   - reminders:read
   - reminders:write
+  - im:write

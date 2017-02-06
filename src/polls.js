@@ -4,10 +4,6 @@
 
 'use strict';
 
-const os = require('os');
-const config = require('./config');
-const func = require('./func');
-
 var emoji_num = [":one:", ":two:", ":three:", ":four:", ":five:", ":six:", ":seven:", ":eight:", ":nine:", ":keycap_ten:"];
 
 
@@ -16,50 +12,16 @@ var emoji_num = [":one:", ":two:", ":three:", ":four:", ":five:", ":six:", ":sev
 
 
 
-// ==============================
-// ========== LANGUAGE ==========
-// ==============================
-var lang_poll = {
-  wrd: {
-    poll: "Umfrage",
-    user: "User",
-    preview: "Vorschau",
-    vote: "Stimme",
-    votes: "Stimmen",
-    allowed: "erlaubt"
-  },
-  btn: {
-    back: "< Zurück",
-    next: "Weiter >",
-    edit: "Bearbeiten",
-    open: "Öffnen",
-    close: "Schließen",
-    delete: "Löschen",
-    done: "Fertig",
-    cancel: "Abbrechen",
-    dismiss: "Ausblenden",
-    createpoll: "Umfrage erstellen",
-    showpolls: "Umfragen anzeigen",
-    editpoll: "Umfrage bearbeiten",
-    showhelp: "Hilfe anzeigen",
-    yes: "Ja",
-    no: "Nein",
-    all: "Alle"
-  },
-  msg: {
-    novotes: "Keine Stimmen",
-    pollclosed: "Umfrage wurde geschlossen.",
-    newpollcreated: "Eine neue Umfrage wurde erstellt:",
-    entertitle: "Umfragen-Titel eingeben: `/poll <title>`",
-    entertext: "Umfragen-Text eingeben: `/poll <text>` (optional)",
-    enteranswer: "Umfragen-Antwort eingeben: `/poll <answer>` (mind. 2, max. 10)\nEs können auch mehrere Antworten auf einmal eingegeben werden: `/poll <answer1>;<answer2>;...`",
-    entermax: "Wie viele Antworten sollen auswählbar sein? (Standard: 1)",
-    shownames: "Sollen Nutzernamen angezeigt werden? (Standard: Ja)",
-    selectedit: "Welche Information soll bearbeitet werden?",
-    confirm: "Sind Sie sicher?",
-    confirmcancel: "Sind Sie sicher, dass Sie den Vorgang abbrechen wollen?"
-  }
-}
+// ============================
+// ========== MODULE ==========
+// ============================
+
+module.exports = (app) => {
+  let slapp = app.slapp;
+  let kv = app.kv;
+  let config = app.config;
+  let func = app.func;
+  let lang = app.lang;
 
 
 
@@ -79,22 +41,22 @@ var poll_main_msg = {
       actions: [
         {
           name: 'createpoll',
-          text: lang_poll.btn.createpoll,
+          text: lang.btn.poll.createpoll,
           type: 'button'
         },
         {
           name: 'showpoll',
-          text: lang_poll.btn.showpolls,
+          text: lang.btn.poll.showpolls,
           type: 'button'
         },
         {
           name: 'editpoll',
-          text: lang_poll.btn.editpoll,
+          text: lang.btn.poll.editpoll,
           type: 'button'
         },
         {
           name: 'showhelp',
-          text: lang_poll.btn.showhelp,
+          text: lang.btn.showhelp,
           type: 'button'
         }
       ],
@@ -107,7 +69,7 @@ var poll_main_msg = {
       actions: [
         {
           name: 'dismiss',
-          text: lang_poll.btn.dismiss,
+          text: lang.btn.dismiss,
           type: 'button'
         }
       ],
@@ -121,12 +83,12 @@ var poll_main_msg = {
 // ===== CREATE =====
 
 var poll_create_title_msg = {
-  text: lang_poll.wrd.preview + ":",
+  text: lang.wrd.preview + ":",
   attachments: [
     {},
     {
-      text: lang_poll.msg.entertitle,
-      fallback: lang_poll.msg.entertitle,
+      text: lang.msg.poll.entertitle,
+      fallback: lang.msg.poll.entertitle,
       mrkdwn_in : ["text", "pretext"]
     },
     {
@@ -136,7 +98,7 @@ var poll_create_title_msg = {
       actions: [
         {
           name: 'cancel',
-          text: lang_poll.btn.cancel,
+          text: lang.btn.cancel,
           type: 'button',
           style: 'danger'
         }
@@ -149,12 +111,12 @@ var poll_create_title_msg = {
 };
 
 var poll_create_title_nb_msg = {
-  text: lang_poll.wrd.preview + ":",
+  text: lang.wrd.preview + ":",
   attachments: [
     {},
     {
-      text: lang_poll.msg.entertitle,
-      fallback: lang_poll.msg.entertitle,
+      text: lang.msg.poll.entertitle,
+      fallback: lang.msg.poll.entertitle,
       mrkdwn_in : ["text", "pretext"]
     },
     {
@@ -164,12 +126,12 @@ var poll_create_title_nb_msg = {
       actions: [
         {
           name: 'next',
-          text: lang_poll.btn.next,
+          text: lang.btn.next,
           type: 'button'
         },
         {
           name: 'cancel',
-          text: lang_poll.btn.cancel,
+          text: lang.btn.cancel,
           type: 'button',
           style: 'danger'
         }
@@ -182,12 +144,12 @@ var poll_create_title_nb_msg = {
 };
 
 var poll_create_text_msg = {
-  text: lang_poll.wrd.preview + ":",
+  text: lang.wrd.preview + ":",
   attachments: [
     {},
     {
-      text: lang_poll.msg.entertext,
-      fallback: lang_poll.msg.entertext,
+      text: lang.msg.poll.entertext,
+      fallback: lang.msg.poll.entertext,
       mrkdwn_in : ["text", "pretext"]
     },
     {
@@ -197,24 +159,24 @@ var poll_create_text_msg = {
       actions: [
         {
           name: 'back',
-          text: lang_poll.btn.back,
+          text: lang.btn.back,
           type: 'button'
         },
         {
           name: 'next',
-          text: lang_poll.btn.next,
+          text: lang.btn.next,
           type: 'button'
         },
         {
           name: 'cancel',
-          text: lang_poll.btn.cancel,
+          text: lang.btn.cancel,
           type: 'button',
           style: 'danger',
           confirm: {
-            title: lang_poll.msg.confirm,
-            text: lang_poll.msg.confirmcancel,
-            ok_text: lang_poll.btn.yes,
-            dismiss_text: lang_poll.btn.no
+            title: lang.msg.confirm,
+            text: lang.msg.confirmcancel,
+            ok_text: lang.btn.yes,
+            dismiss_text: lang.btn.no
           }
         }
       ],
@@ -226,12 +188,12 @@ var poll_create_text_msg = {
 };
 
 var poll_create_answers_msg = {
-  text: lang_poll.wrd.preview + ":",
+  text: lang.wrd.preview + ":",
   attachments: [
     {},
     {
-      text: lang_poll.msg.enteranswer,
-      fallback: lang_poll.msg.enteranswer,
+      text: lang.msg.poll.enteranswer,
+      fallback: lang.msg.poll.enteranswer,
       mrkdwn_in : ["text", "pretext"]
     },
     {
@@ -241,19 +203,19 @@ var poll_create_answers_msg = {
       actions: [
         {
           name: 'back',
-          text: lang_poll.btn.back,
+          text: lang.btn.back,
           type: 'button'
         },
         {
           name: 'cancel',
-          text: lang_poll.btn.cancel,
+          text: lang.btn.cancel,
           type: 'button',
           style: 'danger',
           confirm: {
-            title: lang_poll.msg.confirm,
-            text: lang_poll.msg.confirmcancel,
-            ok_text: lang_poll.btn.yes,
-            dismiss_text: lang_poll.btn.no
+            title: lang.msg.confirm,
+            text: lang.msg.confirmcancel,
+            ok_text: lang.btn.yes,
+            dismiss_text: lang.btn.no
           }
         }
       ],
@@ -265,12 +227,12 @@ var poll_create_answers_msg = {
 };
 
 var poll_create_answers_nb_msg = {
-  text: lang_poll.wrd.preview + ":",
+  text: lang.wrd.preview + ":",
   attachments: [
     {},
     {
-      text: lang_poll.msg.enteranswer,
-      fallback: lang_poll.msg.enteranswer,
+      text: lang.msg.poll.enteranswer,
+      fallback: lang.msg.poll.enteranswer,
       mrkdwn_in : ["text", "pretext"]
     },
     {
@@ -280,24 +242,24 @@ var poll_create_answers_nb_msg = {
       actions: [
         {
           name: 'back',
-          text: lang_poll.btn.back,
+          text: lang.btn.back,
           type: 'button'
         },
         {
           name: 'next',
-          text: lang_poll.btn.next,
+          text: lang.btn.next,
           type: 'button'
         },
         {
           name: 'cancel',
-          text: lang_poll.btn.cancel,
+          text: lang.btn.cancel,
           type: 'button',
           style: 'danger',
           confirm: {
-            title: lang_poll.msg.confirm,
-            text: lang_poll.msg.confirmcancel,
-            ok_text: lang_poll.btn.yes,
-            dismiss_text: lang_poll.btn.no
+            title: lang.msg.confirm,
+            text: lang.msg.confirmcancel,
+            ok_text: lang.btn.yes,
+            dismiss_text: lang.btn.no
           }
         }
       ],
@@ -309,12 +271,12 @@ var poll_create_answers_nb_msg = {
 };
 
 var poll_create_max_msg = {
-  text: lang_poll.wrd.preview + ":",
+  text: lang.wrd.preview + ":",
   attachments: [
     {},
     {
-      text: lang_poll.msg.entermax,
-      fallback: lang_poll.msg.entermax,
+      text: lang.msg.poll.entermax,
+      fallback: lang.msg.poll.entermax,
       mrkdwn_in : ["text", "pretext"]
     },
     {
@@ -338,19 +300,19 @@ var poll_create_max_msg = {
       actions: [
         {
           name: 'back',
-          text: lang_poll.btn.back,
+          text: lang.btn.back,
           type: 'button'
         },
         {
           name: 'cancel',
-          text: lang_poll.btn.cancel,
+          text: lang.btn.cancel,
           type: 'button',
           style: 'danger',
           confirm: {
-            title: lang_poll.msg.confirm,
-            text: lang_poll.msg.confirmcancel,
-            ok_text: lang_poll.btn.yes,
-            dismiss_text: lang_poll.btn.no
+            title: lang.msg.confirm,
+            text: lang.msg.confirmcancel,
+            ok_text: lang.btn.yes,
+            dismiss_text: lang.btn.no
           }
         }
       ],
@@ -362,22 +324,22 @@ var poll_create_max_msg = {
 };
 
 var poll_create_names_msg = {
-  text: lang_poll.wrd.preview + ":",
+  text: lang.wrd.preview + ":",
   attachments: [
     {},
     {
-      text: lang_poll.msg.shownames,
-      fallback: lang_poll.msg.shownames,
+      text: lang.msg.poll.shownames,
+      fallback: lang.msg.poll.shownames,
       callback_id: 'poll_create_names_callback',
       actions: [
         {
           name: 'yes',
-          text: lang_poll.btn.yes,
+          text: lang.btn.yes,
           type: 'button'
         },
         {
           name: 'no',
-          text: lang_poll.btn.no,
+          text: lang.btn.no,
           type: 'button'
         }
       ],
@@ -390,24 +352,24 @@ var poll_create_names_msg = {
       actions: [
         {
           name: 'back',
-          text: lang_poll.btn.back,
+          text: lang.btn.back,
           type: 'button'
         },
         {
           name: 'next',
-          text: lang_poll.btn.next,
+          text: lang.btn.next,
           type: 'button'
         },
         {
           name: 'cancel',
-          text: lang_poll.btn.cancel,
+          text: lang.btn.cancel,
           type: 'button',
           style: 'danger',
           confirm: {
-            title: lang_poll.msg.confirm,
-            text: lang_poll.msg.confirmcancel,
-            ok_text: lang_poll.btn.yes,
-            dismiss_text: lang_poll.btn.no
+            title: lang.msg.confirm,
+            text: lang.msg.confirmcancel,
+            ok_text: lang.btn.yes,
+            dismiss_text: lang.btn.no
           }
         }
       ],
@@ -419,7 +381,7 @@ var poll_create_names_msg = {
 };
 
 var poll_create_final_msg = {
-  text: lang_poll.wrd.preview + ":",
+  text: lang.wrd.preview + ":",
   attachments: [
     {},
     {
@@ -429,25 +391,25 @@ var poll_create_final_msg = {
       actions: [
         {
           name: 'edit',
-          text: lang_poll.btn.edit,
+          text: lang.btn.edit,
           type: 'button'
         },
         {
           name: 'done',
-          text: lang_poll.btn.done,
+          text: lang.btn.done,
           type: 'button',
           style: 'primary'
         },
         {
           name: 'cancel',
-          text: lang_poll.btn.cancel,
+          text: lang.btn.cancel,
           type: 'button',
           style: 'danger',
           confirm: {
-            title: lang_poll.msg.confirm,
-            text: lang_poll.msg.confirmcancel,
-            ok_text: lang_poll.btn.yes,
-            dismiss_text: lang_poll.btn.no
+            title: lang.msg.confirm,
+            text: lang.msg.confirmcancel,
+            ok_text: lang.btn.yes,
+            dismiss_text: lang.btn.no
           }
         }
       ],
@@ -459,16 +421,7 @@ var poll_create_final_msg = {
 };
 
 
-// ============================
-// ========== MODULE ==========
-// ============================
 
-module.exports = (app) => {
-  let slapp = app.slapp;
-  let kv = app.kv;
-  
-  
-  
 // ===========================
 // ========== CLASS ==========
 // ===========================
@@ -566,9 +519,9 @@ module.exports = (app) => {
         }
 
         if (this.options.names) votes = votes.slice(0, -2);
-        else if (votes == 1) votes += " " + lang_poll.wrd.vote;
-        else votes += " " + lang_poll.wrd.votes;
-        if (voter_count == 0) votes = lang_poll.msg.novotes + " *(0%)*";
+        else if (votes == 1) votes += " " + lang.wrd.vote;
+        else votes += " " + lang.wrd.votes;
+        if (voter_count == 0) votes = lang.msg.poll.novotes + " *(0%)*";
         else votes += " *(" + Math.round((this.answers[i].votes.length / voter_count) * 100)+ "%)*";
 
         att_fields[i] = {
@@ -579,7 +532,7 @@ module.exports = (app) => {
       }
 
       return {
-        author_name: lang_poll.wrd.poll + " #" + (slot + 1),
+        author_name: lang.wrd.poll + " #" + (slot + 1),
         title: this.title,
         text: this.text,
         fallback: this.text,
@@ -594,8 +547,8 @@ module.exports = (app) => {
     generatePoll (slot) {
       var prtxt = "";
       if (this.options.max != 0) {
-        if (this.options.max == 1) prtxt = "Max " + this.options.max + " " + lang_poll.wrd.vote + " " + lang_poll.wrd.allowed + ".";
-        else prtxt = "Max. " + this.options.max + " " + lang_poll.wrd.votes + " " + lang_poll.wrd.allowed + ".";
+        if (this.options.max == 1) prtxt = "Max " + this.options.max + " " + lang.wrd.vote + " " + lang.wrd.allowed + ".";
+        else prtxt = "Max. " + this.options.max + " " + lang.wrd.votes + " " + lang.wrd.allowed + ".";
       }
       
       var btn1 = {
@@ -620,8 +573,8 @@ module.exports = (app) => {
       }
 
       var msg = {
-        text: lang_poll.msg.newpollcreated,
-        fallback: lang_poll.msg.newpollcreated,
+        text: lang.msg.poll.newpollcreated,
+        fallback: lang.msg.poll.newpollcreated,
         attachments: [],
         delete_original: true
       }
@@ -630,7 +583,7 @@ module.exports = (app) => {
       if (this.state == 0) {
         msg.attachments[1] = btn1;
         if (btn2.actions.length > 0) msg.attachments[2] = btn2;
-      } else if (this.state == 1) msg.attachments[1] = {text: lang_poll.msg.pollclosed, fallback: lang_poll.msg.pollclosed}
+      } else if (this.state == 1) msg.attachments[1] = {text: lang.msg.poll.pollclosed, fallback: lang.msg.poll.pollclosed}
 
       return msg;
     }
@@ -653,13 +606,13 @@ module.exports = (app) => {
       if ('answers' in data) {
         for (var i = 0; i < data.answers.length; i++) {
           att_fields[i].title = emoji_num[i] + " " + data.answers[i];
-          att_fields[i].value = lang_poll.msg.novotes + " (0%)";
+          att_fields[i].value = lang.msg.poll.novotes + " (0%)";
           att_fields[i].short = false;
         }
       }
       
       return {
-        author_name: lang_poll.wrd.poll + " #" + (slot + 1),
+        author_name: lang.wrd.poll + " #" + (slot + 1),
         title: data.title || "<title>",
         text: temp_text,
         fallback: temp_text,
@@ -728,8 +681,15 @@ module.exports = (app) => {
 
   function loadPollDB () {
     kv.get('poll_db', function (err, val) {
-      if (err) console.log(err);
-      else if (typeof val !== "undefined") poll_db = val;
+      if (err) {
+        console.log("Unable to load poll database (" + err + ")");
+        log.push(":warning: Unable to load poll database (" + err + ")");
+      
+      } else if (typeof val !== "undefined") {
+        poll_db = val;
+        console.log("Poll database loaded");
+        log.push(":white_check_mark: Poll database loaded");
+      }
     });
   }
   
@@ -740,10 +700,9 @@ module.exports = (app) => {
   }
   
   loadPollDB();
-  console.log("Poll-Database loaded");
   
   
-
+  
 // ==============================
 // ========== COMMANDS ==========
 // ==============================  
@@ -846,7 +805,7 @@ module.exports = (app) => {
               if (i < 5) msg_text.attachments[2].actions[i] = btn;
               else msg_text.attachments[3].actions[i - 5] = btn;
             }
-            msg_text.attachments[2].actions[0].text = lang_poll.btn.all;
+            msg_text.attachments[2].actions[0].text = lang.btn.all;
             if (data.answers.length <= 5) msg_text.attachments.splice(3, 1);
             
             msg.respond(msg_text);
@@ -862,6 +821,8 @@ module.exports = (app) => {
       return;
     } else {
       var temp = msg.body.text.split(";");
+      if (temp[temp.length - 1].trim() == "") temp = temp.slice(0, -1);
+      
       if (!('answers' in data)) data.answers = [];
       for (var i = 0; i < temp.length; i++) data.answers.push(temp[i].trim());
       
@@ -880,7 +841,7 @@ module.exports = (app) => {
           if (i < 5) msg_text.attachments[2].actions[i] = btn;
           else msg_text.attachments[3].actions[i - 5] = btn;
         }
-        msg_text.attachments[2].actions[0].text = lang_poll.btn.all;
+        msg_text.attachments[2].actions[0].text = lang.btn.all;
         if (data.answers.length <= 5) msg_text.attachments.splice(3, 1);
         
         msg.respond(msg_text);
@@ -1018,10 +979,11 @@ module.exports = (app) => {
   
   slapp.command('/dbpoll', "(.*)", (msg, cmd) => {
     var temp = cmd.split(";");
+    if (temp[temp.length - 1].trim() == "") temp = temp.slice(0, -1);
     
     if (temp.length >= 3) {
       var data = {title: temp[0], answers: [], creator: msg.body.user_id};
-      for (var i = 1; i < temp.length; i++) data.answers[i - 1] = temp[i];
+      for (var i = 1; i < temp.length; i++) data.answers[i - 1] = temp[i].trim();
       
       msg.respond(msg_text);
       msg.route('poll_create_final_route', data, 60);
