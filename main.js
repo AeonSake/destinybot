@@ -49,13 +49,15 @@ console.log("Listening on port " + process.env.PORT);
 server.listen(process.env.PORT);
 
 function notifyAdmin () {
+  
+  
+  
   slapp.client.im.open({
     token: config.bot_token,
     user: config.admin_id
   }, (err, data) => {
     if (err) console.log(err);
     else {
-      console.log(data);
       config.admin_ch = data.channel.id;
       
       var msg_text = "";
@@ -74,6 +76,4 @@ function notifyAdmin () {
   })
 }
 
-notifyAdmin();
-
-
+setTimeout(notifyAdmin(), 3000);
