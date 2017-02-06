@@ -53,7 +53,7 @@ module.exports = (app) => {
   }
   
   function getUserInfo () {
-    slapp.client.team.info({
+    slapp.client.users.list({
       token: config.bot_token
     }, (err, data) => {
       if (err) {
@@ -69,7 +69,6 @@ module.exports = (app) => {
         });
       }
       else {
-        console.log(data);
         for (var i = 0; i < data.members.length; i++) {
           user_db[i] = {
             id: data.members[i].id,
