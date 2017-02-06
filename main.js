@@ -38,7 +38,7 @@ var app = {
   log
 };
 
-//var user = require('./src/user')(app);
+var user = require('./src/user')(app);
 //require('./src/destiny')(app, user);
 require('./src/polls')(app);
 //require('./src/events')(app, user);
