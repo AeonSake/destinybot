@@ -55,6 +55,7 @@ function notifyAdmin () {
   }, (err, data) => {
     if (err) console.log(err);
     else {
+      console.log(data);
       config.admin_ch = data.channel.id;
       
       var msg_text = "";

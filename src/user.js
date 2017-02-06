@@ -86,6 +86,7 @@ module.exports = (app) => {
         
         console.log("User info loaded");
         log.push(":white_check_mark: User info loaded");
+        console.log(user_db);
         
         kv.set('user_db', user_db, function (err) {
           if (err) console.log(err);
