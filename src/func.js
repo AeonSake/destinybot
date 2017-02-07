@@ -11,9 +11,11 @@ var slapp;
 // ========== FUNCTIONS ==========
 // ===============================
 
-module.exports = (slapp_in) => {
+var init = function(slapp_in) {
   slapp = slapp_in;
-};
+}
+
+module.exports = init;
 
 
 let func = module.exports = {
