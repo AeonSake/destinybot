@@ -25,24 +25,27 @@ let func = module.exports = {
 
 module.exports = (slapp) => {
 
-  func.addLogEntry: (text, type) => {
+  func.addLogEntry = (text, type) => {
     var type_text = ["INFO", "INFO", "WARNING", "ERROR"];
     var type_emoji = [":information_source:", ":white_check_mark:", ":warning:", ":x:"];
     
     console.log(type_text[type] + ": " + text);
     
-    slapp.client.chat.postMessage({
-      token: config.bot_token,
-      channel: config.admin_ch,
-      text: type_emoji[type] + ": " + text,
-      parse: 'full',
-      as_user: true
-    }, (err, data) => {
-      if (err) console.log("ERROR: Unable to fetch send admin notification (" + err + ")");
-    });
+    if (config.admin_ch == "") func.getAdminCh();
+    else {
+      slapp.client.chat.postMessage({
+        token: config.bot_token,
+        channel: config.admin_ch,
+        text: type_emoji[type] + ": " + text,
+        parse: 'full',
+        as_user: true
+      }, (err, data) => {
+        if (err) console.log("ERROR: Unable to fetch send admin notification (" + err + ")");
+      });
+    }
   };
   
-  func.getAdminCh: () => {
+  func.getAdminCh = () => {
     slapp.client.im.open({
       token: config.bot_token,
       user: config.admin_id
