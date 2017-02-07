@@ -4,8 +4,6 @@
 
 'use strict';
 
-const config = require('./config').validate();
-
 var team_db = {};
 var user_db = [];
 
@@ -15,7 +13,7 @@ var user_db = [];
 // ========== DATABASE ==========
 // ==============================
 
-module.exports = ({slapp, kv, func}) => {
+module.exports = (slapp, kv, config, func) => {
   var module = {};
   
   module.getUser = (user_id) => {
@@ -84,6 +82,5 @@ module.exports = ({slapp, kv, func}) => {
   getTeamInfo();
   getUserInfo();
   
-  console.log(config.admin_ch);
   return module;
 };

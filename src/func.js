@@ -12,8 +12,9 @@ const config = require('./config').validate();
 // ========== FUNCTIONS ==========
 // ===============================
 
-module.exports = (slapp) => {
+module.exports = (slapp, config) => {
   var module = {};
+  module.ready = false;
   
   module.getRandomColor = () => {
     var letters = '0123456789ABCDEF';
@@ -24,7 +25,19 @@ module.exports = (slapp) => {
     return color;
   };
   
-  
+  module.getAdminCh = () => {
+    slapp.client.im.open({
+      token: config.bot_token,
+      user: config.admin_id
+    }, (err, data) => {
+      if (err) console.log("ERROR: Unable to fetch admin channel ID (" + err + ")");
+      else {
+        config.admin_ch = data.channel.id;
+        module.ready = true;
+      }
+    });
+  };
+  module.getAdminCh();
   
   module.addLogEntry = (text, type) => {
     var type_text = ["INFO", "INFO", "WARNING", "ERROR"];
@@ -32,28 +45,17 @@ module.exports = (slapp) => {
     
     console.log(type_text[type] + ": " + text);
     
-    if (config.admin_ch == "") module.getAdminCh();
-    else {
-      slapp.client.chat.postMessage({
-        token: config.bot_token,
-        channel: config.admin_ch,
-        text: type_emoji[type] + ": " + text,
-        parse: 'full',
-        as_user: true
-      }, (err, data) => {
-        if (err) console.log("ERROR: Unable to fetch send admin notification (" + err + ")");
-      });
+    while (config.admin_ch == "") {
+      setTimeout(module.getAdminCh, 1000);
     }
-  };
-  
-  module.getAdminCh = () => {
-    slapp.client.im.open({
+    slapp.client.chat.postMessage({
       token: config.bot_token,
-      user: config.admin_id
+      channel: config.admin_ch,
+      text: type_emoji[type] + ": " + text,
+      parse: 'full',
+      as_user: true
     }, (err, data) => {
-      if (err) console.log("ERROR: Unable to fetch admin channel ID (" + err + ")");
-      else config.admin_ch = data.channel.id;
-      console.log(config.admin_ch);
+      if (err) console.log("ERROR: Unable to fetch send admin notification (" + err + ")");
     });
   };
   

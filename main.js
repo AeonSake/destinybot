@@ -14,8 +14,6 @@ const config = require('./src/config').validate();
 const lang = require('./src/lang_de');
 if (!process.env.PORT) throw Error('PORT missing but required');
 
-var log = [];
-
 var slapp = Slapp({
   record: config.slapp_record,
   convo_store: config.bb_convo_store,
@@ -26,14 +24,15 @@ var slapp = Slapp({
 });
 
 var server = slapp.attachToExpress(express());
-const func = require('./src/func')(slapp);
-//func.init(slapp);
-const user = require('./src/user')({slapp, kv: BeepBoopPersist({provider: config.bb_persist_provider}), func});
+var kv = BeepBoopPersist({provider: config.bb_persist_provider});
+
+const func = require('./src/func')(slapp, config);
+const user = require('./src/user')(slapp, kv, config, func);
 
 var app = {
   slapp,
   server,
-  kv: BeepBoopPersist({provider: config.bb_persist_provider}),
+  kv,
   config,
   func,
   lang,
