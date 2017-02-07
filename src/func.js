@@ -11,8 +11,8 @@ var slapp;
 // ========== FUNCTIONS ==========
 // ===============================
 
-module.exports = (slapp) => {
-  let slapp = slapp;
+module.exports = (slapp_in) => {
+  let slapp = slapp_in;
 };
 
 
