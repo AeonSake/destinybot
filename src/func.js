@@ -32,7 +32,7 @@ let func = module.exports = {
   }
 };
 
-module.exports = (slapp) => {
+module.exports = ({slapp, config}) => {
 
   function notifyAdmin (text, type) {
     var type_text = [":information_source:", ":white_check_mark:", ":warning:", ":x:"];
