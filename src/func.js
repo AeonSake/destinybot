@@ -12,7 +12,7 @@ var slapp;
 // ===============================
 
 module.exports = (slapp_in) => {
-  let slapp = slapp_in;
+  slapp = slapp_in;
 };
 
 
