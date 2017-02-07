@@ -46,7 +46,6 @@ module.exports = (slapp) => {
     }, (err, data) => {
       if (err) console.log("ERROR: Unable to fetch send admin notification (" + err + ")");
     });
-    }
   };
   
   function openAdminCh () {
