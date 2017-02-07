@@ -45,7 +45,7 @@ module.exports = (slapp, config) => {
     
     console.log(type_text[type] + ": " + text);
     
-    notifyAdmin(type_emoji[type] + ": " + text);
+    notifyAdmin(type_emoji[type] + " " + text);
   };
   
   function notifyAdmin(text) {
