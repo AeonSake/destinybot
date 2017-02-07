@@ -11,14 +11,11 @@ var slapp;
 // ========== FUNCTIONS ==========
 // ===============================
 
-var init = function(slapp_in) {
-  slapp = slapp_in;
-}
-
-module.exports = init;
-
-
 let func = module.exports = {
+  
+  init: (slapp_in) => {
+    slapp = slapp_in;
+  },
   
   // Method to get a random RGB color in hex
   getRandomColor: () => {

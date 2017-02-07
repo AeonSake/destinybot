@@ -9,6 +9,8 @@ const config = require('./config').validate();
 var team_db = {};
 var user_db = [];
 
+
+
 // ===============================
 // ========== FUNCTIONS ==========
 // ===============================

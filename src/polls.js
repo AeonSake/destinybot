@@ -7,10 +7,6 @@
 var emoji_num = [":one:", ":two:", ":three:", ":four:", ":five:", ":six:", ":seven:", ":eight:", ":nine:", ":keycap_ten:"];
 
 
-// ===== TODO =====
-// ---
-
-
 
 // ============================
 // ========== MODULE ==========
@@ -32,394 +28,394 @@ module.exports = (app) => {
 
 // ===== MAIN =====
 
-var poll_main_msg = {
-  text: "",
-  attachments: [
-    {
-      text: "",
-      fallback: "",
-      callback_id: 'poll_main_callback',
-      actions: [
-        {
-          name: 'createpoll',
-          text: lang.btn.poll.createpoll,
-          type: 'button'
-        },
-        {
-          name: 'showpoll',
-          text: lang.btn.poll.showpolls,
-          type: 'button'
-        },
-        {
-          name: 'editpoll',
-          text: lang.btn.poll.editpoll,
-          type: 'button'
-        },
-        {
-          name: 'showhelp',
-          text: lang.btn.showhelp,
-          type: 'button'
-        }
-      ],
-      mrkdwn_in : ["text", "pretext"]
-    },
-    {
-      text: "",
-      fallback: "",
-      callback_id: 'poll_dismiss_callback',
-      actions: [
-        {
-          name: 'dismiss',
-          text: lang.btn.dismiss,
-          type: 'button'
-        }
-      ],
-      mrkdwn_in : ["text", "pretext"]
-    }
-  ],
-  response_type: 'ephemeral',
-  delete_original: true
-};
-
-// ===== CREATE =====
-
-var poll_create_title_msg = {
-  text: lang.wrd.preview + ":",
-  attachments: [
-    {},
-    {
-      text: lang.msg.poll.entertitle,
-      fallback: lang.msg.poll.entertitle,
-      mrkdwn_in : ["text", "pretext"]
-    },
-    {
-      text: "",
-      fallback: "",
-      callback_id: 'poll_create_menu_callback',
-      actions: [
-        {
-          name: 'cancel',
-          text: lang.btn.cancel,
-          type: 'button',
-          style: 'danger'
-        }
-      ],
-      mrkdwn_in : ["text", "pretext"]
-    }
-  ],
-  response_type: 'ephemeral',
-  delete_original: true
-};
-
-var poll_create_title_nb_msg = {
-  text: lang.wrd.preview + ":",
-  attachments: [
-    {},
-    {
-      text: lang.msg.poll.entertitle,
-      fallback: lang.msg.poll.entertitle,
-      mrkdwn_in : ["text", "pretext"]
-    },
-    {
-      text: "",
-      fallback: "",
-      callback_id: 'poll_create_menu_callback',
-      actions: [
-        {
-          name: 'next',
-          text: lang.btn.next,
-          type: 'button'
-        },
-        {
-          name: 'cancel',
-          text: lang.btn.cancel,
-          type: 'button',
-          style: 'danger'
-        }
-      ],
-      mrkdwn_in : ["text", "pretext"]
-    }
-  ],
-  response_type: 'ephemeral',
-  delete_original: true
-};
-
-var poll_create_text_msg = {
-  text: lang.wrd.preview + ":",
-  attachments: [
-    {},
-    {
-      text: lang.msg.poll.entertext,
-      fallback: lang.msg.poll.entertext,
-      mrkdwn_in : ["text", "pretext"]
-    },
-    {
-      text: "",
-      fallback: "",
-      callback_id: 'poll_create_menu_callback',
-      actions: [
-        {
-          name: 'back',
-          text: lang.btn.back,
-          type: 'button'
-        },
-        {
-          name: 'next',
-          text: lang.btn.next,
-          type: 'button'
-        },
-        {
-          name: 'cancel',
-          text: lang.btn.cancel,
-          type: 'button',
-          style: 'danger',
-          confirm: {
-            title: lang.msg.confirm,
-            text: lang.msg.confirmcancel,
-            ok_text: lang.btn.yes,
-            dismiss_text: lang.btn.no
+  var poll_main_msg = {
+    text: "",
+    attachments: [
+      {
+        text: "",
+        fallback: "",
+        callback_id: 'poll_main_callback',
+        actions: [
+          {
+            name: 'createpoll',
+            text: lang.btn.poll.createpoll,
+            type: 'button'
+          },
+          {
+            name: 'showpoll',
+            text: lang.btn.poll.showpolls,
+            type: 'button'
+          },
+          {
+            name: 'editpoll',
+            text: lang.btn.poll.editpoll,
+            type: 'button'
+          },
+          {
+            name: 'showhelp',
+            text: lang.btn.showhelp,
+            type: 'button'
           }
-        }
-      ],
-      mrkdwn_in : ["text", "pretext"]
-    }
-  ],
-  response_type: 'ephemeral',
-  delete_original: true
-};
-
-var poll_create_answers_msg = {
-  text: lang.wrd.preview + ":",
-  attachments: [
-    {},
-    {
-      text: lang.msg.poll.enteranswer,
-      fallback: lang.msg.poll.enteranswer,
-      mrkdwn_in : ["text", "pretext"]
-    },
-    {
-      text: "",
-      fallback: "",
-      callback_id: 'poll_create_menu_callback',
-      actions: [
-        {
-          name: 'back',
-          text: lang.btn.back,
-          type: 'button'
-        },
-        {
-          name: 'cancel',
-          text: lang.btn.cancel,
-          type: 'button',
-          style: 'danger',
-          confirm: {
-            title: lang.msg.confirm,
-            text: lang.msg.confirmcancel,
-            ok_text: lang.btn.yes,
-            dismiss_text: lang.btn.no
+        ],
+        mrkdwn_in : ["text", "pretext"]
+      },
+      {
+        text: "",
+        fallback: "",
+        callback_id: 'poll_dismiss_callback',
+        actions: [
+          {
+            name: 'dismiss',
+            text: lang.btn.dismiss,
+            type: 'button'
           }
-        }
-      ],
-      mrkdwn_in : ["text", "pretext"]
-    }
-  ],
-  response_type: 'ephemeral',
-  delete_original: true
-};
+        ],
+        mrkdwn_in : ["text", "pretext"]
+      }
+    ],
+    response_type: 'ephemeral',
+    delete_original: true
+  };
 
-var poll_create_answers_nb_msg = {
-  text: lang.wrd.preview + ":",
-  attachments: [
-    {},
-    {
-      text: lang.msg.poll.enteranswer,
-      fallback: lang.msg.poll.enteranswer,
-      mrkdwn_in : ["text", "pretext"]
-    },
-    {
-      text: "",
-      fallback: "",
-      callback_id: 'poll_create_menu_callback',
-      actions: [
-        {
-          name: 'back',
-          text: lang.btn.back,
-          type: 'button'
-        },
-        {
-          name: 'next',
-          text: lang.btn.next,
-          type: 'button'
-        },
-        {
-          name: 'cancel',
-          text: lang.btn.cancel,
-          type: 'button',
-          style: 'danger',
-          confirm: {
-            title: lang.msg.confirm,
-            text: lang.msg.confirmcancel,
-            ok_text: lang.btn.yes,
-            dismiss_text: lang.btn.no
-          }
-        }
-      ],
-      mrkdwn_in : ["text", "pretext"]
-    }
-  ],
-  response_type: 'ephemeral',
-  delete_original: true
-};
+  // ===== CREATE =====
 
-var poll_create_max_msg = {
-  text: lang.wrd.preview + ":",
-  attachments: [
-    {},
-    {
-      text: lang.msg.poll.entermax,
-      fallback: lang.msg.poll.entermax,
-      mrkdwn_in : ["text", "pretext"]
-    },
-    {
-      text: "",
-      fallback: "",
-      callback_id: 'poll_create_max_callback',
-      actions: [],
-      mrkdwn_in : ["text", "pretext"]
-    },
-    {
-      text: "",
-      fallback: "",
-      callback_id: 'poll_create_max_callback',
-      actions: [],
-      mrkdwn_in : ["text", "pretext"]
-    },
-    {
-      text: "",
-      fallback: "",
-      callback_id: 'poll_create_menu_callback',
-      actions: [
-        {
-          name: 'back',
-          text: lang.btn.back,
-          type: 'button'
-        },
-        {
-          name: 'cancel',
-          text: lang.btn.cancel,
-          type: 'button',
-          style: 'danger',
-          confirm: {
-            title: lang.msg.confirm,
-            text: lang.msg.confirmcancel,
-            ok_text: lang.btn.yes,
-            dismiss_text: lang.btn.no
+  var poll_create_title_msg = {
+    text: lang.wrd.preview + ":",
+    attachments: [
+      {},
+      {
+        text: lang.msg.poll.entertitle,
+        fallback: lang.msg.poll.entertitle,
+        mrkdwn_in : ["text", "pretext"]
+      },
+      {
+        text: "",
+        fallback: "",
+        callback_id: 'poll_create_menu_callback',
+        actions: [
+          {
+            name: 'cancel',
+            text: lang.btn.cancel,
+            type: 'button',
+            style: 'danger'
           }
-        }
-      ],
-      mrkdwn_in : ["text", "pretext"]
-    }
-  ],
-  response_type: 'ephemeral',
-  delete_original: true
-};
+        ],
+        mrkdwn_in : ["text", "pretext"]
+      }
+    ],
+    response_type: 'ephemeral',
+    delete_original: true
+  };
 
-var poll_create_names_msg = {
-  text: lang.wrd.preview + ":",
-  attachments: [
-    {},
-    {
-      text: lang.msg.poll.shownames,
-      fallback: lang.msg.poll.shownames,
-      callback_id: 'poll_create_names_callback',
-      actions: [
-        {
-          name: 'yes',
-          text: lang.btn.yes,
-          type: 'button'
-        },
-        {
-          name: 'no',
-          text: lang.btn.no,
-          type: 'button'
-        }
-      ],
-      mrkdwn_in : ["text", "pretext"]
-    },
-    {
-      text: "",
-      fallback: "",
-      callback_id: 'poll_create_menu_callback',
-      actions: [
-        {
-          name: 'back',
-          text: lang.btn.back,
-          type: 'button'
-        },
-        {
-          name: 'next',
-          text: lang.btn.next,
-          type: 'button'
-        },
-        {
-          name: 'cancel',
-          text: lang.btn.cancel,
-          type: 'button',
-          style: 'danger',
-          confirm: {
-            title: lang.msg.confirm,
-            text: lang.msg.confirmcancel,
-            ok_text: lang.btn.yes,
-            dismiss_text: lang.btn.no
+  var poll_create_title_nb_msg = {
+    text: lang.wrd.preview + ":",
+    attachments: [
+      {},
+      {
+        text: lang.msg.poll.entertitle,
+        fallback: lang.msg.poll.entertitle,
+        mrkdwn_in : ["text", "pretext"]
+      },
+      {
+        text: "",
+        fallback: "",
+        callback_id: 'poll_create_menu_callback',
+        actions: [
+          {
+            name: 'next',
+            text: lang.btn.next,
+            type: 'button'
+          },
+          {
+            name: 'cancel',
+            text: lang.btn.cancel,
+            type: 'button',
+            style: 'danger'
           }
-        }
-      ],
-      mrkdwn_in : ["text", "pretext"]
-    }
-  ],
-  response_type: 'ephemeral',
-  delete_original: true
-};
+        ],
+        mrkdwn_in : ["text", "pretext"]
+      }
+    ],
+    response_type: 'ephemeral',
+    delete_original: true
+  };
 
-var poll_create_final_msg = {
-  text: lang.wrd.preview + ":",
-  attachments: [
-    {},
-    {
-      text: "",
-      fallback: "",
-      callback_id: 'poll_create_menu_callback',
-      actions: [
-        {
-          name: 'edit',
-          text: lang.btn.edit,
-          type: 'button'
-        },
-        {
-          name: 'done',
-          text: lang.btn.done,
-          type: 'button',
-          style: 'primary'
-        },
-        {
-          name: 'cancel',
-          text: lang.btn.cancel,
-          type: 'button',
-          style: 'danger',
-          confirm: {
-            title: lang.msg.confirm,
-            text: lang.msg.confirmcancel,
-            ok_text: lang.btn.yes,
-            dismiss_text: lang.btn.no
+  var poll_create_text_msg = {
+    text: lang.wrd.preview + ":",
+    attachments: [
+      {},
+      {
+        text: lang.msg.poll.entertext,
+        fallback: lang.msg.poll.entertext,
+        mrkdwn_in : ["text", "pretext"]
+      },
+      {
+        text: "",
+        fallback: "",
+        callback_id: 'poll_create_menu_callback',
+        actions: [
+          {
+            name: 'back',
+            text: lang.btn.back,
+            type: 'button'
+          },
+          {
+            name: 'next',
+            text: lang.btn.next,
+            type: 'button'
+          },
+          {
+            name: 'cancel',
+            text: lang.btn.cancel,
+            type: 'button',
+            style: 'danger',
+            confirm: {
+              title: lang.msg.confirm,
+              text: lang.msg.confirmcancel,
+              ok_text: lang.btn.yes,
+              dismiss_text: lang.btn.no
+            }
           }
-        }
-      ],
-      mrkdwn_in : ["text", "pretext"]
-    }
-  ],
-  response_type: 'ephemeral',
-  delete_original: true
-};
+        ],
+        mrkdwn_in : ["text", "pretext"]
+      }
+    ],
+    response_type: 'ephemeral',
+    delete_original: true
+  };
+
+  var poll_create_answers_msg = {
+    text: lang.wrd.preview + ":",
+    attachments: [
+      {},
+      {
+        text: lang.msg.poll.enteranswer,
+        fallback: lang.msg.poll.enteranswer,
+        mrkdwn_in : ["text", "pretext"]
+      },
+      {
+        text: "",
+        fallback: "",
+        callback_id: 'poll_create_menu_callback',
+        actions: [
+          {
+            name: 'back',
+            text: lang.btn.back,
+            type: 'button'
+          },
+          {
+            name: 'cancel',
+            text: lang.btn.cancel,
+            type: 'button',
+            style: 'danger',
+            confirm: {
+              title: lang.msg.confirm,
+              text: lang.msg.confirmcancel,
+              ok_text: lang.btn.yes,
+              dismiss_text: lang.btn.no
+            }
+          }
+        ],
+        mrkdwn_in : ["text", "pretext"]
+      }
+    ],
+    response_type: 'ephemeral',
+    delete_original: true
+  };
+
+  var poll_create_answers_nb_msg = {
+    text: lang.wrd.preview + ":",
+    attachments: [
+      {},
+      {
+        text: lang.msg.poll.enteranswer,
+        fallback: lang.msg.poll.enteranswer,
+        mrkdwn_in : ["text", "pretext"]
+      },
+      {
+        text: "",
+        fallback: "",
+        callback_id: 'poll_create_menu_callback',
+        actions: [
+          {
+            name: 'back',
+            text: lang.btn.back,
+            type: 'button'
+          },
+          {
+            name: 'next',
+            text: lang.btn.next,
+            type: 'button'
+          },
+          {
+            name: 'cancel',
+            text: lang.btn.cancel,
+            type: 'button',
+            style: 'danger',
+            confirm: {
+              title: lang.msg.confirm,
+              text: lang.msg.confirmcancel,
+              ok_text: lang.btn.yes,
+              dismiss_text: lang.btn.no
+            }
+          }
+        ],
+        mrkdwn_in : ["text", "pretext"]
+      }
+    ],
+    response_type: 'ephemeral',
+    delete_original: true
+  };
+
+  var poll_create_max_msg = {
+    text: lang.wrd.preview + ":",
+    attachments: [
+      {},
+      {
+        text: lang.msg.poll.entermax,
+        fallback: lang.msg.poll.entermax,
+        mrkdwn_in : ["text", "pretext"]
+      },
+      {
+        text: "",
+        fallback: "",
+        callback_id: 'poll_create_max_callback',
+        actions: [],
+        mrkdwn_in : ["text", "pretext"]
+      },
+      {
+        text: "",
+        fallback: "",
+        callback_id: 'poll_create_max_callback',
+        actions: [],
+        mrkdwn_in : ["text", "pretext"]
+      },
+      {
+        text: "",
+        fallback: "",
+        callback_id: 'poll_create_menu_callback',
+        actions: [
+          {
+            name: 'back',
+            text: lang.btn.back,
+            type: 'button'
+          },
+          {
+            name: 'cancel',
+            text: lang.btn.cancel,
+            type: 'button',
+            style: 'danger',
+            confirm: {
+              title: lang.msg.confirm,
+              text: lang.msg.confirmcancel,
+              ok_text: lang.btn.yes,
+              dismiss_text: lang.btn.no
+            }
+          }
+        ],
+        mrkdwn_in : ["text", "pretext"]
+      }
+    ],
+    response_type: 'ephemeral',
+    delete_original: true
+  };
+
+  var poll_create_names_msg = {
+    text: lang.wrd.preview + ":",
+    attachments: [
+      {},
+      {
+        text: lang.msg.poll.shownames,
+        fallback: lang.msg.poll.shownames,
+        callback_id: 'poll_create_names_callback',
+        actions: [
+          {
+            name: 'yes',
+            text: lang.btn.yes,
+            type: 'button'
+          },
+          {
+            name: 'no',
+            text: lang.btn.no,
+            type: 'button'
+          }
+        ],
+        mrkdwn_in : ["text", "pretext"]
+      },
+      {
+        text: "",
+        fallback: "",
+        callback_id: 'poll_create_menu_callback',
+        actions: [
+          {
+            name: 'back',
+            text: lang.btn.back,
+            type: 'button'
+          },
+          {
+            name: 'next',
+            text: lang.btn.next,
+            type: 'button'
+          },
+          {
+            name: 'cancel',
+            text: lang.btn.cancel,
+            type: 'button',
+            style: 'danger',
+            confirm: {
+              title: lang.msg.confirm,
+              text: lang.msg.confirmcancel,
+              ok_text: lang.btn.yes,
+              dismiss_text: lang.btn.no
+            }
+          }
+        ],
+        mrkdwn_in : ["text", "pretext"]
+      }
+    ],
+    response_type: 'ephemeral',
+    delete_original: true
+  };
+
+  var poll_create_final_msg = {
+    text: lang.wrd.preview + ":",
+    attachments: [
+      {},
+      {
+        text: "",
+        fallback: "",
+        callback_id: 'poll_create_menu_callback',
+        actions: [
+          {
+            name: 'edit',
+            text: lang.btn.edit,
+            type: 'button'
+          },
+          {
+            name: 'done',
+            text: lang.btn.done,
+            type: 'button',
+            style: 'primary'
+          },
+          {
+            name: 'cancel',
+            text: lang.btn.cancel,
+            type: 'button',
+            style: 'danger',
+            confirm: {
+              title: lang.msg.confirm,
+              text: lang.msg.confirmcancel,
+              ok_text: lang.btn.yes,
+              dismiss_text: lang.btn.no
+            }
+          }
+        ],
+        mrkdwn_in : ["text", "pretext"]
+      }
+    ],
+    response_type: 'ephemeral',
+    delete_original: true
+  };
 
 
 
