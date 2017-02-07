@@ -25,7 +25,7 @@ let func = module.exports = {
 
 module.exports = (slapp) => {
 
-  func.addLogEntry = (text, type) => {
+  this.addLogEntry = (text, type) => {
     var type_text = ["INFO", "INFO", "WARNING", "ERROR"];
     var type_emoji = [":information_source:", ":white_check_mark:", ":warning:", ":x:"];
     
@@ -45,7 +45,7 @@ module.exports = (slapp) => {
     }
   };
   
-  func.getAdminCh = () => {
+  this.getAdminCh = () => {
     slapp.client.im.open({
       token: config.bot_token,
       user: config.admin_id

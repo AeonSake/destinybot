@@ -22,7 +22,7 @@ module.exports = (app) => {
   let config = app.config;
   let func = app.func;
   let lang = app.lang;
-  let log = app.log;
+  let user = app.user;
 
 
 
