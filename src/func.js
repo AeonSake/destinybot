@@ -5,29 +5,26 @@
 'use strict';
 
 const config = require('./config').validate();
-var slapp;
+
+
 
 // ===============================
 // ========== FUNCTIONS ==========
 // ===============================
 
-let func = module.exports = {
+module.exports = (slapp) => {
+  var module {};
   
-  /*init: (slapp_in) => {
-    slapp = slapp_in;
-  },*/
-  
-  // Method to get a random RGB color in hex
-  getRandomColor: () => {
+  module.getRandomColor = () => {
     var letters = '0123456789ABCDEF';
     var color = '#';
     for (var i = 0; i < 6; i++) {
       color += letters[Math.floor(Math.random() * 16)];
     }
     return color;
-  },
+  };
   
-  addLogEntry: (text, type) => {
+  module.addLogEntry = (text, type) => {
     var type_text = ["INFO", "INFO", "WARNING", "ERROR"];
     var type_emoji = [":information_source:", ":white_check_mark:", ":warning:", ":x:"];
     
@@ -45,9 +42,9 @@ let func = module.exports = {
         if (err) console.log("ERROR: Unable to fetch send admin notification (" + err + ")");
       });
     }
-  },
+  };
   
-  getAdminCh: () => {
+  module.getAdminCh = () => {
     slapp.client.im.open({
       token: config.bot_token,
       user: config.admin_id
@@ -55,9 +52,7 @@ let func = module.exports = {
       if (err) console.log("ERROR: Unable to fetch admin channel ID (" + err + ")");
       else config.admin_ch = data.channel.id;
     });
-  }
-};
-
-module.exports = (slapp_in) => {
-  slapp = slapp_in;
+  };
+  
+  return module;
 }
