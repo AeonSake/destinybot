@@ -13,7 +13,7 @@ const config = require('./config').validate();
 // ===============================
 
 module.exports = (slapp) => {
-  var module {};
+  var module = {};
   
   module.getRandomColor = () => {
     var letters = '0123456789ABCDEF';
