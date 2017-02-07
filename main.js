@@ -26,8 +26,8 @@ var slapp = Slapp({
 });
 
 var server = slapp.attachToExpress(express());
-var func = require('./src/func')({slapp, config});
-var user = require('./src/user')({slapp, kv: BeepBoopPersist({provider: config.bb_persist_provider}), config, func});
+const func = require('./src/func')(slapp);
+var user = require('./src/user')({slapp, kv: BeepBoopPersist({provider: config.bb_persist_provider})});
 
 var app = {
   slapp,

@@ -4,6 +4,8 @@
 
 'use strict';
 
+const config = require('./config').validate();
+
 // ===============================
 // ========== FUNCTIONS ==========
 // ===============================
@@ -21,9 +23,9 @@ let func = module.exports = {
   }
 };
 
-module.exports = ({slapp, config}) => {
+module.exports = (slapp) => {
 
-  function addLogEntry (text, type) {
+  func.addLogEntry: (text, type) => {
     var type_text = ["INFO", "INFO", "WARNING", "ERROR"];
     var type_emoji = [":information_source:", ":white_check_mark:", ":warning:", ":x:"];
     
@@ -40,7 +42,7 @@ module.exports = ({slapp, config}) => {
     });
   };
   
-  function getAdminCh () {
+  func.getAdminCh: () => {
     slapp.client.im.open({
       token: config.bot_token,
       user: config.admin_id

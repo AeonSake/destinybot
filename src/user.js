@@ -4,6 +4,9 @@
 
 'use strict';
 
+const config = require('./config').validate();
+const config = require('./func');
+
 var team_db = {};
 var user_db = [];
 
@@ -29,7 +32,7 @@ let user = module.exports = {
 // ========== DATABASE ==========
 // ==============================
 
-module.exports = ({slapp, kv, config, func}) => {
+module.exports = ({slapp, kv}) => {
   
   function getTeamInfo () {
     slapp.client.team.info({
