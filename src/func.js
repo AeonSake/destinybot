@@ -24,13 +24,15 @@ module.exports = (slapp) => {
     return color;
   };
   
+  
+  
   module.addLogEntry = (text, type) => {
     var type_text = ["INFO", "INFO", "WARNING", "ERROR"];
     var type_emoji = [":information_source:", ":white_check_mark:", ":warning:", ":x:"];
     
     console.log(type_text[type] + ": " + text);
     
-    if (config.admin_ch == "") func.getAdminCh();
+    if (config.admin_ch == "") module.getAdminCh();
     else {
       slapp.client.chat.postMessage({
         token: config.bot_token,

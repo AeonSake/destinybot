@@ -11,29 +11,22 @@ var user_db = [];
 
 
 
-// ===============================
-// ========== FUNCTIONS ==========
-// ===============================
-
-let user = module.exports = {
-  
-  getUser: (user_id) => {
-    var output = {};
-    for (var i = 0; i < user_db.length; i++) {
-      if (user_db[i].user_id == user_id) output = user_db[i];
-    }
-    return output;
-  }
-  
-};
-
-
-
 // ==============================
 // ========== DATABASE ==========
 // ==============================
 
 module.exports = ({slapp, kv, func}) => {
+  var module = {};
+  
+  module.getUser = (user_id) => {
+    var output = {};
+    for (var i = 0; i < user_db.length; i++) {
+      if (user_db[i].user_id == user_id) output = user_db[i];
+    }
+    return output;
+  };
+  
+  
   
   function getTeamInfo () {
     slapp.client.team.info({
@@ -90,4 +83,6 @@ module.exports = ({slapp, kv, func}) => {
    
   getTeamInfo();
   getUserInfo();
+  
+  return module;
 };
