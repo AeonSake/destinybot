@@ -5,10 +5,16 @@
 'use strict';
 
 const config = require('./config').validate();
+var slapp;
 
 // ===============================
 // ========== FUNCTIONS ==========
 // ===============================
+
+module.exports = (slapp) => {
+  let slapp = slapp;
+};
+
 
 let func = module.exports = {
   
@@ -20,12 +26,9 @@ let func = module.exports = {
       color += letters[Math.floor(Math.random() * 16)];
     }
     return color;
-  }
-};
-
-module.exports = (slapp) => {
-
-  this.addLogEntry = (text, type) => {
+  },
+  
+  addLogEntry: (text, type) => {
     var type_text = ["INFO", "INFO", "WARNING", "ERROR"];
     var type_emoji = [":information_source:", ":white_check_mark:", ":warning:", ":x:"];
     
@@ -43,9 +46,9 @@ module.exports = (slapp) => {
         if (err) console.log("ERROR: Unable to fetch send admin notification (" + err + ")");
       });
     }
-  };
+  },
   
-  this.getAdminCh = () => {
+  getAdminCh: () => {
     slapp.client.im.open({
       token: config.bot_token,
       user: config.admin_id
@@ -53,5 +56,5 @@ module.exports = (slapp) => {
       if (err) console.log("ERROR: Unable to fetch admin channel ID (" + err + ")");
       else config.admin_ch = data.channel.id;
     });
-  };
+  }
 };
