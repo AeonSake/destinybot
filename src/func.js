@@ -45,19 +45,27 @@ module.exports = (slapp, config) => {
     
     console.log(type_text[type] + ": " + text);
     
-    while (config.admin_ch == "") {
-      setTimeout(module.getAdminCh, 1000);
-    }
-    slapp.client.chat.postMessage({
-      token: config.bot_token,
-      channel: config.admin_ch,
-      text: type_emoji[type] + ": " + text,
-      parse: 'full',
-      as_user: true
-    }, (err, data) => {
-      if (err) console.log("ERROR: Unable to fetch send admin notification (" + err + ")");
-    });
+    notifyAdmin(type_emoji[type] + ": " + text);
   };
+  
+  function notifyAdmin(text) {
+    if (module.ready == true) {
+      slapp.client.chat.postMessage({
+        token: config.bot_token,
+        channel: config.admin_ch,
+        text: text,
+        parse: 'full',
+        as_user: true
+      }, (err, data) => {
+        if (err) console.log("ERROR: Unable to fetch send admin notification (" + err + ")");
+      });
+    } else {
+      module.getAdminCh();
+      setTimeout(function() {
+        notifyAdmin(text);
+      }, 1000)
+    }
+  }
   
   return module;
 }
