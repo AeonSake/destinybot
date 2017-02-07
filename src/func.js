@@ -18,29 +18,21 @@ let func = module.exports = {
       color += letters[Math.floor(Math.random() * 16)];
     }
     return color;
-  },
-  
-  getAdminCh () {
-    openAdminCh();
-  },
-  
-  addLogEntry (text, type) {
-    var type_text = ["INFO", "INFO", "WARNING", "ERROR"];
-    
-    console.log(type_text[type] + ": " + text);
-    notifyAdmin(text, type);
   }
 };
 
 module.exports = ({slapp, config}) => {
 
-  function notifyAdmin (text, type) {
-    var type_text = [":information_source:", ":white_check_mark:", ":warning:", ":x:"];
+  function addLogEntry (text, type) {
+    var type_text = ["INFO", "INFO", "WARNING", "ERROR"];
+    var type_emoji = [":information_source:", ":white_check_mark:", ":warning:", ":x:"];
+    
+    console.log(type_text[type] + ": " + text);
     
     slapp.client.chat.postMessage({
       token: config.bot_token,
       channel: config.admin_ch,
-      text: type_text[type] + ": " + text,
+      text: type_emoji[type] + ": " + text,
       parse: 'full',
       as_user: true
     }, (err, data) => {
@@ -48,7 +40,7 @@ module.exports = ({slapp, config}) => {
     });
   };
   
-  function openAdminCh () {
+  function getAdminCh () {
     slapp.client.im.open({
       token: config.bot_token,
       user: config.admin_id
