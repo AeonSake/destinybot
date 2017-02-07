@@ -13,9 +13,9 @@ var slapp;
 
 let func = module.exports = {
   
-  init: (slapp_in) => {
+  /*init: (slapp_in) => {
     slapp = slapp_in;
-  },
+  },*/
   
   // Method to get a random RGB color in hex
   getRandomColor: () => {
@@ -57,3 +57,7 @@ let func = module.exports = {
     });
   }
 };
+
+module.exports = (slapp_in) => {
+  slapp = slapp_in;
+}

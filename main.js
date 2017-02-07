@@ -26,8 +26,8 @@ var slapp = Slapp({
 });
 
 var server = slapp.attachToExpress(express());
-const func = require('./src/func');
-func.init(slapp);
+const func = require('./src/func')(slapp);
+//func.init(slapp);
 const user = require('./src/user')({slapp, kv: BeepBoopPersist({provider: config.bb_persist_provider}), func});
 
 var app = {
@@ -47,7 +47,7 @@ require('./src/polls')(app);
 //console.log("Running " + config.title + " on version " + config.version);
 //log.push("\n:information_source: Running " + config.title + " on version " + config.version);
 
-func.addLogEntry("Running " + config.title + " on version " + config.version, 0)
+func.addLogEntry("Running " + config.title + " on version " + config.version, 0);
 
 console.log("Listening on port " + process.env.PORT);
 server.listen(process.env.PORT);

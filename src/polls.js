@@ -672,27 +672,25 @@ module.exports = (app) => {
 
   function savePollDB () {
     kv.set('poll_db', poll_db, function (err) {
-      if (err) console.log(err);
+      if (err) func.addLogEntry("Unable to save poll database (" + err + ")", 3);
     });
   }
 
   function loadPollDB () {
     kv.get('poll_db', function (err, val) {
       if (err) {
-        console.log("Unable to load poll database (" + err + ")");
-        log.push(":warning: Unable to load poll database (" + err + ")");
+        func.addLogEntry("Unable to load poll database (" + err + ")", 3);
       
       } else if (typeof val !== "undefined") {
         poll_db = val;
-        console.log("Poll database loaded");
-        log.push(":white_check_mark: Poll database loaded");
+        func.addLogEntry("Poll database loaded", 1);
       }
     });
   }
   
   function deletePollDB () {
     kv.del('poll_info', function (err) {
-      if (err) console.log(err);
+      if (err) func.addLogEntry("Unable to delete poll database (" + err + ")", 2);
     });
   }
   
