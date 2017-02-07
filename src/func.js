@@ -53,6 +53,7 @@ module.exports = (slapp) => {
     }, (err, data) => {
       if (err) console.log("ERROR: Unable to fetch admin channel ID (" + err + ")");
       else config.admin_ch = data.channel.id;
+      console.log(config.admin_ch);
     });
   };
   

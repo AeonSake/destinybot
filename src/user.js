@@ -84,5 +84,6 @@ module.exports = ({slapp, kv, func}) => {
   getTeamInfo();
   getUserInfo();
   
+  console.log(config.admin_ch);
   return module;
 };
