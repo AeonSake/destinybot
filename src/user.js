@@ -5,7 +5,7 @@
 'use strict';
 
 const config = require('./config').validate();
-const config = require('./func');
+const func = require('./func');
 
 var team_db = {};
 var user_db = [];
