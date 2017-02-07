@@ -29,7 +29,7 @@ let user = module.exports = {
 // ========== DATABASE ==========
 // ==============================
 
-module.exports = ({slapp, kv, func}) => {
+module.exports = ({slapp, kv, config, func}) => {
   
   function getTeamInfo () {
     slapp.client.team.info({
