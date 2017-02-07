@@ -46,7 +46,9 @@ require('./src/polls')(app);
 //console.log("Running " + config.title + " on version " + config.version);
 //log.push("\n:information_source: Running " + config.title + " on version " + config.version);
 
-func.addLogEntry("Running " + config.title + " on version " + config.version, 0);
-
 console.log("Listening on port " + process.env.PORT);
 server.listen(process.env.PORT);
+
+setTimeout(function(){
+  func.addLogEntry("Running " + config.title + " on version " + config.version, 0);
+}, 3000);
