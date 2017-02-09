@@ -4,8 +4,6 @@
 
 'use strict';
 
-const config = require('./config').validate();
-
 
 
 // ===============================
@@ -44,7 +42,6 @@ module.exports = (slapp, config) => {
     var type_emoji = [":information_source:", ":white_check_mark:", ":warning:", ":x:"];
     
     console.log(type_text[type] + ": " + text);
-    
     notifyAdmin(type_emoji[type] + " " + text);
   };
   

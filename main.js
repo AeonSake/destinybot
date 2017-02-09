@@ -43,9 +43,6 @@ var app = {
 require('./src/polls')(app);
 //require('./src/events')(app);
 
-//console.log("Running " + config.title + " on version " + config.version);
-//log.push("\n:information_source: Running " + config.title + " on version " + config.version);
-
 console.log("Listening on port " + process.env.PORT);
 server.listen(process.env.PORT);
 

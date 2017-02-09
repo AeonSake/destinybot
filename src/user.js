@@ -15,6 +15,7 @@ var user_db = [];
 
 module.exports = (slapp, kv, config, func) => {
   var module = {};
+  module.ready = false;
   
   module.getUser = (user_id) => {
     var output = {};
@@ -24,9 +25,7 @@ module.exports = (slapp, kv, config, func) => {
     return output;
   };
   
-  
-  
-  function getTeamInfo () {
+  module.getTeamInfo = () => {
     slapp.client.team.info({
       token: config.bot_token
     }, (err, data) => {
@@ -40,7 +39,7 @@ module.exports = (slapp, kv, config, func) => {
     });
   }
   
-  function getUserInfo () {
+  module.getUserInfo = () => {
     slapp.client.users.list({
       token: config.bot_token
     }, (err, data) => {
@@ -79,8 +78,9 @@ module.exports = (slapp, kv, config, func) => {
     });
   }
    
-  getTeamInfo();
-  getUserInfo();
+  module.getTeamInfo();
+  module.getUserInfo();
+  module.ready = true;
   
   return module;
 };
