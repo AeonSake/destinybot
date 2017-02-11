@@ -523,7 +523,7 @@ module.exports = (app) => {
         if (this.options.names) votes = votes.slice(0, -2);
         else if (votes == 1) votes += " " + lang.wrd.vote;
         else votes += " " + lang.wrd.votes;
-        if (voter_count == 0) votes = lang.msg.poll.novotes + " *(0%)*";
+        if (this.answers[i].votes.length == 0) votes = lang.msg.poll.novotes + " *(0%)*";
         else votes += " *(" + Math.round((this.answers[i].votes.length / voter_count) * 100)+ "%)*";
 
         att_fields[i] = {
