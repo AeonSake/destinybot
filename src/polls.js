@@ -303,6 +303,11 @@ module.exports = (app) => {
             type: 'button'
           },
           {
+            name: 'next',
+            text: lang.btn.next,
+            type: 'button'
+          },
+          {
             name: 'cancel',
             text: lang.btn.cancel,
             type: 'button',
@@ -1024,7 +1029,7 @@ module.exports = (app) => {
 // ===== Vote button callback =====
   
   slapp.action('poll_answer_callback', (msg) => {
-    var answer = parseInt(msg.body.actions[0].name);
+    var answer = parseInt(msg.body.actions[0].name) - 1;
     var slot = parseInt(msg.body.original_message.attachments[0].author_name.split("#").pop()) - 1;
     
     console.log(answer, slot);
