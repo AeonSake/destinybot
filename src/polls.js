@@ -462,8 +462,7 @@ module.exports = (app) => {
       text: count + " " + lang.msg.poll.openpolls,
       fallback: "",
       callback_id: 'poll_show_pages_callback',
-      actions: btns
-      ],
+      actions: btns,
       mrkdwn_in: ['text', 'pretext']
     };
   };
