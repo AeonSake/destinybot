@@ -19,6 +19,8 @@ module.exports = (app) => {
   let func = app.func;
   let lang = app.lang;
   let user = app.user;
+  
+  var module = {};
 
 
 
@@ -28,7 +30,7 @@ module.exports = (app) => {
 
 // ===== MAIN =====
 
-  var poll_main_msg = {
+  module.poll_main_msg = {
     text: "",
     attachments: [
       {
@@ -984,7 +986,7 @@ module.exports = (app) => {
       msg.route('poll_create_final_route', data, 60);
       return;
     } else {
-      msg.respond(poll_main_msg);
+      msg.respond(module.poll_main_msg);
       return;
     }
   });
@@ -1022,6 +1024,8 @@ module.exports = (app) => {
     var answer = parseInt(msg.body.actions[0].name);
     var slot = parseInt(msg.body.original_message.attachments[0].author_name.split("#").pop()) - 1;
     
+    console.log(slot);
+    
     poll_db[slot].vote(answer, msg.body.user.id); //todo: show error text
     poll_db[slot].update(slot);
     savePollDB();
@@ -1035,4 +1039,5 @@ module.exports = (app) => {
     return;
   });
   
+  return module;
 };
