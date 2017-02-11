@@ -109,7 +109,7 @@ module.exports = (app) => {
     delete_original: true
   };
 
-  var poll_create_title_nb_msg = {
+  var poll_create_title_n_msg = {
     text: lang.wrd.preview + ":",
     attachments: [
       {},
@@ -225,7 +225,7 @@ module.exports = (app) => {
     delete_original: true
   };
 
-  var poll_create_answers_nb_msg = {
+  var poll_create_answers_n_msg = {
     text: lang.wrd.preview + ":",
     attachments: [
       {},
@@ -434,24 +434,22 @@ module.exports = (app) => {
     constructor (data) {
       this.title = data.title;
       this.text = data.text || "";
-      this.answers = [];
-      for (var i = 0; i < data.answers.length; i++) this.answers[i] = {text: data.answers[i], votes: []};
+      this.answers = data.answers || [];
+      //for (var i = 0; i < data.answers.length; i++) this.answers[i] = {text: data.answers[i], votes: []};
       this.creator = data.creator || "";
-      this.ts = {created: 0, edited: 0};
-      this.ts.created = data.tscreated || 0;
-      this.posts = [];
-      this.state = 0; //0 = default, 1 = vote closed, 2 = deleted
-      this.options = {max: 1, names: true, color: func.getRandomColor()}; //max: 0 = all, etc; names: true = show user names, false = don't show user names
-      this.options.max = data.max || 1;
-      if ('names' in data) this.options.names = data.names;
+      this.ts = {created: data.ts.created || 0, edited: data.ts.edited || 0};
+      this.posts = data.posts || [];
+      this.state = data.state || 0; //0 = default, 1 = vote closed, 2 = deleted
+      this.options = {max: data.options.max || 1, names: true, color: func.getRandomColor()}; //max: 0 = all, etc; names: true = show user names, false = don't show user names
+      if ('names' in data.options) this.options.names = data.options.names;
     }
 
     edit (data) {
       this.title = data.title || this.title;
       this.text = data.text || this.text;
-      this.ts.edited = data.ts || this.ts.edited;
-      this.options.max = data.max || this.options.max;
-      this.options.names = data.names || this.options.names;
+      this.ts.edited = data.ts.edited || this.ts.edited;
+      this.options.max = data.options.max || this.options.max;
+      this.options.names = data.options.names || this.options.names;
     }
 
     addAnswer (text) {
@@ -551,7 +549,7 @@ module.exports = (app) => {
     generatePoll (slot) {
       var prtxt = "";
       if (this.options.max != 0) {
-        if (this.options.max == 1) prtxt = "Max " + this.options.max + " " + lang.wrd.vote + " " + lang.wrd.allowed + ".";
+        if (this.options.max == 1) prtxt = "Max. " + this.options.max + " " + lang.wrd.vote + " " + lang.wrd.allowed + ".";
         else prtxt = "Max. " + this.options.max + " " + lang.wrd.votes + " " + lang.wrd.allowed + ".";
       }
       
@@ -611,7 +609,7 @@ module.exports = (app) => {
       if ('answers' in data) {
         for (var i = 0; i < data.answers.length; i++) {
           att_fields[i] = {
-            title: emoji_num[i] + " " + data.answers[i],
+            title: emoji_num[i] + " " + data.answers[i].title,
             value: lang.msg.poll.novotes + " (0%)",
             short: false
           }
@@ -692,7 +690,9 @@ module.exports = (app) => {
         func.addLogEntry("Unable to load poll database (" + err + ")", 3);
       
       } else if (typeof val !== "undefined") {
-        poll_db = val;
+        //poll_db = val;
+        for (var i = 0; i < val.length; i++) poll_db[i] = new Poll(val[i]);
+        
         func.addLogEntry("Poll database loaded", 1);
       }
     });
@@ -760,7 +760,7 @@ module.exports = (app) => {
     } else if (msg.type == 'action') {
       switch (msg.body.actions[0].name) {
         case 'back':
-          var msg_text = poll_create_title_nb_msg;
+          var msg_text = poll_create_title_n_msg;
           msg_text.attachments[0] = Poll.generateDummy(poll_db.length, data);
           msg.respond(msg_text);
           msg.route('poll_create_title_route', data, 60);
@@ -829,10 +829,10 @@ module.exports = (app) => {
       if (temp[temp.length - 1].trim() == "") temp = temp.slice(0, -1);
       
       if (!('answers' in data)) data.answers = [];
-      for (var i = 0; i < temp.length; i++) data.answers.push(temp[i].trim());
+      for (var i = 0; i < Math.min(temp.length, 10); i++) data.answers.push({text: temp[i].trim(), votes: []});
       
       if (data.answers.length < 10) {
-        if (data.answers.length >= 2) var msg_text = poll_create_answers_nb_msg;
+        if (data.answers.length >= 2) var msg_text = poll_create_answers_n_msg;
         else var msg_text = poll_create_answers_msg;
         msg_text.attachments[0] = Poll.generateDummy(poll_db.length, data);
         msg.respond(msg_text);
@@ -881,7 +881,7 @@ module.exports = (app) => {
       
       var temp = parseInt(msg.body.actions[0].name) || -1;
       if (temp >= 0 && temp <= data.answers.length) {
-        data.max = temp;
+        data.options.max = temp;
         var msg_text = poll_create_names_msg;
         msg_text.attachments[0] = Poll.generateDummy(poll_db.length, data);
         msg.respond(msg_text);
@@ -898,10 +898,10 @@ module.exports = (app) => {
     } else {
       switch (msg.body.actions[0].name) {
         case 'yes':
-          data.names = true;
+          data.options.names = true;
           break;
         case 'no':
-          data.names = false;
+          data.options.names = false;
           break;
         case 'back':
           var msg_text = poll_create_max_msg;
@@ -943,7 +943,7 @@ module.exports = (app) => {
           return;
       }
       
-      data.tscreated = msg.body.action_ts;
+      data.ts.created = msg.body.action_ts;
       var slot = poll_db.length;
       poll_db[slot] = new Poll(data);
       var msg_text = poll_db[slot].generatePoll(slot);
@@ -960,22 +960,8 @@ module.exports = (app) => {
   
 // ===== /poll test =====
   
-  
   slapp.command('/dbpoll', "test", (msg, cmd) => {
-    var data = {title: "Poll title", text: "Poll text", answers: [], creator: msg.body.user_id, max: 1, names: false};
-    data.answers[0] = {text: "Test 1", votes: []};
-    data.answers[1] = {text: "Test 2", votes: []};
-    data.answers[2] = {text: "Test 3", votes: []};
     
-    //tscreated: msg.body.action_ts
-    
-    var slot = poll_db.length;
-    poll_db[slot] = new Poll(data);
-    
-    msg.say(poll_db[slot].generatePoll(slot), (err, result) => {
-      poll_db[slot].addPost(result.channel, result.ts);
-      savePollDB();
-    });
     return;
   });
   
@@ -988,7 +974,7 @@ module.exports = (app) => {
     
     if (temp.length >= 3) {
       var data = {title: temp[0], answers: [], creator: msg.body.user_id};
-      for (var i = 1; i < temp.length; i++) data.answers[i - 1] = temp[i].trim();
+      for (var i = 1; i < temp.length; i++) data.answers[i - 1] = {text: temp[i].trim(), votes: []};
       
       msg.respond(msg_text);
       msg.route('poll_create_final_route', data, 60);
@@ -1029,11 +1015,8 @@ module.exports = (app) => {
 // ===== Vote button callback =====
   
   slapp.action('poll_answer_callback', (msg) => {
-    var answer = parseInt(msg.body.actions[0].name) - 1;
+    var answer = parseInt(msg.body.actions[0].name);
     var slot = parseInt(msg.body.original_message.attachments[0].author_name.split("#").pop()) - 1;
-    
-    console.log(answer, slot);
-    console.log(poll_db);
     
     poll_db[slot].vote(answer, msg.body.user.id); //todo: show error text
     poll_db[slot].update(slot);
