@@ -1062,14 +1062,16 @@ module.exports = (app) => {
       
       for (var i = 0; i < poll_db.length; i++) {
         if (poll_db[i].isOpen() && openpolls < 5) {
-          var temp = poll_db[slot].generatePoll(slot).attachments;
+          console.log(poll_db[slot].generatePoll(slot));
+          var temp = (poll_db[slot].generatePoll(slot)).attachments;
           msg_text.attachments.push(temp);
           openpolls++;
         }
       }
+         
+      if (openpolls > 5) msg_text.attachments.push(poll_show_pages_att(1,openpolls));
+      else msg_text.attachments.push(poll_dismiss_att);
     }
-    if (openpolls > 5) msg_text.attachments.push(poll_show_pages_att(1,openpolls));
-    else msg_text.attachments.push(poll_dismiss_att);
     
     msg.respond(msg_text);
     return;
