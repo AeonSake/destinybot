@@ -446,7 +446,7 @@ module.exports = (app) => {
         },
         {
           name: 'page',
-          text: lang.wrd.page + " " cur + " / " + Math.ceil(count / 5),
+          text: lang.wrd.page + " " + cur + " / " + Math.ceil(count / 5),
           type: 'button'
         },
         {
