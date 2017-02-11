@@ -453,29 +453,29 @@ module.exports = (app) => {
       this.answers.push({text: text, votes: []});
     }
 
-    removeAnswer (slot) {
-      this.answers.splice(slot, 1);
+    removeAnswer (answer) {
+      this.answers.splice(answer, 1);
     }
 
-    editAnswer (slot, text) {
-      this.answers[slot].text = text;
+    editAnswer (answer, text) {
+      this.answers[answer].text = text;
     }
 
-    vote (slot, user) {
-      var pos = this.answers[slot].votes.indexOf(user);
+    vote (answer, user) {
+      var pos = this.answers[answer].votes.indexOf(user);
       if (pos == -1) {
-        if (this.countVotes(user) < this.options.max) this.answers[slot].votes.push(user);
+        if (this.countVotes(user) < this.options.max) this.answers[answer].votes.push(user);
         else if (this.options.max == 1) {
           for (var i = 0; i < this.answers.length; i++) this.unvote(i, user);
-          this.answers[slot].votes.push(user);
+          this.answers[answer].votes.push(user);
         }
       }
-      else this.unvote(slot, user);
+      else this.unvote(answer, user);
     }
 
-    unvote (slot, user) {
-      var pos = this.answers[slot].votes.indexOf(user);
-      if (pos != -1) this.answers[slot].votes.splice(pos, 1);
+    unvote (answer, user) {
+      var pos = this.answers[answer].votes.indexOf(user);
+      if (pos != -1) this.answers[answer].votes.splice(pos, 1);
     }
 
     countVotes (user) {
@@ -602,8 +602,14 @@ module.exports = (app) => {
         value: "user2 (50%)",
         short: false
       };
+      
+      console.log(data);
+      console.log(att_fields);
+      
       if ('answers' in data) {
         for (var i = 0; i < data.answers.length; i++) {
+          console.log(i);
+          console.log(att_fields[i]);
           att_fields[i].title = emoji_num[i] + " " + data.answers[i];
           att_fields[i].value = lang.msg.poll.novotes + " (0%)";
           att_fields[i].short = false;
