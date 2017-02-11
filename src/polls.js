@@ -603,16 +603,13 @@ module.exports = (app) => {
         short: false
       };
       
-      console.log(data);
-      console.log(att_fields);
-      
       if ('answers' in data) {
         for (var i = 0; i < data.answers.length; i++) {
-          console.log(i);
-          console.log(att_fields[i]);
-          att_fields[i].title = emoji_num[i] + " " + data.answers[i];
-          att_fields[i].value = lang.msg.poll.novotes + " (0%)";
-          att_fields[i].short = false;
+          att_fields[i] = {
+            title: emoji_num[i] + " " + data.answers[i],
+            value: lang.msg.poll.novotes + " (0%)",
+            short: false
+          }
         }
       }
       
@@ -1030,7 +1027,8 @@ module.exports = (app) => {
     var answer = parseInt(msg.body.actions[0].name);
     var slot = parseInt(msg.body.original_message.attachments[0].author_name.split("#").pop()) - 1;
     
-    console.log(slot);
+    console.log(answer, slot);
+    console.log(poll_db);
     
     poll_db[slot].vote(answer, msg.body.user.id); //todo: show error text
     poll_db[slot].update(slot);
