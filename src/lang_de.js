@@ -16,7 +16,8 @@ let lang = module.exports = {
     preview: "Vorschau",
     vote: "Stimme",
     votes: "Stimmen",
-    allowed: "erlaubt"
+    allowed: "erlaubt",
+    page: "Seite"
   },
   
   btn: {
@@ -54,11 +55,15 @@ let lang = module.exports = {
       selectedit: "Welche Information soll bearbeitet werden?",
       novotes: "Keine Stimmen",
       pollclosed: "Umfrage wurde geschlossen.",
-      newpollcreated: "Eine neue Umfrage wurde erstellt:"
+      newpollcreated: "Eine neue Umfrage wurde erstellt:",
+      openpolls: "offene Umfragen."
     }
   },
   
   err: {
-    
+    poll: {
+      notfound: "Eine Umfrage mit dieser ID konnte nicht gefunden werden."
+      
+    }
   }
 };

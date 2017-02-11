@@ -59,7 +59,7 @@ module.exports = (app) => {
             type: 'button'
           }
         ],
-        mrkdwn_in : ["text", "pretext"]
+        mrkdwn_in: ['text', 'pretext']
       },
       {
         text: "",
@@ -72,7 +72,7 @@ module.exports = (app) => {
             type: 'button'
           }
         ],
-        mrkdwn_in : ["text", "pretext"]
+        mrkdwn_in: ['text', 'pretext']
       }
     ],
     response_type: 'ephemeral',
@@ -88,7 +88,7 @@ module.exports = (app) => {
       {
         text: lang.msg.poll.entertitle,
         fallback: lang.msg.poll.entertitle,
-        mrkdwn_in : ["text", "pretext"]
+        mrkdwn_in: ['text', 'pretext']
       },
       {
         text: "",
@@ -102,7 +102,7 @@ module.exports = (app) => {
             style: 'danger'
           }
         ],
-        mrkdwn_in : ["text", "pretext"]
+        mrkdwn_in: ['text', 'pretext']
       }
     ],
     response_type: 'ephemeral',
@@ -116,7 +116,7 @@ module.exports = (app) => {
       {
         text: lang.msg.poll.entertitle,
         fallback: lang.msg.poll.entertitle,
-        mrkdwn_in : ["text", "pretext"]
+        mrkdwn_in: ['text', 'pretext']
       },
       {
         text: "",
@@ -135,7 +135,7 @@ module.exports = (app) => {
             style: 'danger'
           }
         ],
-        mrkdwn_in : ["text", "pretext"]
+        mrkdwn_in: ['text', 'pretext']
       }
     ],
     response_type: 'ephemeral',
@@ -149,7 +149,7 @@ module.exports = (app) => {
       {
         text: lang.msg.poll.entertext,
         fallback: lang.msg.poll.entertext,
-        mrkdwn_in : ["text", "pretext"]
+        mrkdwn_in: ['text', 'pretext']
       },
       {
         text: "",
@@ -179,7 +179,7 @@ module.exports = (app) => {
             }
           }
         ],
-        mrkdwn_in : ["text", "pretext"]
+        mrkdwn_in: ['text', 'pretext']
       }
     ],
     response_type: 'ephemeral',
@@ -193,7 +193,7 @@ module.exports = (app) => {
       {
         text: lang.msg.poll.enteranswer,
         fallback: lang.msg.poll.enteranswer,
-        mrkdwn_in : ["text", "pretext"]
+        mrkdwn_in: ['text', 'pretext']
       },
       {
         text: "",
@@ -218,7 +218,7 @@ module.exports = (app) => {
             }
           }
         ],
-        mrkdwn_in : ["text", "pretext"]
+        mrkdwn_in: ['text', 'pretext']
       }
     ],
     response_type: 'ephemeral',
@@ -232,7 +232,7 @@ module.exports = (app) => {
       {
         text: lang.msg.poll.enteranswer,
         fallback: lang.msg.poll.enteranswer,
-        mrkdwn_in : ["text", "pretext"]
+        mrkdwn_in: ['text', 'pretext']
       },
       {
         text: "",
@@ -262,7 +262,7 @@ module.exports = (app) => {
             }
           }
         ],
-        mrkdwn_in : ["text", "pretext"]
+        mrkdwn_in: ['text', 'pretext']
       }
     ],
     response_type: 'ephemeral',
@@ -276,21 +276,21 @@ module.exports = (app) => {
       {
         text: lang.msg.poll.entermax,
         fallback: lang.msg.poll.entermax,
-        mrkdwn_in : ["text", "pretext"]
+        mrkdwn_in: ['text', 'pretext']
       },
       {
         text: "",
         fallback: "",
         callback_id: 'poll_create_max_callback',
         actions: [],
-        mrkdwn_in : ["text", "pretext"]
+        mrkdwn_in: ['text', 'pretext']
       },
       {
         text: "",
         fallback: "",
         callback_id: 'poll_create_max_callback',
         actions: [],
-        mrkdwn_in : ["text", "pretext"]
+        mrkdwn_in: ['text', 'pretext']
       },
       {
         text: "",
@@ -320,7 +320,7 @@ module.exports = (app) => {
             }
           }
         ],
-        mrkdwn_in : ["text", "pretext"]
+        mrkdwn_in: ['text', 'pretext']
       }
     ],
     response_type: 'ephemeral',
@@ -347,7 +347,7 @@ module.exports = (app) => {
             type: 'button'
           }
         ],
-        mrkdwn_in : ["text", "pretext"]
+        mrkdwn_in: ['text', 'pretext']
       },
       {
         text: "",
@@ -377,7 +377,7 @@ module.exports = (app) => {
             }
           }
         ],
-        mrkdwn_in : ["text", "pretext"]
+        mrkdwn_in: ['text', 'pretext']
       }
     ],
     response_type: 'ephemeral',
@@ -417,14 +417,86 @@ module.exports = (app) => {
             }
           }
         ],
-        mrkdwn_in : ["text", "pretext"]
+        mrkdwn_in: ['text', 'pretext']
       }
     ],
     response_type: 'ephemeral',
     delete_original: true
   };
+  
+  // ===== SHOW =====
+  
+  var poll_show_msg = {
+    text: "",
+    attachments: [],
+    response_type: 'ephemeral',
+    delete_original: true
+  };
+  
+  function poll_show_pages_att (cur, count) {
+    return {
+      text: count + " " + lang.msg.poll.openpolls,
+      fallback: "",
+      callback_id: 'poll_show_pages_callback',
+      actions: [
+        {
+          name: 'back',
+          text: "<",
+          type: 'button'
+        },
+        {
+          name: 'page',
+          text: lang.wrd.page + " " cur + " / " + Math.ceil(count / 5),
+          type: 'button'
+        },
+        {
+          name: 'next',
+          text: ">",
+          type: 'button'
+        },
+        {
+          name: 'dismiss',
+          text: lang.btn.dismiss,
+          type: 'button'
+        }
+      ],
+      mrkdwn_in: ['text', 'pretext']
+    };
+  };
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  var poll_dismiss_att = {
+    text: "",
+    fallback: "",
+    callback_id: 'poll_dismiss_callback',
+    actions: [
+      {
+        name: 'dismiss',
+        text: lang.btn.dismiss,
+        type: 'button'
+      }
+    ],
+    mrkdwn_in: ['text', 'pretext']
+  };
+  
+  function generateInfoMsg (text) {
+    return {
+      text: text,
+      attachments: [poll_dismiss_att],
+      response_type: 'ephemeral',
+      delete_original: true
+    };
+  }
 
-
+  
 
 // ===========================
 // ========== CLASS ==========
@@ -440,7 +512,11 @@ module.exports = (app) => {
       this.ts = {created: data.ts.created || 0, edited: data.ts.edited || 0};
       this.posts = data.posts || [];
       this.state = data.state || 0; //0 = default, 1 = vote closed, 2 = deleted
-      this.options = {max: data.options.max || 1, names: true, color: func.getRandomColor()}; //max: 0 = all, etc; names: true = show user names, false = don't show user names
+      this.options = {
+        max: data.options.max || 1, 
+        names: true,
+        color: data.options.color || func.getRandomColor()
+      }; //max: 0 = all, etc; names: true = show user names, false = don't show user names
       if ('names' in data.options) this.options.names = data.options.names;
     }
 
@@ -542,7 +618,7 @@ module.exports = (app) => {
         footer: "<@" + this.creator + ">",
         ts: this.ts.created,
         color: this.options.color,
-        mrkdwn_in: ["text", "pretext", "fields"]
+        mrkdwn_in: ['text', 'pretext', 'fields']
       };
     }
 
@@ -559,14 +635,14 @@ module.exports = (app) => {
         fallback: "",
         callback_id: 'poll_answer_callback',
         actions: [],
-        mrkdwn_in: ["text", "pretext"]
+        mrkdwn_in: ['text', 'pretext']
       };
       var btn2 = {
         text: "",
         fallback: "",
         callback_id: 'poll_answer_callback',
         actions: [],
-        mrkdwn_in: ["text", "pretext"]
+        mrkdwn_in: ['text', 'pretext']
       };
 
       for (var i = 0; i < this.answers.length; i++) {
@@ -625,7 +701,7 @@ module.exports = (app) => {
         footer: "<@" + data.creator + ">",
         ts: 0,
         color: func.getRandomColor(),
-        mrkdwn_in: ["text", "pretext", "fields"]
+        mrkdwn_in: ['text', 'pretext', 'fields']
       };
     }
 
@@ -667,6 +743,14 @@ module.exports = (app) => {
     close (slot) {
       this.state = 1;
       this.update(slot);
+    }
+    
+    isOpen () {
+      return (this.state == 0);
+    }
+    
+    isOwner (user) {
+      return (this.creator == user);
     }
   }
 
@@ -957,6 +1041,55 @@ module.exports = (app) => {
     }
   });
   
+// ===== /poll show =====
+  
+  slapp.command('/dbpoll', "(show|list)(.*)", (msg, cmd) => {
+    var check = new RegExp("\\d{1,4}");
+    var msg_text = {};
+    
+    if (cmd.substring(0,4) == "show" && check.test(cmd.substring(5))) {
+      var slot = parseInt(cmd.substring(5)) - 1;
+      
+      if (slot < poll_db.length) {
+        msg_text = poll_db[slot].generatePoll(slot);
+        msg_text.attachments.push(poll_dismiss_att);
+      } else {
+        msg_text = generateInfoMsg(lang.err.poll.notfound);
+      }
+    } else {
+      msg_text = poll_show_msg;
+      var openpolls = 0;
+      
+      for (var i = 0; i < poll_db.length; i++) {
+        if (poll_db[i].isOpen() && openpolls < 5) {
+          var temp = poll_db[slot].generatePoll(slot).attachments;
+          msg_text.attachments.push(temp);
+          openpolls++;
+        }
+      }
+    }
+    if (openpolls > 5) msg_text.attachments.push(poll_show_pages_att(1,openpolls));
+    else msg_text.attachments.push(poll_dismiss_att);
+    
+    msg.respond(msg_text);
+    return;
+  });
+  
+  slapp.action('poll_show_pages_callback', (msg) => {
+    switch (msg.body.actions[0].name) {
+      case 'back':
+        break;
+      case 'next':
+        break;
+      case 'page':
+        break;
+      case 'dismiss':
+        msg.respond({text: "", delete_original: true});
+        break;
+    }
+    
+    return;
+  });
   
 // ===== /poll test =====
   
@@ -964,7 +1097,6 @@ module.exports = (app) => {
     
     return;
   });
-  
   
 // ===== /poll =====
   
@@ -1010,7 +1142,7 @@ module.exports = (app) => {
     }
     return;
   });
-  
+    
   
 // ===== Vote button callback =====
   
