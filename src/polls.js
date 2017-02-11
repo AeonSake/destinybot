@@ -1018,8 +1018,6 @@ module.exports = (app) => {
     var answer = parseInt(msg.body.actions[0].name);
     var slot = parseInt(msg.body.original_message.attachments[0].author_name.split("#").pop()) - 1;
     
-    console.log(poll_db[slot].answers);
-    
     poll_db[slot].vote(answer, msg.body.user.id); //todo: show error text
     poll_db[slot].update(slot);
     savePollDB();
