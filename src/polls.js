@@ -434,31 +434,35 @@ module.exports = (app) => {
   };
   
   function poll_show_pages_att (cur, count) {
+    var btns = [];
+    var max = Math.ceil(count / 5);
+    
+    if (cur != 1) btns.push({
+      name: 'back',
+      text: "<",
+      type: 'button'
+    });
+    btns.push({
+      name: 'page',
+      text: lang.wrd.page + " " + cur + " / " + max,
+      type: 'button'
+    });
+    if (cur == max) btns.push({
+      name: 'next',
+      text: ">",
+      type: 'button'
+    });
+    btns.push({
+      name: 'dismiss',
+      text: lang.btn.dismiss,
+      type: 'button'
+    });
+    
     return {
       text: count + " " + lang.msg.poll.openpolls,
       fallback: "",
       callback_id: 'poll_show_pages_callback',
-      actions: [
-        {
-          name: 'back',
-          text: "<",
-          type: 'button'
-        },
-        {
-          name: 'page',
-          text: lang.wrd.page + " " + cur + " / " + Math.ceil(count / 5),
-          type: 'button'
-        },
-        {
-          name: 'next',
-          text: ">",
-          type: 'button'
-        },
-        {
-          name: 'dismiss',
-          text: lang.btn.dismiss,
-          type: 'button'
-        }
+      actions: btns
       ],
       mrkdwn_in: ['text', 'pretext']
     };
@@ -646,8 +650,8 @@ module.exports = (app) => {
       };
 
       for (var i = 0; i < this.answers.length; i++) {
-        if (i < 5) btn1.actions[i] = {name: i, text: emoji_num[i], type: 'button'};
-        else btn2.actions[i - 5] = {name: i, text: emoji_num[i], type: 'button'};
+        if (i < 5) btn1.actions[i] = {name: i, text: emoji_num[i], value: slot, type: 'button'};
+        else btn2.actions[i - 5] = {name: i, text: emoji_num[i], value: slot, type: 'button'};
       }
 
       var msg = {
@@ -1150,11 +1154,13 @@ module.exports = (app) => {
   
   slapp.action('poll_answer_callback', (msg) => {
     var answer = parseInt(msg.body.actions[0].name);
-    var slot = parseInt(msg.body.original_message.attachments[0].author_name.split("#").pop()) - 1;
+    var slot = parseInt(msg.body.actions[0].value) - 1;
     
     poll_db[slot].vote(answer, msg.body.user.id); //todo: show error text
     poll_db[slot].update(slot);
     savePollDB();
+    
+    msg.respond({text: "", delete_original: true});
     return;
   });
   
