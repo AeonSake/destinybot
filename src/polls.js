@@ -514,7 +514,7 @@ module.exports = (app) => {
         var votes = "";
         for (var j = 0; j < this.answers[i].votes.length; j++) {
           if (this.options.names) {
-            votes += user.getUser(this.answers[i].votes[j]).name + ">, ";
+            votes += user.getUser(this.answers[i].votes[j]).name + ", ";
           } else {
             votes = (j + 1);
           }
@@ -1017,6 +1017,8 @@ module.exports = (app) => {
   slapp.action('poll_answer_callback', (msg) => {
     var answer = parseInt(msg.body.actions[0].name);
     var slot = parseInt(msg.body.original_message.attachments[0].author_name.split("#").pop()) - 1;
+    
+    console.log(poll_db[slot].answers);
     
     poll_db[slot].vote(answer, msg.body.user.id); //todo: show error text
     poll_db[slot].update(slot);

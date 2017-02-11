@@ -19,6 +19,7 @@ module.exports = (slapp, kv, config, func) => {
   
   module.getUser = (user_id) => {
     var output = {};
+    console.log(user_db);
     for (var i = 0; i < user_db.length; i++) {
       if (user_db[i].user_id == user_id) output = user_db[i];
     }
