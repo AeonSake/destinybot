@@ -1052,6 +1052,7 @@ module.exports = (app) => {
       
       if (slot < poll_db.length) {
         msg_text = poll_db[slot].generatePoll(slot);
+        msg_text.text = "";
         msg_text.attachments.push(poll_dismiss_att);
       } else {
         msg_text = generateInfoMsg(lang.err.poll.notfound);
@@ -1062,8 +1063,7 @@ module.exports = (app) => {
       
       for (var i = 0; i < poll_db.length; i++) {
         if (poll_db[i].isOpen() && openpolls < 5) {
-          console.log(poll_db[slot].generatePoll(slot));
-          var temp = (poll_db[slot].generatePoll(slot)).attachments;
+          var temp = (poll_db[i].generatePoll(i)).attachments;
           msg_text.attachments.push(temp);
           openpolls++;
         }
