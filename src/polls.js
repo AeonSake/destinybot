@@ -1092,7 +1092,12 @@ module.exports = (app) => {
   slapp.command('/dbpoll', "post \\d{1,4}", (msg, cmd) => {
     var slot = parseInt(cmd.substring(5)) - 1;
     
-    if (slot < poll_db.length) msg.say(poll_db[slot].generatePoll(slot));
+    if (slot < poll_db.length) {
+      msg.say(poll_db[slot].generatePoll(slot), (err, result) => {
+        poll_db[slot].addPost(result.channel, result.ts);
+        savePollDB();
+      });
+    }
     else msg.respond(func.generateInfoMsg(lang.err.poll.notfound));
     
     return;
@@ -1161,7 +1166,7 @@ module.exports = (app) => {
     poll_db[slot].update(slot);
     savePollDB();
     
-    msg.respond({text: "", delete_original: true});
+    if (!('original_message' in msg)) msg.respond({text: "", delete_original: true});
     return;
   });
   
