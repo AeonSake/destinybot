@@ -84,7 +84,7 @@ module.exports = (slapp, kv, config, func) => {
   module.sendDM = (user_id, msg) => {
     var user = user_db.getUser(user_id);
     
-    if (user'dm_ch' in user) {
+    if ('dm_ch' in user) {
       slapp.client.chat.postMessage({
         token: config.bot_token,
         channel: user.dm_ch,
