@@ -501,7 +501,6 @@ module.exports = (app) => {
       this.title = data.title;
       this.text = data.text || "";
       this.answers = data.answers || [];
-      //for (var i = 0; i < data.answers.length; i++) this.answers[i] = {text: data.answers[i], votes: []};
       this.creator = data.creator || "";
       this.ts = {created: data.ts.created || 0, edited: data.ts.edited || 0};
       this.posts = data.posts || [];
@@ -519,7 +518,7 @@ module.exports = (app) => {
       this.text = data.text || this.text;
       this.ts.edited = data.ts.edited || this.ts.edited;
       this.options.max = data.options.max || this.options.max;
-      this.options.names = data.options.names || this.options.names;
+      if ('names' in data.options) this.options.names = data.options.names;
     }
 
     addAnswer (text) {
@@ -582,6 +581,8 @@ module.exports = (app) => {
 
       for (var i = 0; i < this.answers.length; i++) {
         var votes = "";
+        var percent = 0;
+        
         for (var j = 0; j < this.answers[i].votes.length; j++) {
           if (this.options.names) {
             votes += user.getUser(this.answers[i].votes[j]).name + ", ";
@@ -593,12 +594,14 @@ module.exports = (app) => {
         if (this.options.names) votes = votes.slice(0, -2);
         else if (votes == 1) votes += " " + lang.wrd.vote;
         else votes += " " + lang.wrd.votes;
-        if (this.answers[i].votes.length == 0) votes = lang.msg.poll.novotes + " *(0%)*";
-        else votes += " *(" + Math.round((this.answers[i].votes.length / voter_count) * 100)+ "%)*";
+        //if (this.answers[i].votes.length == 0) votes = lang.msg.poll.novotes + " *(0%)*";
+        //else votes += " *(" + Math.round((this.answers[i].votes.length / voter_count) * 100)+ "%)*";
+        if (this.answers[i].votes.length == 0) votes = lang.msg.poll.novotes;
+        else percent = Math.round((this.answers[i].votes.length / voter_count) * 100);
 
         att_fields[i] = {
-          title: emoji_num[i] + " " + this.answers[i].text,
-          value: votes,
+          //title: emoji_num[i] + " " + this.answers[i].text,
+          value: emoji_num[i] + " *" + this.answers[i].text + " (" + percent + "%)*\n" + votes,
           short: false
         };
       }
@@ -624,9 +627,8 @@ module.exports = (app) => {
       }
       
       var btn1 = {
-        pretext: prtxt,
-        text: "",
-        fallback: "",
+        text: prtxt,
+        fallback: prtxt,
         callback_id: 'poll_answer_callback',
         actions: [],
         mrkdwn_in: ['text', 'pretext']
@@ -666,21 +668,21 @@ module.exports = (app) => {
       
       var att_fields = [];
       att_fields[0] = {
-        title: emoji_num[0] + " <answer1>",
-        value: "user1, user2 (100%)",
+        //title: emoji_num[0] + " <answer1>",
+        value: emoji_num[0] + " *<answer1> (100%)*\n" + "user1, user2",
         short: false
       };
       att_fields[1] = {
-        title: emoji_num[1] + " <answer2>",
-        value: "user2 (50%)",
+        //title: emoji_num[1] + " <answer2>",
+        value: emoji_num[1] + " *<answer2> (50%)*\n" + "user2",
         short: false
       };
       
       if ('answers' in data) {
         for (var i = 0; i < data.answers.length; i++) {
           att_fields[i] = {
-            title: emoji_num[i] + " " + data.answers[i].title,
-            value: lang.msg.poll.novotes + " (0%)",
+            //title: emoji_num[i] + " " + data.answers[i].text,
+            value: emoji_num[i] + " *" + data.answers[i].text + " (0%)*\n" + lang.msg.poll.novotes,
             short: false
           }
         }
@@ -959,7 +961,7 @@ module.exports = (app) => {
       
       var temp = parseInt(msg.body.actions[0].name) || -1;
       if (temp >= 0 && temp <= data.answers.length) {
-        data.options.max = temp;
+        data.options = {max: temp};
         var msg_text = poll_create_names_msg;
         msg_text.attachments[0] = Poll.generateDummy(poll_db.length, data);
         msg.respond(msg_text);
