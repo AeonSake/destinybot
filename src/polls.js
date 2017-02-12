@@ -1166,7 +1166,8 @@ module.exports = (app) => {
     poll_db[slot].update(slot);
     savePollDB();
     
-    if (!('original_message' in msg)) msg.respond({text: "", delete_original: true});
+    console.log(msg);
+    //if (!('original_message' in msg)) msg.respond({text: "", delete_original: true});
     return;
   });
   
