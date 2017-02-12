@@ -716,7 +716,8 @@ module.exports = (app) => {
             link_names: 1,
             as_user: true
           }, (err, data) => {
-            if (err) console.log(err);
+            if (err == 'message_not_found') console.log(i);//this.posts.splice(i, 1);
+            else if (err) console.log(err);
           });
         }
       }
@@ -1023,7 +1024,7 @@ module.exports = (app) => {
           return;
       }
       
-      data.ts.created = msg.body.action_ts;
+      data.ts = {created: msg.body.action_ts};
       var slot = poll_db.length;
       poll_db[slot] = new Poll(data);
       var msg_text = poll_db[slot].generatePoll(slot);
