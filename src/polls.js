@@ -717,7 +717,8 @@ module.exports = (app) => {
             link_names: 1,
             as_user: true
           }, (err, data) => {
-            if (err == 'message_not_found' || err == 'channel_not_found' || err == 'edit_window_closed') console.log(i);//this.posts.splice(i, 1);
+            console.log(i);
+            if (err == 'cant_update_message' || err == 'message_not_found' || err == 'channel_not_found' || err == 'edit_window_closed') console.log(i);//this.posts.splice(i, 1);
             else if (err) console.log(err);
           });
         }
