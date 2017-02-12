@@ -13,6 +13,7 @@
 module.exports = (slapp, config) => {
   var module = {};
   
+  // Function to generate a random RGB hex value
   module.getRandomColor = () => {
     var letters = '0123456789ABCDEF';
     var color = '#';
@@ -22,10 +23,12 @@ module.exports = (slapp, config) => {
     return color;
   };
   
+  // Function to clone objects
   module.cloneObject = (obj) => {
     return JSON.parse(JSON.stringify(obj));
   };
   
+  // Function to add entries to console and admin chat
   module.addLogEntry = (text, type) => {
     var type_text = ["INFO", "INFO", "WARNING", "ERROR"];
     var type_emoji = [":information_source:", ":white_check_mark:", ":warning:", ":x:"];
@@ -34,6 +37,7 @@ module.exports = (slapp, config) => {
     notifyAdmin(type_emoji[type] + " " + text);
   };
   
+  // Function to get admin channel id (DM)
   function getAdminCh () {
     if (config.admin_ch == "") {
       slapp.client.im.open({
@@ -47,6 +51,7 @@ module.exports = (slapp, config) => {
   }
   getAdminCh();
   
+  // Function to notify admin on events
   function notifyAdmin (text) {
     if (config.admin_ch != "") {
       slapp.client.chat.postMessage({
@@ -66,6 +71,7 @@ module.exports = (slapp, config) => {
     }
   }
   
+  // Function to create a message + dismiss button
   module.generateInfoMsg = (text) => {
     return {
       text: "",

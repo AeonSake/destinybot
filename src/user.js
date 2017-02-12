@@ -17,6 +17,7 @@ module.exports = (slapp, kv, config, func) => {
   var module = {};
   module.ready = false;
   
+  // Function to fetch team info from slack
   module.getTeamInfo = () => {
     slapp.client.team.info({
       token: config.bot_token
@@ -31,6 +32,7 @@ module.exports = (slapp, kv, config, func) => {
     });
   };
   
+  // Function to fetch user info from slack
   module.getUserInfo = () => {
     slapp.client.users.list({
       token: config.bot_token
@@ -70,6 +72,7 @@ module.exports = (slapp, kv, config, func) => {
     });
   };
   
+  // Function to fetch user DM channel ids
   module.getUserDM = () => {
     for (var i = 0; i < user_db.length; i++) {
       slapp.client.im.open({
@@ -81,6 +84,7 @@ module.exports = (slapp, kv, config, func) => {
     }
   };
   
+  // Function for sending DMs to users
   module.sendDM = (user_id, msg) => {
     var user = user_db.getUser(user_id);
     
@@ -98,6 +102,7 @@ module.exports = (slapp, kv, config, func) => {
     }
   }
   
+  // Function to retrieve user info from database
   module.getUser = (user_id) => {
     var output = {};
     for (var i = 0; i < user_db.length; i++) {

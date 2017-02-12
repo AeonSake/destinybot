@@ -15,26 +15,26 @@ let baseUrl = process.env.BASE_URL || `https://beepboophq.com/proxy/${process.en
 
 let config = module.exports = {
   
-  //HTTP port
+  // HTTP port
   port: process.env.PORT || 4000,
   
-  //Slack tokens
+  // Slack tokens
   slack_verify_token: process.env.SLACK_VERIFY_TOKEN,
   
-  //Slapp config
+  // Slapp config
   slapp_record: 'out.jsonl',
   slapp_log: true,
   slapp_colors: true,
   
-  //BeepBoop config
+  // BeepBoop config
   bb_project_id: process.env.BEEPBOOP_PROJECT_ID,
   bb_token: process.env.BEEPBOOP_TOKEN,
   bb_convo_store: BeepBoopConvoStore(),
   bb_context: BeepBoopContext(),
   bb_persist_provider: process.env.PERSIST_PROVIDER || 'beepboop',
   
-  //Project config
-  version: "5.2.44",
+  // Project config
+  version: "5.2.45",
   title: "DestinyBot",
   admin_id: process.env.admin_id,
   admin_ch: "",
@@ -42,18 +42,18 @@ let config = module.exports = {
   bot_token: process.env.bot_token,
   app_token: process.env.app_token,
   
-  //Destiny config
+  // Destiny config
   //destiny_ch: process.env.destiny_ch,
   
-  //Poll config
+  // Poll config
   poll_ch: process.env.poll_ch,
   
-  //Events config
+  // Events config
   event_ch: process.env.event_ch,
   
   
   
-  //Validation function
+  // Validation function
   validate: () => {
     let required = ['bb_token'];
 

@@ -1094,8 +1094,11 @@ module.exports = (app) => {
     
     if (slot < poll_db.length) {
       msg.say(poll_db[slot].generatePoll(slot), (err, result) => {
-        poll_db[slot].addPost(result.channel, result.ts);
-        savePollDB();
+        if (err) console.log("Unable to post in channel (" + err + ")");
+        else {
+          poll_db[slot].addPost(result.channel, result.ts);
+          savePollDB();
+        }
       });
     }
     else msg.respond(func.generateInfoMsg(lang.err.poll.notfound));
@@ -1140,15 +1143,12 @@ module.exports = (app) => {
         msg.route('poll_create_title_route', data, 60);
         break;
       case 'showpoll':
-        msg.respond("showpoll");
         //do something
         break;
       case 'editpoll':
-        msg.respond("editpoll");
         //do something
         break;
       case 'showhelp':
-        msg.respond("showhelp");
         //do something
         break;
     }
