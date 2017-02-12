@@ -17,14 +17,6 @@ module.exports = (slapp, kv, config, func) => {
   var module = {};
   module.ready = false;
   
-  module.getUser = (user_id) => {
-    var output = {};
-    for (var i = 0; i < user_db.length; i++) {
-      if (user_db[i].id == user_id) output = user_db[i];
-    }
-    return output;
-  };
-  
   module.getTeamInfo = () => {
     slapp.client.team.info({
       token: config.bot_token
@@ -37,7 +29,7 @@ module.exports = (slapp, kv, config, func) => {
         func.addLogEntry("Team info loaded", 1);
       }
     });
-  }
+  };
   
   module.getUserInfo = () => {
     slapp.client.users.list({
@@ -76,10 +68,47 @@ module.exports = (slapp, kv, config, func) => {
         });
       }
     });
+  };
+  
+  module.getUserDM = () => {
+    for (var i = 0; i < user_db.length; i++) {
+      slapp.client.im.open({
+        token: config.bot_token,
+        user: user_db[i].id
+      }, (err, data) => {
+        if (!err) user_db.dm_ch = data.channel.id;
+      });
+    }
+  };
+  
+  module.sendDM = (user_id, msg) => {
+    var user = user_db.getUser(user_id);
+    
+    if (user'dm_ch' in user) {
+      slapp.client.chat.postMessage({
+        token: config.bot_token,
+        channel: user.dm_ch,
+        text: msg.text,
+        attachments: msg.attachments,
+        parse: 'full',
+        as_user: true
+      }, (err, data) => {
+        if (err) console.log("ERROR: Unable to send user DM (" + err + ")");
+      });
+    }
   }
+  
+  module.getUser = (user_id) => {
+    var output = {};
+    for (var i = 0; i < user_db.length; i++) {
+      if (user_db[i].id == user_id) output = user_db[i];
+    }
+    return output;
+  };
    
   module.getTeamInfo();
   module.getUserInfo();
+  module.getUserDM();
   module.ready = true;
   
   return module;

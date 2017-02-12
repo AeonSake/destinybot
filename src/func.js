@@ -12,7 +12,6 @@
 
 module.exports = (slapp, config) => {
   var module = {};
-  module.ready = false;
   
   module.getRandomColor = () => {
     var letters = '0123456789ABCDEF';
@@ -23,19 +22,9 @@ module.exports = (slapp, config) => {
     return color;
   };
   
-  module.getAdminCh = () => {
-    slapp.client.im.open({
-      token: config.bot_token,
-      user: config.admin_id
-    }, (err, data) => {
-      if (err) console.log("ERROR: Unable to fetch admin channel ID (" + err + ")");
-      else {
-        config.admin_ch = data.channel.id;
-        module.ready = true;
-      }
-    });
+  module.cloneObject = (obj) => {
+    return JSON.parse(JSON.stringify(obj));
   };
-  module.getAdminCh();
   
   module.addLogEntry = (text, type) => {
     var type_text = ["INFO", "INFO", "WARNING", "ERROR"];
@@ -45,8 +34,21 @@ module.exports = (slapp, config) => {
     notifyAdmin(type_emoji[type] + " " + text);
   };
   
-  function notifyAdmin(text) {
-    if (module.ready == true) {
+  function getAdminCh () {
+    if (config.admin_ch == "") {
+      slapp.client.im.open({
+        token: config.bot_token,
+        user: config.admin_id
+      }, (err, data) => {
+        if (err) console.log("Unable to fetch admin channel (" + err + ")");
+        else config.admin_ch = data.channel.id;
+      });
+    }
+  }
+  getAdminCh();
+  
+  function notifyAdmin (text) {
+    if (config.admin_ch != "") {
       slapp.client.chat.postMessage({
         token: config.bot_token,
         channel: config.admin_ch,
@@ -54,15 +56,30 @@ module.exports = (slapp, config) => {
         parse: 'full',
         as_user: true
       }, (err, data) => {
-        if (err) console.log("ERROR: Unable to fetch send admin notification (" + err + ")");
+        if (err) console.log("ERROR: Unable to send admin notification (" + err + ")");
       });
     } else {
-      module.getAdminCh();
+      getAdminCh();
       setTimeout(function() {
         notifyAdmin(text);
       }, 1000)
     }
   }
+  
+  module.generateInfoMsg = (text) => {
+    return {
+      text: "",
+      attachments: [{name: 'dismiss', text: lang.btn.dismiss, type: 'button'}],
+      response_type: 'ephemeral',
+      delete_original: true
+    };
+  };
+  
+  // Close button callback
+  slapp.action('dismiss_callback', (msg) => {
+    msg.respond({text: "", delete_original: true});
+    return;
+  });
   
   return module;
 }

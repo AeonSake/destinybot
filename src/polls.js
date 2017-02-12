@@ -64,7 +64,7 @@ module.exports = (app) => {
       {
         text: "",
         fallback: "",
-        callback_id: 'poll_dismiss_callback',
+        callback_id: 'dismiss_callback',
         actions: [
           {
             name: 'dismiss',
@@ -479,7 +479,7 @@ module.exports = (app) => {
   var poll_dismiss_att = {
     text: "",
     fallback: "",
-    callback_id: 'poll_dismiss_callback',
+    callback_id: 'dismiss_callback',
     actions: [
       {
         name: 'dismiss',
@@ -490,15 +490,6 @@ module.exports = (app) => {
     mrkdwn_in: ['text', 'pretext']
   };
   
-  function generateInfoMsg (text) {
-    return {
-      text: text,
-      attachments: [poll_dismiss_att],
-      response_type: 'ephemeral',
-      delete_original: true
-    };
-  }
-
   
 
 // ===========================
@@ -1058,7 +1049,7 @@ module.exports = (app) => {
         msg_text.text = "";
         msg_text.attachments.push(poll_dismiss_att);
       } else {
-        msg_text = generateInfoMsg(lang.err.poll.notfound);
+        msg_text = func.generateInfoMsg(lang.err.poll.notfound);
       }
     } else {
       msg_text = poll_show_msg;
@@ -1092,6 +1083,17 @@ module.exports = (app) => {
         msg.respond({text: "", delete_original: true});
         break;
     }
+    
+    return;
+  });
+  
+  // ===== /poll post =====
+  
+  slapp.command('/dbpoll', "post \\d{1,4}", (msg, cmd) => {
+    var slot = parseInt(cmd.substring(5)) - 1;
+    
+    if (slot < poll_db.length) msg.say(poll_db[slot].generatePoll(slot));
+    else msg.respond(func.generateInfoMsg(lang.err.poll.notfound));
     
     return;
   });
@@ -1153,19 +1155,12 @@ module.exports = (app) => {
   
   slapp.action('poll_answer_callback', (msg) => {
     var answer = parseInt(msg.body.actions[0].name);
-    var slot = parseInt(msg.body.actions[0].value) - 1;
+    var slot = parseInt(msg.body.actions[0].value);
     
     poll_db[slot].vote(answer, msg.body.user.id); //todo: show error text
     poll_db[slot].update(slot);
     savePollDB();
     
-    msg.respond({text: "", delete_original: true});
-    return;
-  });
-  
-// ===== Close button callback =====
-  
-  slapp.action('poll_dismiss_callback', (msg) => {
     msg.respond({text: "", delete_original: true});
     return;
   });
