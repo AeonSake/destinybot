@@ -477,29 +477,26 @@ module.exports = (app) => {
             if (poll_db[i].isVisible()) {
               if (pollcount >= page * 5 && pollcount < page * 5 + 5) {
                 msg.attachments.push((poll_db[i].generatePoll(i)).attachments);
-                console.log(msg);
-                console.log(msg.attachments);
-                console.log()
               }
-              else pollcount++;
+              pollcount++;
             }
             break;
           case 1:
             if (poll_db[i].isOpen()) {
               if (pollcount >= page * 5 && pollcount < page * 5 + 5) msg.attachments.push((poll_db[i].generatePoll(i)).attachments);
-              else pollcount++;
+              pollcount++;
             }
             break;
           case 2:
             if (poll_db[i].isClosed()) {
               if (pollcount >= page * 5 && pollcount < page * 5 + 5) msg.attachments.push((poll_db[i].generatePoll(i)).attachments);
-              else pollcount++;
+              pollcount++;
             }
             break;
           case 3:
             if (poll_db[i].isVisible() && poll_db[i].isOwner(options.user)) {
               if (pollcount >= page * 5 && pollcount < page * 5 + 5) msg.attachments.push((poll_db[i].generatePoll(i)).attachments);
-              else pollcount++;
+              pollcount++;
             }
             break;
         }
@@ -510,7 +507,12 @@ module.exports = (app) => {
     
     //show filter
     if (pollcount > 5) msg.attachments.push(poll_show_pages_att(page, pollcount));
-    if (pollcount == 0) msg.text = lang.msg.poll.nopollfound;
+    if (pollcount == 0) {
+      msg.text = lang.msg.poll.nopollfound;
+      msg.attachments[0] = poll_dismiss_att;
+    }
+    
+    console.log(msg);
     
     return msg;
   }
