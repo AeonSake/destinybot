@@ -426,6 +426,49 @@ module.exports = (app) => {
   
   // ===== SHOW =====
   
+  function poll_show_filter_att (filter, sort) {
+    var btns = [];
+    
+    if (filter != 0) btns.push({
+      name: 'allpolls',
+      text: lang.btn.poll.allpolls,
+      type: 'button'
+    });
+    if (filter != 1) btns.push({
+      name: 'openpolls',
+      text: lang.btn.poll.openpolls,
+      type: 'button'
+    });
+    if (filter != 2) btns.push({
+      name: 'closedpolls',
+      text: lang.btn.poll.closedpolls,
+      type: 'button'
+    });
+    if (filter != 3) btns.push({
+      name: 'mypolls',
+      text: lang.btn.poll.mypolls,
+      type: 'button'
+    });
+    if (sort == 'asc') btns.push({
+      name: 'desc',
+      text: lang.btn.poll.desc,
+      type: 'button'
+    });
+    if (sort == 'desc') btns.push({
+      name: 'asc',
+      text: lang.btn.poll.asc,
+      type: 'button'
+    });
+    
+    return {
+      text: lang.wrd.filter + ":",
+      fallback: "",
+      callback_id: 'poll_show_filter_callback',
+      actions: btns,
+      mrkdwn_in: ['text', 'pretext']
+    };
+  };
+  
   function poll_show_pages_att (page, count) {
     var btns = [],
         max = Math.ceil(count / 5);
@@ -507,7 +550,7 @@ module.exports = (app) => {
       
     }
     
-    //show filter
+    msg.attachments.push(poll_show_filter_att(options.mode, options.sort));
     if (pollcount > 5) msg.attachments.push(poll_show_pages_att(page, pollcount));
     if (pollcount == 0) {
       msg.text = lang.msg.poll.nopollfound;
@@ -1195,7 +1238,7 @@ module.exports = (app) => {
         msg.route('poll_create_title_route', data, 60);
         break;
       case 'showpoll':
-        //do something
+        msg.respond(poll_show_msg(0, {sort: 'asc', mode: 0}));
         break;
       case 'editpoll':
         //do something
@@ -1218,7 +1261,7 @@ module.exports = (app) => {
     poll_db[slot].update(slot);
     savePollDB();
     
-    if (!('original_message' in msg.body)) msg.respond({text: "", delete_original: true});
+    if (!('original_message' in msg.body)) msg.respond(func.generateInfoMsg(lang.msg.poll.success));
     return;
   });
   

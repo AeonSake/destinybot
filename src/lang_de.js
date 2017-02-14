@@ -19,7 +19,8 @@ let lang = module.exports = {
     votes: "Stimmen",
     allowed: "erlaubt",
     page: "Seite",
-    total: "Gesamt"
+    total: "Gesamt",
+    filter: "Filter"
   },
   
   btn: {
@@ -40,7 +41,13 @@ let lang = module.exports = {
     poll: {
       createpoll: "Umfrage erstellen",
       showpolls: "Umfragen anzeigen",
-      editpoll: "Umfrage bearbeiten"
+      editpoll: "Umfrage bearbeiten",
+      allpolls: "Alle Umfragen",
+      openpolls: "Offene Umfragen",
+      closedpolls: "Geschlossene Umfragen",
+      mypolls: "Meine Umfragen",
+      asc: "Aufsteigend",
+      desc: "Absteigend"
     }
   },
   
@@ -58,7 +65,8 @@ let lang = module.exports = {
       novotes: "Keine Stimmen",
       pollclosed: "Umfrage wurde geschlossen.",
       newpollcreated: "Eine neue Umfrage wurde erstellt:",
-      nopollfound: "Keine Umfragen gefunden."
+      nopollfound: "Keine Umfragen gefunden.",
+      success: "Erfolgreich abgestimmt."
     }
   },
   
