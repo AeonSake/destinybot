@@ -438,7 +438,7 @@ module.exports = (app) => {
     });
     btns.push({
       name: 'page',
-      text: lang.wrd.page + " " + (page + 1) + " / " + max,
+      text: lang.wrd.page + " " + String(page + 1) + " / " + max,
       type: 'button'
     });
     if (page + 1 < max) btns.push({
