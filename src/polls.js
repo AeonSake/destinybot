@@ -553,8 +553,6 @@ module.exports = (app) => {
       msg.attachments[0] = poll_dismiss_att;
     }
     
-    console.log(msg);
-    
     return msg;
   }
   
@@ -1154,7 +1152,7 @@ module.exports = (app) => {
         msg_text = func.generateInfoMsg(lang.err.poll.notfound);
       }
     } else {
-      msg_text = poll_list_msg(0, {mode: 0, sort: 'asc'});
+      msg_text = poll_list_msg(0, {mode: 0, sort: 'desc'});
     }
     
     msg.respond(msg_text);
@@ -1241,7 +1239,7 @@ module.exports = (app) => {
         msg.route('poll_create_title_route', data, 60);
         break;
       case 'showpoll':
-        msg.respond(poll_list_msg(0, {mode: 0, sort: 'asc'}));
+        msg.respond(poll_list_msg(0, {mode: 0, sort: 'desc'}));
         break;
       case 'editpoll':
         //do something
