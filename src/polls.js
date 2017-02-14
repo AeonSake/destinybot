@@ -1168,7 +1168,7 @@ module.exports = (app) => {
   slapp.action('poll_show_filter_callback', (msg) => {
     var data = msg.body.actions[0].name.split("-");
     
-    msg.respond(poll_show_msg(page, {mode: parseInt(data[0]), sort: data[1]}));
+    msg.respond(poll_show_msg(0, {mode: parseInt(data[0]), sort: data[1]}));
     return;
   });
   
