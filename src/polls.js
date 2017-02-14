@@ -427,8 +427,9 @@ module.exports = (app) => {
   // ===== SHOW =====
   
   function poll_show_pages_att (page, count) {
-    var btns = [];
-    var max = Math.ceil(count / 5);
+    var btns = [],
+        page1 = page + 1,
+        max = Math.ceil(count / 5);
     
     if (page != 0) btns.push({
       name: 'back',
@@ -438,7 +439,7 @@ module.exports = (app) => {
     });
     btns.push({
       name: 'page',
-      text: lang.wrd.page + " " + (page + 1).toString + " / " + max,
+      text: lang.wrd.page + " " + page1 + " / " + max,
       type: 'button'
     });
     if (page + 1 < max) btns.push({
