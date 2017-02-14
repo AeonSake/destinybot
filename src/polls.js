@@ -426,36 +426,36 @@ module.exports = (app) => {
   
   // ===== SHOW =====
   
-  function poll_show_filter_att (filter, sort) {
+  function poll_show_filter_att (mode, sort) {
     var btns = [];
     
-    if (filter != 0) btns.push({
-      name: 'allpolls',
+    if (mode != 0) btns.push({
+      name: "0-" + sort,
       text: lang.btn.poll.allpolls,
       type: 'button'
     });
-    if (filter != 1) btns.push({
-      name: 'openpolls',
+    if (mode != 1) btns.push({
+      name: "1-" + sort,
       text: lang.btn.poll.openpolls,
       type: 'button'
     });
-    if (filter != 2) btns.push({
-      name: 'closedpolls',
+    if (mode != 2) btns.push({
+      name: "2-" + sort,
       text: lang.btn.poll.closedpolls,
       type: 'button'
     });
-    if (filter != 3) btns.push({
-      name: 'mypolls',
+    if (mode != 3) btns.push({
+      name: "3-" + sort,
       text: lang.btn.poll.mypolls,
       type: 'button'
     });
     if (sort == 'asc') btns.push({
-      name: 'desc',
+      name: mode + "-desc",
       text: lang.btn.poll.desc,
       type: 'button'
     });
     if (sort == 'desc') btns.push({
-      name: 'asc',
+      name: mode + "-asc",
       text: lang.btn.poll.asc,
       type: 'button'
     });
@@ -469,12 +469,12 @@ module.exports = (app) => {
     };
   };
   
-  function poll_show_pages_att (page, count) {
+  function poll_show_pages_att (page, count, mode, sort) {
     var btns = [],
         max = Math.ceil(count / 5);
     
     if (page != 0) btns.push({
-      name: 'back',
+      name: 'back-' + mode + "-" + sort,
       value: page - 1,
       text: "<",
       type: 'button'
@@ -485,7 +485,7 @@ module.exports = (app) => {
       type: 'button'
     });
     if (page + 1 < max) btns.push({
-      name: 'next',
+      name: 'next-' + mode + "-" + sort,
       value: page + 1,
       text: ">",
       type: 'button'
@@ -551,7 +551,7 @@ module.exports = (app) => {
     }
     
     msg.attachments.push(poll_show_filter_att(options.mode, options.sort));
-    if (pollcount > 5) msg.attachments.push(poll_show_pages_att(page, pollcount));
+    if (pollcount > 5) msg.attachments.push(poll_show_pages_att(page, pollcount, options.mode, options.sort));
     if (pollcount == 0) {
       msg.text = lang.msg.poll.nopollfound;
       msg.attachments[0] = poll_dismiss_att;
@@ -1158,21 +1158,28 @@ module.exports = (app) => {
         msg_text = func.generateInfoMsg(lang.err.poll.notfound);
       }
     } else {
-      msg_text = poll_show_msg(0, {sort: 'asc', mode: 0});
+      msg_text = poll_show_msg(0, {mode: 0, sort: 'asc'});
     }
     
     msg.respond(msg_text);
     return;
   });
   
+  slapp.action('poll_show_filter_callback', (msg) => {
+    var data = msg.body.actions[0].name.split("-");
+    
+    msg.respond(poll_show_msg(page, {mode: parseInt(data[0]), sort: data[1]}));
+    return;
+  });
+  
   slapp.action('poll_show_pages_callback', (msg) => {
-    var page = parseInt(msg.body.actions[0].value);
-    switch (msg.body.actions[0].name) {
+    var data = msg.body.actions[0].name.split("-"),
+        page = parseInt(msg.body.actions[0].value);
+    
+    switch (data[0]) {
       case 'back':
-        msg.respond(poll_show_msg(page, {sort: 'asc', mode: 0}));
-        return;
       case 'next':
-        msg.respond(poll_show_msg(page, {sort: 'asc', mode: 0}));
+        msg.respond(poll_show_msg(page, {mode: parseInt(data[1]), sort: data[2]}));
         return;
       case 'page':
         return;
@@ -1238,7 +1245,7 @@ module.exports = (app) => {
         msg.route('poll_create_title_route', data, 60);
         break;
       case 'showpoll':
-        msg.respond(poll_show_msg(0, {sort: 'asc', mode: 0}));
+        msg.respond(poll_show_msg(0, {mode: 0, sort: 'asc'}));
         break;
       case 'editpoll':
         //do something
