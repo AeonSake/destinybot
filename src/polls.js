@@ -505,7 +505,7 @@ module.exports = (app) => {
     };
   };
   
-  function poll_show_msg (page, options) {
+  function poll_list_msg (page, options) {
     var msg = {
       text: "",
       attachments: [],
@@ -515,39 +515,35 @@ module.exports = (app) => {
     var pollcount = 0;
     // options.mode: 0 = all, 1 = open, 2 = closed, 3 = own
     
-    if (options.sort == 'asc') {
-      for (var i = 0; i < poll_db.length; i++) {
-        switch(options.mode) {
-          case 0:
-            if (poll_db[i].isVisible()) {
-              if (pollcount >= page * 5 && pollcount < page * 5 + 5) {
-                msg.attachments = msg.attachments.concat(poll_db[i].generatePoll(i).attachments);
-              }
-              pollcount++;
-            }
-            break;
-          case 1:
-            if (poll_db[i].isOpen()) {
-              if (pollcount >= page * 5 && pollcount < page * 5 + 5) msg.attachments = msg.attachments.concat(poll_db[i].generatePoll(i).attachments);
-              pollcount++;
-            }
-            break;
-          case 2:
-            if (poll_db[i].isClosed()) {
-              if (pollcount >= page * 5 && pollcount < page * 5 + 5) msg.attachments = msg.attachments.concat(poll_db[i].generatePoll(i).attachments);
-              pollcount++;
-            }
-            break;
-          case 3:
-            if (poll_db[i].isVisible() && poll_db[i].isOwner(options.user)) {
-              if (pollcount >= page * 5 && pollcount < page * 5 + 5) msg.attachments = msg.attachments.concat(poll_db[i].generatePoll(i).attachments);
-              pollcount++;
-            }
-            break;
-        }
-      }
-    } else if (options.sort == 'desc') {
+    for (var i = 0; i < poll_db.length; i++) {
+      var j = (optoons.mode == 'asc' ? 0 : poll_db.length - i - 1);
       
+      switch(options.mode) {
+        case 0:
+          if (poll_db[j].isVisible()) {
+            if (pollcount >= page * 5 && pollcount < page * 5 + 5) msg.attachments = msg.attachments.concat(poll_db[j].generatePoll(j).attachments);
+            pollcount++;
+          }
+          break;
+        case 1:
+          if (poll_db[j].isOpen()) {
+            if (pollcount >= page * 5 && pollcount < page * 5 + 5) msg.attachments = msg.attachments.concat(poll_db[j].generatePoll(j).attachments);
+            pollcount++;
+          }
+          break;
+        case 2:
+          if (poll_db[j].isClosed()) {
+            if (pollcount >= page * 5 && pollcount < page * 5 + 5) msg.attachments = msg.attachments.concat(poll_db[j].generatePoll(j).attachments);
+            pollcount++;
+          }
+          break;
+        case 3:
+          if (poll_db[j].isVisible() && poll_db[j].isOwner(options.user)) {
+            if (pollcount >= page * 5 && pollcount < page * 5 + 5) msg.attachments = msg.attachments.concat(poll_db[j].generatePoll(j).attachments);
+            pollcount++;
+          }
+          break;
+      }
     }
     
     msg.attachments.push(poll_show_filter_att(options.mode, options.sort));
@@ -842,7 +838,7 @@ module.exports = (app) => {
     }
     
     isClosed () {
-      reutrn (this.state == 1);
+      return (this.state == 1);
     }
     
     isVisible () {
@@ -1158,7 +1154,7 @@ module.exports = (app) => {
         msg_text = func.generateInfoMsg(lang.err.poll.notfound);
       }
     } else {
-      msg_text = poll_show_msg(0, {mode: 0, sort: 'asc'});
+      msg_text = poll_list_msg(0, {mode: 0, sort: 'asc'});
     }
     
     msg.respond(msg_text);
@@ -1168,7 +1164,7 @@ module.exports = (app) => {
   slapp.action('poll_show_filter_callback', (msg) => {
     var data = msg.body.actions[0].name.split("-");
     
-    msg.respond(poll_show_msg(0, {mode: parseInt(data[0]), sort: data[1]}));
+    msg.respond(poll_list_msg(0, {mode: parseInt(data[0]), sort: data[1], user: msg.body.user.id}));
     return;
   });
   
@@ -1179,7 +1175,7 @@ module.exports = (app) => {
     switch (data[0]) {
       case 'back':
       case 'next':
-        msg.respond(poll_show_msg(page, {mode: parseInt(data[1]), sort: data[2]}));
+        msg.respond(poll_list_msg(page, {mode: parseInt(data[1]), sort: data[2], user: msg.body.user.id}));
         return;
       case 'page':
         return;
@@ -1245,7 +1241,7 @@ module.exports = (app) => {
         msg.route('poll_create_title_route', data, 60);
         break;
       case 'showpoll':
-        msg.respond(poll_show_msg(0, {mode: 0, sort: 'asc'}));
+        msg.respond(poll_list_msg(0, {mode: 0, sort: 'asc'}));
         break;
       case 'editpoll':
         //do something
