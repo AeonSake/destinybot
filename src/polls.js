@@ -432,6 +432,7 @@ module.exports = (app) => {
     
     if (page != 0) btns.push({
       name: 'back',
+      value: page - 1,
       text: "<",
       type: 'button'
     });
@@ -440,8 +441,9 @@ module.exports = (app) => {
       text: lang.wrd.page + " " + (page + 1) + " / " + max,
       type: 'button'
     });
-    if (page + 1 == max) btns.push({
+    if (page + 1 < max) btns.push({
       name: 'next',
+      value: page + 1,
       text: ">",
       type: 'button'
     });
@@ -1124,17 +1126,17 @@ module.exports = (app) => {
     var page = msg.body.actions[0].value;
     switch (msg.body.actions[0].name) {
       case 'back':
-        break;
+        msg.respond(poll_show_msg(page, {sort: 'asc', mode: 0}));
+        return;
       case 'next':
-        break;
+        msg.respond(poll_show_msg(page, {sort: 'asc', mode: 0}));
+        return;
       case 'page':
-        break;
+        return;
       case 'dismiss':
         msg.respond({text: "", delete_original: true});
-        break;
+        return;
     }
-    
-    return;
   });
   
   // ===== /poll post =====
