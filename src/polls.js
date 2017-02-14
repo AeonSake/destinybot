@@ -426,21 +426,21 @@ module.exports = (app) => {
   
   // ===== SHOW =====
   
-  function poll_show_pages_att (cur, count) {
+  function poll_show_pages_att (page, count) {
     var btns = [];
     var max = Math.ceil(count / 5);
     
-    if (cur != 1) btns.push({
+    if (page != 0) btns.push({
       name: 'back',
       text: "<",
       type: 'button'
     });
     btns.push({
       name: 'page',
-      text: lang.wrd.page + " " + cur + " / " + max,
+      text: lang.wrd.page + " " + (page + 1) + " / " + max,
       type: 'button'
     });
-    if (cur == max) btns.push({
+    if (page + 1 == max) btns.push({
       name: 'next',
       text: ">",
       type: 'button'
@@ -476,26 +476,26 @@ module.exports = (app) => {
           case 0:
             if (poll_db[i].isVisible()) {
               if (pollcount >= page * 5 && pollcount < page * 5 + 5) {
-                msg.attachments.push((poll_db[i].generatePoll(i)).attachments);
+                msg.attachments = msg.attachments.concat(poll_db[i].generatePoll(i)).attachments);
               }
               pollcount++;
             }
             break;
           case 1:
             if (poll_db[i].isOpen()) {
-              if (pollcount >= page * 5 && pollcount < page * 5 + 5) msg.attachments.push((poll_db[i].generatePoll(i)).attachments);
+              if (pollcount >= page * 5 && pollcount < page * 5 + 5) msg.attachments = msg.attachments.concat(poll_db[i].generatePoll(i)).attachments);
               pollcount++;
             }
             break;
           case 2:
             if (poll_db[i].isClosed()) {
-              if (pollcount >= page * 5 && pollcount < page * 5 + 5) msg.attachments.push((poll_db[i].generatePoll(i)).attachments);
+              if (pollcount >= page * 5 && pollcount < page * 5 + 5) msg.attachments = msg.attachments.concat(poll_db[i].generatePoll(i)).attachments);
               pollcount++;
             }
             break;
           case 3:
             if (poll_db[i].isVisible() && poll_db[i].isOwner(options.user)) {
-              if (pollcount >= page * 5 && pollcount < page * 5 + 5) msg.attachments.push((poll_db[i].generatePoll(i)).attachments);
+              if (pollcount >= page * 5 && pollcount < page * 5 + 5) msg.attachments = msg.attachments.concat(poll_db[i].generatePoll(i)).attachments);
               pollcount++;
             }
             break;
