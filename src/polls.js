@@ -484,19 +484,19 @@ module.exports = (app) => {
               else pollcount++;
             }
             break;
-          case: 1:
+          case 1:
             if (poll_db[i].isOpen()) {
               if (pollcount >= page * 5 && pollcount < page * 5 + 5) msg.attachments.push((poll_db[i].generatePoll(i)).attachments);
               else pollcount++;
             }
             break;
-          case: 2:
+          case 2:
             if (poll_db[i].isClosed()) {
               if (pollcount >= page * 5 && pollcount < page * 5 + 5) msg.attachments.push((poll_db[i].generatePoll(i)).attachments);
               else pollcount++;
             }
             break;
-          case: 3:
+          case 3:
             if (poll_db[i].isVisible() && poll_db[i].isOwner(options.user)) {
               if (pollcount >= page * 5 && pollcount < page * 5 + 5) msg.attachments.push((poll_db[i].generatePoll(i)).attachments);
               else pollcount++;
