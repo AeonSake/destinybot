@@ -476,26 +476,26 @@ module.exports = (app) => {
           case 0:
             if (poll_db[i].isVisible()) {
               if (pollcount >= page * 5 && pollcount < page * 5 + 5) {
-                msg.attachments = msg.attachments.concat(poll_db[i].generatePoll(i)).attachments);
+                msg.attachments = msg.attachments.concat(poll_db[i].generatePoll(i).attachments);
               }
               pollcount++;
             }
             break;
           case 1:
             if (poll_db[i].isOpen()) {
-              if (pollcount >= page * 5 && pollcount < page * 5 + 5) msg.attachments = msg.attachments.concat(poll_db[i].generatePoll(i)).attachments);
+              if (pollcount >= page * 5 && pollcount < page * 5 + 5) msg.attachments = msg.attachments.concat(poll_db[i].generatePoll(i).attachments);
               pollcount++;
             }
             break;
           case 2:
             if (poll_db[i].isClosed()) {
-              if (pollcount >= page * 5 && pollcount < page * 5 + 5) msg.attachments = msg.attachments.concat(poll_db[i].generatePoll(i)).attachments);
+              if (pollcount >= page * 5 && pollcount < page * 5 + 5) msg.attachments = msg.attachments.concat(poll_db[i].generatePoll(i).attachments);
               pollcount++;
             }
             break;
           case 3:
             if (poll_db[i].isVisible() && poll_db[i].isOwner(options.user)) {
-              if (pollcount >= page * 5 && pollcount < page * 5 + 5) msg.attachments = msg.attachments.concat(poll_db[i].generatePoll(i)).attachments);
+              if (pollcount >= page * 5 && pollcount < page * 5 + 5) msg.attachments = msg.attachments.concat(poll_db[i].generatePoll(i).attachments);
               pollcount++;
             }
             break;
