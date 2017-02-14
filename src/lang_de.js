@@ -12,12 +12,14 @@ let lang = module.exports = {
   
   wrd: {
     poll: "Umfrage",
+    polls: "Umfragen",
     user: "User",
     preview: "Vorschau",
     vote: "Stimme",
     votes: "Stimmen",
     allowed: "erlaubt",
-    page: "Seite"
+    page: "Seite",
+    total: "Gesamt"
   },
   
   btn: {
@@ -56,7 +58,7 @@ let lang = module.exports = {
       novotes: "Keine Stimmen",
       pollclosed: "Umfrage wurde geschlossen.",
       newpollcreated: "Eine neue Umfrage wurde erstellt:",
-      openpolls: "offene Umfragen."
+      nopollfound: "Keine Umfragen gefunden."
     }
   },
   

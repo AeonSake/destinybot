@@ -426,13 +426,6 @@ module.exports = (app) => {
   
   // ===== SHOW =====
   
-  var poll_show_msg = {
-    text: "",
-    attachments: [],
-    response_type: 'ephemeral',
-    delete_original: true
-  };
-  
   function poll_show_pages_att (cur, count) {
     var btns = [];
     var max = Math.ceil(count / 5);
@@ -459,7 +452,7 @@ module.exports = (app) => {
     });
     
     return {
-      text: count + " " + lang.msg.poll.openpolls,
+      text: lang.wrd.total + ": " + count + " " + (count > 1 ? lang.wrd.polls : lang.wrd.poll),
       fallback: "",
       callback_id: 'poll_show_pages_callback',
       actions: btns,
@@ -467,7 +460,60 @@ module.exports = (app) => {
     };
   };
   
-  
+  function poll_show_msg (page, options) {
+    var msg = {
+      text: "",
+      attachments: [],
+      response_type: 'ephemeral',
+      delete_original: true
+    };
+    var pollcount = 0;
+    // options.mode: 0 = all, 1 = open, 2 = closed, 3 = own
+    
+    if (options.sort == 'asc') {
+      for (var i = 0; i < poll_db.length; i++) {
+        switch(options.mode) {
+          case 0:
+            if (poll_db[i].isVisible()) {
+              if (pollcount >= page * 5 && pollcount < page * 5 + 5) {
+                msg.attachments.push((poll_db[i].generatePoll(i)).attachments);
+                console.log(msg);
+                console.log(msg.attachments);
+                console.log()
+              }
+              else pollcount++;
+            }
+            break;
+          case: 1:
+            if (poll_db[i].isOpen()) {
+              if (pollcount >= page * 5 && pollcount < page * 5 + 5) msg.attachments.push((poll_db[i].generatePoll(i)).attachments);
+              else pollcount++;
+            }
+            break;
+          case: 2:
+            if (poll_db[i].isClosed()) {
+              if (pollcount >= page * 5 && pollcount < page * 5 + 5) msg.attachments.push((poll_db[i].generatePoll(i)).attachments);
+              else pollcount++;
+            }
+            break;
+          case: 3:
+            if (poll_db[i].isVisible() && poll_db[i].isOwner(options.user)) {
+              if (pollcount >= page * 5 && pollcount < page * 5 + 5) msg.attachments.push((poll_db[i].generatePoll(i)).attachments);
+              else pollcount++;
+            }
+            break;
+        }
+      }
+    } else if (options.sort == 'desc') {
+      
+    }
+    
+    //show filter
+    if (pollcount > 5) msg.attachments.push(poll_show_pages_att(page, pollcount));
+    if (pollcount == 0) msg.text = lang.msg.poll.nopollfound;
+    
+    return msg;
+  }
   
   
   
@@ -502,7 +548,10 @@ module.exports = (app) => {
       this.text = data.text || "";
       this.answers = data.answers || [];
       this.creator = data.creator || "";
-      this.ts = {created: data.ts.created || 0, edited: data.ts.edited || 0};
+      this.ts = {
+        created: data.ts.created || 0,
+        edited: data.ts.edited || 0
+      };
       this.posts = data.posts || [];
       this.state = data.state || 0; //0 = default, 1 = vote closed, 2 = deleted
       this.options = {
@@ -716,15 +765,7 @@ module.exports = (app) => {
             link_names: 1,
             as_user: true
           }, (err, data) => {
-            if (err) {
-              if (err.message == 'cant_update_message' || err.message == 'message_not_found' || err.message == 'channel_not_found' || err.message == 'edit_window_closed') {
-                console.log(err.arguments);
-                
-                //this.posts.splice(i, 1);
-                
-                
-              } else if (err) console.log(err);
-            }
+            if (err && err.message != 'cant_update_message' && err.message != 'message_not_found' && err.message != 'channel_not_found' && err.message != 'edit_window_closed') console.log(err);
           });
         }
       }
@@ -739,7 +780,7 @@ module.exports = (app) => {
           channel: this.posts[i].ch,
           as_user: true
         }, (err, data) => {
-          if (err) console.log(err);
+          if (err && err.message != 'cant_delete_message' && err.message != 'message_not_found' && err.message != 'channel_not_found') console.log(err);
         });
       }
     }
@@ -751,6 +792,14 @@ module.exports = (app) => {
     
     isOpen () {
       return (this.state == 0);
+    }
+    
+    isClosed () {
+      reutrn (this.state == 1);
+    }
+    
+    isVisible () {
+      return (this.state == 0 || this.state == 1);
     }
     
     isOwner (user) {
@@ -778,7 +827,6 @@ module.exports = (app) => {
         func.addLogEntry("Unable to load poll database (" + err + ")", 3);
       
       } else if (typeof val !== "undefined") {
-        //poll_db = val;
         for (var i = 0; i < val.length; i++) poll_db[i] = new Poll(val[i]);
         
         func.addLogEntry("Poll database loaded", 1);
@@ -1019,10 +1067,11 @@ module.exports = (app) => {
     } else {
       switch (msg.body.actions[0].name) {
         case 'edit':
+          data.create = true;
           var msg_text = poll_edit_msg;
           msg_text.attachments[0] = Poll.generateDummy(poll_db.length, data);
           msg.respond(msg_text);
-          msg.route('poll_create_edit_route', data, 60);
+          msg.route('poll_edit_route', data, 60);
           return;
         case 'done':
           break;
@@ -1062,19 +1111,7 @@ module.exports = (app) => {
         msg_text = func.generateInfoMsg(lang.err.poll.notfound);
       }
     } else {
-      msg_text = poll_show_msg;
-      var openpolls = 0;
-      
-      for (var i = 0; i < poll_db.length; i++) {
-        if (poll_db[i].isOpen() && openpolls < 5) {
-          var temp = (poll_db[i].generatePoll(i)).attachments;
-          msg_text.attachments.push(temp);
-          openpolls++;
-        }
-      }
-         
-      if (openpolls > 5) msg_text.attachments.push(poll_show_pages_att(1,openpolls));
-      else msg_text.attachments.push(poll_dismiss_att);
+      msg_text = poll_show_msg(0, {sort: 'asc', mode: 0});
     }
     
     msg.respond(msg_text);
@@ -1082,6 +1119,7 @@ module.exports = (app) => {
   });
   
   slapp.action('poll_show_pages_callback', (msg) => {
+    var page = msg.body.actions[0].value;
     switch (msg.body.actions[0].name) {
       case 'back':
         break;
