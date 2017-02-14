@@ -428,7 +428,6 @@ module.exports = (app) => {
   
   function poll_show_pages_att (page, count) {
     var btns = [],
-        page1 = page + 1,
         max = Math.ceil(count / 5);
     
     if (page != 0) btns.push({
@@ -439,7 +438,7 @@ module.exports = (app) => {
     });
     btns.push({
       name: 'page',
-      text: lang.wrd.page + " " + page1 + " / " + max,
+      text: lang.wrd.page + " " + (page + 1) + " / " + max,
       type: 'button'
     });
     if (page + 1 < max) btns.push({
@@ -1124,7 +1123,7 @@ module.exports = (app) => {
   });
   
   slapp.action('poll_show_pages_callback', (msg) => {
-    var page = msg.body.actions[0].value;
+    var page = parseInt(msg.body.actions[0].value);
     switch (msg.body.actions[0].name) {
       case 'back':
         msg.respond(poll_show_msg(page, {sort: 'asc', mode: 0}));
