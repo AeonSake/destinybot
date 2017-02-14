@@ -516,7 +516,7 @@ module.exports = (app) => {
     // options.mode: 0 = all, 1 = open, 2 = closed, 3 = own
     
     for (var i = 0; i < poll_db.length; i++) {
-      var j = (options.mode == 'asc' ? 0 : poll_db.length - i - 1);
+      var j = (options.mode == 'asc' ? i : poll_db.length - i - 1);
       
       switch(options.mode) {
         case 0:
