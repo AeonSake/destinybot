@@ -76,7 +76,7 @@ module.exports = (app) => {
       }
     ],
     response_type: 'ephemeral',
-    delete_original: true
+    replace_original: true
   };
 
   // ===== CREATE =====
@@ -106,7 +106,7 @@ module.exports = (app) => {
       }
     ],
     response_type: 'ephemeral',
-    delete_original: true
+    replace_original: true
   };
 
   var poll_create_title_n_msg = {
@@ -139,7 +139,7 @@ module.exports = (app) => {
       }
     ],
     response_type: 'ephemeral',
-    delete_original: true
+    replace_original: true
   };
 
   var poll_create_text_msg = {
@@ -183,7 +183,7 @@ module.exports = (app) => {
       }
     ],
     response_type: 'ephemeral',
-    delete_original: true
+    replace_original: true
   };
 
   var poll_create_answers_msg = {
@@ -222,7 +222,7 @@ module.exports = (app) => {
       }
     ],
     response_type: 'ephemeral',
-    delete_original: true
+    replace_original: true
   };
 
   var poll_create_answers_n_msg = {
@@ -266,7 +266,7 @@ module.exports = (app) => {
       }
     ],
     response_type: 'ephemeral',
-    delete_original: true
+    replace_original: true
   };
 
   var poll_create_max_msg = {
@@ -324,7 +324,7 @@ module.exports = (app) => {
       }
     ],
     response_type: 'ephemeral',
-    delete_original: true
+    replace_original: true
   };
 
   var poll_create_names_msg = {
@@ -381,7 +381,7 @@ module.exports = (app) => {
       }
     ],
     response_type: 'ephemeral',
-    delete_original: true
+    replace_original: true
   };
 
   var poll_create_final_msg = {
@@ -421,7 +421,7 @@ module.exports = (app) => {
       }
     ],
     response_type: 'ephemeral',
-    delete_original: true
+    replace_original: true
   };
   
   // ===== SHOW =====
@@ -510,7 +510,7 @@ module.exports = (app) => {
       text: "",
       attachments: [],
       response_type: 'ephemeral',
-      delete_original: true
+      replace_original: true
     };
     var pollcount = 0;
     // options.mode: 0 = all, 1 = open, 2 = closed, 3 = own
