@@ -104,12 +104,18 @@ module.exports = (slapp, kv, config, func) => {
   
   // Function to retrieve user info from database
   module.getUser = (user_id) => {
-    var output = {};
     for (var i = 0; i < user_db.length; i++) {
-      if (user_db[i].id == user_id) output = user_db[i];
+      if (user_db[i].id == user_id) return user_db[i];
     }
-    return output;
+    return {};
   };
+  
+  module.isAdmin = (user_id) => {
+    for (var i = 0; i < user_db.length; i++) {
+      if (user_db[i].id == user_id) return user_db[i].admin;
+    }
+    return false;
+  }
    
   module.getTeamInfo();
   module.getUserInfo();

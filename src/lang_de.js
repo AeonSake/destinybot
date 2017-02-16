@@ -69,7 +69,9 @@ let lang = module.exports = {
     },
     
     evt: {
-      confirmdelete: "Sind Sie sicher, dass Sie diesen Event löschen wollen?"
+      confirmdelete: "Sind Sie sicher, dass Sie diesen Event löschen wollen?",
+      
+      help: "Liste aller Befehle:\n`/event` : Hauptmenü\n`/event <title>;<dd.mm.yy>;<hh:mm>` : Schnell-Erstellung eines Events\n`/event create` : Erstellung eines Events\n`/event list` : Anzeigen aller Events\n`/event show <id>` : Anzeigen des Events mit der ID <id>\n`/event post <id>` : Posten des Events mit der ID <id> im aktuellen Channel\n`/event edit <id>` : Bearbeiten des Events mit der ID <id>\n `/event help` : Anzeigen der Hilfe"
     },
     
     poll: {
@@ -87,7 +89,7 @@ let lang = module.exports = {
       main: "Das ist das Hauptmenü für Abstimmungen.",
       confirmdelete: "Sind Sie sicher, dass Sie diese Abstimmung löschen wollen?",
       
-      help: "Liste aller Befehle:\n`/poll` : Hauptmenü\n`/poll <title>;<answer1>;<answer2>;...` : Schnell-Erstellung von Abstimmungen\n`/poll create` : Erstellung von Abstimmungen\n`/poll list` : Anzeigen aller Abstimmungen\n`/poll show <id>` : Anzeigen einer bestimmten Abstimmung\n`/poll edit <id>` : Bearbeiten einer Abstimmung\n `/poll help` : Anzeigen der Hilfe"
+      help: "Liste aller Befehle:\n`/poll` : Hauptmenü\n`/poll <title>;<answer1>;<answer2>;...` : Schnell-Erstellung einer Abstimmung\n`/poll create` : Erstellung einer Abstimmung\n`/poll list` : Anzeigen aller Abstimmungen\n`/poll show <id>` : Anzeigen der Abstimmung mit der ID <id>\n`/poll post <id>` : Posten der Abstimmung mit der ID <id> im aktuellen Channel\n`/poll edit <id>` : Bearbeiten der Abstimmung mit der ID <id>\n `/poll help` : Anzeigen der Hilfe"
     }
   },
   
@@ -101,7 +103,8 @@ let lang = module.exports = {
     },
     
     poll: {
-      notfound: "Eine Abstimmung mit dieser ID konnte nicht gefunden werden."   
+      notfound: "Eine Abstimmung mit dieser ID konnte nicht gefunden werden.",
+      notowner: "Nur der Ersteller dieser Abstimmung kann diese bearbeiten."
     }
   }
 };

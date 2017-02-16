@@ -4,6 +4,8 @@
 
 'use strict';
 
+var poll_db = [];
+
 var emoji_num = [":one:", ":two:", ":three:", ":four:", ":five:", ":six:", ":seven:", ":eight:", ":nine:", ":keycap_ten:"];
 
 
@@ -550,7 +552,7 @@ module.exports = (app) => {
     if (pollcount > 5) msg.attachments.push(poll_show_pages_att(page, pollcount, options.mode, options.sort));
     if (pollcount == 0) {
       msg.text = lang.msg.poll.nopollfound;
-      msg.attachments[0] = poll_dismiss_att;
+      msg.attachments.push(poll_dismiss_att);
     }
     
     return msg;
@@ -853,8 +855,6 @@ module.exports = (app) => {
 // ===================================
 // ========== POLL DATABASE ==========
 // ===================================
-  
-  var poll_db = [];
 
   function savePollDB () {
     kv.set('poll_db', poll_db, function (err) {
@@ -1139,23 +1139,18 @@ module.exports = (app) => {
   
   slapp.command('/dbpoll', "(show|list)(.*)", (msg, cmd) => {
     var check = new RegExp("\\d{1,4}");
-    var msg_text = {};
     
     if (cmd.substring(0,4) == "show" && check.test(cmd.substring(5))) {
       var slot = parseInt(cmd.substring(5)) - 1;
       
       if (slot < poll_db.length) {
-        msg_text = poll_db[slot].generatePoll(slot);
+        var msg_text = poll_db[slot].generatePoll(slot);
         msg_text.text = "";
         msg_text.attachments.push(poll_dismiss_att);
-      } else {
-        msg_text = func.generateInfoMsg(lang.err.poll.notfound);
-      }
-    } else {
-      msg_text = poll_list_msg(0, {mode: 0, sort: 'desc'});
-    }
+        msg.respond(msg_text);
+      } else msg.respond(func.generateInfoMsg(lang.err.poll.notfound));
+    } else msg.respond(poll_list_msg(0, {mode: 0, sort: 'desc'}));
     
-    msg.respond(msg_text);
     return;
   });
   
@@ -1202,9 +1197,33 @@ module.exports = (app) => {
     return;
   });
   
-// ===== /poll test =====
+// ===== /poll edit =====
   
-  slapp.command('/dbpoll', "test", (msg, cmd) => {
+  slapp.command('/dbpoll', "edit(.*)", (msg, cmd) => {
+    var check = new RegExp("\\d{1,4}");
+    
+    if (check.test(cmd.substring(5))) {
+      var slot = parseInt(cmd.substring(5)) - 1;
+      
+      if (slot < poll_db.length) {
+        if (poll_db[slot].isOwner(msg.body.user_id) || msg.body.user_id == config.admin_id) {
+          
+          
+          
+          
+        } else msg.respond(func.generateInfoMsg(lang.err.poll.notowner));
+      } else msg.respond(func.generateInfoMsg(lang.err.poll.notfound));
+    } else msg.respond(poll_edit_msg(msg.body.user_id));
+    
+    return;
+  });
+  
+// ===== /poll debug =====
+  
+  slapp.command('/dbpoll', "debug \\d{1,4}", (msg, cmd) => {
+    var slot = parseInt(cmd.substring(5)) - 1;
+    
+    if (slot < poll_db.length && msg.body.user_id == config.admin_id) msg.respond(poll_db[slot].generateDebugInfo(slot));
     
     return;
   });
