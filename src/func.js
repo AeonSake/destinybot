@@ -75,9 +75,15 @@ module.exports = (slapp, config, lang) => {
   module.generateInfoMsg = (text) => {
     return {
       text: "",
-      attachments: [{name: 'dismiss', text: lang.btn.dismiss, type: 'button'}],
+      attachments: [{
+        text: text,
+        fallback: text,
+        callback_id: 'dismiss_callback',
+        actions: [{name: 'dismiss', text: lang.btn.dismiss, type: 'button'}],
+        mrkdwn_in: ['text', 'pretext']
+      }],
       response_type: 'ephemeral',
-      delete_original: true
+      replace_original: true
     };
   };
   
