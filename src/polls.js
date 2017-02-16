@@ -649,7 +649,7 @@ module.exports = (app) => {
     var pollcount = 0;
     
     for (var i = 0; i < poll_db.length; i++) {
-      var j = (options.sort == 'asc' ? i : poll_db.length - i - 1);
+      var j = (sort == 'asc' ? i : poll_db.length - i - 1);
       
       if (poll_db[j].isVisible() && poll_db[j].isOwner(user_id)) {
         if (pollcount >= page * 5 && pollcount < page * 5 + 5) msg.attachments.push(poll_db[j].generateAttachment(j));
@@ -1348,7 +1348,7 @@ module.exports = (app) => {
   });
   
   slapp.action('poll_edit_del_callback', (msg) => {
-    var slot = msg.body.actions[0].name;
+    var slot = msg.body.actions[0].value;
     
     switch (msg.body.actions[0].name) {
       case 'edit':
