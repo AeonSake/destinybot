@@ -1440,8 +1440,8 @@ module.exports = (app) => {
       
       //var temp = parseInt(msg.body.actions[0].name) || -1;
       //if (temp >= 0 && temp <= data.answers.length) {
-        //data.options = {max: parseInt(msg.body.actions[0].name)};
-      data.options = {max: temp};
+      data.options = {max: parseInt(msg.body.actions[0].name)};
+      //data.options = {max: temp};
         var msg_text = poll_create_names_msg;
         msg_text.attachments[0] = Poll.generateDummy(poll_db.length, data);
         msg.respond(msg_text);
