@@ -541,19 +541,19 @@ module.exports = (app) => {
       switch(options.mode) {
         case 0:
           if (poll_db[j].isVisible()) {
-            if (pollcount >= page * 5 && pollcount < page * 5 + 5) msg.attachments = msg_text.attachments.concat(poll_db[j].generatePoll(j).attachments);
+            if (pollcount >= page * 5 && pollcount < page * 5 + 5) msg_text.attachments = msg_text.attachments.concat(poll_db[j].generatePoll(j).attachments);
             pollcount++;
           }
           break;
         case 1:
           if (poll_db[j].isOpen()) {
-            if (pollcount >= page * 5 && pollcount < page * 5 + 5) msg.attachments = msg_text.attachments.concat(poll_db[j].generatePoll(j).attachments);
+            if (pollcount >= page * 5 && pollcount < page * 5 + 5) msg_text.attachments = msg_text.attachments.concat(poll_db[j].generatePoll(j).attachments);
             pollcount++;
           }
           break;
         case 2:
           if (poll_db[j].isClosed()) {
-            if (pollcount >= page * 5 && pollcount < page * 5 + 5) msg.attachments = msg_text.attachments.concat(poll_db[j].generatePoll(j).attachments);
+            if (pollcount >= page * 5 && pollcount < page * 5 + 5) mmsg_textsg.attachments = msg_text.attachments.concat(poll_db[j].generatePoll(j).attachments);
             pollcount++;
           }
           break;
@@ -1614,7 +1614,7 @@ module.exports = (app) => {
   });
   
   slapp.action('poll_edit_del_callback', (msg) => {
-    var slot = msg.body.actions[0].value;
+    var slot = parseInt(msg.body.actions[0].value);
     
     switch (msg.body.actions[0].name) {
       case 'edit':
@@ -1822,6 +1822,12 @@ module.exports = (app) => {
     }
   });
   
+// ===== /poll help =====
+  
+  slapp.command('/dbpoll', "help", (msg, cmd) => {
+    msg.respond(func.generateInfoMsg(lang.msg.poll.help));
+    return;
+  });
   
 // ===== /poll debug =====
   
