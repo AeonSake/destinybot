@@ -10,7 +10,7 @@
 // ========== FUNCTIONS ==========
 // ===============================
 
-module.exports = (slapp, config) => {
+module.exports = (slapp, config, lang) => {
   var module = {};
   
   // Function to generate a random RGB hex value

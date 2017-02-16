@@ -469,7 +469,7 @@ module.exports = (app) => {
       actions: btns,
       mrkdwn_in: ['text', 'pretext']
     };
-  };
+  }
   
   function poll_show_pages_att (page, count, mode, sort) {
     var btns = [],
@@ -505,7 +505,7 @@ module.exports = (app) => {
       actions: btns,
       mrkdwn_in: ['text', 'pretext']
     };
-  };
+  }
   
   function poll_list_msg (page, options) {
     var msg = {
@@ -540,8 +540,9 @@ module.exports = (app) => {
           }
           break;
         case 3:
-          if (poll_db[j].isVisible() && poll_db[j].isOwner(options.user)) {
+          if (poll_db[j].isVisible() && poll_db[j].isOwner(options.user_id)) {
             if (pollcount >= page * 5 && pollcount < page * 5 + 5) msg.attachments = msg.attachments.concat(poll_db[j].generatePoll(j).attachments);
+            msg.attachments.push(poll_edit_del_att(j));
             pollcount++;
           }
           break;
@@ -558,12 +559,116 @@ module.exports = (app) => {
     return msg;
   }
   
+  // ===== EDIT =====
+  
+  function poll_edit_del_att (slot) {
+    text: "",
+    fallback: "",
+    callback_id: 'poll_edit_del_callback',
+    actions: [
+      {
+        name: 'edit',
+        value: slot,
+        text: lang.btn.edit,
+        type: 'button'
+      },
+      {
+        name: 'delete',
+        value: slot,
+        text: lang.btn.delete,
+        type: 'button',
+        style: 'danger',
+        confirm: {
+          title: lang.msg.confirm,
+          text: lang.msg.poll.confirmdelete,
+          ok_text: lang.btn.yes,
+          dismiss_text: lang.btn.no
+        }
+      }
+    ],
+    mrkdwn_in: ['text', 'pretext']
+  }
+  
+  function poll_edit_pages_att (page, count, sort) {
+    var btns = [],
+        max = Math.ceil(count / 5);
+    
+    if (page != 0) btns.push({
+      name: 'back-' + sort,
+      value: page - 1,
+      text: "<",
+      type: 'button'
+    });
+    btns.push({
+      name: 'page',
+      text: lang.wrd.page + " " + (page + 1) + " / " + max,
+      type: 'button'
+    });
+    if (page + 1 < max) btns.push({
+      name: 'next-' + sort,
+      value: page + 1,
+      text: ">",
+      type: 'button'
+    });
+    if (sort == 'asc') btns.push({
+      name: 'desc',
+      text: lang.btn.desc,
+      type: 'button'
+    });
+    else btns.push({
+      name: 'asc',
+      text: lang.btn.asc,
+      type: 'button'
+    });
+    btns.push({
+      name: 'dismiss',
+      text: lang.btn.dismiss,
+      type: 'button'
+    });
+    
+    return {
+      text: lang.wrd.total + ": " + count + " " + (count > 1 ? lang.wrd.polls : lang.wrd.poll),
+      fallback: "",
+      callback_id: 'poll_edit_pages_callback',
+      actions: btns,
+      mrkdwn_in: ['text', 'pretext']
+    };
+  }
+  
+  function poll_edit_list_msg (user_id, page, sort) {
+    var msg = {
+      text: "",
+      attachments: [],
+      response_type: 'ephemeral',
+      replace_original: true
+    };
+    var pollcount = 0;
+    
+    for (var i = 0; i < poll_db.length; i++) {
+      var j = (options.sort == 'asc' ? i : poll_db.length - i - 1);
+      
+      if (poll_db[j].isVisible() && poll_db[j].isOwner(user_id)) {
+        if (pollcount >= page * 5 && pollcount < page * 5 + 5) msg.attachments.push(poll_db[j].generateAttachment(j));
+        msg.attachments.push(poll_edit_del_att(j));
+        pollcount++;
+      }
+    }
+    
+    if (pollcount == 0) {
+      msg.text = lang.msg.poll.nopollfound;
+      msg.attachments.push(poll_dismiss_att);
+    } else msg.attachments.push(poll_edit_pages_att(page, pollcount, options.sort));
+    
+    return msg;
+  }
+  
+  function poll_edit_msg (user_id) {
+    //text: lang.poll.msg.editlist,
+  }
   
   
   
-  
-  
-  
+  // ===== MISC =====
   
   var poll_dismiss_att = {
     text: "",
@@ -597,6 +702,7 @@ module.exports = (app) => {
       };
       this.posts = data.posts || [];
       this.state = data.state || 0; //0 = default, 1 = vote closed, 2 = deleted
+      if (!('options' in data)) data.options = {};
       this.options = {
         max: data.options.max || 1, 
         names: true,
@@ -625,27 +731,27 @@ module.exports = (app) => {
       this.answers[answer].text = text;
     }
 
-    vote (answer, user) {
-      var pos = this.answers[answer].votes.indexOf(user);
+    vote (answer, user_id) {
+      var pos = this.answers[answer].votes.indexOf(user_id);
       if (pos == -1) {
-        if (this.countVotes(user) < this.options.max) this.answers[answer].votes.push(user);
+        if (this.countVotes(user_id) < this.options.max) this.answers[answer].votes.push(user_id);
         else if (this.options.max == 1) {
-          for (var i = 0; i < this.answers.length; i++) this.unvote(i, user);
-          this.answers[answer].votes.push(user);
+          for (var i = 0; i < this.answers.length; i++) this.unvote(i, user_id);
+          this.answers[answer].votes.push(user_id);
         }
       }
-      else this.unvote(answer, user);
+      else this.unvote(answer, user_id);
     }
 
-    unvote (answer, user) {
-      var pos = this.answers[answer].votes.indexOf(user);
+    unvote (answer, user_id) {
+      var pos = this.answers[answer].votes.indexOf(user_id);
       if (pos != -1) this.answers[answer].votes.splice(pos, 1);
     }
 
-    countVotes (user) {
+    countVotes (user_id) {
       var count = 0;
       for (var i = 0; i < this.answers.length; i++) {
-        if (this.answers[i].votes.indexOf(user) != -1) count++;
+        if (this.answers[i].votes.indexOf(user_id) != -1) count++;
       }
 
       return count;
@@ -686,13 +792,10 @@ module.exports = (app) => {
         if (this.options.names) votes = votes.slice(0, -2);
         else if (votes == 1) votes += " " + lang.wrd.vote;
         else votes += " " + lang.wrd.votes;
-        //if (this.answers[i].votes.length == 0) votes = lang.msg.poll.novotes + " *(0%)*";
-        //else votes += " *(" + Math.round((this.answers[i].votes.length / voter_count) * 100)+ "%)*";
         if (this.answers[i].votes.length == 0) votes = lang.msg.poll.novotes;
         else percent = Math.round((this.answers[i].votes.length / voter_count) * 100);
 
         att_fields[i] = {
-          //title: emoji_num[i] + " " + this.answers[i].text,
           value: emoji_num[i] + " *" + this.answers[i].text + " (" + percent + "%)*\n" + votes,
           short: false
         };
@@ -845,8 +948,8 @@ module.exports = (app) => {
       return (this.state == 0 || this.state == 1);
     }
     
-    isOwner (user) {
-      return (this.creator == user);
+    isOwner (user_id) {
+      return (this.creator == user_id);
     }
   }
 
@@ -1157,7 +1260,7 @@ module.exports = (app) => {
   slapp.action('poll_show_filter_callback', (msg) => {
     var data = msg.body.actions[0].name.split("-");
     
-    msg.respond(poll_list_msg(0, {mode: parseInt(data[0]), sort: data[1], user: msg.body.user.id}));
+    msg.respond(poll_list_msg(0, {mode: parseInt(data[0]), sort: data[1], user_id: msg.body.user.id}));
     return;
   });
   
@@ -1168,7 +1271,7 @@ module.exports = (app) => {
     switch (data[0]) {
       case 'back':
       case 'next':
-        msg.respond(poll_list_msg(page, {mode: parseInt(data[1]), sort: data[2], user: msg.body.user.id}));
+        msg.respond(poll_list_msg(page, {mode: parseInt(data[1]), sort: data[2], user_id: msg.body.user.id}));
         return;
       case 'page':
         return;
@@ -1205,16 +1308,57 @@ module.exports = (app) => {
     if (check.test(cmd.substring(5))) {
       var slot = parseInt(cmd.substring(5)) - 1;
       
-      if (slot < poll_db.length) {
-        if (poll_db[slot].isOwner(msg.body.user_id) || msg.body.user_id == config.admin_id) {
-          
-          
-          
-          
+      if (slot < poll_db.length && poll_db[slot].isVisible() || user.isAdmin(msg.body.user_id)) {
+        if (poll_db[slot].isOwner(msg.body.user_id) || user.isAdmin(msg.body.user_id)) {
+          var msg_text = poll_edit_msg;
+          msg_text.attachments[0] = poll_db[slot].generateAttachment(slot);
+        
+          msg.respond(msg_text);
+          msg.route('poll_edit_route', {slot: slot}, 60);
+          return;
         } else msg.respond(func.generateInfoMsg(lang.err.poll.notowner));
       } else msg.respond(func.generateInfoMsg(lang.err.poll.notfound));
-    } else msg.respond(poll_edit_msg(msg.body.user_id));
+    } else msg.respond(poll_edit_list_msg(msg.body.user_id, 0, 'asc'));
     
+    return;
+  });
+  
+  slapp.action('poll_edit_pages_callback', (msg) => {
+    var data = msg.body.actions[0].name.split("-");
+    
+    switch (data[0]) {
+      case 'back':
+      case 'next':
+        msg.respond(poll_edit_list_msg(msg.body.user.id, parseInt(msg.body.actions[0].value), data[1]));
+        return;
+      case 'page':
+        return;
+      case 'asc':
+      case 'desc':
+        msg.respond(poll_edit_list_msg(msg.body.user.id, 0, data[0]);
+        return;
+      case 'dismiss':
+        msg.respond({text: "", delete_original: true});
+        return;
+    }
+  });
+  
+  slapp.action('poll_edit_del_callback', (msg) => {
+    var slot = msg.body.actions[0].name;
+    
+    switch (msg.body.actions[0].name) {
+      case 'edit':
+        var msg_text = poll_edit_msg;
+        msg_text.attachments[0] = poll_db[slot].generateAttachment(slot);
+        
+        msg.respond(msg_text);
+        msg.route('poll_edit_route', {slot: slot}, 60);
+        break;
+      case 'delete':
+        poll_db[slot].delete();
+        msg.respond(func.generateInfoMsg(lang.msg.poll.deleted));
+        break;
+    }
     return;
   });
   
