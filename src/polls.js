@@ -990,10 +990,11 @@ module.exports = (app) => {
     edit (data) {
       this.title = data.title || this.title;
       this.text = data.text || this.text;
-      this.ts.edited = data.ts.edited || this.ts.edited;
-      // if ('options' in data) {}
-      this.options.max = data.options.max || this.options.max;
-      if ('names' in data.options) this.options.names = data.options.names;
+      if ('ts' in data) this.ts.edited = data.ts.edited || this.ts.edited;
+      if ('options' in data) {
+        this.options.max = data.options.max || this.options.max;
+        if ('names' in data.options) this.options.names = data.options.names;
+      }
     }
 
     addAnswer (text) {
@@ -1676,13 +1677,13 @@ module.exports = (app) => {
           return;
       }
       
-      if (data.edited) {
+      
         if (data.create) {
           var msg_text = poll_create_final_msg;
           msg_text.attachments[0] = Poll.generateDummy(poll_db.length, data);
           msg.respond(msg_text);
           msg.route('poll_create_final_route', data, 60);
-        } else {
+        } else if (data.edited) {
           poll_db[data.slot].update(data.slot);
           savePollDB();
           msg.respond({text: "", delete_original: true});
@@ -1700,7 +1701,7 @@ module.exports = (app) => {
       switch (msg.body.actions[0].name) {
         case 'back':
           var msg_text = poll_edit_msg;
-          msg_text.attachments[0] = poll_db[slot].generateAttachment(slot);
+          msg_text.attachments[0] = poll_db[data.slot].generateAttachment(data.slot);
           msg.respond(msg_text);
           msg.route('poll_edit_route', data, 60);
           break;
@@ -1715,7 +1716,7 @@ module.exports = (app) => {
       data.edited = true;
       
       var msg_text = poll_edit_msg;
-      msg_text.attachments[0] = poll_db[slot].generateAttachment(slot);
+      msg_text.attachments[0] = poll_db[data.slot].generateAttachment(data.slot);
       msg.respond(msg_text);
       msg.route('poll_edit_route', data, 60);
       return;
@@ -1730,7 +1731,7 @@ module.exports = (app) => {
       switch (msg.body.actions[0].name) {
         case 'back':
           var msg_text = poll_edit_msg;
-          msg_text.attachments[0] = poll_db[slot].generateAttachment(slot);
+          msg_text.attachments[0] = poll_db[data.slot].generateAttachment(data.slot);
           msg.respond(msg_text);
           msg.route('poll_edit_route', data, 60);
           break;
@@ -1745,7 +1746,7 @@ module.exports = (app) => {
       data.edited = true;
       
       var msg_text = poll_edit_msg;
-      msg_text.attachments[0] = poll_db[slot].generateAttachment(slot);
+      msg_text.attachments[0] = poll_db[data.slot].generateAttachment(data.slot);
       msg.respond(msg_text);
       msg.route('poll_edit_route', data, 60);
       return;
@@ -1764,7 +1765,7 @@ module.exports = (app) => {
       switch (msg.body.actions[0].name) {
         case 'back':
           var msg_text = poll_edit_msg;
-          msg_text.attachments[0] = poll_db[slot].generateAttachment(slot);
+          msg_text.attachments[0] = poll_db[data.slot].generateAttachment(data.slot);
           msg.respond(msg_text);
           msg.route('poll_edit_route', data, 60);
           return;
@@ -1779,7 +1780,7 @@ module.exports = (app) => {
       data.edited = true;
       
       var msg_text = poll_edit_msg;
-      msg_text.attachments[0] = poll_db[slot].generateAttachment(slot);
+      msg_text.attachments[0] = poll_db[data.slot].generateAttachment(data.slot);
       msg.respond(msg_text);
       msg.route('poll_edit_route', data, 60);
       return;
@@ -1802,7 +1803,7 @@ module.exports = (app) => {
           break;
         case 'back':
           var msg_text = poll_edit_msg;
-          msg_text.attachments[0] = poll_db[slot].generateAttachment(slot);
+          msg_text.attachments[0] = poll_db[data.slot].generateAttachment(data.slot);
           msg.respond(msg_text);
           msg.route('poll_edit_route', data, 60);
           return;
@@ -1815,7 +1816,7 @@ module.exports = (app) => {
       data.edited = true;
       
       var msg_text = poll_edit_msg;
-      msg_text.attachments[0] = poll_db[slot].generateAttachment(slot);
+      msg_text.attachments[0] = poll_db[data.slot].generateAttachment(data.slot);
       msg.respond(msg_text);
       msg.route('poll_edit_route', data, 60);
       return;
