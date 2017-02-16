@@ -40,17 +40,17 @@ module.exports = (app) => {
         actions: [
           {
             name: 'create',
-            text: lang.btn.poll.create,
+            text: lang.btn.create,
             type: 'button'
           },
           {
             name: 'show',
-            text: lang.btn.poll.show,
+            text: lang.btn.show,
             type: 'button'
           },
           {
             name: 'edit',
-            text: lang.btn.poll.edit,
+            text: lang.btn.edit,
             type: 'button'
           },
           {
@@ -451,12 +451,12 @@ module.exports = (app) => {
     });
     if (sort == 'asc') btns.push({
       name: mode + "-desc",
-      text: lang.btn.poll.desc,
+      text: lang.btn.desc,
       type: 'button'
     });
     if (sort == 'desc') btns.push({
       name: mode + "-asc",
-      text: lang.btn.poll.asc,
+      text: lang.btn.asc,
       type: 'button'
     });
     
@@ -1219,6 +1219,8 @@ module.exports = (app) => {
       var data = {title: temp[0], answers: [], creator: msg.body.user_id};
       for (var i = 1; i < temp.length; i++) data.answers[i - 1] = {text: temp[i].trim(), votes: []};
       
+      var msg_text = poll_create_final_msg;
+      msg_text.attachments[0] = Poll.generateDummy(poll_db.length, data);
       msg.respond(msg_text);
       msg.route('poll_create_final_route', data, 60);
       return;
@@ -1245,7 +1247,12 @@ module.exports = (app) => {
         //do something
         break;
       case 'help':
-        //do something
+        msg.respond({
+          text: lang.msg.poll.help,
+          attachments: [poll_dismiss_att],
+          response_type: 'ephemeral',
+          replace_original: true
+        });
         break;
     }
     return;
