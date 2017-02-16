@@ -34,27 +34,27 @@ module.exports = (app) => {
     text: "",
     attachments: [
       {
-        text: "",
-        fallback: "",
+        text: lang.msg.poll.main,
+        fallback: lang.msg.poll.main,
         callback_id: 'poll_main_callback',
         actions: [
           {
-            name: 'createpoll',
-            text: lang.btn.poll.createpoll,
+            name: 'create',
+            text: lang.btn.poll.create,
             type: 'button'
           },
           {
-            name: 'showpoll',
-            text: lang.btn.poll.showpolls,
+            name: 'show',
+            text: lang.btn.poll.show,
             type: 'button'
           },
           {
-            name: 'editpoll',
-            text: lang.btn.poll.editpoll,
+            name: 'edit',
+            text: lang.btn.poll.edit,
             type: 'button'
           },
           {
-            name: 'showhelp',
+            name: 'help',
             text: lang.btn.showhelp,
             type: 'button'
           }
@@ -1230,7 +1230,7 @@ module.exports = (app) => {
   
   slapp.action('poll_main_callback', (msg) => {
     switch (msg.body.actions[0].name) {
-      case 'createpoll':
+      case 'create':
         var data = {creator: msg.body.user.id};
         var msg_text = poll_create_title_msg;
         msg_text.attachments[0] = Poll.generateDummy(poll_db.length, data);
@@ -1238,13 +1238,13 @@ module.exports = (app) => {
         msg.respond(msg_text);
         msg.route('poll_create_title_route', data, 60);
         break;
-      case 'showpoll':
+      case 'show':
         msg.respond(poll_list_msg(0, {mode: 0, sort: 'desc'}));
         break;
-      case 'editpoll':
+      case 'edit':
         //do something
         break;
-      case 'showhelp':
+      case 'help':
         //do something
         break;
     }

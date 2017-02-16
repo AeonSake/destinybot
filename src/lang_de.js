@@ -11,8 +11,8 @@
 let lang = module.exports = {
   
   wrd: {
-    poll: "Umfrage",
-    polls: "Umfragen",
+    poll: "Abstimmung",
+    polls: "Abstimmungen",
     user: "User",
     preview: "Vorschau",
     vote: "Stimme",
@@ -39,13 +39,13 @@ let lang = module.exports = {
     all: "Alle",
     
     poll: {
-      createpoll: "Umfrage erstellen",
-      showpolls: "Umfragen anzeigen",
-      editpoll: "Umfrage bearbeiten",
-      allpolls: "Alle Umfragen",
-      openpolls: "Offene Umfragen",
-      closedpolls: "Geschlossene Umfragen",
-      mypolls: "Meine Umfragen",
+      create: "Erstellen",
+      show: "Anzeigen",
+      edit: "Bearbeiten",
+      allpolls: "Alle Abstimmungen",
+      openpolls: "Offene Abst.",
+      closedpolls: "Geschlossene Abst.",
+      mypolls: "Meine Abstimmungen",
       asc: "Aufsteigend",
       desc: "Absteigend"
     }
@@ -56,23 +56,24 @@ let lang = module.exports = {
     confirmcancel: "Sind Sie sicher, dass Sie den Vorgang abbrechen wollen?",
     
     poll: {
-      entertitle: "Umfragen-Titel eingeben: `/poll <title>`",
-      entertext: "Umfragen-Text eingeben: `/poll <text>` (optional)",
-      enteranswer: "Umfragen-Antwort eingeben: `/poll <answer>` (mind. 2, max. 10)\nEs können auch mehrere Antworten auf einmal eingegeben werden: `/poll <answer1>;<answer2>;...`",
+      entertitle: "Abstimmungs-Titel eingeben: `/poll <title>`",
+      entertext: "Abstimmungs-Text eingeben: `/poll <text>` (optional)",
+      enteranswer: "Abstimmungs-Antwort eingeben: `/poll <answer>` (mind. 2, max. 10)\nEs können auch mehrere Antworten auf einmal eingegeben werden: `/poll <answer1>;<answer2>;...`",
       entermax: "Wie viele Antworten sollen auswählbar sein? (Standard: 1)",
       shownames: "Sollen Nutzernamen angezeigt werden? (Standard: Ja)",
       selectedit: "Welche Information soll bearbeitet werden?",
       novotes: "Keine Stimmen",
-      pollclosed: "Umfrage wurde geschlossen.",
-      newpollcreated: "Eine neue Umfrage wurde erstellt:",
-      nopollfound: "Keine Umfragen gefunden.",
-      success: "Erfolgreich abgestimmt."
+      pollclosed: "Abstimmung wurde geschlossen.",
+      newpollcreated: "Eine neue Abstimmung wurde erstellt:",
+      nopollfound: "Keine Abstimmungen gefunden.",
+      success: "Erfolgreich abgestimmt.",
+      main: "Das ist das Hauptmenü für Abstimmungen."
     }
   },
   
   err: {
     poll: {
-      notfound: "Eine Umfrage mit dieser ID konnte nicht gefunden werden."
+      notfound: "Eine Abstimmung mit dieser ID konnte nicht gefunden werden."
       
     }
   }
