@@ -562,31 +562,33 @@ module.exports = (app) => {
   // ===== EDIT =====
   
   function poll_edit_del_att (slot) {
-    text: "",
-    fallback: "",
-    callback_id: 'poll_edit_del_callback',
-    actions: [
-      {
-        name: 'edit',
-        value: slot,
-        text: lang.btn.edit,
-        type: 'button'
-      },
-      {
-        name: 'delete',
-        value: slot,
-        text: lang.btn.delete,
-        type: 'button',
-        style: 'danger',
-        confirm: {
-          title: lang.msg.confirm,
-          text: lang.msg.poll.confirmdelete,
-          ok_text: lang.btn.yes,
-          dismiss_text: lang.btn.no
+    return {
+      text: "",
+      fallback: "",
+      callback_id: 'poll_edit_del_callback',
+      actions: [
+        {
+          name: 'edit',
+          value: slot,
+          text: lang.btn.edit,
+          type: 'button'
+        },
+        {
+          name: 'delete',
+          value: slot,
+          text: lang.btn.delete,
+          type: 'button',
+          style: 'danger',
+          confirm: {
+            title: lang.msg.confirm,
+            text: lang.msg.poll.confirmdelete,
+            ok_text: lang.btn.yes,
+            dismiss_text: lang.btn.no
+          }
         }
-      }
-    ],
-    mrkdwn_in: ['text', 'pretext']
+      ],
+      mrkdwn_in: ['text', 'pretext']
+    };
   }
   
   function poll_edit_pages_att (page, count, sort) {
