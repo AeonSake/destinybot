@@ -1397,7 +1397,7 @@ module.exports = (app) => {
         msg.respond(msg_text);
         msg.route('poll_create_answers_route', data, 60);
       } else {
-        var msg_text = poll_create_max_msg;
+        var msg_text = poll_create_max_msg(data.answers.length);
         msg_text.attachments[0] = Poll.generateDummy(poll_db.length, data);
         
         for (var i = 0; i < data.answers.length; i++) {
