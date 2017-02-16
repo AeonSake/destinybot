@@ -1337,7 +1337,7 @@ module.exports = (app) => {
         return;
       case 'asc':
       case 'desc':
-        msg.respond(poll_edit_list_msg(msg.body.user.id, 0, data[0]);
+        msg.respond(poll_edit_list_msg(msg.body.user.id, 0, data[0]));
         return;
       case 'dismiss':
         msg.respond({text: "", delete_original: true});
