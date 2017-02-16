@@ -541,8 +541,10 @@ module.exports = (app) => {
           break;
         case 3:
           if (poll_db[j].isVisible() && poll_db[j].isOwner(options.user_id)) {
-            if (pollcount >= page * 5 && pollcount < page * 5 + 5) msg.attachments = msg.attachments.concat(poll_db[j].generatePoll(j).attachments);
-            msg.attachments.push(poll_edit_del_att(j));
+            if (pollcount >= page * 5 && pollcount < page * 5 + 5) {
+              msg.attachments = msg.attachments.concat(poll_db[j].generatePoll(j).attachments);
+              msg.attachments.push(poll_edit_del_att(j));
+            }
             pollcount++;
           }
           break;
