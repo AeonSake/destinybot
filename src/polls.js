@@ -1388,7 +1388,7 @@ module.exports = (app) => {
       if (temp[temp.length - 1].trim() == "") temp = temp.slice(0, -1);
       
       if (!('answers' in data)) data.answers = [];
-      for (var i = 0; i < temp.length && data.answers.length < 10; i++) data.answers.push({text: temp[i].trim(), votes: [], state = 0});
+      for (var i = 0; i < temp.length && data.answers.length < 10; i++) data.answers.push({text: temp[i].trim(), votes: [], state: 0});
       
       if (data.answers.length < 10) {
         if (data.answers.length >= 2) var msg_text = poll_create_answers_n_msg;
