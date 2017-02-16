@@ -804,9 +804,9 @@ module.exports = (app) => {
           short: false
         };
       }
-
+      
       return {
-        author_name: lang.wrd.poll + " #" + (slot + 1),
+        author_name: lang.wrd.poll + " #" + (slot + 1) + (this.state == 2 ? " [" + lang.wrd.deleted + "]" : ""),
         title: this.title,
         text: this.text,
         fallback: this.text,
@@ -933,6 +933,8 @@ module.exports = (app) => {
           if (err && err.message != 'cant_delete_message' && err.message != 'message_not_found' && err.message != 'channel_not_found') console.log(err);
         });
       }
+      this.posts = [];
+      this.state = 2;
     }
 
     close (slot) {

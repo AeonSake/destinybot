@@ -22,7 +22,8 @@ let lang = module.exports = {
     allowed: "erlaubt",
     page: "Seite",
     total: "Gesamt",
-    filter: "Filter"
+    filter: "Filter",
+    deleted: "Gelöscht"
   },
   
   btn: {
