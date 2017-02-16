@@ -1370,7 +1370,7 @@ module.exports = (app) => {
           break;
         case 'next':
           if (data.answers.length >= 2) {
-            var msg_text = poll_create_max_msg(answers.length);
+            var msg_text = poll_create_max_msg(data.answers.length);
             msg_text.attachments[0] = Poll.generateDummy(poll_db.length, data);
             msg.respond(msg_text);
             msg.route('poll_create_max_route', data, 60);
@@ -1399,15 +1399,6 @@ module.exports = (app) => {
       } else {
         var msg_text = poll_create_max_msg(data.answers.length);
         msg_text.attachments[0] = Poll.generateDummy(poll_db.length, data);
-        
-        for (var i = 0; i < data.answers.length; i++) {
-          var btn = {name: i, text: i, type: 'button'};
-          if (i < 5) msg_text.attachments[2].actions[i] = btn;
-          else msg_text.attachments[3].actions[i - 5] = btn;
-        }
-        msg_text.attachments[2].actions[0].text = lang.btn.all;
-        if (data.answers.length <= 5) msg_text.attachments.splice(3, 1);
-        
         msg.respond(msg_text);
         msg.route('poll_create_max_route', data, 60);
       }
