@@ -1678,16 +1678,15 @@ module.exports = (app) => {
       }
       
       
-        if (data.create) {
-          var msg_text = poll_create_final_msg;
-          msg_text.attachments[0] = Poll.generateDummy(poll_db.length, data);
-          msg.respond(msg_text);
-          msg.route('poll_create_final_route', data, 60);
-        } else if (data.edited) {
-          poll_db[data.slot].update(data.slot);
-          savePollDB();
-          msg.respond({text: "", delete_original: true});
-        }
+      if (data.create) {
+        var msg_text = poll_create_final_msg;
+        msg_text.attachments[0] = Poll.generateDummy(poll_db.length, data);
+        msg.respond(msg_text);
+        msg.route('poll_create_final_route', data, 60);
+      } else if (data.edited) {
+        poll_db[data.slot].update(data.slot);
+        savePollDB();
+        msg.respond({text: "", delete_original: true});
       }
       return;
     }
