@@ -63,6 +63,7 @@ let lang = module.exports = {
       answers: "Antworten",
       max: "Max. Stimmen",
       names: "Anzeige der Nutzernamen",
+      deletetext: "Text entfernen",
       addanswer: "Antwort hinzufügen"
     }
   },

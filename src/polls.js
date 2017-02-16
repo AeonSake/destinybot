@@ -23,6 +23,13 @@ module.exports = (app) => {
   let user = app.user;
   
   var module = {};
+  
+  // TODO:
+  // generate data copy (class function)
+  // display data copy in edit route
+  // extend edit text route with deletetext btn
+  // poll_edit_answers_route
+  // poll_edit_answer_edit_route
 
 
 
@@ -804,6 +811,49 @@ module.exports = (app) => {
     replace_original: true
   };
   
+  var poll_edit_title_del_msg = {
+    text: "",
+    attachments: [
+      {
+        text: lang.msg.poll.entertitle,
+        fallback: lang.msg.poll.entertitle,
+        mrkdwn_in: ['text', 'pretext']
+      },
+      {
+        text: "",
+        fallback: "",
+        callback_id: 'poll_edit_answers_callback',
+        actions: [
+          {
+            name: 'back',
+            text: lang.btn.back,
+            type: 'button',
+          },
+          {
+            name: 'delete',
+            text: lang.btn.poll.deletetext,
+            type: 'button',
+          },
+          {
+            name: 'cancel',
+            text: lang.btn.cancel,
+            type: 'button',
+            style: 'danger',
+            confirm: {
+              title: lang.msg.confirm,
+              text: lang.msg.confirmcancel,
+              ok_text: lang.btn.yes,
+              dismiss_text: lang.btn.no
+            }
+          }
+        ],
+        mrkdwn_in: ['text', 'pretext']
+      }
+    ],
+    response_type: 'ephemeral',
+    replace_original: true
+  };
+  
   var poll_edit_text_msg = {
     text: "",
     attachments: [
@@ -838,22 +888,22 @@ module.exports = (app) => {
               value: i,
               text: lang.btn.edit,
               type: 'button'
-            },
-            {
-              name: 'edit',
-              value: i,
-              text: lang.btn.delete,
-              type: 'button',
-              style: 'danger',
-              confirm: {
-                title: lang.msg.confirm,
-                text: lang.msg.poll.confirmdeleteanswer,
-                ok_text: lang.btn.yes,
-                dismiss_text: lang.btn.no
-              }
             }
           ],
           mrkdwn_in: ['text', 'pretext']
+        });
+        if (answers.length > 2) msg_text.attachments[i].actions.push({
+          name: 'delete',
+          value: i,
+          text: lang.btn.delete,
+          type: 'button',
+          style: 'danger',
+          confirm: {
+            title: lang.msg.confirm,
+            text: lang.msg.poll.confirmdeleteanswer,
+            ok_text: lang.btn.yes,
+            dismiss_text: lang.btn.no
+          }
         });
       }
     }
@@ -1150,12 +1200,10 @@ module.exports = (app) => {
       
       var att_fields = [];
       att_fields[0] = {
-        //title: emoji_num[0] + " <answer1>",
         value: emoji_num[0] + " *<answer1> (100%)*\n" + "user1, user2",
         short: false
       };
       att_fields[1] = {
-        //title: emoji_num[1] + " <answer2>",
         value: emoji_num[1] + " *<answer2> (50%)*\n" + "user2",
         short: false
       };
@@ -1163,7 +1211,6 @@ module.exports = (app) => {
       if ('answers' in data) {
         for (var i = 0; i < data.answers.length; i++) {
           att_fields[i] = {
-            //title: emoji_num[i] + " " + data.answers[i].text,
             value: emoji_num[i] + " *" + data.answers[i].text + " (0%)*\n" + lang.msg.poll.novotes,
             short: false
           }
@@ -1430,15 +1477,11 @@ module.exports = (app) => {
           return;
       }
       
-      //var temp = parseInt(msg.body.actions[0].name) || -1;
-      //if (temp >= 0 && temp <= data.answers.length) {
       data.options = {max: parseInt(msg.body.actions[0].name)};
-      //data.options = {max: temp};
-        var msg_text = poll_create_names_msg;
-        msg_text.attachments[0] = Poll.generateDummy(poll_db.length, data);
-        msg.respond(msg_text);
-        msg.route('poll_create_names_route', data, 60);
-      //}
+      var msg_text = poll_create_names_msg;
+      msg_text.attachments[0] = Poll.generateDummy(poll_db.length, data);
+      msg.respond(msg_text);
+      msg.route('poll_create_names_route', data, 60);
       return;
     }
   });
@@ -1580,8 +1623,9 @@ module.exports = (app) => {
     if (check.test(cmd.substring(5))) {
       var slot = parseInt(cmd.substring(5)) - 1;
       
-      if (slot < poll_db.length && poll_db[slot].isVisible() || user.isAdmin(msg.body.user_id)) {
+      if (slot < poll_db.length && (poll_db[slot].isVisible() || user.isAdmin(msg.body.user_id))) {
         if (poll_db[slot].isOwner(msg.body.user_id) || user.isAdmin(msg.body.user_id)) {
+          // generate data copy
           var msg_text = poll_edit_msg;
           msg_text.attachments[0] = poll_db[slot].generateAttachment(slot);
           msg.respond(msg_text);
@@ -1619,6 +1663,7 @@ module.exports = (app) => {
     
     switch (msg.body.actions[0].name) {
       case 'edit':
+        // generate data copy
         var msg_text = poll_edit_msg;
         msg_text.attachments[0] = poll_db[slot].generateAttachment(slot);
         msg.respond(msg_text);
@@ -1653,10 +1698,8 @@ module.exports = (app) => {
           msg.route('poll_edit_answers_route', data, 60);
           return;
         case 'max':
-          var max = 0;
-          for (var i = 0; i < data.answers; i++) {
-            if (data.answers[i].state != 2) max++;
-          }
+          if (!('answers' in data)) data.answers = poll_db[data.slot].getAnswers();
+          var max = data.answers.length;
           
           msg.respond(poll_edit_max_msg(max));
           msg.route('poll_edit_max_route', data, 60);
@@ -1684,10 +1727,12 @@ module.exports = (app) => {
         msg.respond(msg_text);
         msg.route('poll_create_final_route', data, 60);
       } else if (data.edited) {
+        data.ts = {edited: msg.body.action_ts};
+        poll_db[data.slot].edit(data);
         poll_db[data.slot].update(data.slot);
         savePollDB();
         msg.respond({text: "", delete_original: true});
-      }
+      } else msg.respond({text: "", delete_original: true});
       return;
     }
   });
@@ -1874,7 +1919,7 @@ module.exports = (app) => {
         msg.respond(poll_list_msg(0, {mode: 0, sort: 'desc'}));
         break;
       case 'edit':
-        //do something
+        msg.respond(poll_edit_list_msg(msg.body.user_id, 0, 'desc'));
         break;
       case 'help':
         msg.respond({
