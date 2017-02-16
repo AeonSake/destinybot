@@ -552,8 +552,10 @@ module.exports = (app) => {
     }
     
     msg.attachments.push(poll_show_filter_att(options.mode, options.sort));
-    if (pollcount == 0) msg.text = lang.msg.poll.nopollfound;
-    else msg.attachments.push(poll_show_pages_att(page, pollcount, options.mode, options.sort));
+    if (pollcount == 0) {
+      msg.text = lang.msg.poll.nopollfound;
+      msg.attachments.push(poll_dismiss_att);
+    } else msg.attachments.push(poll_show_pages_att(page, pollcount, options.mode, options.sort));
     
     return msg;
   }
@@ -655,8 +657,10 @@ module.exports = (app) => {
       }
     }
     
-    if (pollcount == 0) msg.text = lang.msg.poll.nopollfound;
-    else msg.attachments.push(poll_edit_pages_att(page, pollcount, options.sort));
+    if (pollcount == 0) {
+      msg.text = lang.msg.poll.nopollfound;
+      msg.attachments.push(poll_dismiss_att);
+    } else msg.attachments.push(poll_edit_pages_att(page, pollcount, sort));
     
     return msg;
   }
@@ -1357,6 +1361,7 @@ module.exports = (app) => {
         break;
       case 'delete':
         poll_db[slot].delete();
+        savePollDB();
         msg.respond(func.generateInfoMsg(lang.msg.poll.deleted));
         break;
     }
