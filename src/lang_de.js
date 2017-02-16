@@ -57,7 +57,13 @@ let lang = module.exports = {
       allpolls: "Alle Abstimmungen",
       openpolls: "Offene Abst.",
       closedpolls: "Geschlossene Abst.",
-      mypolls: "Meine Abstimmungen"
+      mypolls: "Meine Abstimmungen",
+      title: "Titel",
+      text: "Text",
+      answers: "Antworten",
+      max: "Max. Stimmen",
+      names: "Anzeige der Nutzernamen",
+      addanswer: "Antwort hinzufügen"
     }
   },
   
@@ -79,7 +85,8 @@ let lang = module.exports = {
     poll: {
       entertitle: "Abstimmungs-Titel eingeben: `/poll <title>`",
       entertext: "Abstimmungs-Text eingeben: `/poll <text>` (optional)",
-      enteranswer: "Abstimmungs-Antwort eingeben: `/poll <answer>` (mind. 2, max. 10)\nEs können auch mehrere Antworten auf einmal eingegeben werden: `/poll <answer1>;<answer2>;...`",
+      enteranswer: "Abstimmungs-Antwort eingeben: `/poll <answer>`",
+      enteranswers: "Abstimmungs-Antwort eingeben: `/poll <answer>` (mind. 2, max. 10)\nEs können auch mehrere Antworten auf einmal eingegeben werden: `/poll <answer1>;<answer2>;...`",
       entermax: "Wie viele Antworten sollen auswählbar sein? (Standard: 1)",
       shownames: "Sollen Nutzernamen angezeigt werden? (Standard: Ja)",
       novotes: "Keine Stimmen",
@@ -90,8 +97,9 @@ let lang = module.exports = {
       main: "Das ist das Hauptmenü für Abstimmungen.",
       editlist: "Liste Ihrer Abstimmungen:",
       selectedit: "Welche Information soll bearbeitet werden?",
-      selectansweredit: "Welche Antwort soll bearbeitet werden?",
+      selectansweredit: "Welche Antwort soll bearbeitet werden?\nZum Hinzufügen neuer Abstimmungs-Antworten: `/poll <answer>` (max. 10)\nEs können auch mehrere Antworten auf einmal eingegeben werden: `/poll <answer1>;<answer2>;...`",
       confirmdelete: "Sind Sie sicher, dass Sie diese Abstimmung löschen wollen?",
+      confirmdeleteanswer: "Sind Sie sicher, dass Sie diese Antwort löschen wollen?",
       deleted: "Abstimmung wurde erfolgreich gelöscht.",
       
       help: "Liste aller Befehle:\n`/poll` : Hauptmenü\n`/poll <title>;<answer1>;<answer2>;...` : Schnell-Erstellung einer Abstimmung\n`/poll create` : Erstellung einer Abstimmung\n`/poll list` : Anzeigen aller Abstimmungen\n`/poll show <id>` : Anzeigen der Abstimmung mit der ID <id>\n`/poll post <id>` : Posten der Abstimmung mit der ID <id> im aktuellen Channel\n`/poll edit <id>` : Bearbeiten der Abstimmung mit der ID <id>\n `/poll help` : Anzeigen der Hilfe"

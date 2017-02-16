@@ -134,7 +134,13 @@ module.exports = (app) => {
             name: 'cancel',
             text: lang.btn.cancel,
             type: 'button',
-            style: 'danger'
+            style: 'danger',
+            confirm: {
+              title: lang.msg.confirm,
+              text: lang.msg.confirmcancel,
+              ok_text: lang.btn.yes,
+              dismiss_text: lang.btn.no
+            }
           }
         ],
         mrkdwn_in: ['text', 'pretext']
@@ -193,8 +199,8 @@ module.exports = (app) => {
     attachments: [
       {},
       {
-        text: lang.msg.poll.enteranswer,
-        fallback: lang.msg.poll.enteranswer,
+        text: lang.msg.poll.enteranswers,
+        fallback: lang.msg.poll.enteranswers,
         mrkdwn_in: ['text', 'pretext']
       },
       {
@@ -232,8 +238,8 @@ module.exports = (app) => {
     attachments: [
       {},
       {
-        text: lang.msg.poll.enteranswer,
-        fallback: lang.msg.poll.enteranswer,
+        text: lang.msg.poll.enteranswers,
+        fallback: lang.msg.poll.enteranswers,
         mrkdwn_in: ['text', 'pretext']
       },
       {
@@ -271,63 +277,75 @@ module.exports = (app) => {
     replace_original: true
   };
 
-  var poll_create_max_msg = {
-    text: lang.wrd.preview + ":",
-    attachments: [
-      {},
-      {
-        text: lang.msg.poll.entermax,
-        fallback: lang.msg.poll.entermax,
-        mrkdwn_in: ['text', 'pretext']
-      },
-      {
-        text: "",
-        fallback: "",
-        callback_id: 'poll_create_max_callback',
-        actions: [],
-        mrkdwn_in: ['text', 'pretext']
-      },
-      {
-        text: "",
-        fallback: "",
-        callback_id: 'poll_create_max_callback',
-        actions: [],
-        mrkdwn_in: ['text', 'pretext']
-      },
-      {
-        text: "",
-        fallback: "",
-        callback_id: 'poll_create_menu_callback',
-        actions: [
-          {
-            name: 'back',
-            text: lang.btn.back,
-            type: 'button'
-          },
-          {
-            name: 'next',
-            text: lang.btn.next,
-            type: 'button'
-          },
-          {
-            name: 'cancel',
-            text: lang.btn.cancel,
-            type: 'button',
-            style: 'danger',
-            confirm: {
-              title: lang.msg.confirm,
-              text: lang.msg.confirmcancel,
-              ok_text: lang.btn.yes,
-              dismiss_text: lang.btn.no
+  function poll_create_max_msg (max) {
+    var msg_text = {
+      text: lang.wrd.preview + ":",
+      attachments: [
+        {},
+        {
+          text: lang.msg.poll.entermax,
+          fallback: lang.msg.poll.entermax,
+          mrkdwn_in: ['text', 'pretext']
+        },
+        {
+          text: "",
+          fallback: "",
+          callback_id: 'poll_create_max_callback',
+          actions: [],
+          mrkdwn_in: ['text', 'pretext']
+        },
+        {
+          text: "",
+          fallback: "",
+          callback_id: 'poll_create_max_callback',
+          actions: [],
+          mrkdwn_in: ['text', 'pretext']
+        },
+        {
+          text: "",
+          fallback: "",
+          callback_id: 'poll_create_menu_callback',
+          actions: [
+            {
+              name: 'back',
+              text: lang.btn.back,
+              type: 'button'
+            },
+            {
+              name: 'next',
+              text: lang.btn.next,
+              type: 'button'
+            },
+            {
+              name: 'cancel',
+              text: lang.btn.cancel,
+              type: 'button',
+              style: 'danger',
+              confirm: {
+                title: lang.msg.confirm,
+                text: lang.msg.confirmcancel,
+                ok_text: lang.btn.yes,
+                dismiss_text: lang.btn.no
+              }
             }
-          }
-        ],
-        mrkdwn_in: ['text', 'pretext']
-      }
-    ],
-    response_type: 'ephemeral',
-    replace_original: true
-  };
+          ],
+          mrkdwn_in: ['text', 'pretext']
+        }
+      ],
+      response_type: 'ephemeral',
+      replace_original: true
+    };
+    
+    for (var i = 0; i < max; i++) {
+      var btn = {name: i, text: i, type: 'button'};
+      if (i < 5) msg_text.attachments[2].actions[i] = btn;
+      else msg_text.attachments[3].actions[i - 5] = btn;
+    }
+    msg_text.attachments[2].actions[0].text = lang.btn.all;
+    if (max.length <= 5) msg_text.attachments.splice(3, 1);
+    
+    return msg_text;
+  }
 
   var poll_create_names_msg = {
     text: lang.wrd.preview + ":",
@@ -508,7 +526,7 @@ module.exports = (app) => {
   }
   
   function poll_list_msg (page, options) {
-    var msg = {
+    var msg_text = {
       text: "",
       attachments: [],
       response_type: 'ephemeral',
@@ -523,27 +541,27 @@ module.exports = (app) => {
       switch(options.mode) {
         case 0:
           if (poll_db[j].isVisible()) {
-            if (pollcount >= page * 5 && pollcount < page * 5 + 5) msg.attachments = msg.attachments.concat(poll_db[j].generatePoll(j).attachments);
+            if (pollcount >= page * 5 && pollcount < page * 5 + 5) msg.attachments = msg_text.attachments.concat(poll_db[j].generatePoll(j).attachments);
             pollcount++;
           }
           break;
         case 1:
           if (poll_db[j].isOpen()) {
-            if (pollcount >= page * 5 && pollcount < page * 5 + 5) msg.attachments = msg.attachments.concat(poll_db[j].generatePoll(j).attachments);
+            if (pollcount >= page * 5 && pollcount < page * 5 + 5) msg.attachments = msg_text.attachments.concat(poll_db[j].generatePoll(j).attachments);
             pollcount++;
           }
           break;
         case 2:
           if (poll_db[j].isClosed()) {
-            if (pollcount >= page * 5 && pollcount < page * 5 + 5) msg.attachments = msg.attachments.concat(poll_db[j].generatePoll(j).attachments);
+            if (pollcount >= page * 5 && pollcount < page * 5 + 5) msg.attachments = msg_text.attachments.concat(poll_db[j].generatePoll(j).attachments);
             pollcount++;
           }
           break;
         case 3:
           if (poll_db[j].isVisible() && poll_db[j].isOwner(options.user_id)) {
             if (pollcount >= page * 5 && pollcount < page * 5 + 5) {
-              msg.attachments = msg.attachments.concat(poll_db[j].generatePoll(j).attachments);
-              msg.attachments.push(poll_edit_del_att(j));
+              msg_text.attachments = msg_text.attachments.concat(poll_db[j].generatePoll(j).attachments);
+              msg_text.attachments.push(poll_edit_del_att(j));
             }
             pollcount++;
           }
@@ -551,13 +569,13 @@ module.exports = (app) => {
       }
     }
     
-    msg.attachments.push(poll_show_filter_att(options.mode, options.sort));
+    msg_text.attachments.push(poll_show_filter_att(options.mode, options.sort));
     if (pollcount == 0) {
-      msg.text = lang.msg.poll.nopollfound;
-      msg.attachments.push(poll_dismiss_att);
-    } else msg.attachments.push(poll_show_pages_att(page, pollcount, options.mode, options.sort));
+      msg_text.text = lang.msg.poll.nopollfound;
+      msg_text.attachments.push(poll_dismiss_att);
+    } else msg_text.attachments.push(poll_show_pages_att(page, pollcount, options.mode, options.sort));
     
-    return msg;
+    return msg_text;
   }
   
   // ===== EDIT =====
@@ -639,7 +657,7 @@ module.exports = (app) => {
   }
   
   function poll_edit_list_msg (user_id, page, sort) {
-    var msg = {
+    var msg_text = {
       text: "",
       attachments: [],
       response_type: 'ephemeral',
@@ -651,25 +669,280 @@ module.exports = (app) => {
       var j = (sort == 'asc' ? i : poll_db.length - i - 1);
       
       if (poll_db[j].isVisible() && poll_db[j].isOwner(user_id)) {
-        if (pollcount >= page * 5 && pollcount < page * 5 + 5) msg.attachments.push(poll_db[j].generateAttachment(j));
-        msg.attachments.push(poll_edit_del_att(j));
+        if (pollcount >= page * 5 && pollcount < page * 5 + 5) {
+          msg_text.attachments.push(poll_db[j].generateAttachment(j));
+          msg_text.attachments.push(poll_edit_del_att(j));
+        }
         pollcount++;
       }
     }
     
     if (pollcount == 0) {
-      msg.text = lang.msg.poll.nopollfound;
-      msg.attachments.push(poll_dismiss_att);
-    } else msg.attachments.push(poll_edit_pages_att(page, pollcount, sort));
+      msg_text.text = lang.msg.poll.nopollfound;
+      msg_text.attachments.push(poll_dismiss_att);
+    } else msg_text.attachments.push(poll_edit_pages_att(page, pollcount, sort));
     
-    return msg;
+    return msg_text;
   }
   
-  function poll_edit_msg (user_id) {
-    //text: lang.poll.msg.editlist,
+  var poll_edit_msg = {
+    text: lang.wrd.preview + ":",
+    attachments: [
+      {},
+      {
+        text: lang.msg.poll.selectedit,
+        fallback: lang.msg.poll.selectedit,
+        callback_id: 'poll_edit_select_callback',
+        actions: [
+          {
+            name: 'title',
+            text: lang.btn.poll.title,
+            type: 'button'
+          },
+          {
+            name: 'text',
+            text: lang.btn.poll.text,
+            type: 'button'
+          },
+          {
+            name: 'answers',
+            text: lang.btn.poll.answers,
+            type: 'button'
+          },
+          {
+            name: 'max',
+            text: lang.btn.poll.max,
+            type: 'button'
+          },
+          {
+            name: 'names',
+            text: lang.btn.poll.names,
+            type: 'button'
+          }
+        ],
+        mrkdwn_in: ['text', 'pretext']
+      },
+      {
+        text: "",
+        fallback: "",
+        callback_id: 'poll_edit_menu_callback',
+        actions: [
+          {
+            name: 'done',
+            text: lang.btn.done,
+            type: 'button',
+            style: 'primary'
+          },
+          {
+            name: 'cancel',
+            text: lang.btn.cancel,
+            type: 'button',
+            confirm: {
+              title: lang.msg.confirm,
+              text: lang.msg.confirmcancel,
+              ok_text: lang.btn.yes,
+              dismiss_text: lang.btn.no
+            }
+          },
+          {
+            name: 'delete',
+            text: lang.btn.delete,
+            type: 'button',
+            style: 'danger',
+            confirm: {
+              title: lang.msg.confirm,
+              text: lang.msg.poll.confirmdelete,
+              ok_text: lang.btn.yes,
+              dismiss_text: lang.btn.no
+            }
+          }
+        ],
+        mrkdwn_in: ['text', 'pretext']
+      }
+    ],
+    response_type: 'ephemeral',
+    replace_original: true
+  };
+  
+  var poll_edit_menu_att = {
+    text: "",
+    fallback: "",
+    callback_id: 'poll_edit_answers_callback',
+    actions: [
+      {
+        name: 'back',
+        text: lang.btn.back,
+        type: 'button',
+      },
+      {
+        name: 'cancel',
+        text: lang.btn.cancel,
+        type: 'button',
+        style: 'danger',
+        confirm: {
+          title: lang.msg.confirm,
+          text: lang.msg.confirmcancel,
+          ok_text: lang.btn.yes,
+          dismiss_text: lang.btn.no
+        }
+      }
+    ],
+    mrkdwn_in: ['text', 'pretext']
+  };
+  
+  var poll_edit_title_msg = {
+    text: "",
+    attachments: [
+      {
+        text: lang.msg.poll.entertitle,
+        fallback: lang.msg.poll.entertitle,
+        mrkdwn_in: ['text', 'pretext']
+      },
+      poll_edit_menu_att
+    ],
+    response_type: 'ephemeral',
+    replace_original: true
+  };
+  
+  var poll_edit_text_msg = {
+    text: "",
+    attachments: [
+      {
+        text: lang.msg.poll.entertext,
+        fallback: lang.msg.poll.entertext,
+        mrkdwn_in: ['text', 'pretext']
+      },
+      poll_edit_menu_att
+    ],
+    response_type: 'ephemeral',
+    replace_original: true
+  };
+  
+  function poll_edit_answers_msg (answers) {
+    var msg_text = {
+      text: lang.msg.poll.selectansweredit,
+      attachments: [],
+      response_type: 'ephemeral',
+      replace_original: true
+    };
+    
+    for (var i = 0; i < answers.length; i++) {
+      if (answers[i].state != 3) {
+        msg_text.attachments.push({
+          text: answers[i].text,
+          fallback: answers[i].text,
+          callback_id: 'poll_edit_answers_callback',
+          actions: [
+            {
+              name: 'edit',
+              value: i,
+              text: lang.btn.edit,
+              type: 'button'
+            },
+            {
+              name: 'edit',
+              value: i,
+              text: lang.btn.delete,
+              type: 'button',
+              style: 'danger',
+              confirm: {
+                title: lang.msg.confirm,
+                text: lang.msg.poll.confirmdeleteanswer,
+                ok_text: lang.btn.yes,
+                dismiss_text: lang.btn.no
+              }
+            }
+          ],
+          mrkdwn_in: ['text', 'pretext']
+        });
+      }
+    }
+    
+    msg_text.attachments.push(poll_edit_menu_att);
+    return msg_text;
   }
   
+  var poll_edit_answer_edit_msg = {
+    text: "",
+    attachments: [
+      {
+        text: lang.msg.poll.enteranswer,
+        fallback: lang.msg.poll.enteranswer,
+        mrkdwn_in: ['text', 'pretext']
+      },
+      poll_edit_menu_att
+    ],
+    response_type: 'ephemeral',
+    replace_original: true
+  };
   
+  function poll_edit_max_msg (max) {
+    var msg_text = {
+      text: "",
+      attachments: [
+        {
+          text: lang.msg.poll.entermax,
+          fallback: lang.msg.poll.entermax,
+          mrkdwn_in: ['text', 'pretext']
+        },
+        {
+          text: "",
+          fallback: "",
+          callback_id: 'poll_create_max_callback',
+          actions: [],
+          mrkdwn_in: ['text', 'pretext']
+        },
+        {
+          text: "",
+          fallback: "",
+          callback_id: 'poll_create_max_callback',
+          actions: [],
+          mrkdwn_in: ['text', 'pretext']
+        },
+      ],
+      response_type: 'ephemeral',
+      replace_original: true
+    };
+    
+    for (var i = 0; i < max; i++) {
+      var btn = {name: i, text: i, type: 'button'};
+      if (i < 5) msg_text.attachments[1].actions[i] = btn;
+      else msg_text.attachments[2].actions[i - 5] = btn;
+    }
+    msg_text.attachments[1].actions[0].text = lang.btn.all;
+    if (max <= 5) msg_text.attachments.splice(2, 1);
+    
+    msg_text.attachments.push(poll_edit_menu_att);
+    return msg_text;
+  }
+
+  var poll_edit_names_msg = {
+    text: lang.wrd.preview + ":",
+    attachments: [
+      {},
+      {
+        text: lang.msg.poll.shownames,
+        fallback: lang.msg.poll.shownames,
+        callback_id: 'poll_edit_names_callback',
+        actions: [
+          {
+            name: 'yes',
+            text: lang.btn.yes,
+            type: 'button'
+          },
+          {
+            name: 'no',
+            text: lang.btn.no,
+            type: 'button'
+          }
+        ],
+        mrkdwn_in: ['text', 'pretext']
+      },
+      poll_edit_menu_att
+    ],
+    response_type: 'ephemeral',
+    replace_original: true
+  };
   
   // ===== MISC =====
   
@@ -718,6 +991,7 @@ module.exports = (app) => {
       this.title = data.title || this.title;
       this.text = data.text || this.text;
       this.ts.edited = data.ts.edited || this.ts.edited;
+      // if ('options' in data) {}
       this.options.max = data.options.max || this.options.max;
       if ('names' in data.options) this.options.names = data.options.names;
     }
@@ -732,6 +1006,15 @@ module.exports = (app) => {
 
     editAnswer (answer, text) {
       this.answers[answer].text = text;
+    }
+    
+    getAnswers () {
+      var output = [];
+      for (var i = 0; i < this.answers.length; i++) output.push({
+        text: this.answers[i].text,
+        state: 0
+      });
+      return output;
     }
 
     vote (answer, user_id) {
@@ -1087,17 +1370,8 @@ module.exports = (app) => {
           break;
         case 'next':
           if (data.answers.length >= 2) {
-            var msg_text = poll_create_max_msg;
+            var msg_text = poll_create_max_msg(answers.length);
             msg_text.attachments[0] = Poll.generateDummy(poll_db.length, data);
-            
-            for (var i = 0; i < data.answers.length; i++) {
-              var btn = {name: i, text: i, type: 'button'};
-              if (i < 5) msg_text.attachments[2].actions[i] = btn;
-              else msg_text.attachments[3].actions[i - 5] = btn;
-            }
-            msg_text.attachments[2].actions[0].text = lang.btn.all;
-            if (data.answers.length <= 5) msg_text.attachments.splice(3, 1);
-            
             msg.respond(msg_text);
             msg.route('poll_create_max_route', data, 60);
           } else {
@@ -1114,7 +1388,7 @@ module.exports = (app) => {
       if (temp[temp.length - 1].trim() == "") temp = temp.slice(0, -1);
       
       if (!('answers' in data)) data.answers = [];
-      for (var i = 0; i < Math.min(temp.length, 10); i++) data.answers.push({text: temp[i].trim(), votes: []});
+      for (var i = 0; i < temp.length && data.answers.length < 10; i++) data.answers.push({text: temp[i].trim(), votes: [], state = 0});
       
       if (data.answers.length < 10) {
         if (data.answers.length >= 2) var msg_text = poll_create_answers_n_msg;
@@ -1164,14 +1438,15 @@ module.exports = (app) => {
           return;
       }
       
-      var temp = parseInt(msg.body.actions[0].name) || -1;
-      if (temp >= 0 && temp <= data.answers.length) {
-        data.options = {max: temp};
+      //var temp = parseInt(msg.body.actions[0].name) || -1;
+      //if (temp >= 0 && temp <= data.answers.length) {
+        //data.options = {max: parseInt(msg.body.actions[0].name)};
+      data.options = {max: temp};
         var msg_text = poll_create_names_msg;
         msg_text.attachments[0] = Poll.generateDummy(poll_db.length, data);
         msg.respond(msg_text);
         msg.route('poll_create_names_route', data, 60);
-      }
+      //}
       return;
     }
   });
@@ -1317,13 +1592,12 @@ module.exports = (app) => {
         if (poll_db[slot].isOwner(msg.body.user_id) || user.isAdmin(msg.body.user_id)) {
           var msg_text = poll_edit_msg;
           msg_text.attachments[0] = poll_db[slot].generateAttachment(slot);
-        
           msg.respond(msg_text);
           msg.route('poll_edit_route', {slot: slot}, 60);
           return;
         } else msg.respond(func.generateInfoMsg(lang.err.poll.notowner));
       } else msg.respond(func.generateInfoMsg(lang.err.poll.notfound));
-    } else msg.respond(poll_edit_list_msg(msg.body.user_id, 0, 'asc'));
+    } else msg.respond(poll_edit_list_msg(msg.body.user_id, 0, 'desc'));
     
     return;
   });
@@ -1355,7 +1629,6 @@ module.exports = (app) => {
       case 'edit':
         var msg_text = poll_edit_msg;
         msg_text.attachments[0] = poll_db[slot].generateAttachment(slot);
-        
         msg.respond(msg_text);
         msg.route('poll_edit_route', {slot: slot}, 60);
         break;
@@ -1368,15 +1641,206 @@ module.exports = (app) => {
     return;
   });
   
+  slapp.route('poll_edit_route', (msg, data) => {
+    if (msg.type != 'action') {
+      msg.route('poll_edit_route', data, 60);
+      return;
+    } else {
+      switch (msg.body.actions[0].name) {
+        case 'title':
+          msg.respond(poll_edit_title_msg);
+          msg.route('poll_edit_title_route', data, 60);
+          return;
+        case 'text':
+          msg.respond(poll_edit_text_msg);
+          msg.route('poll_edit_text_route', data, 60);
+          return;
+        case 'answers':
+          if (!('answers' in data)) data.answers = poll_db[data.slot].getAnswers();
+          msg.respond(poll_edit_answers_msg(data.answers));
+          msg.route('poll_edit_answers_route', data, 60);
+          return;
+        case 'max':
+          var max = 0;
+          for (var i = 0; i < data.answers; i++) {
+            if (data.answers[i].state != 2) max++;
+          }
+          
+          msg.respond(poll_edit_max_msg(max));
+          msg.route('poll_edit_max_route', data, 60);
+          return;
+        case 'names':
+          msg.respond(poll_edit_names_msg);
+          msg.route('poll_edit_names_route', data, 60);
+          return;
+        case 'done':
+          break;
+        case 'cancel':
+          msg.respond({text: "", delete_original: true});
+          return;
+        case 'delete':
+          poll_db[data.slot].delete();
+          savePollDB();
+          msg.respond(func.generateInfoMsg(lang.msg.poll.deleted));
+          return;
+      }
+      
+      if (data.edited) {
+        if (data.create) {
+          var msg_text = poll_create_final_msg;
+          msg_text.attachments[0] = Poll.generateDummy(poll_db.length, data);
+          msg.respond(msg_text);
+          msg.route('poll_create_final_route', data, 60);
+        } else {
+          poll_db[data.slot].update(data.slot);
+          savePollDB();
+          msg.respond({text: "", delete_original: true});
+        }
+      }
+      return;
+    }
+  });
+  
+  slapp.route('poll_edit_title_route', (msg, data) => {
+    if (msg.type == 'event') {
+      msg.route('poll_edit_title_route', data, 60);
+      return;
+    } else if (msg.type == 'action') {
+      switch (msg.body.actions[0].name) {
+        case 'back':
+          var msg_text = poll_edit_msg;
+          msg_text.attachments[0] = poll_db[slot].generateAttachment(slot);
+          msg.respond(msg_text);
+          msg.route('poll_edit_route', data, 60);
+          break;
+        case 'cancel':
+          msg.respond({text: "", delete_original: true});
+          break;
+      }
+      return;
+    } else {
+      data.title = msg.body.text;
+      poll_db[data.slot].edit(data);
+      data.edited = true;
+      
+      var msg_text = poll_edit_msg;
+      msg_text.attachments[0] = poll_db[slot].generateAttachment(slot);
+      msg.respond(msg_text);
+      msg.route('poll_edit_route', data, 60);
+      return;
+    }
+  });
+  
+  slapp.route('poll_edit_text_route', (msg, data) => {
+    if (msg.type == 'event') {
+      msg.route('poll_edit_text_route', data, 60);
+      return;
+    } else if (msg.type == 'action') {
+      switch (msg.body.actions[0].name) {
+        case 'back':
+          var msg_text = poll_edit_msg;
+          msg_text.attachments[0] = poll_db[slot].generateAttachment(slot);
+          msg.respond(msg_text);
+          msg.route('poll_edit_route', data, 60);
+          break;
+        case 'cancel':
+          msg.respond({text: "", delete_original: true});
+          break;
+      }
+      return;
+    } else {
+      data.text = msg.body.text;
+      poll_db[data.slot].edit(data);
+      data.edited = true;
+      
+      var msg_text = poll_edit_msg;
+      msg_text.attachments[0] = poll_db[slot].generateAttachment(slot);
+      msg.respond(msg_text);
+      msg.route('poll_edit_route', data, 60);
+      return;
+    }
+  });
+  
+  // poll_edit_answers_route
+  
+  // poll_edit_answer_edit_route
+  
+  slapp.route('poll_edit_max_route', (msg, data) => {
+    if (msg.type != 'action') {
+      msg.route('poll_edit_max_route', data, 60);
+      return;
+    } else {
+      switch (msg.body.actions[0].name) {
+        case 'back':
+          var msg_text = poll_edit_msg;
+          msg_text.attachments[0] = poll_db[slot].generateAttachment(slot);
+          msg.respond(msg_text);
+          msg.route('poll_edit_route', data, 60);
+          return;
+        case 'cancel':
+          msg.respond({text: "", delete_original: true});
+          return;
+      }
+      
+      if (!('options' in data)) data.options = {};
+      data.options.max = parseInt(msg.body.actions[0].name);
+      poll_db[data.slot].edit(data);
+      data.edited = true;
+      
+      var msg_text = poll_edit_msg;
+      msg_text.attachments[0] = poll_db[slot].generateAttachment(slot);
+      msg.respond(msg_text);
+      msg.route('poll_edit_route', data, 60);
+      return;
+    }
+  });
+  
+  slapp.route('poll_edit_names_route', (msg, data) => {
+    if (msg.type != 'action') {
+      msg.route('poll_edit_names_route', data, 60);
+      return;
+    } else {
+      switch (msg.body.actions[0].name) {
+        case 'yes':
+          if (!('options' in data)) data.options = {};
+          data.options.names = true;
+          break;
+        case 'no':
+          if (!('options' in data)) data.options = {};
+          data.options.names = false;
+          break;
+        case 'back':
+          var msg_text = poll_edit_msg;
+          msg_text.attachments[0] = poll_db[slot].generateAttachment(slot);
+          msg.respond(msg_text);
+          msg.route('poll_edit_route', data, 60);
+          return;
+        case 'cancel':
+          msg.respond({text: "", delete_original: true});
+          return;
+      }
+      
+      poll_db[data.slot].edit(data);
+      data.edited = true;
+      
+      var msg_text = poll_edit_msg;
+      msg_text.attachments[0] = poll_db[slot].generateAttachment(slot);
+      msg.respond(msg_text);
+      msg.route('poll_edit_route', data, 60);
+      return;
+    }
+  });
+  
+  
 // ===== /poll debug =====
   
-  slapp.command('/dbpoll', "debug \\d{1,4}", (msg, cmd) => {
+  /*slapp.command('/dbpoll', "debug \\d{1,4}", (msg, cmd) => {
     var slot = parseInt(cmd.substring(5)) - 1;
     
     if (slot < poll_db.length && msg.body.user_id == config.admin_id) msg.respond(poll_db[slot].generateDebugInfo(slot));
     
     return;
-  });
+  });*/
   
 // ===== /poll =====
   
