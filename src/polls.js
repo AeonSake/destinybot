@@ -894,7 +894,7 @@ module.exports = (app) => {
     for (var i = 0; i < answers.length; i++) {
       if (answers[i].state != 3) {
         msg_text.attachments.push({
-          text: "*" + emoji_num[msg_text.attachments.length - 1] + " " + answers[i].text + "*",
+          text: "*" + emoji_num[msg_text.attachments.length] + " " + answers[i].text + "*",
           fallback: answers[i].text,
           callback_id: 'poll_edit_answers_callback',
           actions: [
@@ -1814,8 +1814,6 @@ module.exports = (app) => {
         data.info.ts.edited = msg.body.action_ts;
         poll_db[data.slot].edit(data.info);
         poll_db[data.slot].update(data.slot);
-        console.log(data.info);
-        console.log(poll_db[data.slot]);
         savePollDB();
         msg.respond({text: "", delete_original: true});
       } else msg.respond({text: "", delete_original: true});
@@ -1901,6 +1899,7 @@ module.exports = (app) => {
           msg.route('poll_edit_answer_edit_route', data, 60);
           return;
         case 'delete':
+          data.edited = true;
           var slot = parseInt(msg.body.actions[0].value);
           if (data.info.answers[slot].state == 2) data.info.answers.splice(slot, 1);
           else data.info.answers[slot].state = 3;
@@ -1934,6 +1933,7 @@ module.exports = (app) => {
         });
       }
       
+      data.edited = true;
       msg.respond(poll_edit_answers_msg(data.info.answers));
       msg.route('poll_edit_answers_route', data, 60);
       return;
@@ -1958,6 +1958,7 @@ module.exports = (app) => {
       data.info.answers[data.curanswer].text = msg.body.text;
       if (data.info.answers[data.curanswer].state == 0) data.info.answers[data.curanswer].state = 1;
       
+      data.edited = true;
       msg.respond(poll_edit_answers_msg(data.info.answers));
       msg.route('poll_edit_answers_route', data, 60);
       return;
