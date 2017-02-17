@@ -1901,7 +1901,7 @@ module.exports = (app) => {
         case 'delete':
           var slot = parseInt(msg.body.actions[0].value);
           if (data.info.answers[slot].state == 2) data.info.answers.splice(slot, 1);
-          else data.info.answers[].state = 3;
+          else data.info.answers[slot].state = 3;
           msg.respond(poll_edit_answers_msg(data.info.answers));
           msg.route('poll_edit_answers_route', data, 60);
           return;
@@ -2089,7 +2089,6 @@ module.exports = (app) => {
     return;
   });
     
-  
 // ===== Vote button callback =====
   
   slapp.action('poll_answer_callback', (msg) => {
