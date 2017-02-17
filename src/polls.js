@@ -1244,6 +1244,7 @@ module.exports = (app) => {
       
       if ('answers' in data) {
         if ('ts' in data) {
+          att_fields = [];
           temp_ts = data.ts.edited;
           var voter_count = poll_db[slot].collectVoters().length;
           
