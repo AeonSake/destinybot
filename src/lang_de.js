@@ -61,11 +61,10 @@ let lang = module.exports = {
       text: "Text",
       answers: "Antworten",
       max: "Max. Stimmen",
-      names: "Anzeige Nutzernamen",
+      names: "Stimmenliste",
       deletetext: "Text entfernen",
-      addanswer: "Antwort hinzufügen",
-      open: "Abstimmung öffnen",
-      close: "Abstimmung schließen"
+      open: "Abst. öffnen",
+      close: "Abst schließen"
     }
   },
   
@@ -81,7 +80,7 @@ let lang = module.exports = {
       confirmdelete: "Sind Sie sicher, dass Sie diesen Event löschen wollen?",
       deleted: "Event wurde erfolgreich gelöscht.",
       
-      help: "Liste aller Befehle:\n`/event` : Hauptmenü\n`/event <title>;<dd.mm.yy>;<hh:mm>` : Schnell-Erstellung eines Events\n`/event create` : Erstellung eines Events\n`/event list` : Anzeigen aller Events\n`/event show <id>` : Anzeigen des Events mit der ID <id>\n`/event post <id>` : Posten des Events mit der ID <id> im aktuellen Channel\n`/event edit <id>` : Bearbeiten des Events mit der ID <id>\n `/event help` : Anzeigen der Hilfe"
+      help: "Liste aller Befehle:\n`/event` : Hauptmenü\n`/event <title>;<dd.mm.yy>;<hh:mm>` : Schnell-Erstellung eines Events\n`/event create` : Erstellung eines Events\n`/event join <id>` : Dem Event mit der ID <id> beitreten\n`/event leave <id>` : Den Event mit der ID <id> verlassen\n`/event list` : Anzeigen aller Events\n`/event show <id>` : Anzeigen des Events mit der ID <id>\n`/event post <id>` : Posten des Events mit der ID <id> im aktuellen Channel\n`/event edit <id>` : Bearbeiten des Events mit der ID <id>\n `/event help` : Anzeigen der Hilfe"
     },
     
     poll: {
