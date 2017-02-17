@@ -907,7 +907,7 @@ module.exports = (app) => {
           ],
           mrkdwn_in: ['text', 'pretext']
         });
-        if (answers.length > 2) msg_text.attachments[i].actions.push({
+        if (answers.length > 2) msg_text.attachments[msg_text.attachments.length - 1].actions.push({
           name: 'delete',
           value: i,
           text: lang.btn.delete,
@@ -1924,7 +1924,7 @@ module.exports = (app) => {
       
       for (var i = 0; i < temp.length && i + active < 10; i++) {
         data.info.answers.push({
-          text: data.info.text = msg.body.text,
+          text: data.info.text = temp[i],
           votes: [],
           state: 2
         });
