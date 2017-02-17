@@ -894,7 +894,7 @@ module.exports = (app) => {
     for (var i = 0; i < answers.length; i++) {
       if (answers[i].state != 3) {
         msg_text.attachments.push({
-          text: answers[i].text,
+          text: "*" + emoji_num[msg_text.attachments.length - 1] + " " + answers[i].text + "*",
           fallback: answers[i].text,
           callback_id: 'poll_edit_answers_callback',
           actions: [
@@ -1281,8 +1281,6 @@ module.exports = (app) => {
           }
         }
       }
-      
-      console.log(data);
       
       return {
         author_name: lang.wrd.poll + " #" + (slot + 1) + (data.state == 2 ? " [" + lang.wrd.deleted + "]" : ""),
@@ -1816,6 +1814,8 @@ module.exports = (app) => {
         data.info.ts.edited = msg.body.action_ts;
         poll_db[data.slot].edit(data.info);
         poll_db[data.slot].update(data.slot);
+        console.log(data.info);
+        console.log(poll_db[data.slot]);
         savePollDB();
         msg.respond({text: "", delete_original: true});
       } else msg.respond({text: "", delete_original: true});
@@ -1928,7 +1928,7 @@ module.exports = (app) => {
       
       for (var i = 0; i < temp.length && i + active < 10; i++) {
         data.info.answers.push({
-          text: data.info.text = temp[i],
+          text: temp[i],
           votes: [],
           state: 2
         });
