@@ -690,7 +690,7 @@ module.exports = (app) => {
   }
   
   function poll_edit_msg (state) {
-    var btns [];
+    var btns = [];
     btns.push({
       name: 'done',
       text: lang.btn.done,
