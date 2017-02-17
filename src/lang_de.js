@@ -31,8 +31,7 @@ let lang = module.exports = {
     show: "Anzeigen",
     edit: "Bearbeiten",
     delete: "Löschen",
-    open: "Öffnen",
-    close: "Schließen",
+    undelete: "Wiederherstellen",
     done: "Fertig",
     cancel: "Abbrechen",
     dismiss: "Ausblenden",
@@ -62,9 +61,11 @@ let lang = module.exports = {
       text: "Text",
       answers: "Antworten",
       max: "Max. Stimmen",
-      names: "Anzeige der Nutzernamen",
+      names: "Anzeige Nutzernamen",
       deletetext: "Text entfernen",
-      addanswer: "Antwort hinzufügen"
+      addanswer: "Antwort hinzufügen",
+      open: "Abstimmung öffnen",
+      close: "Abstimmung schließen"
     }
   },
   
