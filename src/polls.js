@@ -1066,10 +1066,10 @@ module.exports = (app) => {
           case 0:
             break;
           case 1:
-            this.answers[i - deleted].text = data.ansers[i].text;
+            this.answers[i - deleted].text = data.answers[i].text;
             break;
           case 2:
-            this.answers.push({text: data.ansers[i].text, votes: []});
+            this.answers.push({text: data.answers[i].text, votes: []});
             break;
           case 3:
             this.answers.splice(i - deleted, 1);
@@ -1281,6 +1281,8 @@ module.exports = (app) => {
           }
         }
       }
+      
+      console.log(data);
       
       return {
         author_name: lang.wrd.poll + " #" + (slot + 1) + (data.state == 2 ? " [" + lang.wrd.deleted + "]" : ""),
