@@ -2034,7 +2034,19 @@ module.exports = (app) => {
     return;
   });
   
-// ===== /poll debug =====
+// ===== /poll clean =====
+  
+  slapp.command('/dbpoll', "clean", (msg, cmd) => {
+    if (msg.body.user_id == config.admin_id) {
+      for (var i = 0; i < poll_db.length; i++) poll_db[i].delete();
+      deletePollDB();
+      poll_db = [];
+      savePollDB();
+    }
+    return;
+  });
+  
+  // ===== /poll debug =====
   
   /*slapp.command('/dbpoll', "debug \\d{1,4}", (msg, cmd) => {
     var slot = parseInt(cmd.substring(5)) - 1;
