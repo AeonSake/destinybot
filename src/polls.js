@@ -1283,7 +1283,7 @@ module.exports = (app) => {
       }
       
       return {
-        author_name: lang.wrd.poll + " #" + (slot + 1),
+        author_name: lang.wrd.poll + " #" + (slot + 1) + (data.state == 2 ? " [" + lang.wrd.deleted + "]" : ""),
         title: data.title || "<title>",
         text: temp_text,
         fallback: temp_text,
@@ -1899,7 +1899,9 @@ module.exports = (app) => {
           msg.route('poll_edit_answer_edit_route', data, 60);
           return;
         case 'delete':
-          data.info.answers[parseInt(msg.body.actions[0].value)].state = 3;
+          var slot = parseInt(msg.body.actions[0].value);
+          if (data.info.answers[slot].state == 2) data.info.answers.splice(slot, 1);
+          else data.info.answers[].state = 3;
           msg.respond(poll_edit_answers_msg(data.info.answers));
           msg.route('poll_edit_answers_route', data, 60);
           return;
@@ -1952,6 +1954,7 @@ module.exports = (app) => {
       }
     } else {
       data.info.answers[data.curanswer].text = msg.body.text;
+      if (data.info.answers[data.curanswer].state == 0) data.info.answers[data.curanswer].state = 1;
       
       msg.respond(poll_edit_answers_msg(data.info.answers));
       msg.route('poll_edit_answers_route', data, 60);
