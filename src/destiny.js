@@ -6,8 +6,7 @@
 
 var https = require('https');
 
-var destiny_info_tue = {},
-    destiny_info_we = {},
+var destiny_info = {},
     destiny_activity_def = {},
     destiny_skull_def = {};
 
@@ -74,7 +73,8 @@ module.exports = (app) => {
         body += d;
       });
       res.on('end', function() {
-        console.log(JSON.parse(body).Response.data);
+        destiny_info = JSON.parse(body).Response.data;
+        user.sendDM(config.admin_id, JSON.stringify(destiny_info));
       });
     });
   }
