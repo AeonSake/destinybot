@@ -136,6 +136,7 @@ module.exports = (app) => {
   }
   
   function prepareData () {
+    console.log("called");
     if (destiny_activities == {} || destiny_activity_def == {} || destiny_place_def == {} || destiny_skull_def == {} || destiny_skull_ref_def == {}) setTimeout(prepareData, 2000);
     else {
       // pve
