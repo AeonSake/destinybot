@@ -86,7 +86,7 @@ module.exports = (slapp, kv, config, func) => {
   
   // Function for sending DMs to users
   module.sendDM = (user_id, msg) => {
-    var user = user_db.getUser(user_id);
+    var user = module.getUser(user_id);
     
     if ('dm_ch' in user) {
       slapp.client.chat.postMessage({
