@@ -136,7 +136,6 @@ module.exports = (app) => {
   }
   
   function prepareData () {
-    console.log("called");
     if (destiny_activities == {} || destiny_activity_def == {} || destiny_place_def == {} || destiny_skull_def == {} || destiny_skull_ref_def == {}) setTimeout(prepareData, 2000);
     else {
       // pve
@@ -229,13 +228,16 @@ module.exports = (app) => {
       response_type: 'ephemeral',
       replace_original: true
     };
+    var txt = "";
+    for (var i = 0; i < destiny_info.heroicstrike.skulls.length; i++) txt += destiny_info.heroicstrike.skulls[i].name + " : " + destiny_info.heroicstrike.skulls[0].desc + "\n";
     
     msg_text.attachments[0] = {
-      text: destiny_info.heroicstrike.skulls[0].name + " | " + destiny_info.heroicstrike.skulls[0].desc + ", " + destiny_info.heroicstrike.skulls[1].name + " | " + destiny_info.heroicstrike.skulls[1].desc,
+      text: txt,
       fallback: "",
       mrkdwn_in: ['text', 'pretext']
     };
     
+    console.log(destiny_info.heroicstrike.skulls);
     return msg_text;
   }
   
