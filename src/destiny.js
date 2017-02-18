@@ -42,15 +42,28 @@ module.exports = (app) => {
       method: 'GET'
     };
     
-    https.get('https://destiny.plumbing/de/raw/DestinyActivityModeDefinition.json', (res) => {
-      res.on('data', (data) => {
-        console.log(JSON.parse(data));
+    http.get('https://destiny.plumbing/' + config.lang + '/raw/DestinyActivityModeDefinition.json', function(res) {
+      var body = "";
+      res.on('data', function(d) {
+        body += d;
       });
-    }).on('error', (err) => {
-      console.log(err);
+      res.on('end', function() {
+        destiny_activity_def = JSON.parse(body);
+        console.log(destiny_activity_def);
+      });
     });
   }
   getDestinyActivityDef();
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
   
   function getDestinyMissionDef () {
     var options = {
