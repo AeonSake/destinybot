@@ -246,7 +246,7 @@ module.exports = (app) => {
 // ========== COMMANDS ==========
 // ==============================
   
-  slapp.command('destiny', (msg) => {
+  slapp.command('/destiny', (msg) => {
     destiny_info = {};
     msg.respond(destiny_main);
     return;
