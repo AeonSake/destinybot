@@ -57,8 +57,8 @@ module.exports = (app) => {
       res.on('end', function() {
         destiny_skull_def = JSON.parse(body);
         setTimeout(function(){
-        destiny_skull_def['90'] = {skullHash: 90, skullName: lang.msg.dest.heroic, description: lang.msg.dest.heroicdef};
-        destiny_skull_def['91'] = {skullHash: 91, skullName: lang.msg.dest.epic, description: lang.msg.dest.epicdef};
+          destiny_skull_def['90'] = {skullHash: 90, skullName: lang.msg.dest.heroic, description: lang.msg.dest.heroicdef};
+          destiny_skull_def['91'] = {skullHash: 91, skullName: lang.msg.dest.epic, description: lang.msg.dest.epicdef};
         }, 2000);
       });
     });
@@ -69,8 +69,10 @@ module.exports = (app) => {
       });
       res.on('end', function() {
         destiny_skull_ref_def = JSON.parse(body);
-        destiny_skull_def['90'] = {skullHash: 90, skullName: "Heroic"};
-        destiny_skull_def['91'] = {skullHash: 91, skullName: "Epic"};
+        setTimeout(function(){
+          destiny_skull_def['90'] = {skullHash: 90, skullName: "Heroic"};
+          destiny_skull_def['91'] = {skullHash: 91, skullName: "Epic"};
+        }, 2000);
       });
     });
   }
