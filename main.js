@@ -39,7 +39,7 @@ var app = {
   user
 };
 
-//require('./src/destiny')(app);
+require('./src/destiny')(app);
 require('./src/polls')(app);
 //require('./src/events')(app);
 
