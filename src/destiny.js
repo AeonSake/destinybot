@@ -42,7 +42,7 @@ module.exports = (app) => {
       method: 'GET'
     };
     
-    http.get('https://destiny.plumbing/' + config.lang + '/raw/DestinyActivityModeDefinition.json', function(res) {
+    https.get('https://destiny.plumbing/' + config.lang + '/raw/DestinyActivityModeDefinition.json', function(res) {
       var body = "";
       res.on('data', function(d) {
         body += d;
