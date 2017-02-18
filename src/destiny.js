@@ -9,10 +9,9 @@ var https = require('https');
 var destiny_info_tue = {},
     destiny_info_we = {},
     destiny_activity_def = {},
-    destiny_mission_def = {},
     destiny_skull_def = {};
 
-
+// key 37e6325d088049b3aadf888d71fdab87
 
 // ============================
 // ========== MODULE ==========
@@ -33,58 +32,52 @@ module.exports = (app) => {
 // ===================================
 // ========== LANGUAGE DATA ==========
 // ===================================
-  
-  function getDestinyActivityDef () {
-    var options = {
-      host: 'bungie.net',
-      port: 443,
-      path: 'https://destiny.plumbing/de/raw/DestinyActivityModeDefinition.json',
-      method: 'GET'
-    };
     
-    https.get('https://destiny.plumbing/' + config.lang + '/raw/DestinyActivityModeDefinition.json', function(res) {
+  function getActivityDef () {
+    https.get('https://destiny.plumbing/' + config.lang + '/raw/DestinyActivityDefinition.json', function(res) {
       var body = "";
       res.on('data', function(d) {
         body += d;
       });
       res.on('end', function() {
         destiny_activity_def = JSON.parse(body);
-        console.log(destiny_activity_def);
       });
     });
   }
-  getDestinyActivityDef();
+  getActivityDef(); 
+  
+  function getSkullDef () {
+    https.get('https://destiny.plumbing/' + config.lang + '/raw/DestinyScriptedSkullDefinition.json', function(res) {
+      var body = "";
+      res.on('data', function(d) {
+        body += d;
+      });
+      res.on('end', function() {
+        destiny_skull_def = JSON.parse(body);
+      });
+    });
+  }
+  getSkullDef();
   
   
   
-  
-  
-  
-  
-  
-  
-  
-  
-  function getDestinyMissionDef () {
+  function getTest () {
     var options = {
-      host: 'bungie.net',
-      port: 443,
-      path: 'https://destiny.plumbing/de/raw/DestinyActivityDefinition.json',
-      method: 'GET'
+      host: 'destiny.plumbing',
+      path: config.lang + '/raw/DestinyActivityDefinition.json',
+      headers: {'X-API-Key': config.destiny_key}
     };
     
+    https.get(options, function(res) {
+      var body = "";
+      res.on('data', function(d) {
+        body += d;
+      });
+      res.on('end', function() {
+        console.log(JSON.parse(body));
+      });
+    });
   }
-  
-  function getDestinySkullDef () {
-    var options = {
-      host: 'bungie.net',
-      port: 443,
-      path: 'https://destiny.plumbing/de/raw/DestinyScriptedSkullDefinition.json',
-      method: 'GET'
-    };
-    
-  }
-  
   
   
   

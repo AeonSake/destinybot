@@ -19,6 +19,10 @@ config:
     friendly_name: Bot Token
     type: secret
     global: true
+  - name: destiny_key
+    friendly_name: Destiny API key
+    type: secret
+    global: true
   - name: destiny_ch
     friendly_name: Destiny channel ID
     type: secret
