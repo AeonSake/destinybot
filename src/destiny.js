@@ -101,7 +101,6 @@ module.exports = (app) => {
       });
       res.on('end', function() {
         destiny_activities = JSON.parse(body).Response.data.activities;
-        prepareData();
       });
     });
   }
@@ -137,80 +136,83 @@ module.exports = (app) => {
   }
   
   function prepareData () {
-    // pve
-    destiny_info.prisonofelders = {
-      //v1: destiny_activity_def[1404620600].activityName,
-      //name: destiny_activity_def[destiny_activities.prisonofelders.display.activityHash].activityName,
-      
-    };
-    
-    destiny_info.elderchallenge = {
-      title: destiny_activity_def[destiny_activities.elderchallenge.display.activityHash].activityName,
-      skulls: getSkulls(destiny_activities.elderchallenge.extended.skullCategories[0].skulls)
-    };
-    
-    
-    destiny_info.dailychapter = {
-      title: lang.msg.dest.dailyheroic,
-      mission: destiny_activity_def[destiny_activities.dailychapter.display.activityHash].activityName,
-      desc: destiny_activity_def[destiny_activities.dailychapter.display.activityHash].activityDescription,
-      loc: destiny_place_def[destiny_activities.dailychapter.display.placeHash].placeName
-    };
-    
-    destiny_info.heroicstrike = {
-      title: lang.msg.dest.heroicstrikes,
-      skulls: getSkulls(destiny_activities.heroicstrike.extended.skullCategories[0].skulls)
-    };
-    
-    destiny_info.nightfall = {
-      
-    };
-    
-    // raid
-    destiny_info.vaultofglass = {
-      
-    };
-    
-    destiny_info.crota = {
-      
-    };
-    
-    destiny_info.kingsfall = {
-      
-    };
-    destiny_info.wrathofthemachine = {
-      
-    };
-    
-    // pvp
-    destiny_info.dailycrucible = {
-      
-    };
-    
-    destiny_info.weeklycrucible = {
-      
-    };
-    
-    // special
-    destiny_info.ironbanner = {
-      
-    };
-    
-    destiny_info.trials = {
-      
-    };
-    
-    destiny_info.xur = {
-      
-    };
-    
-    destiny_info.srl = {
-      
-    };
-    
-    destiny_info.armsday = {
-      
-    };
+    if (destiny_activities == {} || destiny_activity_def == {} || destiny_place_def == {} || destiny_skull_def == {} || destiny_skull_ref_def == {}) setTimeout(prepareData, 2000);
+    else {
+      // pve
+      destiny_info.prisonofelders = {
+        //v1: destiny_activity_def[1404620600].activityName,
+        //name: destiny_activity_def[destiny_activities.prisonofelders.display.activityHash].activityName,
+
+      };
+
+      destiny_info.elderchallenge = {
+        title: destiny_activity_def[destiny_activities.elderchallenge.display.activityHash].activityName,
+        skulls: getSkulls(destiny_activities.elderchallenge.extended.skullCategories[0].skulls)
+      };
+
+
+      destiny_info.dailychapter = {
+        title: lang.msg.dest.dailyheroic,
+        mission: destiny_activity_def[destiny_activities.dailychapter.display.activityHash].activityName,
+        desc: destiny_activity_def[destiny_activities.dailychapter.display.activityHash].activityDescription,
+        loc: destiny_place_def[destiny_activities.dailychapter.display.placeHash].placeName
+      };
+
+      destiny_info.heroicstrike = {
+        title: lang.msg.dest.heroicstrikes,
+        skulls: getSkulls(destiny_activities.heroicstrike.extended.skullCategories[0].skulls)
+      };
+
+      destiny_info.nightfall = {
+
+      };
+
+      // raid
+      destiny_info.vaultofglass = {
+
+      };
+
+      destiny_info.crota = {
+
+      };
+
+      destiny_info.kingsfall = {
+
+      };
+      destiny_info.wrathofthemachine = {
+
+      };
+
+      // pvp
+      destiny_info.dailycrucible = {
+
+      };
+
+      destiny_info.weeklycrucible = {
+
+      };
+
+      // special
+      destiny_info.ironbanner = {
+
+      };
+
+      destiny_info.trials = {
+
+      };
+
+      destiny_info.xur = {
+
+      };
+
+      destiny_info.srl = {
+
+      };
+
+      destiny_info.armsday = {
+
+      };
+    }
   }
   
   
