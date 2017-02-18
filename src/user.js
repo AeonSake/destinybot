@@ -79,6 +79,7 @@ module.exports = (slapp, kv, config, func) => {
         token: config.bot_token,
         user: user_db[i].id
       }, (err, data) => {
+        console.log(err);
         if (!err) console.log(data);//user_db.dm_ch = data.channel.id;
       });
     }
