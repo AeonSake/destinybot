@@ -56,8 +56,10 @@ module.exports = (app) => {
       });
       res.on('end', function() {
         destiny_skull_def = JSON.parse(body);
+        setTimeout(function(){
         destiny_skull_def['90'] = {skullHash: 90, skullName: lang.msg.dest.heroic, description: lang.msg.dest.heroicdef};
         destiny_skull_def['91'] = {skullHash: 91, skullName: lang.msg.dest.epic, description: lang.msg.dest.epicdef};
+        }, 2000);
       });
     });
     https.get('https://destiny.plumbing/en/raw/DestinyScriptedSkullDefinition.json', function(res) {
