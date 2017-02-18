@@ -63,8 +63,8 @@ module.exports = (app) => {
   
   function getTest () {
     var options = {
-      host: 'destiny.plumbing',
-      path: config.lang + '/raw/DestinyActivityDefinition.json',
+      host: 'www.bungie.net',
+      path: 'Platform/Destiny/Advisors/V2/',
       headers: {'X-API-Key': config.destiny_key}
     };
     
@@ -78,7 +78,7 @@ module.exports = (app) => {
       });
     });
   }
-  
+  getTest();
   
   
   
