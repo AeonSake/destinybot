@@ -225,8 +225,6 @@ module.exports = (app) => {
   function destiny_main () {
     if (destiny_info == {}) prepareData();
     
-    console.log(destiny_info);
-    
     var msg_text = {
       text: lang.msg.dest.main,
       attachments: [],
@@ -251,7 +249,7 @@ module.exports = (app) => {
   
   slapp.command('/destiny', (msg) => {
     destiny_info = {};
-    msg.respond(destiny_main);
+    msg.respond(destiny_main());
     return;
   });
   
