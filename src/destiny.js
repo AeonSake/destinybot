@@ -74,7 +74,7 @@ module.exports = (app) => {
         body += d;
       });
       res.on('end', function() {
-        console.log(JSON.parse(body));
+        console.log(body);
       });
     });
   }
