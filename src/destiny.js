@@ -149,8 +149,7 @@ module.exports = (app) => {
         title: destiny_activity_def[destiny_activities.elderchallenge.display.activityHash].activityName,
         skulls: getSkulls(destiny_activities.elderchallenge.extended.skullCategories[0].skulls)
       };
-
-
+      
       destiny_info.dailychapter = {
         title: lang.msg.dest.dailyheroic,
         mission: destiny_activity_def[destiny_activities.dailychapter.display.activityHash].activityName,
@@ -229,7 +228,7 @@ module.exports = (app) => {
       replace_original: true
     };
     var txt = "";
-    for (var i = 0; i < destiny_info.heroicstrike.skulls.length; i++) txt += destiny_info.heroicstrike.skulls[i].name + " : " + destiny_info.heroicstrike.skulls[0].desc + "\n";
+    for (var i = 0; i < destiny_info.heroicstrike.skulls.length; i++) txt += "*" + destiny_info.heroicstrike.skulls[i].name + "* : " + destiny_info.heroicstrike.skulls[0].desc + "\n";
     
     msg_text.attachments[0] = {
       text: txt,
@@ -237,7 +236,8 @@ module.exports = (app) => {
       mrkdwn_in: ['text', 'pretext']
     };
     
-    console.log(destiny_info.heroicstrike.skulls);
+    console.log(destiny_activities.heroicstrike.extended.skullCategories[0].skulls);
+    console.log(destiny_skull_ref_def);
     return msg_text;
   }
   
