@@ -73,7 +73,17 @@ let lang = module.exports = {
     confirmcancel: "Sind Sie sicher, dass Sie den Vorgang abbrechen wollen?",
     
     dest: {
+      main: "Destiny Aktivitäten Übersicht:",
+      daily: "Täglich",
+      weekly: "Wöchentlich",
+      dailyheroic: "Tägliche Story (heroisch)",
+      heroicstrikes: "SIVA-Krise (heroisch)",
+      nightfall: "Wöchentlicher Dämmerungs-Strike",
       
+      heroic: "Heroisch",
+      heroicdef: "Feinde erscheinen in größerer Anzahl und sind aggressiver.",
+      epic: "Episch",
+      epicdef: "Feinde sind gut gepanzert, hochaggressiv und erscheinen in großer Anzahl."   
     },
     
     evt: {
