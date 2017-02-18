@@ -43,11 +43,8 @@ module.exports = (app) => {
     };
     
     https.get('https://destiny.plumbing/de/raw/DestinyActivityModeDefinition.json', (res) => {
-      console.log('statusCode:', res.statusCode);
-      console.log('headers:', res.headers);
-      
       res.on('data', (data) => {
-        console.log(data);
+        console.log(JSON.parse(data));
       });
     }).on('error', (err) => {
       console.log(err);
