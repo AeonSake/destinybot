@@ -114,9 +114,9 @@ module.exports = (app) => {
 // ==================================
     
   function findSkull (name) {
-    for (var key in obj) {
-      if (obj.hasOwnProperty(key)) {
-        if (obj[key].skullName == name) return obj[key].skullHash;
+    for (var key in destiny_skull_ref_def) {
+      if (destiny_skull_ref_def.hasOwnProperty(key)) {
+        if (destiny_skull_ref_def[key].skullName == name) return obj[key].skullHash;
       }
     }
     return 0;
