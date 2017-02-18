@@ -64,7 +64,7 @@ module.exports = (app) => {
   function getTest () {
     var options = {
       host: 'www.bungie.net',
-      path: 'Platform/Destiny/Advisors/V2/',
+      path: '/Platform/Destiny/Advisors/V2/',
       headers: {'X-API-Key': config.destiny_key}
     };
     
