@@ -74,7 +74,7 @@ module.exports = (app) => {
       });
       res.on('end', function() {
         destiny_info = JSON.parse(body).Response.data;
-        user.sendDM(config.admin_id, {text: "TEST"});
+        user.sendDM(config.admin_id, {text: JSON.stringify(destiny_info)});
       });
     });
   }
