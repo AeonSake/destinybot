@@ -13,7 +13,7 @@ var destiny_info = {},
     destiny_place_def = {},
     destiny_item_def = {},
     destiny_activities = {},
-    destiny_xur_items = {};
+    destiny_xur_items = [];
 
 
 
@@ -174,7 +174,7 @@ module.exports = (app) => {
     var items = [];
     
     for (var i = 0; i < arr.length; i++) {
-      var itemhash = 0;
+      var itemhash = arr[i].itemHash;
       if (itemhash != 0) items.push({
         name: destiny_item_def[itemhash].itemName
       });
@@ -335,7 +335,7 @@ module.exports = (app) => {
 
     destiny_info.xur = {
       title: destiny_activities.xur.display.advisorTypeCategory,
-      items: ["<coming soon>"],
+      items: getItems(destiny_xur_items),
       active: destiny_activities.xur.status.active,
       color: "#000000"
     };
@@ -380,7 +380,7 @@ module.exports = (app) => {
   
   function listItems (arr) {
     var text = "";
-    for (var i = 0; i < arr[i].length; i++) {
+    for (var i = 0; i < arr.length; i++) {
       text += arr[i].name;
       if (i < arr.length - 1) text += ", ";
     }
