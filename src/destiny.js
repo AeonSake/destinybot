@@ -7,11 +7,13 @@
 var https = require('https');
 
 var destiny_info = {},
-    destiny_activities = {},
     destiny_activity_def = {},
     destiny_skull_def = {},
     destiny_skull_ref_def = {},
-    destiny_place_def = {};
+    destiny_place_def = {},
+    destiny_item_def = {},
+    destiny_activities = {},
+    destiny_xur_items = {};
 
 
 
@@ -87,6 +89,19 @@ module.exports = (app) => {
   }
   getPlaceDef();
   
+  function getItemDef () {
+    https.get('https://destiny.plumbing/' + config.lang + '/items/All.json', function(res) {
+      var body = "";
+      res.on('data', function(d) {
+        body += d;
+      });
+      res.on('end', function() {
+        destiny_item_def = JSON.parse(body);
+      });
+    });
+  }
+  getItemDef();
+  
   function getActivities () {
     var options = {
       host: 'www.bungie.net',
@@ -105,6 +120,26 @@ module.exports = (app) => {
     });
   }
   getActivities();
+  
+  function getXurItems () {
+    var options = {
+      host: 'www.bungie.net',
+      path: '/Platform/Destiny/Advisors/Xur/',
+      headers: {'X-API-Key': config.destiny_key}
+    };
+    
+    https.get(options, function(res) {
+      var body = "";
+      res.on('data', function(d) {
+        body += d;
+      });
+      res.on('end', function() {
+        destiny_xur_items = JSON.parse(body).Response.data;
+        console.log(destiny_xur_items);
+      });
+    });
+  }
+  getXurItems();
   
   
   
@@ -135,83 +170,188 @@ module.exports = (app) => {
     return skulls;
   }
   
-  function prepareData () {
-    if (destiny_activities == {} || destiny_activity_def == {} || destiny_place_def == {} || destiny_skull_def == {} || destiny_skull_ref_def == {}) setTimeout(prepareData, 2000);
-    else {
-      // pve
-      destiny_info.prisonofelders = {
-        //v1: destiny_activity_def[1404620600].activityName,
-        //name: destiny_activity_def[destiny_activities.prisonofelders.display.activityHash].activityName,
-
-      };
-
-      destiny_info.elderchallenge = {
-        title: destiny_activity_def[destiny_activities.elderchallenge.display.activityHash].activityName,
-        skulls: getSkulls(destiny_activities.elderchallenge.extended.skullCategories[0].skulls)
-      };
-      
-      destiny_info.dailychapter = {
-        title: lang.msg.dest.dailyheroic,
-        mission: destiny_activity_def[destiny_activities.dailychapter.display.activityHash].activityName,
-        desc: destiny_activity_def[destiny_activities.dailychapter.display.activityHash].activityDescription,
-        loc: destiny_place_def[destiny_activities.dailychapter.display.placeHash].placeName
-      };
-
-      destiny_info.heroicstrike = {
-        title: lang.msg.dest.heroicstrikes,
-        skulls: getSkulls(destiny_activities.heroicstrike.extended.skullCategories[0].skulls)
-      };
-
-      destiny_info.nightfall = {
-
-      };
-
-      // raid
-      destiny_info.vaultofglass = {
-
-      };
-
-      destiny_info.crota = {
-
-      };
-
-      destiny_info.kingsfall = {
-
-      };
-      destiny_info.wrathofthemachine = {
-
-      };
-
-      // pvp
-      destiny_info.dailycrucible = {
-
-      };
-
-      destiny_info.weeklycrucible = {
-
-      };
-
-      // special
-      destiny_info.ironbanner = {
-
-      };
-
-      destiny_info.trials = {
-
-      };
-
-      destiny_info.xur = {
-
-      };
-
-      destiny_info.srl = {
-
-      };
-
-      destiny_info.armsday = {
-
-      };
+  function getItems (arr) {
+    var items = [];
+    
+    for (var i = 0; i < arr.length; i++) {
+      var itemhash = 0;
+      if (itemhash != 0) items.push({
+        name: destiny_item_def[itemhash].itemName
+      });
     }
+    
+    return items;
+  }
+  
+  function prepareData () {
+    // pve
+    /*destiny_info.prisonofelders = {
+      //v1: destiny_activity_def[1404620600].activityName,
+      //name: destiny_activity_def[destiny_activities.prisonofelders.display.activityHash].activityName,,
+      active: destiny_activities.ironbanner.status.active
+    };*/
+
+    destiny_info.elderchallenge = {
+      title: destiny_activity_def[destiny_activities.elderchallenge.display.activityHash].activityName,
+      skulls: getSkulls(destiny_activities.elderchallenge.extended.skullCategories[0].skulls),
+      active: destiny_activities.elderchallenge.status.active,
+      //color: "#333333"
+    };
+
+    destiny_info.dailychapter = {
+      type: lang.msg.dest.dailyheroic,
+      title: destiny_activity_def[destiny_activities.dailychapter.display.activityHash].activityName,
+      desc: destiny_activity_def[destiny_activities.dailychapter.display.activityHash].activityDescription,
+      loc: destiny_place_def[destiny_activities.dailychapter.display.placeHash].placeName,
+      level: destiny_activities.dailychapter.activityTiers[0].activityData.displayLevel,
+      light: destiny_activities.dailychapter.activityTiers[0].activityData.recommendedLight,
+      active: destiny_activities.dailychapter.status.active,
+      color: "#5941E0"
+    };
+
+    destiny_info.heroicstrike = {
+      title: lang.msg.dest.heroicstrikes,
+      desc: destiny_activity_def[destiny_activities.heroicstrike.display.activityHash].activityDescription,
+      skulls: getSkulls(destiny_activities.heroicstrike.extended.skullCategories[0].skulls),
+      level: destiny_activities.heroicstrike.activityTiers[0].activityData.displayLevel,
+      light: destiny_activities.heroicstrike.activityTiers[0].activityData.recommendedLight,
+      active: destiny_activities.heroicstrike.status.active,
+      color: "#5941E0"
+    };
+
+    destiny_info.nightfall = {
+      type: lang.msg.dest.nightfall,
+      title: destiny_activity_def[destiny_activities.nightfall.display.activityHash].activityName,
+      desc: destiny_activity_def[destiny_activities.nightfall.display.activityHash].activityDescription,
+      loc: destiny_place_def[destiny_activities.nightfall.display.placeHash].placeName,
+      skulls: getSkulls(destiny_activities.nightfall.extended.skullCategories[0].skulls),
+      level: destiny_activities.nightfall.activityTiers[0].activityData.displayLevel,
+      light: destiny_activities.nightfall.activityTiers[0].activityData.recommendedLight,
+      active: destiny_activities.nightfall.status.active,
+      color: "#5941E0"
+    };
+
+    // raid
+    destiny_info.vaultofglass = {
+      type: lang.msg.dest.raid,
+      title: destiny_activity_def[destiny_activities.vaultofglass.display.activityHash].activityName,
+      desc: destiny_activity_def[destiny_activities.vaultofglass.display.activityHash].activityDescription,
+      loc: destiny_place_def[destiny_activities.vaultofglass.display.placeHash].placeName,
+      normal: {
+        level: destiny_activities.nightfall.activityTiers[0].activityData.displayLevel,
+        light: destiny_activities.nightfall.activityTiers[0].activityData.recommendedLight
+      },
+      hard: {
+        level: destiny_activities.nightfall.activityTiers[1].activityData.displayLevel,
+        light: destiny_activities.nightfall.activityTiers[1].activityData.recommendedLight
+      },
+      active: destiny_activities.vaultofglass.status.active,
+      //color: "#333333"
+    };
+
+    destiny_info.crota = {
+      type: lang.msg.dest.raid,
+      title: destiny_activity_def[destiny_activities.crota.display.activityHash].activityName,
+      desc: destiny_activity_def[destiny_activities.crota.display.activityHash].activityDescription,
+      loc: destiny_place_def[destiny_activities.crota.display.placeHash].placeName,
+      normal: {
+        level: destiny_activities.crota.activityTiers[0].activityData.displayLevel,
+        light: destiny_activities.crota.activityTiers[0].activityData.recommendedLight
+      },
+      hard: {
+        level: destiny_activities.crota.activityTiers[1].activityData.displayLevel,
+        light: destiny_activities.crota.activityTiers[1].activityData.recommendedLight
+      },
+      active: destiny_activities.crota.status.active,
+      //color: "#333333"
+    };
+
+    destiny_info.kingsfall = {
+      type: lang.msg.dest.raid,
+      title: destiny_activity_def[destiny_activities.kingsfall.display.activityHash].activityName,
+      desc: destiny_activity_def[destiny_activities.kingsfall.display.activityHash].activityDescription,
+      loc: destiny_place_def[destiny_activities.kingsfall.display.placeHash].placeName,
+      challenge: destiny_activities.kingsfall.activityTiers[0].skullCategories[0].skulls[0].displayName,
+      normal: {
+        level: destiny_activities.kingsfall.activityTiers[0].activityData.displayLevel,
+        light: destiny_activities.kingsfall.activityTiers[0].activityData.recommendedLight
+      },
+      hard: {
+        level: destiny_activities.kingsfall.activityTiers[1].activityData.displayLevel,
+        light: destiny_activities.kingsfall.activityTiers[1].activityData.recommendedLight
+      },
+      active: destiny_activities.kingsfall.status.active,
+      //color: "#333333"
+    };
+    destiny_info.wrathofthemachine = {
+      type: lang.msg.dest.raid,
+      title: destiny_activity_def[destiny_activities.wrathofthemachine.display.activityHash].activityName,
+      desc: destiny_activity_def[destiny_activities.wrathofthemachine.display.activityHash].activityDescription,
+      loc: destiny_place_def[destiny_activities.wrathofthemachine.display.placeHash].placeName,
+      challenge: destiny_activities.wrathofthemachine.activityTiers[0].skullCategories[0].skulls[0].displayName,
+      normal: {
+        level: destiny_activities.wrathofthemachine.activityTiers[0].activityData.displayLevel,
+        light: destiny_activities.wrathofthemachine.activityTiers[0].activityData.recommendedLight
+      },
+      hard: {
+        level: destiny_activities.wrathofthemachine.activityTiers[1].activityData.displayLevel,
+        light: destiny_activities.wrathofthemachine.activityTiers[1].activityData.recommendedLight
+      },
+      active: destiny_activities.wrathofthemachine.status.active,
+      //color: "#333333"
+    };
+
+    // pvp
+    destiny_info.dailycrucible = {
+      type: lang.msg.dest.pvp,
+      title: destiny_activity_def[destiny_activities.dailycrucible.display.activityHash].activityName,
+      loc: destiny_place_def[destiny_activities.dailycrucible.display.placeHash].placeName,
+      active: destiny_activities.dailycrucible.status.active,
+      color: "#9D3532"
+    };
+
+    destiny_info.weeklycrucible = {
+      type: lang.msg.dest.pvp,
+      title: destiny_activity_def[destiny_activities.weeklycrucible.display.activityHash].activityName,
+      loc: destiny_place_def[destiny_activities.weeklycrucible.display.placeHash].placeName,
+      active: destiny_activities.weeklycrucible.status.active,
+      color: "#9D3532"
+    };
+
+    // special
+    destiny_info.ironbanner = {
+      type: lang.msg.dest.pvp,
+      title: destiny_activity_def[destiny_activities.ironbanner.display.activityHash].activityName,
+      active: destiny_activities.ironbanner.status.active,
+      color: "#C98855"
+    };
+
+    destiny_info.trials = {
+      type: lang.msg.dest.trials,
+      title: destiny_activity_def[destiny_activities.trials.display.activityHash].activityName,
+      active: destiny_activities.trials.status.active,
+      color: "#F9DD58"
+    };
+
+    destiny_info.xur = {
+      title: destiny_activities.xur.display.advisorTypeCategory,
+      items: ["<coming soon>"],
+      active: destiny_activities.xur.status.active,
+      color: "#000000"
+    };
+
+    destiny_info.srl = {
+      type: lang.msg.dest.pvp,
+      title: lang.msg.dest.srl,
+      active: destiny_activities.srl.status.active,
+      color: "#E62836"
+    };
+
+    destiny_info.armsday = {
+      title: lang.msg.dest.armsday,
+      active: destiny_activities.armsday.status.active,
+      //color: "#333333"
+    };
   }
   
   
@@ -220,6 +360,98 @@ module.exports = (app) => {
 // ========== MESSAGES ==========
 // ==============================
   
+  function listSkulls (arr) {
+    var text = "";
+    for (var i = 0; i < arr[i].length; i++) {
+      text += arr[i].name;
+      if (i < arr.length - 1) text += ", ";
+    }
+    return text;
+  }
+  
+  function listFullSkulls (arr) {
+    var text = "";
+    for (var i = 0; i < arr.length; i++) {
+      text += "*" + arr[i].name + "* : " + arr[i].desc;
+      if (i < arr.length - 1) text += "\n";
+    }
+    return text;
+  }
+  
+  function listItems (arr) {
+    var text = "";
+    for (var i = 0; i < arr[i].length; i++) {
+      text += arr[i].name;
+      if (i < arr.length - 1) text += ", ";
+    }
+    return text;
+  }
+  
+  function getActivityAttachment (act) {
+    var text = "";
+    if ('skulls' in destiny_info[act]) text = listSkulls(destiny_info[act].skulls);
+    else if ('challenge' in destiny_info[act]) text = destiny_info[act].challenge;
+    else if ('loc' in destiny_info[act]) text = destiny_info[act].loc;
+    else if ('items' in destiny_info[act]) text = listItems(destiny_info[act].items);
+    
+    return {
+      author_name: destiny_info[act].type || "",
+      title: destiny_info[act].title,
+      text: text,
+      fallback: destiny_info[act].title,
+      //footer: "",
+      color: destiny_info[act].color || "",
+      mrkdwn_in: ['text', 'pretext', 'fields']
+    };
+  }
+  
+  function getFullActivityAttachment (act) {
+    var text = "";
+    if ('loc' in destiny_info[act]) text += destiny_info[act].loc + "\n";
+    if ('desc' in destiny_info[act]) text += destiny_info[act].desc + "\n";
+    
+    var fields = [];
+    if ('light' in destiny_info[act]) fields.push({
+      title: lang.msg.dest.recom,
+      value: "*" + lang.msg.dest.level + "* : " + destiny_info[act].level + "\n*" + lang.msg.dest.light + "* : " + destiny_info[act].light,
+      short: false
+    });
+    if ('skulls' in destiny_info[act]) fields.push({
+      title: lang.msg.dest.mods,
+      value: listFullSkulls(destiny_info[act].skulls),
+      short: false
+    });
+    if ('challenge' in destiny_info[act]) fields.push({
+      title: destiny_info[act].challenge,
+      short: false
+    });
+    if ('normal' in destiny_info[act]) fields.push({
+      title: lang.msg.dest.normalmode,
+      value: "*" + lang.msg.dest.level + "* : " + destiny_info[act].normal.level + "\n*" + lang.msg.dest.light + "* : " + destiny_info[act].normal.light,
+      short: false
+    });
+    if ('hard' in destiny_info[act]) fields.push({
+      title: lang.msg.dest.hardmode,
+      value: "*" + lang.msg.dest.level + "* : " + destiny_info[act].hard.level + "\n*" + lang.msg.dest.light + "* : " + destiny_info[act].hard.light,
+      short: false
+    });
+    if ('items' in destiny_info[act]) fields.push({
+      value: listItems(destiny_info[act].items),
+      short: false
+    });
+    
+    return {
+      author_name: destiny_info[act].type || "",
+      title: destiny_info[act].title,
+      text: text,
+      fallback: destiny_info[act].title,
+      fields: fields,
+      //footer: "",
+      color: destiny_info[act].color || "",
+      mrkdwn_in: ['text', 'pretext', 'fields']
+    };
+  }
+  
   function destiny_main () {
     var msg_text = {
       text: lang.msg.dest.main,
@@ -227,14 +459,10 @@ module.exports = (app) => {
       response_type: 'ephemeral',
       replace_original: true
     };
-    var txt = "";
-    for (var i = 0; i < destiny_info.heroicstrike.skulls.length; i++) txt += "*" + destiny_info.heroicstrike.skulls[i].name + "* : " + destiny_info.heroicstrike.skulls[i].desc + "\n";
     
-    msg_text.attachments[0] = {
-      text: txt,
-      fallback: "",
-      mrkdwn_in: ['text', 'pretext']
-    };
+    for (var key in destiny_info) {
+      if (destiny_info[key].active) msg_text.attachments.push(getActivityAttachment(key));
+    }
     
     return msg_text;
   }

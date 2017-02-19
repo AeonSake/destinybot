@@ -23,7 +23,8 @@ let lang = module.exports = {
     page: "Seite",
     total: "Gesamt",
     filter: "Filter",
-    deleted: "Gelöscht"
+    deleted: "Gelöscht",
+    
   },
   
   btn: {
@@ -74,11 +75,22 @@ let lang = module.exports = {
     
     dest: {
       main: "Destiny Aktivitäten Übersicht:",
-      daily: "Täglich",
-      weekly: "Wöchentlich",
+      daily: "täglich",
+      weekly: "wöchentlich",
       dailyheroic: "Tägliche Story (heroisch)",
       heroicstrikes: "SIVA-Krise (heroisch)",
       nightfall: "Wöchentlicher Dämmerungs-Strike",
+      raid: "Raid",
+      normalmode: "Normal-Mode",
+      hardmode: "Hard-Mode",
+      pvp: "PvP",
+      trials: "Die Prüfungen von Osiris",
+      srl: "Sparrow Racing League",
+      armsday: "Waffenlieferung",
+      mods: "Modifikatoren",
+      recom: "Empfohlen",
+      light: "Licht",
+      level: "Level",
       
       heroic: "Heroisch",
       heroicdef: "Feinde erscheinen in größerer Anzahl und sind aggressiver.",
