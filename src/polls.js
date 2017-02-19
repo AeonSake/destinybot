@@ -1401,7 +1401,7 @@ module.exports = (app) => {
   
 // ===== /poll create =====
   
-  slapp.command('/dbpoll', "create", (msg, cmd) => {
+  slapp.command('/poll', "create", (msg, cmd) => {
     var data = {creator: msg.body.user_id};
     
     var msg_text = poll_create_title_msg;
@@ -1626,7 +1626,7 @@ module.exports = (app) => {
   
 // ===== /poll show =====
   
-  slapp.command('/dbpoll', "(show|list)(.*)", (msg, cmd) => {
+  slapp.command('/poll', "(show|list)(.*)", (msg, cmd) => {
     var check = new RegExp("\\d{1,4}");
     
     if (cmd.substring(0,4) == "show" && check.test(cmd.substring(5))) {
@@ -1669,7 +1669,7 @@ module.exports = (app) => {
   
   // ===== /poll post =====
   
-  slapp.command('/dbpoll', "post \\d{1,4}", (msg, cmd) => {
+  slapp.command('/poll', "post \\d{1,4}", (msg, cmd) => {
     var slot = parseInt(cmd.substring(5)) - 1;
     
     if (slot < poll_db.length) {
@@ -1688,7 +1688,7 @@ module.exports = (app) => {
   
 // ===== /poll edit =====
   
-  slapp.command('/dbpoll', "edit(.*)", (msg, cmd) => {
+  slapp.command('/poll', "edit(.*)", (msg, cmd) => {
     var check = new RegExp("\\d{1,4}");
     
     if (check.test(cmd.substring(5))) {
@@ -2029,14 +2029,14 @@ module.exports = (app) => {
   
 // ===== /poll help =====
   
-  slapp.command('/dbpoll', "help", (msg, cmd) => {
+  slapp.command('/poll', "help", (msg, cmd) => {
     msg.respond(func.generateInfoMsg(lang.msg.poll.help));
     return;
   });
   
 // ===== /poll clean =====
   
-  slapp.command('/dbpoll', "clean", (msg, cmd) => {
+  slapp.command('/poll', "clean", (msg, cmd) => {
     if (msg.body.user_id == config.admin_id) {
       for (var i = 0; i < poll_db.length; i++) poll_db[i].delete();
       deletePollDB();
@@ -2048,7 +2048,7 @@ module.exports = (app) => {
   
   // ===== /poll debug =====
   
-  /*slapp.command('/dbpoll', "debug \\d{1,4}", (msg, cmd) => {
+  /*slapp.command('/poll', "debug \\d{1,4}", (msg, cmd) => {
     var slot = parseInt(cmd.substring(5)) - 1;
     
     if (slot < poll_db.length && msg.body.user_id == config.admin_id) msg.respond(poll_db[slot].generateDebugInfo(slot));
@@ -2058,7 +2058,7 @@ module.exports = (app) => {
   
 // ===== /poll =====
   
-  slapp.command('/dbpoll', "(.*)", (msg, cmd) => {
+  slapp.command('/poll', "(.*)", (msg, cmd) => {
     var temp = cmd.split(";");
     if (temp[temp.length - 1].trim() == "") temp = temp.slice(0, -1);
     
