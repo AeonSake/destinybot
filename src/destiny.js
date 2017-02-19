@@ -208,6 +208,7 @@ module.exports = (app) => {
     };*/
 
     destiny_info.elderchallenge = {
+      icon: 'https://bungie.net' + destiny_activities.elderchallenge.display.icon,
       title: destiny_activity_def[destiny_activities.elderchallenge.display.activityHash].activityName,
       skulls: getSkulls(destiny_activities.elderchallenge.extended.skullCategories[0].skulls),
       active: destiny_activities.elderchallenge.status.active,
@@ -217,6 +218,7 @@ module.exports = (app) => {
 
     destiny_info.dailychapter = {
       type: lang.msg.dest.dailyheroic,
+      icon: 'https://bungie.net' + destiny_activities.dailychapter.display.icon,
       title: destiny_activity_def[destiny_activities.dailychapter.display.activityHash].activityName,
       desc: destiny_activity_def[destiny_activities.dailychapter.display.activityHash].activityDescription,
       loc: destiny_place_def[destiny_activities.dailychapter.display.placeHash].placeName,
@@ -229,6 +231,7 @@ module.exports = (app) => {
 
     destiny_info.heroicstrike = {
       type: lang.msg.dest.weeklystrikes,
+      icon: 'https://bungie.net' + destiny_activities.heroicstrike.display.icon,
       title: lang.msg.dest.heroicstrikes,
       desc: destiny_activity_def[destiny_activities.heroicstrike.display.activityHash].activityDescription,
       skulls: getSkulls(destiny_activities.heroicstrike.extended.skullCategories[0].skulls),
@@ -241,6 +244,7 @@ module.exports = (app) => {
 
     destiny_info.nightfall = {
       type: lang.msg.dest.nightfall,
+      icon: 'https://bungie.net' + destiny_activities.nightfall.display.icon,
       title: destiny_activity_def[destiny_activities.nightfall.display.activityHash].activityName,
       desc: destiny_activity_def[destiny_activities.nightfall.display.activityHash].activityDescription,
       loc: destiny_place_def[destiny_activities.nightfall.display.placeHash].placeName,
@@ -255,6 +259,7 @@ module.exports = (app) => {
     // raid
     destiny_info.vaultofglass = {
       type: lang.msg.dest.raid,
+      icon: 'https://bungie.net' + destiny_activities.vaultofglass.display.icon,
       title: destiny_activity_def[destiny_activities.vaultofglass.display.activityHash].activityName,
       desc: destiny_activity_def[destiny_activities.vaultofglass.display.activityHash].activityDescription,
       loc: destiny_place_def[destiny_activities.vaultofglass.display.placeHash].placeName,
@@ -273,6 +278,7 @@ module.exports = (app) => {
 
     destiny_info.crota = {
       type: lang.msg.dest.raid,
+      icon: 'https://bungie.net' + destiny_activities.crota.display.icon,
       title: destiny_activity_def[destiny_activities.crota.display.activityHash].activityName,
       desc: destiny_activity_def[destiny_activities.crota.display.activityHash].activityDescription,
       loc: destiny_place_def[destiny_activities.crota.display.placeHash].placeName,
@@ -291,6 +297,7 @@ module.exports = (app) => {
 
     destiny_info.kingsfall = {
       type: lang.msg.dest.raid,
+      icon: 'https://bungie.net' + destiny_activities.kingsfall.display.icon,
       title: destiny_activity_def[destiny_activities.kingsfall.display.activityHash].activityName,
       desc: destiny_activity_def[destiny_activities.kingsfall.display.activityHash].activityDescription,
       loc: destiny_place_def[destiny_activities.kingsfall.display.placeHash].placeName,
@@ -309,6 +316,7 @@ module.exports = (app) => {
     };
     destiny_info.wrathofthemachine = {
       type: lang.msg.dest.raid,
+      icon: 'https://bungie.net' + destiny_activities.wrathofthemachine.display.icon,
       title: destiny_activity_def[destiny_activities.wrathofthemachine.display.activityHash].activityName,
       desc: destiny_activity_def[destiny_activities.wrathofthemachine.display.activityHash].activityDescription,
       loc: destiny_place_def[destiny_activities.wrathofthemachine.display.placeHash].placeName,
@@ -329,6 +337,7 @@ module.exports = (app) => {
     // pvp
     destiny_info.dailycrucible = {
       type: lang.msg.dest.dailycrucible,
+      icon: 'https://bungie.net' + destiny_activities.dailycrucible.display.icon,
       title: destiny_activity_def[destiny_activities.dailycrucible.display.activityHash].activityName,
       loc: destiny_place_def[destiny_activities.dailycrucible.display.placeHash].placeName,
       active: destiny_activities.dailycrucible.status.active,
@@ -338,6 +347,7 @@ module.exports = (app) => {
 
     destiny_info.weeklycrucible = {
       type: lang.msg.dest.weeklycrucible,
+      icon: 'https://bungie.net' + destiny_activities.weeklycrucible.display.icon,
       title: destiny_activity_def[destiny_activities.weeklycrucible.display.activityHash].activityName,
       loc: destiny_place_def[destiny_activities.weeklycrucible.display.placeHash].placeName,
       active: destiny_activities.weeklycrucible.status.active,
@@ -347,6 +357,8 @@ module.exports = (app) => {
 
     // special
     destiny_info.ironbanner = {
+      type: lang.msg.dest.specialevent,
+      icon: 'https://bungie.net' + destiny_activities.ironbanner.display.icon,
       title: destiny_activity_def[destiny_activities.ironbanner.display.activityHash].activityName,
       active: destiny_activities.ironbanner.status.active,
       insummary: true,
@@ -354,7 +366,8 @@ module.exports = (app) => {
     };
 
     destiny_info.srl = {
-      type: lang.msg.dest.pvp,
+      type: lang.msg.dest.specialevent,
+      icon: 'https://bungie.net' + destiny_activities.srl.display.icon,
       title: lang.msg.dest.srl,
       active: destiny_activities.srl.status.active,
       insummary: true,
@@ -363,6 +376,7 @@ module.exports = (app) => {
 
     destiny_info.trials = {
       type: lang.msg.dest.trials,
+      icon: 'https://bungie.net' + destiny_activities.trials.display.icon,
       title: destiny_activity_def[destiny_activities.trials.display.activityHash].activityName,
       active: destiny_activities.trials.status.active,
       insummary: true,
@@ -427,6 +441,7 @@ module.exports = (app) => {
     
     return {
       author_name: destiny_info[act].type || "",
+      author_icon: destiny_info[act].icon || "",
       title: destiny_info[act].title,
       text: text,
       fallback: destiny_info[act].title,
@@ -473,6 +488,7 @@ module.exports = (app) => {
     
     return {
       author_name: destiny_info[act].type || "",
+      author_icon: destiny_info[act].icon || "",
       title: destiny_info[act].title,
       text: text,
       fallback: destiny_info[act].title,
