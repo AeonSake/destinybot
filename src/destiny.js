@@ -147,7 +147,7 @@ module.exports = (app) => {
     destiny_skull_ref_def[80] = {skullHash: 80, skullName: "Heroic"};
     destiny_skull_ref_def[81] = {skullHash: 81, skullName: "Epic"};
     destiny_skull_ref_def[90] = {skullHash: 90, skullName: "Precision Kill Bonus"};
-    destiny_skull_ref_def[100] = {skullHash: 110, skullName: "Fresh Troops"};
+    destiny_skull_ref_def[100] = {skullHash: 100, skullName: "Fresh Troops"};
     destiny_skull_ref_def[101] = {skullHash: 101, skullName: "Match Game"};
   }
   
