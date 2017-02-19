@@ -1614,7 +1614,7 @@ module.exports = (app) => {
       var slot = poll_db.length;
       poll_db[slot] = new Poll(data);
       var msg_text = poll_db[slot].generatePoll(slot);
-      msg_text.channel = config.poll_ch;
+      //msg_text.channel = config.poll_ch;
       
       msg.respond({text: "", delete_original: true});
       msg.say(msg_text, (err, result) => {
