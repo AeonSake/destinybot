@@ -92,10 +92,17 @@ let lang = module.exports = {
       light: "Licht",
       level: "Level",
       
-      heroic: "Heroisch",
-      heroicdef: "Feinde erscheinen in größerer Anzahl und sind aggressiver.",
-      epic: "Episch",
-      epicdef: "Feinde sind gut gepanzert, hochaggressiv und erscheinen in großer Anzahl."   
+      skulls: {
+        heroic: "Heroisch",
+        heroicdef: "Feinde erscheinen in größerer Anzahl und sind aggressiver.",
+        epic: "Episch",
+        epicdef: "Feinde sind gut gepanzert, hochaggressiv und erscheinen in großer Anzahl.",
+        
+        freshtroops: "Frische Truppen",
+        freshtroopsdef: "",
+        matchgame: "Puzzelspiel",
+        matchgamedef: ""
+      } 
     },
     
     evt: {
