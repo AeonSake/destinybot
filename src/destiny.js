@@ -134,7 +134,7 @@ module.exports = (app) => {
         body += d;
       });
       res.on('end', function() {
-        destiny_xur_items = JSON.parse(body).Response.data;
+        destiny_xur_items = JSON.parse(body).Response.data.saleItemCategories[2].saleItems;
         console.log(destiny_xur_items);
       });
     });
@@ -238,12 +238,12 @@ module.exports = (app) => {
       desc: destiny_activity_def[destiny_activities.vaultofglass.display.activityHash].activityDescription,
       loc: destiny_place_def[destiny_activities.vaultofglass.display.placeHash].placeName,
       normal: {
-        level: destiny_activities.nightfall.activityTiers[0].activityData.displayLevel,
-        light: destiny_activities.nightfall.activityTiers[0].activityData.recommendedLight
+        level: destiny_activities.vaultofglass.activityTiers[0].activityData.displayLevel,
+        light: destiny_activities.vaultofglass.activityTiers[0].activityData.recommendedLight
       },
       hard: {
-        level: destiny_activities.nightfall.activityTiers[1].activityData.displayLevel,
-        light: destiny_activities.nightfall.activityTiers[1].activityData.recommendedLight
+        level: destiny_activities.vaultofglass.activityTiers[1].activityData.displayLevel,
+        light: destiny_activities.vaultofglass.activityTiers[1].activityData.recommendedLight
       },
       active: destiny_activities.vaultofglass.status.active,
       //color: "#333333"
