@@ -76,7 +76,7 @@ let lang = module.exports = {
     dest: {
       main: "Destiny Aktivitäten Übersicht:",
       dailyheroic: "Tägliche Story (heroisch)",
-      weeklystrikes: "Wächtentliche Strike-Playlist",
+      weeklystrikes: "Wöchtentliche Strike-Playlist",
       heroicstrikes: "SIVA-Krise (heroisch)",
       nightfall: "Wöchentlicher Dämmerungs-Strike",
       dailycrucible: "Tägliche Schmelztiegel-Playlist",
