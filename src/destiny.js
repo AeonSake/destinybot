@@ -146,7 +146,7 @@ module.exports = (app) => {
     destiny_skull_def[101] = {skullHash: 101, skullName: lang.msg.dest.skulls.matchgame, description: lang.msg.dest.skulls.matchgamedef};
   }
   
-  function addCustomSkulls () {
+  function addCustomSkullsRef () {
     destiny_skull_ref_def[80] = {skullHash: 80, skullName: "Heroic"};
     destiny_skull_ref_def[81] = {skullHash: 81, skullName: "Epic"};
     destiny_skull_ref_def[90] = {skullHash: 90, skullName: "Precision Kill Bonus"};
