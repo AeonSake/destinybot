@@ -65,7 +65,7 @@ let lang = module.exports = {
       names: "Stimmenliste",
       deletetext: "Text entfernen",
       open: "Abst. öffnen",
-      close: "Abst schließen"
+      close: "Abst. schließen"
     }
   },
   
