@@ -1508,7 +1508,7 @@ module.exports = (app) => {
       if (temp[temp.length - 1].trim() == "") temp = temp.slice(0, -1);
       
       if (!('answers' in data)) data.answers = [];
-      for (var i = 0; i < temp.length && data.answers.length < 10; i++) data.answers.push({text: temp[i].trim(), votes: [], state: 0});
+      for (var i = 0; i < temp.length && data.answers.length < 10; i++) data.answers.push({text: temp[i].trim(), votes: [], state: 2});
       
       if (data.answers.length < 10) {
         if (data.answers.length >= 2) var msg_text = poll_create_answers_n_msg;
@@ -2063,7 +2063,7 @@ module.exports = (app) => {
     
     if (temp.length >= 3) {
       var data = {title: temp[0], text: "", answers: [], creator: msg.body.user_id};
-      for (var i = 1; i < temp.length && data.answers.length < 10; i++) data.answers.push({text: temp[i].trim(), votes: []});
+      for (var i = 1; i < temp.length && data.answers.length < 10; i++) data.answers.push({text: temp[i].trim(), votes: [], state: 2});
       
       var msg_text = poll_create_final_msg;
       msg_text.attachments[0] = Poll.generateDummy(poll_db.length, data);
