@@ -116,6 +116,7 @@ module.exports = (app) => {
       });
       res.on('end', function() {
         destiny_activities = JSON.parse(body).Response.data.activities;
+        if (destiny_activities.xur.status.active) getXurItems();
       });
     });
   }
@@ -138,7 +139,6 @@ module.exports = (app) => {
       });
     });
   }
-  getXurItems();
   
   
   
