@@ -98,10 +98,13 @@ let lang = module.exports = {
         epic: "Episch",
         epicdef: "Feinde sind gut gepanzert, hochaggressiv und erscheinen in großer Anzahl.",
         
+        precisionbonus: "Präziser Kill-Bonus",
+        precisionbonusdef: "Präzise Kills geben mehr Punkte.",
+        
         freshtroops: "Frische Truppen",
-        freshtroopsdef: "",
-        matchgame: "Puzzelspiel",
-        matchgamedef: ""
+        freshtroopsdef: "Manche Feindeseinheiten haben Verstärkung bekommen.",
+        matchgame: "Puzzlespiel",
+        matchgamedef: "Feindschilde sind gegen ungleiche Elementarschaden resistent."
       } 
     },
     
