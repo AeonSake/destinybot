@@ -513,7 +513,7 @@ module.exports = (app) => {
           body += d;
         });
         res.on('end', function() {
-          msg.say(JSON.parse(body).Response.data.activities);
+          msg.say({text: JSON.parse(body).Response.data.activities});
         });
       });
     };
