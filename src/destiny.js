@@ -174,7 +174,7 @@ module.exports = (app) => {
     var items = [];
     
     for (var i = 0; i < arr.length; i++) {
-      var itemhash = arr[i].itemHash;
+      var itemhash = arr[i].item.itemHash;
       if (itemhash != 0) items.push({
         name: destiny_item_def[itemhash].itemName
       });
