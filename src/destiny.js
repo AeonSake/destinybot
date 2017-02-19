@@ -58,6 +58,7 @@ module.exports = (app) => {
       });
       res.on('end', function() {
         destiny_skull_def = JSON.parse(body);
+        addCustomSkulls();
       });
     });
     https.get('https://destiny.plumbing/en/raw/DestinyScriptedSkullDefinition.json', function(res) {
@@ -67,6 +68,7 @@ module.exports = (app) => {
       });
       res.on('end', function() {
         destiny_skull_ref_def = JSON.parse(body);
+        addCustomSkullsRef();
       });
     });
   }
@@ -113,7 +115,6 @@ module.exports = (app) => {
       res.on('end', function() {
         destiny_activities = JSON.parse(body).Response.data.activities;
         if (destiny_activities.xur.status.active) getXurItems();
-        addCustomSkulls();
       });
     });
   }
@@ -143,13 +144,14 @@ module.exports = (app) => {
     destiny_skull_def[90] = {skullHash: 90, skullName: lang.msg.dest.skulls.precisionbonus, description: lang.msg.dest.skulls.precisionbonusdef};
     destiny_skull_def[100] = {skullHash: 100, skullName: lang.msg.dest.skulls.freshtroops, description: lang.msg.dest.skulls.freshtroopsdef};
     destiny_skull_def[101] = {skullHash: 101, skullName: lang.msg.dest.skulls.matchgame, description: lang.msg.dest.skulls.matchgamedef};
-    
+  }
+  
+  function addCustomSkulls () {
     destiny_skull_ref_def[80] = {skullHash: 80, skullName: "Heroic"};
     destiny_skull_ref_def[81] = {skullHash: 81, skullName: "Epic"};
     destiny_skull_ref_def[90] = {skullHash: 90, skullName: "Precision Kill Bonus"};
     destiny_skull_ref_def[100] = {skullHash: 100, skullName: "Fresh Troops"};
     destiny_skull_ref_def[101] = {skullHash: 101, skullName: "Match Game"};
-    console.log(destiny_skull_def);
   }
   
   
@@ -171,7 +173,6 @@ module.exports = (app) => {
     
     for (var i = 0; i < arr.length; i++) {
       var skullhash = findSkull(arr[i].displayName);
-      console.log(skullhash);
       if (skullhash != 0) skulls.push({
         name: destiny_skull_def[skullhash].skullName,
         desc: destiny_skull_def[skullhash].description
