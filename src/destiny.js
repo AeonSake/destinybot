@@ -138,17 +138,18 @@ module.exports = (app) => {
   }
   
   function addCustomSkulls () {
-    destiny_skull_def[80] = {skullHash: 80, skullName: lang.msg.dest.heroic, description: lang.msg.dest.heroicdef};
-    destiny_skull_def[81] = {skullHash: 81, skullName: lang.msg.dest.epic, description: lang.msg.dest.epicdef};
-    destiny_skull_def[90] = {skullHash: 90, skullName: lang.msg.dest.precisionbonus, description: lang.msg.dest.precisionbonusdef};
-    destiny_skull_def[100] = {skullHash: 100, skullName: lang.msg.dest.freshtroops, description: lang.msg.dest.freshtroopsdef};
-    destiny_skull_def[101] = {skullHash: 101, skullName: lang.msg.dest.matchgame, description: lang.msg.dest.matchgamedef};
+    destiny_skull_def[80] = {skullHash: 80, skullName: lang.msg.dest.skulls.heroic, description: lang.msg.dest.skulls.heroicdef};
+    destiny_skull_def[81] = {skullHash: 81, skullName: lang.msg.dest.skulls.epic, description: lang.msg.dest.skulls.epicdef};
+    destiny_skull_def[90] = {skullHash: 90, skullName: lang.msg.dest.skulls.precisionbonus, description: lang.msg.dest.skulls.precisionbonusdef};
+    destiny_skull_def[100] = {skullHash: 100, skullName: lang.msg.dest.skulls.freshtroops, description: lang.msg.dest.skulls.freshtroopsdef};
+    destiny_skull_def[101] = {skullHash: 101, skullName: lang.msg.dest.skulls.matchgame, description: lang.msg.dest.skulls.matchgamedef};
     
     destiny_skull_ref_def[80] = {skullHash: 80, skullName: "Heroic"};
     destiny_skull_ref_def[81] = {skullHash: 81, skullName: "Epic"};
     destiny_skull_ref_def[90] = {skullHash: 90, skullName: "Precision Kill Bonus"};
     destiny_skull_ref_def[100] = {skullHash: 100, skullName: "Fresh Troops"};
     destiny_skull_ref_def[101] = {skullHash: 101, skullName: "Match Game"};
+    console.log(destiny_skull_def);
   }
   
   
@@ -170,6 +171,7 @@ module.exports = (app) => {
     
     for (var i = 0; i < arr.length; i++) {
       var skullhash = findSkull(arr[i].displayName);
+      console.log(skullhash);
       if (skullhash != 0) skulls.push({
         name: destiny_skull_def[skullhash].skullName,
         desc: destiny_skull_def[skullhash].description
