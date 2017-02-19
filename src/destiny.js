@@ -164,6 +164,10 @@ module.exports = (app) => {
         name: destiny_skull_def[skullhash].skullName,
         desc: destiny_skull_def[skullhash].description
       });
+      else skulls.push({
+        name: arr[i].displayName,
+        desc: arr[i].description
+      });
     }
     
     return skulls;
@@ -488,17 +492,10 @@ module.exports = (app) => {
 // ==============================
   
   slapp.command('/destiny', (msg) => {
-    prepareData();
-    msg.say(destiny_main());
+    if (msg.body.user_id == config.admin_id) {
+      prepareData();
+      msg.say(destiny_main()); 
+    }
     return;
   });
-  
-  
-  
-  
-  
-  
-  
-  
-  
 };
