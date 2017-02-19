@@ -475,7 +475,7 @@ module.exports = (app) => {
     };
     
     for (var key in destiny_info) {
-      if (destiny_info[key].active) msg_text.attachments.push(getActivityAttachment(key));
+      if (destiny_info[key].active && destiny_info[key].insummary) msg_text.attachments.push(getActivityAttachment(key));
     }
     
     return msg_text;
