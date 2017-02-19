@@ -101,7 +101,7 @@ module.exports = (app) => {
   function getActivities () {
     var options = {
       host: 'www.bungie.net',
-      path: '/Platform/Destiny/Advisors/V2/?definitions=true',
+      path: '/Platform/Destiny/Advisors/V2/',
       headers: {'X-API-Key': config.destiny_key}
     };
     
@@ -114,31 +114,10 @@ module.exports = (app) => {
         destiny_activities = JSON.parse(body).Response.data.activities;
         if (destiny_activities.xur.status.active) getXurItems();
         addCustomSkulls();
-        
-        user.sendDM(config.admin_id, {text: destiny_activities});
-        getActivities2();
       });
     });
   }
   getActivities();
-  
-  function getActivities2 () {
-    var options = {
-      host: 'www.bungie.net',
-      path: '/Platform/Destiny/Advisors/?definitions=true',
-      headers: {'X-API-Key': config.destiny_key}
-    };
-    
-    https.get(options, function(res) {
-      var body = "";
-      res.on('data', function(d) {
-        body += d;
-      });
-      res.on('end', function() {
-        user.sendDM(config.admin_id, {text: JSON.parse(body).Response.data.activities});
-      });
-    });
-  }
   
   function getXurItems () {
     var options = {
@@ -520,6 +499,26 @@ module.exports = (app) => {
 // ========== COMMANDS ==========
 // ==============================
   
+  slapp.command('/destiny', "(.*)", (msg, cmd) => {
+    if (msg.body.user_id == config.admin_id) {
+      var options = {
+        host: 'www.bungie.net',
+        path: '/Platform/Destiny/' + cmd,
+        headers: {'X-API-Key': config.destiny_key}
+      }
+      
+      https.get(options, function(res) {
+        var body = "";
+        res.on('data', function(d) {
+          body += d;
+        });
+        res.on('end', function() {
+          msg.say(JSON.parse(body).Response.data.activities);
+        });
+      });
+    };
+  });
+  
   slapp.command('/destiny', (msg) => {
     if (msg.body.user_id == config.admin_id) {
       prepareData();
@@ -527,4 +526,7 @@ module.exports = (app) => {
     }
     return;
   });
+  
+  
+  
 };
