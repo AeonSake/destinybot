@@ -1455,6 +1455,7 @@ module.exports = (app) => {
         case 'next':
           if (!('text' in data)) data.text = "";
           var msg_text = poll_create_answers_msg;
+          if ('answers' in data && data.answers.length >= 2) msg_text = poll_create_answers_n_msg;
           msg_text.attachments[0] = Poll.generateDummy(poll_db.length, data);
           msg.respond(msg_text);
           msg.route('poll_create_answers_route', data, 60);
@@ -1597,11 +1598,10 @@ module.exports = (app) => {
     } else {
       switch (msg.body.actions[0].name) {
         case 'edit':
-          data.create = true;
           var msg_text = poll_edit_msg(0);
           msg_text.attachments[0] = Poll.generateDummy(poll_db.length, data);
           msg.respond(msg_text);
-          msg.route('poll_edit_route', data, 60);
+          msg.route('poll_edit_route', {info: data, create: true}, 60);
           return;
         case 'done':
           break;
@@ -1805,12 +1805,11 @@ module.exports = (app) => {
           return;
       }
       
-      
       if (data.create) {
         var msg_text = poll_create_final_msg;
         msg_text.attachments[0] = Poll.generateDummy(poll_db.length, data);
         msg.respond(msg_text);
-        msg.route('poll_create_final_route', data, 60);
+        msg.route('poll_create_final_route', data.info, 60);
       } else if (data.edited) {
         data.info.ts.edited = msg.body.action_ts;
         poll_db[data.slot].edit(data.info);

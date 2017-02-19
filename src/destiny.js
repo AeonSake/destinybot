@@ -441,7 +441,7 @@ module.exports = (app) => {
     
     return {
       author_name: destiny_info[act].type || "",
-      author_icon: destiny_info[act].icon || "",
+      //author_icon: destiny_info[act].icon || "",
       title: destiny_info[act].title,
       text: text,
       fallback: destiny_info[act].title,
@@ -488,7 +488,7 @@ module.exports = (app) => {
     
     return {
       author_name: destiny_info[act].type || "",
-      author_icon: destiny_info[act].icon || "",
+      //author_icon: destiny_info[act].icon || "",
       title: destiny_info[act].title,
       text: text,
       fallback: destiny_info[act].title,
