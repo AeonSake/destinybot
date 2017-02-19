@@ -135,7 +135,6 @@ module.exports = (app) => {
       });
       res.on('end', function() {
         destiny_xur_items = JSON.parse(body).Response.data.saleItemCategories[2].saleItems;
-        console.log(destiny_xur_items);
       });
     });
   }
@@ -195,6 +194,7 @@ module.exports = (app) => {
       title: destiny_activity_def[destiny_activities.elderchallenge.display.activityHash].activityName,
       skulls: getSkulls(destiny_activities.elderchallenge.extended.skullCategories[0].skulls),
       active: destiny_activities.elderchallenge.status.active,
+      insummary: false,
       //color: "#333333"
     };
 
@@ -206,16 +206,19 @@ module.exports = (app) => {
       level: destiny_activities.dailychapter.activityTiers[0].activityData.displayLevel,
       light: destiny_activities.dailychapter.activityTiers[0].activityData.recommendedLight,
       active: destiny_activities.dailychapter.status.active,
+      insummary: true,
       color: "#5941E0"
     };
 
     destiny_info.heroicstrike = {
+      type: lang.msg.dest.weeklystrikes,
       title: lang.msg.dest.heroicstrikes,
       desc: destiny_activity_def[destiny_activities.heroicstrike.display.activityHash].activityDescription,
       skulls: getSkulls(destiny_activities.heroicstrike.extended.skullCategories[0].skulls),
       level: destiny_activities.heroicstrike.activityTiers[0].activityData.displayLevel,
       light: destiny_activities.heroicstrike.activityTiers[0].activityData.recommendedLight,
       active: destiny_activities.heroicstrike.status.active,
+      insummary: true,
       color: "#5941E0"
     };
 
@@ -228,6 +231,7 @@ module.exports = (app) => {
       level: destiny_activities.nightfall.activityTiers[0].activityData.displayLevel,
       light: destiny_activities.nightfall.activityTiers[0].activityData.recommendedLight,
       active: destiny_activities.nightfall.status.active,
+      insummary: true,
       color: "#5941E0"
     };
 
@@ -246,6 +250,7 @@ module.exports = (app) => {
         light: destiny_activities.vaultofglass.activityTiers[1].activityData.recommendedLight
       },
       active: destiny_activities.vaultofglass.status.active,
+      insummary: false,
       //color: "#333333"
     };
 
@@ -263,6 +268,7 @@ module.exports = (app) => {
         light: destiny_activities.crota.activityTiers[1].activityData.recommendedLight
       },
       active: destiny_activities.crota.status.active,
+      insummary: false,
       //color: "#333333"
     };
 
@@ -281,6 +287,7 @@ module.exports = (app) => {
         light: destiny_activities.kingsfall.activityTiers[1].activityData.recommendedLight
       },
       active: destiny_activities.kingsfall.status.active,
+      insummary: false,
       //color: "#333333"
     };
     destiny_info.wrathofthemachine = {
@@ -298,38 +305,50 @@ module.exports = (app) => {
         light: destiny_activities.wrathofthemachine.activityTiers[1].activityData.recommendedLight
       },
       active: destiny_activities.wrathofthemachine.status.active,
+      insummary: true,
       //color: "#333333"
     };
 
     // pvp
     destiny_info.dailycrucible = {
-      type: lang.msg.dest.pvp,
+      type: lang.msg.dest.dailycrucible,
       title: destiny_activity_def[destiny_activities.dailycrucible.display.activityHash].activityName,
       loc: destiny_place_def[destiny_activities.dailycrucible.display.placeHash].placeName,
       active: destiny_activities.dailycrucible.status.active,
+      insummary: true,
       color: "#9D3532"
     };
 
     destiny_info.weeklycrucible = {
-      type: lang.msg.dest.pvp,
+      type: lang.msg.dest.weeklycrucible,
       title: destiny_activity_def[destiny_activities.weeklycrucible.display.activityHash].activityName,
       loc: destiny_place_def[destiny_activities.weeklycrucible.display.placeHash].placeName,
       active: destiny_activities.weeklycrucible.status.active,
+      insummary: true,
       color: "#9D3532"
     };
 
     // special
     destiny_info.ironbanner = {
-      type: lang.msg.dest.pvp,
       title: destiny_activity_def[destiny_activities.ironbanner.display.activityHash].activityName,
       active: destiny_activities.ironbanner.status.active,
+      insummary: true,
       color: "#C98855"
+    };
+
+    destiny_info.srl = {
+      type: lang.msg.dest.pvp,
+      title: lang.msg.dest.srl,
+      active: destiny_activities.srl.status.active,
+      insummary: true,
+      color: "#E62836"
     };
 
     destiny_info.trials = {
       type: lang.msg.dest.trials,
       title: destiny_activity_def[destiny_activities.trials.display.activityHash].activityName,
       active: destiny_activities.trials.status.active,
+      insummary: true,
       color: "#F9DD58"
     };
 
@@ -337,19 +356,14 @@ module.exports = (app) => {
       title: destiny_activities.xur.display.advisorTypeCategory,
       items: getItems(destiny_xur_items),
       active: destiny_activities.xur.status.active,
+      insummary: true,
       color: "#000000"
-    };
-
-    destiny_info.srl = {
-      type: lang.msg.dest.pvp,
-      title: lang.msg.dest.srl,
-      active: destiny_activities.srl.status.active,
-      color: "#E62836"
     };
 
     destiny_info.armsday = {
       title: lang.msg.dest.armsday,
       active: destiny_activities.armsday.status.active,
+      insummary: true,
       //color: "#333333"
     };
   }
@@ -362,7 +376,7 @@ module.exports = (app) => {
   
   function listSkulls (arr) {
     var text = "";
-    for (var i = 0; i < arr[i].length; i++) {
+    for (var i = 0; i < arr.length; i++) {
       text += arr[i].name;
       if (i < arr.length - 1) text += ", ";
     }
@@ -391,8 +405,8 @@ module.exports = (app) => {
     var text = "";
     if ('skulls' in destiny_info[act]) text = listSkulls(destiny_info[act].skulls);
     else if ('challenge' in destiny_info[act]) text = destiny_info[act].challenge;
-    else if ('loc' in destiny_info[act]) text = destiny_info[act].loc;
     else if ('items' in destiny_info[act]) text = listItems(destiny_info[act].items);
+    else if ('loc' in destiny_info[act]) text = destiny_info[act].loc;
     
     return {
       author_name: destiny_info[act].type || "",
@@ -475,7 +489,7 @@ module.exports = (app) => {
   
   slapp.command('/destiny', (msg) => {
     prepareData();
-    msg.respond(destiny_main());
+    msg.say(destiny_main());
     return;
   });
   

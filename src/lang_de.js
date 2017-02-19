@@ -75,15 +75,15 @@ let lang = module.exports = {
     
     dest: {
       main: "Destiny Aktivitäten Übersicht:",
-      daily: "täglich",
-      weekly: "wöchentlich",
       dailyheroic: "Tägliche Story (heroisch)",
+      weeklystrikes: "Wächtentliche Strike-Playlist",
       heroicstrikes: "SIVA-Krise (heroisch)",
       nightfall: "Wöchentlicher Dämmerungs-Strike",
+      dailycrucible: "Tägliche Schmelztiegel-Playlist",
+      weeklycrucible: "Wöchentliche Schmelztiegel-Playlist",
       raid: "Raid",
       normalmode: "Normal-Mode",
       hardmode: "Hard-Mode",
-      pvp: "PvP",
       trials: "Die Prüfungen von Osiris",
       srl: "Sparrow Racing League",
       armsday: "Waffenlieferung",
