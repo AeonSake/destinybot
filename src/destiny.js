@@ -501,11 +501,11 @@ module.exports = (app) => {
 // ========== COMMANDS ==========
 // ==============================
   
-  slapp.command('/destiny', "(.*)", (msg, cmd) => {
+  slapp.command('/destiny', "test (.*)", (msg, cmd) => {
     if (msg.body.user_id == config.admin_id) {
       var options = {
         host: 'www.bungie.net',
-        path: '/Platform/Destiny/' + cmd,
+        path: '/Platform/Destiny/' + cmd.substring(5),
         headers: {'X-API-Key': config.destiny_key}
       }
       
