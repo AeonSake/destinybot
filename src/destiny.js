@@ -20,7 +20,7 @@ var destiny_info = {},
 module.exports = (app) => {
   let slapp = app.slapp;
   let kv = app.kv;
-  let time = app.time;
+  let moment = app.moment;
   let config = app.config;
   let func = app.func;
   let lang = app.lang;
@@ -460,7 +460,7 @@ module.exports = (app) => {
       title: destiny_info[act].title,
       text: text,
       fallback: destiny_info[act].title,
-      //footer: "",
+      footer: (act.activetill != 0 ? lang.msg.dest.activetill + " " + moment(act.activetill).zone(config.time_offset).format('dd, D.M.YYYY HH:mm') : ""),
       color: destiny_info[act].color || "",
       mrkdwn_in: ['text', 'pretext', 'fields']
     };
@@ -508,7 +508,7 @@ module.exports = (app) => {
       text: text,
       fallback: destiny_info[act].title,
       fields: fields,
-      //footer: "",
+      footer: (act.activetill != 0 ? lang.msg.dest.activetill + " " + moment(act.activetill).zone(config.time_offset).format('dd, D.M.YYYY HH:mm') : ""),
       color: destiny_info[act].color || "",
       mrkdwn_in: ['text', 'pretext', 'fields']
     };

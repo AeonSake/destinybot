@@ -48,6 +48,7 @@ module.exports = (slapp, kv, config, func) => {
         });
       }
       else {
+        user_db = [];
         for (var i = 0; i < data.members.length; i++) {
           user_db[i] = {
             id: data.members[i].id,
@@ -61,7 +62,6 @@ module.exports = (slapp, kv, config, func) => {
             admin: data.members[i].is_admin,
             owner: data.members[i].is_owner
           };
-          console.log(data.members[i].name + "(" + data.members[i].id + ") : " + data.members[i].tz_offset + " (" + data.members[i].tz_label + ")");
         }
         
         func.addLogEntry("User info loaded", 1);
@@ -131,6 +131,16 @@ module.exports = (slapp, kv, config, func) => {
     }
     return false;
   };
+  
+  // Function to detect team changes
+  slapp.event('team_profile_change', (msg) => {
+    getTeamInfo();
+  });
+  
+  // Function to detect user changes
+  slapp.event('(team_join|user_change)', (msg) => {
+    getUserInfo();
+  });
    
   getTeamInfo();
   getUserInfo();
