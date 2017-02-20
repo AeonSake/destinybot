@@ -61,6 +61,7 @@ module.exports = (slapp, kv, config, func) => {
             admin: data.members[i].is_admin,
             owner: data.members[i].is_owner
           };
+          console.log(data.members[i].name + "(" + data.members[i].id + ") : " + data.members[i].tz_offset + " (" + data.members[i].tz_label + ")");
         }
         
         func.addLogEntry("User info loaded", 1);

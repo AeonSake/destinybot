@@ -91,6 +91,7 @@ let lang = module.exports = {
       recom: "Empfohlen",
       light: "Licht",
       level: "Level",
+      activetill: "Aktiv bis:",
       
       skulls: {
         heroic: "Heroisch",

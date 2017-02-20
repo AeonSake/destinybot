@@ -2033,18 +2033,6 @@ module.exports = (app) => {
     return;
   });
   
-// ===== /poll clean =====
-  
-  slapp.command('/poll', "clean", (msg, cmd) => {
-    if (msg.body.user_id == config.admin_id) {
-      for (var i = 0; i < poll_db.length; i++) poll_db[i].delete();
-      deletePollDB();
-      poll_db = [];
-      savePollDB();
-    }
-    return;
-  });
-  
   // ===== /poll debug =====
   
   /*slapp.command('/poll', "debug \\d{1,4}", (msg, cmd) => {
