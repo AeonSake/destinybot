@@ -264,9 +264,6 @@ module.exports = (app) => {
       active: destiny_activities.prisonofelders.status.active
     };*/
     
-    console.log(destiny_def.activity);
-    console.log(destiny_activities.elderchallenge.display.activityHash);
-    
     destiny_info.elderchallenge = {
       icon: 'https://bungie.net' + destiny_activities.elderchallenge.display.icon,
       title: destiny_def.activity[destiny_activities.elderchallenge.display.activityHash].activityName,
