@@ -205,7 +205,7 @@ module.exports = (app) => {
     /*destiny_info.prisonofelders = {
       //v1: destiny_def.activity[1404620600].activityName,
       //name: destiny_def.activity[destiny_activities.prisonofelders.display.activityHash].activityName,
-      activetill: destiny_activities.prisonofelders.status.expirationDate || 0,
+      expirationDate: destiny_activities.prisonofelders.status.expirationDate || 0,
       active: destiny_activities.prisonofelders.status.active
     };*/
     
@@ -214,7 +214,7 @@ module.exports = (app) => {
       title: destiny_def.activity[destiny_activities.elderchallenge.display.activityHash].activityName,
       skulls: getSkulls(destiny_activities.elderchallenge.extended.skullCategories[0].skulls),
       active: destiny_activities.elderchallenge.status.active,
-      activetill: destiny_activities.elderchallenge.status.expirationDate || 0,
+      expirationDate: destiny_activities.elderchallenge.status.expirationDate || 0,
       insummary: false,
       //color: "#333333"
     };
@@ -228,7 +228,7 @@ module.exports = (app) => {
       level: destiny_activities.dailychapter.activityTiers[0].activityData.displayLevel,
       light: destiny_activities.dailychapter.activityTiers[0].activityData.recommendedLight,
       active: destiny_activities.dailychapter.status.active,
-      activetill: destiny_activities.dailychapter.status.expirationDate || 0,
+      expirationDate: destiny_activities.dailychapter.status.expirationDate || 0,
       insummary: true,
       color: "#5941E0"
     };
@@ -242,7 +242,7 @@ module.exports = (app) => {
       level: destiny_activities.heroicstrike.activityTiers[0].activityData.displayLevel,
       light: destiny_activities.heroicstrike.activityTiers[0].activityData.recommendedLight,
       active: destiny_activities.heroicstrike.status.active,
-      activetill: destiny_activities.heroicstrike.status.expirationDate || 0,
+      expirationDate: destiny_activities.heroicstrike.status.expirationDate || 0,
       insummary: true,
       color: "#5941E0"
     };
@@ -257,7 +257,7 @@ module.exports = (app) => {
       level: destiny_activities.nightfall.activityTiers[0].activityData.displayLevel,
       light: destiny_activities.nightfall.activityTiers[0].activityData.recommendedLight,
       active: destiny_activities.nightfall.status.active,
-      activetill: destiny_activities.nightfall.status.expirationDate || 0,
+      expirationDate: destiny_activities.nightfall.status.expirationDate || 0,
       insummary: true,
       color: "#5941E0"
     };
@@ -278,7 +278,7 @@ module.exports = (app) => {
         light: destiny_activities.vaultofglass.activityTiers[1].activityData.recommendedLight
       },
       active: destiny_activities.vaultofglass.status.active,
-      activetill: destiny_activities.vaultofglass.status.expirationDate || 0,
+      expirationDate: destiny_activities.vaultofglass.status.expirationDate || 0,
       insummary: false,
       //color: "#333333"
     };
@@ -298,7 +298,7 @@ module.exports = (app) => {
         light: destiny_activities.crota.activityTiers[1].activityData.recommendedLight
       },
       active: destiny_activities.crota.status.active,
-      activetill: destiny_activities.crota.status.expirationDate || 0,
+      expirationDate: destiny_activities.crota.status.expirationDate || 0,
       insummary: false,
       //color: "#333333"
     };
@@ -319,7 +319,7 @@ module.exports = (app) => {
         light: destiny_activities.kingsfall.activityTiers[1].activityData.recommendedLight
       },
       active: destiny_activities.kingsfall.status.active,
-      activetill: destiny_activities.kingsfall.status.expirationDate || 0,
+      expirationDate: destiny_activities.kingsfall.status.expirationDate || 0,
       insummary: false,
       //color: "#333333"
     };
@@ -340,7 +340,7 @@ module.exports = (app) => {
         light: destiny_activities.wrathofthemachine.activityTiers[1].activityData.recommendedLight
       },
       active: destiny_activities.wrathofthemachine.status.active,
-      activetill: destiny_activities.wrathofthemachine.status.expirationDate || 0,
+      expirationDate: destiny_activities.wrathofthemachine.status.expirationDate || 0,
       insummary: true,
       //color: "#333333"
     };
@@ -351,19 +351,17 @@ module.exports = (app) => {
       icon: 'https://bungie.net' + destiny_activities.dailycrucible.display.icon,
       title: destiny_def.activity[destiny_activities.dailycrucible.display.activityHash].activityName,
       active: destiny_activities.dailycrucible.status.active,
-      activetill: destiny_activities.dailycrucible.status.expirationDate || 0,
+      expirationDate: destiny_activities.dailycrucible.status.expirationDate || 0,
       insummary: true,
       color: "#9D3532"
     };
-    console.log(destiny_activities.dailycrucible.status.expirationDate);
-    console.log(destiny_info.dailycrucible.activetill);
     
     destiny_info.weeklycrucible = {
       type: lang.msg.dest.weeklycrucible,
       icon: 'https://bungie.net' + destiny_activities.weeklycrucible.display.icon,
       title: destiny_def.activity[destiny_activities.weeklycrucible.display.activityHash].activityName,
       active: destiny_activities.weeklycrucible.status.active,
-      activetill: destiny_activities.weeklycrucible.status.expirationDate || 0,
+      expirationDate: destiny_activities.weeklycrucible.status.expirationDate || 0,
       insummary: true,
       color: "#9D3532"
     };
@@ -374,7 +372,7 @@ module.exports = (app) => {
       icon: 'https://bungie.net' + destiny_activities.ironbanner.display.icon,
       title: destiny_def.activity[destiny_activities.ironbanner.display.activityHash].activityName,
       active: destiny_activities.ironbanner.status.active,
-      activetill: destiny_activities.ironbanner.status.expirationDate || 0,
+      expirationDate: destiny_activities.ironbanner.status.expirationDate || 0,
       insummary: true,
       color: "#C98855"
     };
@@ -384,7 +382,7 @@ module.exports = (app) => {
       icon: 'https://bungie.net' + destiny_activities.srl.display.icon,
       title: lang.msg.dest.srl,
       active: destiny_activities.srl.status.active,
-      activetill: destiny_activities.srl.status.expirationDate || 0,
+      expirationDate: destiny_activities.srl.status.expirationDate || 0,
       insummary: true,
       color: "#E62836"
     };
@@ -394,7 +392,7 @@ module.exports = (app) => {
       icon: 'https://bungie.net' + destiny_activities.trials.display.icon,
       title: destiny_def.activity[destiny_activities.trials.display.activityHash].activityName,
       active: destiny_activities.trials.status.active,
-      activetill: destiny_activities.trials.status.expirationDate || 0,
+      expirationDate: destiny_activities.trials.status.expirationDate || 0,
       insummary: true,
       color: "#F9DD58"
     };
@@ -403,7 +401,7 @@ module.exports = (app) => {
       title: destiny_activities.xur.display.advisorTypeCategory,
       items: getItems(destiny_xur_items),
       active: destiny_activities.xur.status.active,
-      activetill: destiny_activities.xur.status.expirationDate || 0,
+      expirationDate: destiny_activities.xur.status.expirationDate || 0,
       insummary: true,
       color: "#000000"
     };
@@ -411,7 +409,7 @@ module.exports = (app) => {
     destiny_info.armsday = {
       title: lang.msg.dest.armsday,
       active: destiny_activities.armsday.status.active,
-      activetill: destiny_activities.armsday.status.expirationDate || 0,
+      expirationDate: destiny_activities.armsday.status.expirationDate || 0,
       insummary: true,
       //color: "#333333"
     };
@@ -458,10 +456,10 @@ module.exports = (app) => {
     else if ('loc' in destiny_info[act]) text = destiny_info[act].loc;
     
     var time = "";
-    if (act.activetill != 0) {
-      time = lang.msg.dest.activetill + " " + moment(act.activetill).format('dd, D.M.YYYY HH:mm');
-      console.log(act.activetill);
-      console.log(moment(act.activetill));
+    if (act.expirationDate != 0) {
+      time = lang.msg.dest.activetill + " " + moment(act.expirationDate).format('dd, D.M.YYYY HH:mm');
+      console.log(act.expirationDate.toString);
+      console.log(moment(act.expirationDate.toString));
     }
     
     return {
@@ -512,7 +510,7 @@ module.exports = (app) => {
     });
     
     var time = "";
-    if (act.activetill != 0) time = lang.msg.dest.activetill + " " + moment(act.activetill).format('dd, D.M.YYYY HH:mm');
+    if (act.expirationDate != 0) time = lang.msg.dest.activetill + " " + moment(act.expirationDate).format('dd, D.M.YYYY HH:mm');
     
     return {
       author_name: destiny_info[act].type || "",
