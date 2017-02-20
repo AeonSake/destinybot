@@ -199,7 +199,7 @@ module.exports = (app) => {
       if (err) console.log(err);
       else if (resp.statusCode !== 201) console.log(resp.statusCode);
       else console.log(resp.body);
-    })
+    });
   }
   
   /*needle.delete(`${this.base}/tasks/${id}`, null, this._baseOptions(), (err, resp) => {
@@ -749,7 +749,7 @@ module.exports = (app) => {
   slapp.event('destiny_update_info', (msg) => {
     getActivities();
     console.log("updated");
-  }
+  });
   
   // ===== moreinfo callback =====
   
