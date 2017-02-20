@@ -454,13 +454,20 @@ module.exports = (app) => {
     else if ('items' in destiny_info[act]) text = listItems(destiny_info[act].items);
     else if ('loc' in destiny_info[act]) text = destiny_info[act].loc;
     
+    var time = "";
+    if (act.activetill != 0) {
+      time = moment(act.activetill).tz(config.timezone).format('dd, D.M.YYYY HH:mm');
+      console.log(act.activetill);
+      console.log(moment(act.activetill));
+    }
+    
     return {
       author_name: destiny_info[act].type || "",
       //author_icon: destiny_info[act].icon || "",
       title: destiny_info[act].title,
       text: text,
       fallback: destiny_info[act].title,
-      footer: (act.activetill != 0 ? lang.msg.dest.activetill + " " + moment(act.activetill).tz(config.timezone).format('dd, D.M.YYYY HH:mm') : ""),
+      footer: time,
       color: destiny_info[act].color || "",
       mrkdwn_in: ['text', 'pretext', 'fields']
     };
@@ -501,6 +508,13 @@ module.exports = (app) => {
       short: false
     });
     
+    var time = "";
+    if (act.activetill != 0) {
+      time = moment(act.activetill).tz(config.timezone).format('dd, D.M.YYYY HH:mm');
+      console.log(act.activetill);
+      console.log(moment(act.activetill));
+    }
+    
     return {
       author_name: destiny_info[act].type || "",
       //author_icon: destiny_info[act].icon || "",
@@ -508,7 +522,7 @@ module.exports = (app) => {
       text: text,
       fallback: destiny_info[act].title,
       fields: fields,
-      footer: (act.activetill != 0 ? lang.msg.dest.activetill + " " + moment(act.activetill).tz(config.timezone).format('dd, D.M.YYYY HH:mm') : ""),
+      footer: time,
       color: destiny_info[act].color || "",
       mrkdwn_in: ['text', 'pretext', 'fields']
     };
