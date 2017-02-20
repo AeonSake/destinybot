@@ -450,62 +450,58 @@ module.exports = (app) => {
   
   function getActivityAttachment (act) {
     var text = "";
-    if ('skulls' in destiny_info[act]) text = listSkulls(destiny_info[act].skulls);
-    else if ('challenge' in destiny_info[act]) text = destiny_info[act].challenge;
-    else if ('items' in destiny_info[act]) text = listItems(destiny_info[act].items);
-    else if ('loc' in destiny_info[act]) text = destiny_info[act].loc;
+    if ('skulls' in act) text = listSkulls(act.skulls);
+    else if ('challenge' in act) text = act.challenge;
+    else if ('items' in act) text = listItems(act.items);
+    else if ('loc' in act) text = act.loc;
     
     var time = "";
-    if (act.expirationDate != 0) {
-      time = lang.msg.dest.activetill + " " + moment(act.expirationDate).format('dd, D.M.YYYY HH:mm');
-      console.log(act.expirationDate.toString);
-      console.log(moment(act.expirationDate.toString));
-    }
+    if (act.expirationDate != 0) time = lang.msg.dest.activetill + " " + moment(act.expirationDate).format('dd, D.M.YYYY HH:mm');
     
     return {
-      author_name: destiny_info[act].type || "",
-      //author_icon: destiny_info[act].icon || "",
-      title: destiny_info[act].title,
+      author_name: act.type || "",
+      //author_icon: act.icon || "",
+      title: act.title,
       text: text,
-      fallback: destiny_info[act].title,
+      fallback: act.title,
       footer: time,
-      color: destiny_info[act].color || "",
+      color: act.color || "",
       mrkdwn_in: ['text', 'pretext', 'fields']
     };
   }
   
   function getFullActivityAttachment (act) {
     var text = "";
-    if ('loc' in destiny_info[act]) text += destiny_info[act].loc + "\n";
-    if ('desc' in destiny_info[act]) text += destiny_info[act].desc + "\n";
+    if ('loc' in act) text += act.loc + "\n";
+    if ('desc' in act) text += act.desc + "\n";
     
     var fields = [];
-    if ('light' in destiny_info[act]) fields.push({
+    if ('light' in act) fields.push({
       title: lang.msg.dest.recom,
-      value: "*" + lang.msg.dest.level + "* : " + destiny_info[act].level + "\n*" + lang.msg.dest.light + "* : " + destiny_info[act].light,
+      value: "*" + lang.msg.dest.level + "* : " + act.level + "\n*" + lang.msg.dest.light + "* : " + act.light,
       short: false
     });
-    if ('skulls' in destiny_info[act]) fields.push({
+    if ('skulls' in act) fields.push({
       title: lang.msg.dest.mods,
-      value: listFullSkulls(destiny_info[act].skulls),
+      value: listFullSkulls(act.skulls),
       short: false
     });
-    if ('challenge' in destiny_info[act]) fields.push({
-      title: destiny_info[act].challenge,
+    if ('challenge' in act) fields.push({
+      title: act.challenge,
       short: false
     });
-    if ('normal' in destiny_info[act]) fields.push({
+    if ('normal' in act) fields.push({
       title: lang.msg.dest.normalmode,
-      value: "*" + lang.msg.dest.level + "* : " + destiny_info[act].normal.level + "\n*" + lang.msg.dest.light + "* : " + destiny_info[act].normal.light,
+      value: "*" + lang.msg.dest.level + "* : " + act.normal.level + "\n*" + lang.msg.dest.light + "* : " + act.normal.light,
       short: false
     });
-    if ('hard' in destiny_info[act]) fields.push({
+    if ('hard' in act) fields.push({
       title: lang.msg.dest.hardmode,
-      value: "*" + lang.msg.dest.level + "* : " + destiny_info[act].hard.level + "\n*" + lang.msg.dest.light + "* : " + destiny_info[act].hard.light,
+      value: "*" + lang.msg.dest.level + "* : " + act.hard.level + "\n*" + lang.msg.dest.light + "* : " + act.hard.light,
       short: false
     });
-    if ('items' in destiny_info[act]) fields.push({
-      value: listItems(destiny_info[act].items),
+    if ('items' in act) fields.push({
+      value: listItems(act.items),
       short: false
     });
     
@@ -513,14 +509,14 @@ module.exports = (app) => {
     if (act.expirationDate != 0) time = lang.msg.dest.activetill + " " + moment(act.expirationDate).format('dd, D.M.YYYY HH:mm');
     
     return {
-      author_name: destiny_info[act].type || "",
-      //author_icon: destiny_info[act].icon || "",
-      title: destiny_info[act].title,
+      author_name: act.type || "",
+      //author_icon: act.icon || "",
+      title: act.title,
       text: text,
-      fallback: destiny_info[act].title,
+      fallback: act.title,
       fields: fields,
       footer: time,
-      color: destiny_info[act].color || "",
+      color: act.color || "",
       mrkdwn_in: ['text', 'pretext', 'fields']
     };
   }
@@ -534,7 +530,7 @@ module.exports = (app) => {
     };
     
     for (var key in destiny_info) {
-      if (destiny_info[key].active && destiny_info[key].insummary) msg_text.attachments.push(getActivityAttachment(key));
+      if (destiny_info[key].active && destiny_info[key].insummary) msg_text.attachments.push(getActivityAttachment(destiny_info[key]));
     }
     
     return msg_text;
