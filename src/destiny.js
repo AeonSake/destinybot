@@ -208,7 +208,7 @@ module.exports = (app) => {
       activetill: destiny_activities.prisonofelders.status.expirationDate || 0,
       active: destiny_activities.prisonofelders.status.active
     };*/
-
+    
     destiny_info.elderchallenge = {
       icon: 'https://bungie.net' + destiny_activities.elderchallenge.display.icon,
       title: destiny_def.activity[destiny_activities.elderchallenge.display.activityHash].activityName,
@@ -218,7 +218,7 @@ module.exports = (app) => {
       insummary: false,
       //color: "#333333"
     };
-
+    
     destiny_info.dailychapter = {
       type: lang.msg.dest.dailyheroic,
       icon: 'https://bungie.net' + destiny_activities.dailychapter.display.icon,
@@ -232,7 +232,7 @@ module.exports = (app) => {
       insummary: true,
       color: "#5941E0"
     };
-
+    
     destiny_info.heroicstrike = {
       type: lang.msg.dest.weeklystrikes,
       icon: 'https://bungie.net' + destiny_activities.heroicstrike.display.icon,
@@ -246,7 +246,7 @@ module.exports = (app) => {
       insummary: true,
       color: "#5941E0"
     };
-
+    
     destiny_info.nightfall = {
       type: lang.msg.dest.nightfall,
       icon: 'https://bungie.net' + destiny_activities.nightfall.display.icon,
@@ -261,7 +261,7 @@ module.exports = (app) => {
       insummary: true,
       color: "#5941E0"
     };
-
+    
     // raid
     destiny_info.vaultofglass = {
       type: lang.msg.dest.raid,
@@ -282,7 +282,7 @@ module.exports = (app) => {
       insummary: false,
       //color: "#333333"
     };
-
+    
     destiny_info.crota = {
       type: lang.msg.dest.raid,
       icon: 'https://bungie.net' + destiny_activities.crota.display.icon,
@@ -302,7 +302,7 @@ module.exports = (app) => {
       insummary: false,
       //color: "#333333"
     };
-
+    
     destiny_info.kingsfall = {
       type: lang.msg.dest.raid,
       icon: 'https://bungie.net' + destiny_activities.kingsfall.display.icon,
@@ -323,6 +323,7 @@ module.exports = (app) => {
       insummary: false,
       //color: "#333333"
     };
+    
     destiny_info.wrathofthemachine = {
       type: lang.msg.dest.raid,
       icon: 'https://bungie.net' + destiny_activities.wrathofthemachine.display.icon,
@@ -343,7 +344,7 @@ module.exports = (app) => {
       insummary: true,
       //color: "#333333"
     };
-
+    
     // pvp
     destiny_info.dailycrucible = {
       type: lang.msg.dest.dailycrucible,
@@ -354,7 +355,9 @@ module.exports = (app) => {
       insummary: true,
       color: "#9D3532"
     };
-
+    console.log(destiny_activities.dailycrucible.status.expirationDate);
+    console.log(destiny_info.dailycrucible.activetill);
+    
     destiny_info.weeklycrucible = {
       type: lang.msg.dest.weeklycrucible,
       icon: 'https://bungie.net' + destiny_activities.weeklycrucible.display.icon,
@@ -364,7 +367,7 @@ module.exports = (app) => {
       insummary: true,
       color: "#9D3532"
     };
-
+    
     // special
     destiny_info.ironbanner = {
       type: lang.msg.dest.specialevent,
@@ -375,7 +378,7 @@ module.exports = (app) => {
       insummary: true,
       color: "#C98855"
     };
-
+    
     destiny_info.srl = {
       type: lang.msg.dest.specialevent,
       icon: 'https://bungie.net' + destiny_activities.srl.display.icon,
@@ -385,7 +388,7 @@ module.exports = (app) => {
       insummary: true,
       color: "#E62836"
     };
-
+    
     destiny_info.trials = {
       type: lang.msg.dest.trials,
       icon: 'https://bungie.net' + destiny_activities.trials.display.icon,
@@ -395,7 +398,7 @@ module.exports = (app) => {
       insummary: true,
       color: "#F9DD58"
     };
-
+    
     destiny_info.xur = {
       title: destiny_activities.xur.display.advisorTypeCategory,
       items: getItems(destiny_xur_items),
@@ -404,7 +407,7 @@ module.exports = (app) => {
       insummary: true,
       color: "#000000"
     };
-
+    
     destiny_info.armsday = {
       title: lang.msg.dest.armsday,
       active: destiny_activities.armsday.status.active,
@@ -456,7 +459,7 @@ module.exports = (app) => {
     
     var time = "";
     if (act.activetill != 0) {
-      time = moment(act.activetill).tz(config.timezone).format('dd, D.M.YYYY HH:mm');
+      time = lang.msg.dest.activetill + " " + moment(act.activetill).format('dd, D.M.YYYY HH:mm');
       console.log(act.activetill);
       console.log(moment(act.activetill));
     }
@@ -509,11 +512,7 @@ module.exports = (app) => {
     });
     
     var time = "";
-    if (act.activetill != 0) {
-      time = moment(act.activetill).tz(config.timezone).format('dd, D.M.YYYY HH:mm');
-      console.log(act.activetill);
-      console.log(moment(act.activetill));
-    }
+    if (act.activetill != 0) time = lang.msg.dest.activetill + " " + moment(act.activetill).format('dd, D.M.YYYY HH:mm');
     
     return {
       author_name: destiny_info[act].type || "",

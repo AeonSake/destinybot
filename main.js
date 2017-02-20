@@ -16,6 +16,7 @@ const lang = require('./src/lang_' + config.lang);
 if (!process.env.PORT) throw Error('PORT missing but required');
 
 moment.locale(config.lang);
+moment.tz.setDefault(config.timezone);
 
 var slapp = Slapp({
   record: config.slapp_record,
