@@ -460,7 +460,7 @@ module.exports = (app) => {
       title: destiny_info[act].title,
       text: text,
       fallback: destiny_info[act].title,
-      footer: (act.activetill != 0 ? lang.msg.dest.activetill + " " + moment(act.activetill).zone(config.time_offset).format('dd, D.M.YYYY HH:mm') : ""),
+      footer: (act.activetill != 0 ? lang.msg.dest.activetill + " " + moment(act.activetill).tz(config.timezone).format('dd, D.M.YYYY HH:mm') : ""),
       color: destiny_info[act].color || "",
       mrkdwn_in: ['text', 'pretext', 'fields']
     };
@@ -508,7 +508,7 @@ module.exports = (app) => {
       text: text,
       fallback: destiny_info[act].title,
       fields: fields,
-      footer: (act.activetill != 0 ? lang.msg.dest.activetill + " " + moment(act.activetill).zone(config.time_offset).format('dd, D.M.YYYY HH:mm') : ""),
+      footer: (act.activetill != 0 ? lang.msg.dest.activetill + " " + moment(act.activetill).tz(config.timezone).format('dd, D.M.YYYY HH:mm') : ""),
       color: destiny_info[act].color || "",
       mrkdwn_in: ['text', 'pretext', 'fields']
     };
