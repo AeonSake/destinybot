@@ -5,11 +5,11 @@
 'use strict';
 
 const https = require('https');
+const needle = require('needle');
 
 var destiny_info = {},
     destiny_def = {},
-    destiny_activities = {},
-    destiny_xur_items = [];
+    destiny_activities = {};
 
 
 
@@ -107,6 +107,7 @@ module.exports = (app) => {
       path: '/Platform/Destiny/Advisors/V2/',
       headers: {'X-API-Key': config.destiny_key}
     };
+    destiny_info.ready = false;
     
     https.get(options, function(res) {
       var body = "";
@@ -116,6 +117,7 @@ module.exports = (app) => {
       res.on('end', function() {
         destiny_activities = JSON.parse(body).Response.data.activities;
         if (destiny_activities.xur.status.active) getXurItems();
+        else prepareData();
       });
     });
   }
@@ -134,7 +136,8 @@ module.exports = (app) => {
         body += d;
       });
       res.on('end', function() {
-        destiny_xur_items = JSON.parse(body).Response.data.saleItemCategories[2].saleItems;
+        prepareData();
+        destiny_info.xur.items = JSON.parse(body).Response.data.saleItemCategories[2].saleItems;
       });
     });
   }
@@ -154,6 +157,60 @@ module.exports = (app) => {
     destiny_def.skull_ref[100] = {skullHash: 100, skullName: "Fresh Troops"};
     destiny_def.skull_ref[101] = {skullHash: 101, skullName: "Match Game"};
   }
+  
+  
+  
+// ================================
+// ========== SCHEDULING ==========
+// ================================
+  
+  function setSchedule (msg) {
+    let ts = Date.now() + '';
+    var data = {
+      //schedule: "30 9 * * * *",
+      schedule: "50 16 * * * *",
+      url: 'https://beepboophq.com/proxy/' + config.bb_project_id + '/slack/event',
+      method: 'POST',
+      headers: {
+        'BB-Enrich': `slack_team_id=${msg.meta.team_id}`
+      },
+      payload: {
+        token: msg.body.token,
+        team_id: msg.meta.team_id,
+        type: 'event_callback',
+        event: {
+          ts: ts,
+          event_ts: ts,
+          type: 'destiny_update_info',
+          payload: "test",
+          user: msg.meta.user_id,
+          channel: msg.meta.channel_id
+        }
+      }
+    };
+    var headers = {
+      headers: {
+        Authorization: 'Bearer ' + config.bb_token
+      },
+      json: true
+    };
+    
+    needle.post('beepboophq.com/api/v1/chronos/tasks', data, headers, (err, resp) => {
+      if (err) console.log(err);
+      else if (resp.statusCode !== 201) console.log(resp.statusCode);
+      else console.log(resp.body);
+    })
+  }
+  
+  /*needle.delete(`${this.base}/tasks/${id}`, null, this._baseOptions(), (err, resp) => {
+      if (err) return callback(err)
+      if (resp.statusCode !== 200) {
+        return callback(new Error(`unsuccesful status code ${resp.statusCode}`))
+      }
+      callback(null, resp.body)
+    })*/
+  
+  
   
   
 // ==================================
@@ -201,6 +258,7 @@ module.exports = (app) => {
   }
   
   function prepareData () {
+    destiny_info = {};
     // pve
     /*destiny_info.prisonofelders = {
       //v1: destiny_def.activity[1404620600].activityName,
@@ -399,7 +457,7 @@ module.exports = (app) => {
     
     destiny_info.xur = {
       title: destiny_activities.xur.display.advisorTypeCategory,
-      items: getItems(destiny_xur_items),
+      items: [],
       active: destiny_activities.xur.status.active,
       expirationDate: destiny_activities.xur.status.expirationDate || 0,
       insummary: true,
@@ -408,11 +466,14 @@ module.exports = (app) => {
     
     destiny_info.armsday = {
       title: lang.msg.dest.armsday,
+      //items: [],
       active: destiny_activities.armsday.status.active,
       expirationDate: destiny_activities.armsday.status.expirationDate || 0,
       insummary: true,
       //color: "#333333"
     };
+    
+    destiny_info.ready = true;
   }
   
   
@@ -447,6 +508,54 @@ module.exports = (app) => {
     }
     return text;
   }
+  
+  var destiny_moreinfo_att = {
+    text: lang.msg.dest.moreinfo,
+    fallback: lang.msg.dest.moreinfo,
+    callback_id: 'destiny_moreinfo_callback',
+    actions: [
+      {
+        name: 'pve',
+        text: lang.btn.dest.pve,
+        type: 'button',
+      },
+      {
+        name: 'raids',
+        text: lang.btn.dest.raids,
+        type: 'button',
+      },
+      {
+        name: 'pvp',
+        text: lang.btn.dest.pvp,
+        type: 'button',
+      },
+      {
+        name: 'special',
+        text: lang.btn.dest.special,
+        type: 'button',
+      }/*,
+      {
+        name: 'vendors',
+        text: lang.btn.dest.vendors,
+        type: 'button',
+      }*/
+    ],
+    mrkdwn_in: ['text', 'pretext']
+  };
+  
+  var destiny_dismiss_att = {
+    text: "",
+    fallback: "",
+    callback_id: 'dismiss_callback',
+    actions: [
+      {
+        name: 'dismiss',
+        text: lang.btn.dismiss,
+        type: 'button',
+      }
+    ],
+    mrkdwn_in: ['text', 'pretext']
+  };
   
   function getActivityAttachment (act) {
     var text = "";
@@ -521,7 +630,7 @@ module.exports = (app) => {
     };
   }
   
-  function destiny_main () {
+  function destiny_summary_msg () {
     var msg_text = {
       text: lang.msg.dest.main,
       attachments: [],
@@ -530,17 +639,80 @@ module.exports = (app) => {
     };
     
     for (var key in destiny_info) {
-      if (destiny_info[key].active && destiny_info[key].insummary) msg_text.attachments.push(getActivityAttachment(destiny_info[key]));
+      if (destiny_info.hasOwnProperty(key)) {
+        if (destiny_info[key].active && destiny_info[key].insummary) msg_text.attachments.push(getActivityAttachment(destiny_info[key]));
+      }
+    }
+    
+    return msg_text;
+  }
+  
+  function destiny_list_msg (keys) {
+    var msg_text = {
+      text: lang.msg.dest.weekendupdate,
+      attachments: [],
+      response_type: 'ephemeral',
+      replace_original: true
+    };
+    
+    if (keys.length != 0) {
+      for (var i = 0; i < keys.length; i++) {
+        if (destiny_info[key].active) msg_text.attachments.push(getActivityAttachment(destiny_info[key]));
+      }
+    } else {
+      for (var key in destiny_info) {
+        if (destiny_info.hasOwnProperty(key)) {
+          if (destiny_info[key].active) msg_text.attachments.push(getActivityAttachment(destiny_info[key]));
+        }
+      }
     }
     
     return msg_text;
   }
   
   
-  
 // ==============================
 // ========== COMMANDS ==========
 // ==============================
+  
+  // ===== /destiny full =====
+  
+  slapp.command('/destiny', "full", (msg, cmd) => {
+    var msg_text = destiny_list_msg([]);
+    msg_text.attachments.push(destiny_moreinfo_att);
+    msg_text.attachments.push(destiny_dismiss_att);
+    msg.respond(msg_text);
+    return;
+  });
+  
+  // ===== /destiny daily =====
+  
+  slapp.command('/destiny', "daily", (msg, cmd) => {
+    var msg_text = destiny_list_msg(['dailychapter', 'dailycrucible']);
+    msg_text.attachments.push(destiny_moreinfo_att);
+    msg_text.attachments.push(destiny_dismiss_att);
+    msg.respond(msg_text);
+    return;
+  });
+  
+  // ===== /destiny daily =====
+  
+  slapp.command('/destiny', "update", (msg, cmd) => {
+    if (msg.body.user_id == config.admin_id) getActivities();
+    return;
+  });
+  
+  //['trials', 'xur']
+  
+  // ===== /destiny cron =====
+  
+  slapp.command('/destiny', "cron", (msg, cmd) => {
+    if (msg.body.user_id == config.admin_id) {
+      setSchedule(msg);
+    };
+  });
+  
+  // ===== /destiny test =====
   
   slapp.command('/destiny', "test (.*)", (msg, cmd) => {
     if (msg.body.user_id == config.admin_id) {
@@ -562,14 +734,32 @@ module.exports = (app) => {
     };
   });
   
+  // ===== /destiny =====
+  
   slapp.command('/destiny', (msg) => {
-    if (msg.body.user_id == config.admin_id) {
-      prepareData();
-      msg.say(destiny_main());
-    }
+    var msg_text = destiny_summary_msg();
+    msg_text.attachments.push(destiny_moreinfo_att);
+    msg_text.attachments.push(destiny_dismiss_att);
+    msg.respond(msg_text);
     return;
   });
   
+  // ===== External update triggers =====
   
+  slapp.event('destiny_update_info', (msg) => {
+    getActivities();
+    console.log("updated");
+  }
   
+  // ===== moreinfo callback =====
+  
+  slapp.action('destiny_moreinfo_callback', (msg) => {
+    
+    // TODO
+    
+    
+    return;
+  });
+  
+  return module;
 };

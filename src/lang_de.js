@@ -46,7 +46,11 @@ let lang = module.exports = {
     all: "Alle",
     
     dest: {
-      
+      pve: "PvE",
+      raids: "Raids",
+      pvp: "PvP",
+      special: "Spezielle Events",
+      vendors: "Händler"
     },
     
     evt: {
@@ -74,7 +78,10 @@ let lang = module.exports = {
     confirmcancel: "Sind Sie sicher, dass Sie den Vorgang abbrechen wollen?",
     
     dest: {
-      main: "Destiny Aktivitäten Übersicht:",
+      main: "Destiny | Aktivitäten Übersicht",
+      weeklyreset: "Destiny | Wöchtentlicher Reset",
+      weekendupdate: "Destiny | Wochenend-Update",
+      moreinfo: "Mehr Informationen:",
       dailyheroic: "Tägliche Story (Heroisch)",
       weeklystrikes: "Wöchtentliche Strike-Playlist",
       heroicstrikes: "SIVA-Krise (Heroisch)",
