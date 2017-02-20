@@ -165,15 +165,15 @@ module.exports = (app) => {
 // ================================
   
   // destiny_daily_update YmRmMjYzM2RmMmVlNDlhYWEwMmZiYjYxODMyNGNjODN8MzAgOSAqICogMCwxLDMsNCw2ICo=
-  // destiny_weekly_update 
+  // destiny_weekly_update OWE3ODVkYTYwNTVhNDY1ZTg2NTEwNzJhYTM5NDIzZjF8MzAgOSAqICogMiAq
   // destiny_weekend_update 
   
   function setSchedule (msg) {
     let ts = Date.now() + '';
     var data = {
       //schedule: "30 9 * * 0,1,3,4,6 *",
-      schedule: "30 9 * * 2 *",
-      //schedule: "30 9 * * 5 *",
+      //schedule: "30 9 * * 2 *",
+      schedule: "30 9 * * 5 *",
       url: 'https://beepboophq.com/proxy/' + config.bb_project_id + '/slack/event',
       method: 'POST',
       headers: {
@@ -186,8 +186,8 @@ module.exports = (app) => {
         event: {
           ts: ts,
           event_ts: ts,
-          type: 'destiny_weekly_update',
-          payload: "destiny_weekly_update",
+          type: 'destiny_weekend_update',
+          payload: "destiny_weekend_update",
           user: msg.meta.user_id,
           channel: msg.meta.channel_id
         }
