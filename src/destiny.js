@@ -167,12 +167,13 @@ module.exports = (app) => {
   function setSchedule (msg) {
     let ts = Date.now() + '';
     var data = {
-      //schedule: "30 9 * * * *",
-      schedule: "50 16 * * * *",
+      schedule: "30 9 * * 0,1,3,4,6 *",
+      //schedule: "30 9 * * 2 *",
+      //schedule: "30 9 * * 5 *",
       url: 'https://beepboophq.com/proxy/' + config.bb_project_id + '/slack/event',
       method: 'POST',
       headers: {
-        'BB-Enrich': `slack_team_id=${msg.meta.team_id}`
+        'BB-Enrich': 'slack_team_id='+ msg.meta.team_id
       },
       payload: {
         token: msg.body.token,
@@ -181,8 +182,8 @@ module.exports = (app) => {
         event: {
           ts: ts,
           event_ts: ts,
-          type: 'destiny_update_info',
-          payload: "test",
+          type: 'destiny_daily_update',
+          payload: "destiny_daily_update",
           user: msg.meta.user_id,
           channel: msg.meta.channel_id
         }
@@ -196,8 +197,8 @@ module.exports = (app) => {
     };
     
     needle.post('beepboophq.com/api/v1/chronos/tasks', data, headers, (err, resp) => {
+      if (resp.statusCode !== 201) console.log(resp.statusCode);
       if (err) console.log(err);
-      else if (resp.statusCode !== 201) console.log(resp.statusCode);
       else console.log(resp.body);
     });
   }
@@ -647,9 +648,9 @@ module.exports = (app) => {
     return msg_text;
   }
   
-  function destiny_list_msg (keys) {
+  function destiny_list_msg (text, keys) {
     var msg_text = {
-      text: lang.msg.dest.weekendupdate,
+      text: text,
       attachments: [],
       response_type: 'ephemeral',
       replace_original: true
@@ -670,6 +671,18 @@ module.exports = (app) => {
     return msg_text;
   }
   
+  function postToChannel (msg) {
+    slapp.client.chat.postMessage({
+      token: config.bot_token,
+      channel: config.admin_ch,
+      text: msg.text,
+      attachments: msg.attachments,
+      parse: 'full',
+      as_user: true
+    }, (err, data) => {
+      if (err) console.log("ERROR: Unable to post to destiny channel (" + err + ")");
+    });
+  }
   
 // ==============================
 // ========== COMMANDS ==========
@@ -678,7 +691,7 @@ module.exports = (app) => {
   // ===== /destiny full =====
   
   slapp.command('/destiny', "full", (msg, cmd) => {
-    var msg_text = destiny_list_msg([]);
+    var msg_text = destiny_list_msg(lang.msg.dest.main, []);
     msg_text.attachments.push(destiny_moreinfo_att);
     msg_text.attachments.push(destiny_dismiss_att);
     msg.respond(msg_text);
@@ -688,21 +701,30 @@ module.exports = (app) => {
   // ===== /destiny daily =====
   
   slapp.command('/destiny', "daily", (msg, cmd) => {
-    var msg_text = destiny_list_msg(['dailychapter', 'dailycrucible']);
+    var msg_text = destiny_list_msg(lang.msg.dest.dailyupdate, ['dailychapter', 'dailycrucible']);
     msg_text.attachments.push(destiny_moreinfo_att);
     msg_text.attachments.push(destiny_dismiss_att);
     msg.respond(msg_text);
     return;
   });
   
-  // ===== /destiny daily =====
+  // ===== /destiny post =====
+  
+  slapp.command('/destiny', "post", (msg, cmd) => {
+    if (msg.body.user_id == config.admin_id) {
+      var msg_text = destiny_summary_msg(lang.msg.dest.main);
+      msg_text.attachments.push(destiny_moreinfo_att);
+      msg.say(msg_text);
+    }
+    return;
+  });
+  
+  // ===== /destiny update =====
   
   slapp.command('/destiny', "update", (msg, cmd) => {
     if (msg.body.user_id == config.admin_id) getActivities();
     return;
   });
-  
-  //['trials', 'xur']
   
   // ===== /destiny cron =====
   
@@ -737,7 +759,7 @@ module.exports = (app) => {
   // ===== /destiny =====
   
   slapp.command('/destiny', (msg) => {
-    var msg_text = destiny_summary_msg();
+    var msg_text = destiny_summary_msg(lang.msg.dest.main);
     msg_text.attachments.push(destiny_moreinfo_att);
     msg_text.attachments.push(destiny_dismiss_att);
     msg.respond(msg_text);
@@ -746,9 +768,29 @@ module.exports = (app) => {
   
   // ===== External update triggers =====
   
-  slapp.event('destiny_update_info', (msg) => {
+  slapp.event('destiny_daily_update', (msg) => {
     getActivities();
-    console.log("updated");
+  });
+  
+  slapp.event('destiny_weekly_update', (msg) => {
+    getActivityDef();
+    setTimeout(function(){
+      getActivities();
+      setTimeout(function(){
+        var msg_text = destiny_summary_msg(lang.msg.dest.weeklyreset);
+        msg_text.attachments.push(destiny_moreinfo_att);
+        postToChannel(msg_text);
+      }, 2000);
+    }, 2000);
+  });
+  
+  slapp.event('destiny_weekend_update', (msg) => {
+    getActivities();
+    setTimeout(function(){
+      var msg_text = destiny_list_msg(lang.msg.dest.weekendupdate, ['trials', 'xur']);
+      msg_text.attachments.push(destiny_moreinfo_att);
+      postToChannel(msg_text);
+    }, 2000);
   });
   
   // ===== moreinfo callback =====

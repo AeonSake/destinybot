@@ -80,6 +80,7 @@ let lang = module.exports = {
     dest: {
       main: "Destiny | Aktivitäten Übersicht",
       weeklyreset: "Destiny | Wöchtentlicher Reset",
+      dailyupdate: "Destiny | Tägliches Update",
       weekendupdate: "Destiny | Wochenend-Update",
       moreinfo: "Mehr Informationen:",
       dailyheroic: "Tägliche Story (Heroisch)",
