@@ -5,7 +5,7 @@
 'use strict';
 
 const https = require('https');
-const needle = require('needle');
+//const needle = require('needle');
 
 var destiny_info = {},
     destiny_def = {},
@@ -166,14 +166,14 @@ module.exports = (app) => {
   
   // destiny_daily_update YmRmMjYzM2RmMmVlNDlhYWEwMmZiYjYxODMyNGNjODN8MzAgOSAqICogMCwxLDMsNCw2ICo=
   // destiny_weekly_update OWE3ODVkYTYwNTVhNDY1ZTg2NTEwNzJhYTM5NDIzZjF8MzAgOSAqICogMiAq
-  // destiny_weekend_update 
+  // destiny_weekend_update ZjVjNjUzNjQ3ZWY3NDk0ZGFjNDAzM2MzY2NlZjA5ZDh8MzAgOSAqICogNSAq
   
-  function setSchedule (msg) {
+  /*function setSchedule (msg) {
     let ts = Date.now() + '';
     var data = {
       //schedule: "30 9 * * 0,1,3,4,6 *",
       //schedule: "30 9 * * 2 *",
-      schedule: "30 9 * * 5 *",
+      //schedule: "30 9 * * 5 *",
       url: 'https://beepboophq.com/proxy/' + config.bb_project_id + '/slack/event',
       method: 'POST',
       headers: {
@@ -205,15 +205,7 @@ module.exports = (app) => {
       if (err) console.log(err);
       else console.log(resp.body);
     });
-  }
-  
-  /*needle.delete(`${this.base}/tasks/${id}`, null, this._baseOptions(), (err, resp) => {
-      if (err) return callback(err)
-      if (resp.statusCode !== 200) {
-        return callback(new Error(`unsuccesful status code ${resp.statusCode}`))
-      }
-      callback(null, resp.body)
-    })*/
+  }*/
   
   
   
@@ -730,14 +722,6 @@ module.exports = (app) => {
   slapp.command('/destiny', "update", (msg, cmd) => {
     if (msg.body.user_id == config.admin_id) getActivities();
     return;
-  });
-  
-  // ===== /destiny cron =====
-  
-  slapp.command('/destiny', "cron", (msg, cmd) => {
-    if (msg.body.user_id == config.admin_id) {
-      setSchedule(msg);
-    };
   });
   
   // ===== /destiny test =====
