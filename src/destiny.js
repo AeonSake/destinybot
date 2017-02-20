@@ -121,7 +121,7 @@ module.exports = (app) => {
       });
     });
   }
-  getActivities();
+  setTimeout(getActivities, 2000);
   
   function getXurItems () {
     var options = {
