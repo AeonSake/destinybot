@@ -164,11 +164,15 @@ module.exports = (app) => {
 // ========== SCHEDULING ==========
 // ================================
   
+  // destiny_daily_update YmRmMjYzM2RmMmVlNDlhYWEwMmZiYjYxODMyNGNjODN8MzAgOSAqICogMCwxLDMsNCw2ICo=
+  // destiny_weekly_update 
+  // destiny_weekend_update 
+  
   function setSchedule (msg) {
     let ts = Date.now() + '';
     var data = {
-      schedule: "30 9 * * 0,1,3,4,6 *",
-      //schedule: "30 9 * * 2 *",
+      //schedule: "30 9 * * 0,1,3,4,6 *",
+      schedule: "30 9 * * 2 *",
       //schedule: "30 9 * * 5 *",
       url: 'https://beepboophq.com/proxy/' + config.bb_project_id + '/slack/event',
       method: 'POST',
@@ -182,8 +186,8 @@ module.exports = (app) => {
         event: {
           ts: ts,
           event_ts: ts,
-          type: 'destiny_daily_update',
-          payload: "destiny_daily_update",
+          type: 'destiny_weekly_update',
+          payload: "destiny_weekly_update",
           user: msg.meta.user_id,
           channel: msg.meta.channel_id
         }
@@ -683,6 +687,8 @@ module.exports = (app) => {
       if (err) console.log("ERROR: Unable to post to destiny channel (" + err + ")");
     });
   }
+  
+  
   
 // ==============================
 // ========== COMMANDS ==========
