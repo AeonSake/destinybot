@@ -144,17 +144,25 @@ module.exports = (app) => {
   function addCustomSkulls () {
     destiny_def.skull[80] = {skullHash: 80, skullName: lang.msg.dest.skulls.heroic, description: lang.msg.dest.skulls.heroicdef};
     destiny_def.skull[81] = {skullHash: 81, skullName: lang.msg.dest.skulls.epic, description: lang.msg.dest.skulls.epicdef};
+    // Bonuses
     destiny_def.skull[90] = {skullHash: 90, skullName: lang.msg.dest.skulls.precisionbonus, description: lang.msg.dest.skulls.precisionbonusdef};
+    destiny_def.skull[91] = {skullHash: 91, skullName: lang.msg.dest.skulls.meleebonus, description: lang.msg.dest.skulls.meleebonusdef};
+    // Mods
     destiny_def.skull[100] = {skullHash: 100, skullName: lang.msg.dest.skulls.freshtroops, description: lang.msg.dest.skulls.freshtroopsdef};
     destiny_def.skull[101] = {skullHash: 101, skullName: lang.msg.dest.skulls.matchgame, description: lang.msg.dest.skulls.matchgamedef};
+    destiny_def.skull[102] = {skullHash: 102, skullName: lang.msg.dest.skulls.ironclad, description: lang.msg.dest.skulls.ironcladdef};
   }
   
   function addCustomSkullsRef () {
     destiny_def.skull_ref[80] = {skullHash: 80, skullName: "Heroic"};
     destiny_def.skull_ref[81] = {skullHash: 81, skullName: "Epic"};
+    // Bonuses
     destiny_def.skull_ref[90] = {skullHash: 90, skullName: "Precision Kill Bonus"};
+    destiny_def.skull_ref[91] = {skullHash: 91, skullName: "Melee Kill Bonus"};
+    // Mods
     destiny_def.skull_ref[100] = {skullHash: 100, skullName: "Fresh Troops"};
     destiny_def.skull_ref[101] = {skullHash: 101, skullName: "Match Game"};
+    destiny_def.skull_ref[102] = {skullHash: 102, skullName: "Ironclad"};
   }
   
   

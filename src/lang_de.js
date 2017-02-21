@@ -110,11 +110,15 @@ let lang = module.exports = {
         
         precisionbonus: "Präziser Kill-Bonus",
         precisionbonusdef: "Präzise Kills geben mehr Punkte.",
+        meleebonus: "Nahkampf-Kill-Bonus",
+        meleebonusdef: "Nahkampf-Kills geben mehr Punkte.",
         
         freshtroops: "Frische Truppen",
         freshtroopsdef: "Manche Feindeseinheiten haben Verstärkung bekommen.",
         matchgame: "Puzzlespiel",
-        matchgamedef: "Feindschilde sind gegen ungleiche Elementarschaden resistent."
+        matchgamedef: "Feindschilde sind gegen ungleiche Elementarschaden resistent.",
+        ironclad: "Panzerschiff",
+        ironcladdef: "Mehr Feinde tragen Schilde."
       } 
     },
     
