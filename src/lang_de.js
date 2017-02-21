@@ -92,6 +92,7 @@ let lang = module.exports = {
       raid: "Raid",
       normalmode: "Normal-Mode",
       hardmode: "Hard-Mode",
+      nochallenge: "Keine Challenge",
       trials: "Die Prüfungen von Osiris",
       srl: "Sparrow Racing League",
       armsday: "Waffenlieferung",

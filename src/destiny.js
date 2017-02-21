@@ -107,7 +107,6 @@ module.exports = (app) => {
       path: '/Platform/Destiny/Advisors/V2/',
       headers: {'X-API-Key': config.destiny_key}
     };
-    destiny_info.ready = false;
     
     https.get(options, function(res) {
       var body = "";
@@ -324,6 +323,7 @@ module.exports = (app) => {
       title: destiny_def.activity[destiny_activities.vaultofglass.display.activityHash].activityName,
       desc: destiny_def.activity[destiny_activities.vaultofglass.display.activityHash].activityDescription,
       loc: destiny_def.place[destiny_activities.vaultofglass.display.placeHash].placeName,
+      challenge: lang.msg.dest.nochallenge,
       normal: {
         level: destiny_activities.vaultofglass.activityTiers[0].activityData.displayLevel,
         light: destiny_activities.vaultofglass.activityTiers[0].activityData.recommendedLight
@@ -344,6 +344,7 @@ module.exports = (app) => {
       title: destiny_def.activity[destiny_activities.crota.display.activityHash].activityName,
       desc: destiny_def.activity[destiny_activities.crota.display.activityHash].activityDescription,
       loc: destiny_def.place[destiny_activities.crota.display.placeHash].placeName,
+      challenge: lang.msg.dest.nochallenge,
       normal: {
         level: destiny_activities.crota.activityTiers[0].activityData.displayLevel,
         light: destiny_activities.crota.activityTiers[0].activityData.recommendedLight
@@ -469,8 +470,6 @@ module.exports = (app) => {
       insummary: true,
       //color: "#333333"
     };
-    
-    destiny_info.ready = true;
   }
   
   
@@ -654,7 +653,7 @@ module.exports = (app) => {
     
     if (keys.length != 0) {
       for (var i = 0; i < keys.length; i++) {
-        if (destiny_info[key].active) msg_text.attachments.push(getActivityAttachment(destiny_info[key]));
+        if (destiny_info[keys[i]].active) msg_text.attachments.push(getActivityAttachment(destiny_info[keys[i]]));
       }
     } else {
       for (var key in destiny_info) {
