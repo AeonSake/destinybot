@@ -86,7 +86,7 @@ let lang = module.exports = {
       moreinfo: "Mehr Informationen:",
       raid: "Raid",
       nochallenge: "Keine Herausforderung",
-      recom: "Empfohlen",
+      recom: "Empfohlen:",
       light: "Licht",
       level: "Level",
       activetill: "Aktiv bis:"

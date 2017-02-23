@@ -70,10 +70,23 @@ module.exports = (app) => {
     });
   }
   
+  function getPerkDef () {
+    https.get('https://destiny.plumbing/' + config.lang + '/raw/DestinySandboxPerkDefinition.json', function(res) {
+      var body = "";
+      res.on('data', function(d) {
+        body += d;
+      });
+      res.on('end', function() {
+        destiny_def.perk = JSON.parse(body);
+      });
+    });
+  }
+  
   function getDefinitions () {
     getActivityDef();
     getPlaceDef();
     getItemDef();
+    //getPerkDef();
   }
   getDefinitions();
   
@@ -178,6 +191,8 @@ module.exports = (app) => {
     
     for (var i in arr) {
       for (var j in arr[i].skulls) {
+        console.log(i + " " + j);
+        console.log(arr[i].skulls[j]);
         skulls.push({
           name: arr[i].skulls[j].displayName,
           desc: arr[i].skulls[j].description
@@ -272,6 +287,7 @@ module.exports = (app) => {
       insummary: true,
       color: "#5941E0"
     };
+    console.log(destiny_activities.nightfall.extended.skullCategories);
     
     // raid
     destiny_info.vaultofglass = {
@@ -749,6 +765,8 @@ module.exports = (app) => {
       case 'elderchallenge':
         msg_text = destiny_full_msg("", 'elderchallenge');
         break;
+      case 'story':
+      case 'dailystory':
       case 'mission':
       case 'dailymission':
       case 'dailychapter':
@@ -786,9 +804,6 @@ module.exports = (app) => {
       case 'ironbanner':
         msg_text = destiny_full_msg("", 'ironbanner');
         break;
-      case 'ironbanner':
-        msg_text = destiny_full_msg("", 'ironbanner');
-        break;
       case 'trials':
         msg_text = destiny_full_msg("", 'trials');
         break;
@@ -805,7 +820,7 @@ module.exports = (app) => {
         return;
     }
     
-    msg_text.attachments.push(destiny_dismiss_att);
+    if ('attachments' in msg_text) msg_text.attachments.push(destiny_dismiss_att);
     msg.respond(msg_text);
     return;
   });
