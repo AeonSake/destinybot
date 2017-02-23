@@ -722,7 +722,7 @@ module.exports = (app) => {
   slapp.command('/destiny', "post", (msg, cmd) => {
     if (msg.body.user_id == config.admin_id) {
       var msg_text = destiny_summary_msg(lang.msg.dest.main);
-      msg_text.attachments.push(destiny_moreinfo_att);
+      msg_text.attachments.push(destiny_moreinfo_att(0));
       msg.say(msg_text);
     }
     return;
