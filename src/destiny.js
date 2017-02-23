@@ -186,7 +186,7 @@ module.exports = (app) => {
       },
       json: true
     };
-    needle.delete('https://beepboophq.com/api/v1/chronos/tasks/' + id, headers, (err, resp) => {
+    needle.delete('https://beepboophq.com/api/v1/chronos/tasks/' + id, null, headers, (err, resp) => {
       if (resp.statusCode !== 201) console.log(resp.statusCode);
       if (err) console.log(err);
       else console.log(resp.body);
