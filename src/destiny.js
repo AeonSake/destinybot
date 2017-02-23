@@ -734,6 +734,7 @@ module.exports = (app) => {
   // ===== /destiny schedule =====
   
   slapp.command('/destiny', "set-s (\w+) (.*)", (msg, cmd, evt, time) => {
+    console.log(cmd + " || " + evt + " || " + time);
     if (msg.body.user_id == config.admin_id) setSchedule(msg, evt, time);
     return;
   });
