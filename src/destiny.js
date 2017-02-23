@@ -859,20 +859,12 @@ module.exports = (app) => {
         msg_text = destiny_full_msg("", 'armsday');
         break;
       default:
-        return;
+        msg_text = destiny_summary_msg(lang.msg.dest.main);
+        msg_text.attachments.push(destiny_moreinfo_att(0));
+        break;
     }
     
     if ('attachments' in msg_text) msg_text.attachments.push(destiny_dismiss_att);
-    msg.respond(msg_text);
-    return;
-  });
-  
-  // ===== /destiny =====
-  
-  slapp.command('/destiny', (msg) => {
-    var msg_text = destiny_summary_msg(lang.msg.dest.main);
-    msg_text.attachments.push(destiny_moreinfo_att(0));
-    msg_text.attachments.push(destiny_dismiss_att);
     msg.respond(msg_text);
     return;
   });
