@@ -140,12 +140,13 @@ module.exports = (app) => {
   // destiny_weekly_update OWE3ODVkYTYwNTVhNDY1ZTg2NTEwNzJhYTM5NDIzZjF8MzAgOSAqICogMiAq
   // destiny_weekend_update ZjVjNjUzNjQ3ZWY3NDk0ZGFjNDAzM2MzY2NlZjA5ZDh8MzAgOSAqICogNSAq
   
-  function setSchedule (msg) {
+  function setSchedule (msg, evt, time) {
     let ts = Date.now() + '';
     var data = {
       //schedule: "30 9 * * 0,1,3,4,6 *",
       //schedule: "30 9 * * 2 *",
-      schedule: "30 18 * * 5 *",
+      //schedule: "30 18 * * 5 *",
+      schedule: time,
       url: 'https://beepboophq.com/proxy/' + config.bb_project_id + '/slack/event',
       method: 'POST',
       headers: {
@@ -158,8 +159,8 @@ module.exports = (app) => {
         event: {
           ts: ts,
           event_ts: ts,
-          type: 'destiny_weekend_update',
-          payload: "destiny_weekend_update",
+          type: evt,
+          payload: evt,
           user: msg.meta.user_id,
           channel: msg.meta.channel_id
         }
@@ -732,8 +733,8 @@ module.exports = (app) => {
   
   // ===== /destiny schedule =====
   
-  slapp.command('/destiny', "set-s", (msg, cmd) => {
-    if (msg.body.user_id == config.admin_id) setSchedule(msg);
+  slapp.command('/destiny', "set-s (\w+) (.*)", (msg, cmd, evt, time) => {
+    if (msg.body.user_id == config.admin_id) setSchedule(msg, evt, time);
     return;
   });
   
