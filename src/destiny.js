@@ -5,7 +5,7 @@
 'use strict';
 
 const https = require('https');
-//const needle = require('needle');
+const needle = require('needle');
 
 var destiny_info = {},
     destiny_def = {},
@@ -140,12 +140,12 @@ module.exports = (app) => {
   // destiny_weekly_update OWE3ODVkYTYwNTVhNDY1ZTg2NTEwNzJhYTM5NDIzZjF8MzAgOSAqICogMiAq
   // destiny_weekend_update ZjVjNjUzNjQ3ZWY3NDk0ZGFjNDAzM2MzY2NlZjA5ZDh8MzAgOSAqICogNSAq
   
-  /*function setSchedule (msg) {
+  function setSchedule (msg) {
     let ts = Date.now() + '';
     var data = {
       //schedule: "30 9 * * 0,1,3,4,6 *",
       //schedule: "30 9 * * 2 *",
-      //schedule: "30 9 * * 5 *",
+      schedule: "30 18 * * 5 *",
       url: 'https://beepboophq.com/proxy/' + config.bb_project_id + '/slack/event',
       method: 'POST',
       headers: {
@@ -177,8 +177,35 @@ module.exports = (app) => {
       if (err) console.log(err);
       else console.log(resp.body);
     });
-  }*/
+  }
   
+  function deleteSchedule (msg, id) {
+    var headers = {
+      headers: {
+        Authorization: 'Bearer ' + config.bb_token
+      },
+      json: true
+    };
+    needle.delete('https://beepboophq.com/api/v1/chronos/tasks/' + id, headers, (err, resp) => {
+      if (resp.statusCode !== 201) console.log(resp.statusCode);
+      if (err) console.log(err);
+      else console.log(resp.body);
+    });
+  }
+  
+  function listSchedule (msg) {
+    var headers = {
+      headers: {
+        Authorization: 'Bearer ' + config.bb_token
+      },
+      json: true
+    };
+    needle.get('https://beepboophq.com/api/v1/chronos/tasks', headers, (err, resp) => {
+      if (resp.statusCode !== 201) console.log(resp.statusCode);
+      if (err) console.log(err);
+      else console.log(resp.body);
+    });
+  }
   
   
   
@@ -191,8 +218,6 @@ module.exports = (app) => {
     
     for (var i in arr) {
       for (var j in arr[i].skulls) {
-        console.log(i + " " + j);
-        console.log(arr[i].skulls[j]);
         skulls.push({
           name: arr[i].skulls[j].displayName,
           desc: arr[i].skulls[j].description
@@ -287,7 +312,6 @@ module.exports = (app) => {
       insummary: true,
       color: "#5941E0"
     };
-    console.log(destiny_activities.nightfall.extended.skullCategories);
     
     // raid
     destiny_info.vaultofglass = {
@@ -544,7 +568,7 @@ module.exports = (app) => {
   
   function getActivityAttachment (act) {
     var text = "";
-    if ('skulls' in act) text = listSkulls(act.skulls);
+    if ('skulls' in act) text = listSkulls(act.skulls.skulls);
     else if ('challenge' in act) text = act.challenge;
     else if ('items' in act) text = listItems(act.items);
     else if ('loc' in act) text = act.loc;
@@ -577,7 +601,7 @@ module.exports = (app) => {
     });
     if ('skulls' in act) fields.push({
       title: act.skulls.title,
-      value: listFullSkulls(act.skulls),
+      value: listFullSkulls(act.skulls.skulls),
       short: false
     });
     if ('normal' in act) fields.push({
@@ -706,6 +730,23 @@ module.exports = (app) => {
     return;
   });
   
+  // ===== /destiny schedule =====
+  
+  slapp.command('/destiny', "set-s", (msg, cmd) => {
+    if (msg.body.user_id == config.admin_id) setSchedule(msg);
+    return;
+  });
+  
+  slapp.command('/destiny', "del-s (.*)", (msg, cmd) => {
+    if (msg.body.user_id == config.admin_id) deleteSchedule(msg, cmd.substr(6));
+    return;
+  });
+  
+  slapp.command('/destiny', "list-s", (msg, cmd) => {
+    if (msg.body.user_id == config.admin_id) listSchedule(msg);
+    return;
+  });
+  
   // ===== /destiny test =====
   
   slapp.command('/destiny', "test (.*)", (msg, cmd) => {
@@ -735,6 +776,7 @@ module.exports = (app) => {
     switch (cmd) {
       case 'full':
       case 'all':
+      case 'list':
         msg_text = destiny_list_msg(lang.msg.dest.main, []);
         msg_text.attachments.push(destiny_moreinfo_att(0));
         break;
