@@ -46,6 +46,7 @@ let lang = module.exports = {
     all: "Alle",
     
     dest: {
+      summary: "Übersicht",
       pve: "PvE",
       raids: "Raids",
       pvp: "PvP",
@@ -83,43 +84,12 @@ let lang = module.exports = {
       dailyupdate: "Destiny | Tägliches Update",
       weekendupdate: "Destiny | Wochenend-Update",
       moreinfo: "Mehr Informationen:",
-      dailyheroic: "Tägliche Story (Heroisch)",
-      weeklystrikes: "Wöchtentliche Strike-Playlist",
-      heroicstrikes: "SIVA-Krise (Heroisch)",
-      nightfall: "Wöchentlicher Dämmerungs-Strike",
-      dailycrucible: "Tägliche Schmelztiegel-Playlist",
-      weeklycrucible: "Wöchentliche Schmelztiegel-Playlist",
       raid: "Raid",
-      normalmode: "Normal-Mode",
-      hardmode: "Hard-Mode",
-      nochallenge: "Keine Challenge",
-      trials: "Die Prüfungen von Osiris",
-      srl: "Sparrow Racing League",
-      armsday: "Waffenlieferung",
-      mods: "Modifikatoren",
+      nochallenge: "Keine Herausforderung",
       recom: "Empfohlen",
       light: "Licht",
       level: "Level",
-      activetill: "Aktiv bis:",
-      
-      skulls: {
-        heroic: "Heroisch",
-        heroicdef: "Feinde erscheinen in größerer Anzahl und sind aggressiver.",
-        epic: "Episch",
-        epicdef: "Feinde sind gut gepanzert, hochaggressiv und erscheinen in großer Anzahl.",
-        
-        precisionbonus: "Präziser Kill-Bonus",
-        precisionbonusdef: "Präzise Kills geben mehr Punkte.",
-        meleebonus: "Nahkampf-Kill-Bonus",
-        meleebonusdef: "Nahkampf-Kills geben mehr Punkte.",
-        
-        freshtroops: "Frische Truppen",
-        freshtroopsdef: "Manche Feindeseinheiten haben Verstärkung bekommen.",
-        matchgame: "Puzzlespiel",
-        matchgamedef: "Feindschilde sind gegen ungleiche Elementarschaden resistent.",
-        ironclad: "Panzerschiff",
-        ironcladdef: "Mehr Feinde tragen Schilde."
-      } 
+      activetill: "Aktiv bis:"
     },
     
     evt: {

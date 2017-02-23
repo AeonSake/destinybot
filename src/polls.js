@@ -24,12 +24,8 @@ module.exports = (app) => {
   
   var module = {};
   
-  // TODO:
-  // poll_edit_answers_route
-  // poll_edit_answer_edit_route
-
-
-
+  
+  
 // ==============================
 // ========== MESSAGES ==========
 // ==============================
@@ -1246,7 +1242,8 @@ module.exports = (app) => {
         if ('ts' in data) {
           att_fields = [];
           temp_ts = data.ts.edited;
-          var voter_count = poll_db[slot].collectVoters().length;
+          var voter_count = poll_db[slot].collectVoters().length,
+              activeanswers = 0;
           
           for (var i = 0; i < data.answers.length; i++) {
             var votes = "";
@@ -1267,18 +1264,19 @@ module.exports = (app) => {
               if (data.answers[i].votes.length == 0) votes = lang.msg.poll.novotes;
               else percent = Math.round((data.answers[i].votes.length / voter_count) * 100);
 
-              att_fields[i] = {
-                value: emoji_num[i] + " *" + data.answers[i].text + " (" + percent + "%)*\n" + votes,
+              att_fields.push({
+                value: emoji_num[activeanswers] + " *" + data.answers[i].text + " (" + percent + "%)*\n" + votes,
                 short: false
-              };
+              });
+              activeanswers++;
             }
           }
         } else {
           for (var i = 0; i < data.answers.length; i++) {
-            att_fields[i] = {
+            att_fields.push({
               value: emoji_num[i] + " *" + data.answers[i].text + " (0%)*\n" + lang.msg.poll.novotes,
               short: false
-            }
+            });
           }
         }
       }
