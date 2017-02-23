@@ -884,7 +884,7 @@ module.exports = (app) => {
     getActivities();
     setTimeout(function(){
       var msg_text = destiny_summary_msg(lang.msg.dest.weeklyreset);
-      msg_text.attachments.push(destiny_moreinfo_att(0));
+      //msg_text.attachments.push(destiny_moreinfo_att(0));
       postToChannel(msg_text);
     }, 2000);
   });
@@ -893,7 +893,6 @@ module.exports = (app) => {
     getActivities();
     setTimeout(function(){
       var msg_text = destiny_list_msg(lang.msg.dest.weekendupdate, ['trials', 'xur']);
-      msg_text.attachments.push(destiny_moreinfo_att(0));
       postToChannel(msg_text);
     }, 2000);
   });
