@@ -84,6 +84,7 @@ let lang = module.exports = {
       dailyupdate: "Destiny | Tägliches Update",
       weekendupdate: "Destiny | Wochenend-Update",
       moreinfo: "Mehr Informationen:",
+      noactivities: "Keine Aktivitäten verfügbar.",
       raid: "Raid",
       nochallenge: "Keine Herausforderung",
       recom: "Empfohlen:",
