@@ -23,11 +23,11 @@ module.exports = (slapp, kv, config, func) => {
       token: config.bot_token
     }, (err, data) => {
       if (err) {
-        func.addLogEntry("Unable to load team info (" + err + ")", 3);
+        console.log("ERROR: Unable to load team info (" + err + ")");
       }
       else {
         team_db = data.team;
-        func.addLogEntry("Team info loaded", 1);
+        console.log("INFO: Team info loaded");
       }
     });
   }
@@ -38,11 +38,11 @@ module.exports = (slapp, kv, config, func) => {
       token: config.bot_token
     }, (err, data) => {
       if (err) {
-        func.addLogEntry("Unable to load user info (" + err + "), using old data instead (if existing)", 2);
+        console.log("WARN: Unable to load user info (" + err + "), using old data instead (if existing)");
         
         kv.get('user_db', function (err, val) {
           if (err) {
-            func.addLogEntry("Unable to load old user info (" + err + ")", 3);
+            console.log("ERROR: Unable to load old user info (" + err + ")");
           }
           else if (typeof val !== "undefined") user_db = val;
         });
@@ -64,10 +64,10 @@ module.exports = (slapp, kv, config, func) => {
           };
         }
         
-        func.addLogEntry("User info loaded", 1);
+        console.log("INFO: User info loaded");
         
         kv.set('user_db', user_db, function (err) {
-          if (err) func.addLogEntry("Unable to save user info (" + err + ")", 2);
+          if (err) console.log("WARN: Unable to save user info (" + err + ")");
         });
       }
     });

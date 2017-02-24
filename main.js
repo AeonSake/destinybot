@@ -51,5 +51,5 @@ console.log("Listening on port " + process.env.PORT);
 server.listen(process.env.PORT);
 
 setTimeout(function(){
-  func.addLogEntry("Running " + config.title + " on version " + config.version, 0);
+  console.log("INFO: Running " + config.title + " on version " + config.version);
 }, 3000);

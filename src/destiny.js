@@ -42,6 +42,7 @@ module.exports = (app) => {
       });
       res.on('end', function() {
         destiny_def.activity = JSON.parse(body);
+        console.log("INFO: Activity definitions loaded");
       });
     });
   }
@@ -54,6 +55,7 @@ module.exports = (app) => {
       });
       res.on('end', function() {
         destiny_def.place = JSON.parse(body);
+        console.log("INFO: Place definitions loaded");
       });
     });
   }
@@ -66,6 +68,7 @@ module.exports = (app) => {
       });
       res.on('end', function() {
         destiny_def.item = JSON.parse(body);
+        console.log("INFO: Item definitions loaded");
       });
     });
   }
@@ -78,6 +81,7 @@ module.exports = (app) => {
       });
       res.on('end', function() {
         destiny_def.perk = JSON.parse(body);
+        console.log("INFO: Perl definitions loaded");
       });
     });
   }
@@ -104,6 +108,7 @@ module.exports = (app) => {
       });
       res.on('end', function() {
         destiny_activities = JSON.parse(body).Response.data.activities;
+        console.log("INFO: Activities loaded");
         if (destiny_activities.xur.status.active) getXurItems();
         else prepareData();
       });
@@ -125,7 +130,8 @@ module.exports = (app) => {
       });
       res.on('end', function() {
         prepareData();
-        destiny_info.xur.items = JSON.parse(body).Response.data.saleItemCategories[2].saleItems;
+        destiny_info.xur.items = getItems(JSON.parse(body).Response.data.saleItemCategories[2].saleItems);
+        console.log("INFO: Xûr items loaded");
       });
     });
   }
@@ -878,6 +884,7 @@ module.exports = (app) => {
   
   slapp.event('destiny_daily_update', (msg) => {
     getActivities();
+    return;
   });
   
   slapp.event('destiny_weekly_update', (msg) => {
@@ -887,6 +894,7 @@ module.exports = (app) => {
       //msg_text.attachments.push(destiny_moreinfo_att(0));
       postToChannel(msg_text);
     }, 2000);
+    return;
   });
   
   slapp.event('destiny_weekend_update', (msg) => {
@@ -895,6 +903,7 @@ module.exports = (app) => {
       var msg_text = destiny_list_msg(lang.msg.dest.weekendupdate, ['trials', 'xur']);
       postToChannel(msg_text);
     }, 2000);
+    return;
   });
   
   // ===== moreinfo callback =====
