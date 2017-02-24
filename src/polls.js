@@ -1074,7 +1074,7 @@ module.exports = (app) => {
         }
       }
       
-      if (this.answers.length > data.options.max) this.options.max = this.answers.length;
+      if (this.answers.length < data.options.max) this.options.max = this.answers.length;
       else this.options.max = data.options.max;
     }
     
@@ -1366,26 +1366,26 @@ module.exports = (app) => {
 
   function savePollDB () {
     kv.set('poll_db', poll_db, function (err) {
-      if (err) console.log("ERROR: Unable to save poll database (" + err + ")");
+      if (err) console.log("ERROR: Polls | Unable to save poll database (" + err + ")");
     });
   }
 
   function loadPollDB () {
     kv.get('poll_db', function (err, val) {
       if (err) {
-        console.log("ERROR: Unable to load poll database (" + err + ")");
+        console.log("ERROR: Polls | Unable to load poll database (" + err + ")");
       
       } else if (typeof val !== "undefined") {
         for (var i = 0; i < val.length; i++) poll_db[i] = new Poll(val[i]);
         
-        console.log("INFO: Poll database loaded");
+        console.log("INFO: Polls | Poll database loaded");
       }
     });
   }
   
   function deletePollDB () {
     kv.del('poll_info', function (err) {
-      if (err) console.log("WARN: Unable to delete poll database (" + err + ")");
+      if (err) console.log("WARN: Polls | Unable to delete poll database (" + err + ")");
     });
   }
   

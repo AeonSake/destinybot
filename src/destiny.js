@@ -42,7 +42,7 @@ module.exports = (app) => {
       });
       res.on('end', function() {
         destiny_def.activity = JSON.parse(body);
-        console.log("INFO: Activity definitions loaded");
+        console.log("INFO: Destiny | Activity definitions loaded");
       });
     });
   }
@@ -55,7 +55,7 @@ module.exports = (app) => {
       });
       res.on('end', function() {
         destiny_def.place = JSON.parse(body);
-        console.log("INFO: Place definitions loaded");
+        console.log("INFO: Destiny | Place definitions loaded");
       });
     });
   }
@@ -68,7 +68,7 @@ module.exports = (app) => {
       });
       res.on('end', function() {
         destiny_def.item = JSON.parse(body);
-        console.log("INFO: Item definitions loaded");
+        console.log("INFO: Destiny | Item definitions loaded");
       });
     });
   }
@@ -81,7 +81,7 @@ module.exports = (app) => {
       });
       res.on('end', function() {
         destiny_def.perk = JSON.parse(body);
-        console.log("INFO: Perl definitions loaded");
+        console.log("INFO: Destiny | Perk definitions loaded");
       });
     });
   }
@@ -108,7 +108,7 @@ module.exports = (app) => {
       });
       res.on('end', function() {
         destiny_activities = JSON.parse(body).Response.data.activities;
-        console.log("INFO: Activities loaded");
+        console.log("INFO: Destiny | Activities loaded");
         if (destiny_activities.xur.status.active) getXurItems();
         else prepareData();
       });
@@ -131,7 +131,7 @@ module.exports = (app) => {
       res.on('end', function() {
         prepareData();
         destiny_info.xur.items = getItems(JSON.parse(body).Response.data.saleItemCategories[2].saleItems);
-        console.log("INFO: Xûr items loaded");
+        console.log("INFO: Destiny | Xûr items loaded");
       });
     });
   }
@@ -729,6 +729,7 @@ module.exports = (app) => {
     if (msg.body.user_id == config.admin_id) {
       var msg_text = destiny_summary_msg(lang.msg.dest.main);
       msg_text.attachments.push(destiny_moreinfo_att(0));
+      msg_text.attachments[msg_text.attachments.length - 1].callback_id = 'destiny_public_moreinfo_callback';
       msg.say(msg_text);
     }
     return;
@@ -891,7 +892,8 @@ module.exports = (app) => {
     getActivities();
     setTimeout(function(){
       var msg_text = destiny_summary_msg(lang.msg.dest.weeklyreset);
-      //msg_text.attachments.push(destiny_moreinfo_att(0));
+      msg_text.attachments.push(destiny_moreinfo_att(0));
+      msg_text.attachments[msg_text.attachments.length - 1].callback_id = 'destiny_public_moreinfo_callback';
       postToChannel(msg_text);
     }, 2000);
     return;
@@ -908,7 +910,7 @@ module.exports = (app) => {
   
   // ===== moreinfo callback =====
   
-  slapp.action('destiny_moreinfo_callback', (msg) => {
+  slapp.action('(destiny_moreinfo_callback|destiny_public_moreinfo_callback)', (msg) => {
     var msg_text = {};
     switch (msg.body.actions[0].name) {
       case 'summary':
@@ -932,7 +934,7 @@ module.exports = (app) => {
         msg_text.attachments.push(destiny_moreinfo_att(4));
         break;
     }
-    
+    console.log(msg.body);
     msg_text.attachments.push(destiny_dismiss_att);
     msg.respond(msg_text);
     return;
