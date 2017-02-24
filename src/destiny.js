@@ -910,7 +910,7 @@ module.exports = (app) => {
   
   // ===== moreinfo callback =====
   
-  slapp.action('(destiny_moreinfo_callback|destiny_public_moreinfo_callback)', (msg) => {
+  slapp.action('destiny_moreinfo_callback', (msg) => {
     var msg_text = {};
     switch (msg.body.actions[0].name) {
       case 'summary':
@@ -934,7 +934,38 @@ module.exports = (app) => {
         msg_text.attachments.push(destiny_moreinfo_att(4));
         break;
     }
-    console.log(msg.body);
+    
+    msg_text.attachments.push(destiny_dismiss_att);
+    msg.respond(msg_text);
+    return;
+  });
+  
+  slapp.action('destiny_public_moreinfo_callback', (msg) => {
+    var msg_text = {};
+    switch (msg.body.actions[0].name) {
+      case 'summary':
+        msg_text = destiny_summary_msg(lang.msg.dest.main);
+        msg_text.attachments.push(destiny_moreinfo_att(0));
+        break;
+      case 'pve':
+        msg_text = destiny_list_msg(lang.msg.dest.main, ['elderchallenge', 'dailychapter', 'heroicstrike', 'nightfall']);
+        msg_text.attachments.push(destiny_moreinfo_att(1));
+        break;
+      case 'raids':
+        msg_text = destiny_list_msg(lang.msg.dest.main, ['vaultofglass', 'crota', 'kingsfall', 'wrathofthemachine']);
+        msg_text.attachments.push(destiny_moreinfo_att(2));
+        break;
+      case 'pvp':
+        msg_text = destiny_list_msg(lang.msg.dest.main, ['dailycrucible', 'weeklycrucible', 'ironbanner', 'trials']);
+        msg_text.attachments.push(destiny_moreinfo_att(3));
+        break;
+      case 'special':
+        msg_text = destiny_list_msg(lang.msg.dest.main, ['ironbanner', 'trials', 'srl', 'xur', 'armsday']);
+        msg_text.attachments.push(destiny_moreinfo_att(4));
+        break;
+    }
+    
+    msg_text.replace_original = false;
     msg_text.attachments.push(destiny_dismiss_att);
     msg.respond(msg_text);
     return;
