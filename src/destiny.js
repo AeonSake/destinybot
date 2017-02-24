@@ -5,7 +5,7 @@
 'use strict';
 
 const https = require('https');
-//const needle = require('needle');
+const needle = require('needle');
 
 var destiny_info = {},
     destiny_def = {},
@@ -146,12 +146,12 @@ module.exports = (app) => {
   // destiny_weekly_update OWE3ODVkYTYwNTVhNDY1ZTg2NTEwNzJhYTM5NDIzZjF8MzAgOSAqICogMiAq
   // destiny_weekend_update OGUyNTRkNTBlNTllNGMzY2E0OWIzOTg4M2NjYjcyNjB8MzAgMTggKiAqIDUgKg==
   
-  /*function setSchedule (msg) {
+  function setSchedule (msg) {
     let ts = Date.now() + '';
     var data = {
-      //schedule: "30 9 * * 0,1,3,4,6 *",
+      schedule: "30 9 * * 0,1,3,4,5,6 *",
       //schedule: "30 9 * * 2 *",
-      schedule: "30 18 * * 5 *",
+      //schedule: "30 18 * * 5 *",
       url: 'https://beepboophq.com/proxy/' + config.bb_project_id + '/slack/event',
       method: 'POST',
       headers: {
@@ -164,8 +164,8 @@ module.exports = (app) => {
         event: {
           ts: ts,
           event_ts: ts,
-          type: 'destiny_weekend_update',
-          payload: "destiny_weekend_update",
+          type: 'destiny_daily_update',
+          payload: "destiny_daily_update",
           user: msg.meta.user_id,
           channel: msg.meta.channel_id
         }
@@ -211,7 +211,7 @@ module.exports = (app) => {
       if (err) console.log(err);
       else console.log(resp.body);
     });
-  }*/
+  }
   
   
   
@@ -744,7 +744,7 @@ module.exports = (app) => {
   
   // ===== /destiny schedule =====
   
-  /*slapp.command('/destiny', "set-s", (msg, cmd) => {
+  slapp.command('/destiny', "set-s", (msg, cmd) => {
     if (msg.body.user_id == config.admin_id) setSchedule(msg);
     return;
   });
@@ -757,7 +757,7 @@ module.exports = (app) => {
   slapp.command('/destiny', "list-s", (msg, cmd) => {
     if (msg.body.user_id == config.admin_id) listSchedule(msg);
     return;
-  });*/
+  });
   
   // ===== /destiny test =====
   
@@ -877,6 +877,7 @@ module.exports = (app) => {
     }
     
     if ('attachments' in msg_text) msg_text.attachments.push(destiny_dismiss_att);
+    else msg_text = func.generateInfoMsg(lang.msg.dest.notactive);
     msg.respond(msg_text);
     return;
   });

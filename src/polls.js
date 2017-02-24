@@ -1635,7 +1635,7 @@ module.exports = (app) => {
         msg_text.text = "";
         msg_text.attachments.push(poll_dismiss_att);
         msg.respond(msg_text);
-      } else msg.respond(func.generateInfoMsg(lang.err.poll.notfound));
+      } else msg.respond(func.generateInfoMsg(lang.msg.poll.notfound));
     } else msg.respond(poll_list_msg(0, {mode: 0, sort: 'desc'}));
     
     return;
@@ -1679,7 +1679,7 @@ module.exports = (app) => {
         }
       });
     }
-    else msg.respond(func.generateInfoMsg(lang.err.poll.notfound));
+    else msg.respond(func.generateInfoMsg(lang.msg.poll.notfound));
     
     return;
   });
@@ -1700,8 +1700,8 @@ module.exports = (app) => {
           msg.respond(msg_text);
           msg.route('poll_edit_route', data, 60);
           return;
-        } else msg.respond(func.generateInfoMsg(lang.err.poll.notowner));
-      } else msg.respond(func.generateInfoMsg(lang.err.poll.notfound));
+        } else msg.respond(func.generateInfoMsg(lang.msg.poll.notowner));
+      } else msg.respond(func.generateInfoMsg(lang.msg.poll.notfound));
     } else msg.respond(poll_edit_list_msg(msg.body.user_id, 0, 'desc'));
     
     return;

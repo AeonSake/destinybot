@@ -90,12 +90,17 @@ let lang = module.exports = {
       recom: "Empfohlen:",
       light: "Licht",
       level: "Level",
-      activetill: "Aktiv bis:"
+      activetill: "Aktiv bis:",
+      notactive: "Aktivität ist derzeit nicht aktiv.",
+      
+      help: ""
     },
     
     evt: {
       confirmdelete: "Sind Sie sicher, dass Sie diesen Event löschen wollen?",
       deleted: "Event wurde erfolgreich gelöscht.",
+      notfound: "Eine Abstimmung mit dieser ID konnte nicht gefunden werden.",
+      notowner: "Nur der Ersteller dieser Abstimmung kann diese bearbeiten.",
       
       help: "Liste aller Befehle:\n`/event` : Hauptmenü\n`/event <title>;<dd.mm.yy>;<hh:mm>` : Schnell-Erstellung eines Events\n`/event create` : Erstellung eines Events\n`/event join <id>` : Dem Event mit der ID <id> beitreten\n`/event leave <id>` : Den Event mit der ID <id> verlassen\n`/event list` : Anzeigen aller Events\n`/event show <id>` : Anzeigen des Events mit der ID <id>\n`/event post <id>` : Posten des Events mit der ID <id> im aktuellen Channel\n`/event edit <id>` : Bearbeiten des Events mit der ID <id>\n `/event help` : Anzeigen der Hilfe"
     },
@@ -119,24 +124,10 @@ let lang = module.exports = {
       confirmdelete: "Sind Sie sicher, dass Sie diese Abstimmung löschen wollen?",
       confirmdeleteanswer: "Sind Sie sicher, dass Sie diese Antwort löschen wollen?",
       deleted: "Abstimmung wurde erfolgreich gelöscht.",
+      notfound: "Eine Abstimmung mit dieser ID konnte nicht gefunden werden.",
+      notowner: "Nur der Ersteller dieser Abstimmung kann diese bearbeiten.",
       
       help: "Liste aller Befehle:\n`/poll` : Hauptmenü\n`/poll <title>;<answer1>;<answer2>;...` : Schnell-Erstellung einer Abstimmung\n`/poll create` : Erstellung einer Abstimmung\n`/poll list` : Anzeigen aller Abstimmungen\n`/poll show <id>` : Anzeigen der Abstimmung mit der ID <id>\n`/poll post <id>` : Posten der Abstimmung mit der ID <id> im aktuellen Channel\n`/poll edit <id>` : Bearbeiten der Abstimmung mit der ID <id>\n `/poll help` : Anzeigen der Hilfe"
-    }
-  },
-  
-  err: {
-    dest: {
-      
-    },
-    
-    evt: {
-      notfound: "Ein Event mit dieser ID konnte nicht gefunden werden.",
-      notowner: "Nur der Ersteller dieses Events kann diesen bearbeiten."
-    },
-    
-    poll: {
-      notfound: "Eine Abstimmung mit dieser ID konnte nicht gefunden werden.",
-      notowner: "Nur der Ersteller dieser Abstimmung kann diese bearbeiten."
     }
   }
 };
