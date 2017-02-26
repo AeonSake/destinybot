@@ -157,7 +157,6 @@ module.exports = (app) => {
       msg_text.attachments[0] = this.generateAttachment(slot);
       msg_text.attachments[0].callback_id = 'event_schedule_answer';
       msg_text.attachments[0].actions = btns;
-      console.log(msg_text.attachments[0]);
       
       for (var i in this.members) user.sendDM(this.members[i], msg_text);
     }
@@ -222,7 +221,7 @@ module.exports = (app) => {
           short: false
         },
         {
-          name: lang.wrd.member + (this.options.max > 0 ? " (Max. " + this.options.max + ")" : ""),
+          title: lang.wrd.member + (this.options.max > 0 ? " (Max. " + this.options.max + ")" : ""),
           value: temp_members,
           short: false
         }
@@ -233,7 +232,7 @@ module.exports = (app) => {
         title: this.title,
         text: this.text,
         fallback: this.text,
-        fields: att_fields,
+        //fields: att_fields,
         footer: "<@" + this.creator + ">",
         //ts: this.ts.created,
         color: this.options.color,
@@ -427,6 +426,7 @@ module.exports = (app) => {
       };
       event_db[0] = new Event(data);
       event_db[0].setSchedule(msg, 0);
+      msg.say(event_db[0].generateEvent(0));
     };
   });
   
