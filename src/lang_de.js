@@ -109,6 +109,7 @@ let lang = module.exports = {
       deleted: "Event wurde erfolgreich gelöscht.",
       notfound: "Eine Abstimmung mit dieser ID konnte nicht gefunden werden.",
       notowner: "Nur der Ersteller dieser Abstimmung kann diese bearbeiten.",
+      startingsoon: "Ein Event an dem Sie teilnehmen beginnt in Kürze:",
       confirmcancel: "Sind Sie sicher, dass Sie diesen Event absagen wollen?",
       hascanceled: "hat für den folgenden Event abgesagt:",
       

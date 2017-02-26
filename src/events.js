@@ -127,7 +127,7 @@ module.exports = (app) => {
     
     notifyMembers (slot) {
       var msg_text = {
-        text: "",
+        text: lang.msg.evt.startingsoon,
         attachments: [],
         delete_original: true
       };
@@ -233,7 +233,7 @@ module.exports = (app) => {
         text: this.text,
         fallback: this.text,
         fields: att_fields,
-        footer: "<@" + this.creator + "|" + user.getUser(this.creator).name + ">",
+        footer: "<@" + this.creator + ">",
         //ts: this.ts.created,
         color: this.options.color,
         mrkdwn_in: ['text', 'pretext', 'fields']
