@@ -431,9 +431,7 @@ module.exports = (app) => {
   // ===== External event schedule trigger =====
   
   slapp.event('event_schedule', (msg) => {
-    console.log(msg.body);
-    console.log(msg.body.payload);
-    event_db[parseInt(msg.body.payload)].notifyMembers(msg.body.payload);
+    event_db[parseInt(msg.body.payload.event)].notifyMembers(msg.body.payload.event);
   });
   
   slapp.action('event_schedule_answer', (msg) => {
