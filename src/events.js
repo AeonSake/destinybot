@@ -146,7 +146,7 @@ module.exports = (app) => {
           style: 'danger',
           confirm: {
             title: lang.msg.confirm,
-            text: lang.msg.evtl.confirmcancel,
+            text: lang.msg.evt.confirmcancel,
             ok_text: lang.btn.yes,
             dismiss_text: lang.btn.no
           }
