@@ -91,7 +91,7 @@ module.exports = (app) => {
       needle.post('beepboophq.com/api/v1/chronos/tasks', data, headers, (err, resp) => {
         if (resp.statusCode !== 201) console.log(resp.statusCode);
         if (err) console.log(err);
-        else console.log(resp.body);
+        else console.log(resp.body.id);
       });
     }
     
