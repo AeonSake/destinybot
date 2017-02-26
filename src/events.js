@@ -134,14 +134,14 @@ module.exports = (app) => {
         {
           name: 'ok',
           value: slot,
-          text: lang.btn.ok,
+          text: lang.btn.evt.ok,
           type: 'button',
           style: 'primary'
         },
         {
           name: 'cancel',
           value: slot,
-          text: lang.btn.cancel,
+          text: lang.btn.evt.cancel,
           type: 'button',
           style: 'danger',
           confirm: {
@@ -431,10 +431,13 @@ module.exports = (app) => {
   
   slapp.event('event_schedule', (msg) => {
     event_db[msg.body.event.payload].notifyMembers(msg.body.event.payload);
+    return;
   });
   
   slapp.action('event_schedule_answer', (msg) => {
+    msg.respond({text: "", delete_original: true});
     if (msg.body.actions[0].name == 'cancel') event_db[msg.body.actions[0].value].notifyCreator(msg.body.user.id);
+    return;
   });
   
   return module;

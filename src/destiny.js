@@ -605,7 +605,7 @@ module.exports = (app) => {
       short: false
     });
     if ('skulls' in act) fields.push({
-      title: act.skulls.title,
+      title: act.skulls.title + ":",
       value: listFullSkulls(act.skulls.skulls),
       short: false
     });
