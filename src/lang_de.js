@@ -24,6 +24,8 @@ let lang = module.exports = {
     total: "Gesamt",
     filter: "Filter",
     deleted: "Gelöscht",
+    member: "Teilnehmer",
+    
     
   },
   
@@ -55,7 +57,8 @@ let lang = module.exports = {
     },
     
     evt: {
-      
+      join: "Teilnehmen",
+      leave: "Verlassen"
     },
     
     poll: {
@@ -79,6 +82,7 @@ let lang = module.exports = {
     confirmcancel: "Sind Sie sicher, dass Sie den Vorgang abbrechen wollen?",
     
     dest: {
+      dateformat: "dd, D.M.YYYY, HH:mm",
       main: "Destiny | Aktivitäten Übersicht",
       weeklyreset: "Destiny | Wöchtentlicher Reset",
       dailyupdate: "Destiny | Tägliches Update",
@@ -97,6 +101,8 @@ let lang = module.exports = {
     },
     
     evt: {
+      dateformat: "[Am] dd, [*]D.M.YYYY[*], [um] [*]HH:mm[*]",
+      neweventcreated: "Ein neuer Event wurde erstellt:",
       confirmdelete: "Sind Sie sicher, dass Sie diesen Event löschen wollen?",
       deleted: "Event wurde erfolgreich gelöscht.",
       notfound: "Eine Abstimmung mit dieser ID konnte nicht gefunden werden.",

@@ -1201,24 +1201,24 @@ module.exports = (app) => {
       };
 
       for (var i = 0; i < this.answers.length; i++) {
-        if (i < 5) btn1.actions[i] = {name: i, text: emoji_num[i], value: slot, type: 'button'};
-        else btn2.actions[i - 5] = {name: i, text: emoji_num[i], value: slot, type: 'button'};
+        if (i < 5) btn1.actions[i] = {name: i, value: slot, text: emoji_num[i], type: 'button'};
+        else btn2.actions[i - 5] = {name: i, value: slot, text: emoji_num[i], type: 'button'};
       }
 
-      var msg = {
+      var msg_text = {
         text: lang.msg.poll.newpollcreated,
         fallback: lang.msg.poll.newpollcreated,
         attachments: [],
         delete_original: true
       }
 
-      msg.attachments[0] = this.generateAttachment(slot);
+      msg_text.attachments[0] = this.generateAttachment(slot);
       if (this.state == 0) {
-        msg.attachments[1] = btn1;
-        if (btn2.actions.length > 0) msg.attachments[2] = btn2;
-      } else if (this.state == 1) msg.attachments[1] = {text: lang.msg.poll.pollclosed, fallback: lang.msg.poll.pollclosed}
+        msg_text.attachments[1] = btn1;
+        if (btn2.actions.length > 0) msg_text.attachments[2] = btn2;
+      } else if (this.state == 1) msg_text.attachments[1] = {text: lang.msg.poll.pollclosed, fallback: lang.msg.poll.pollclosed}
 
-      return msg;
+      return msg_text;
     }
     
     static generateDummy (slot, data) {
@@ -1296,15 +1296,15 @@ module.exports = (app) => {
 
     update (slot) {
       if (this.state == 0 || this.state == 1) {
-        var msg = this.generatePoll(slot);
+        var msg_text = this.generatePoll(slot);
 
         for (var i = 0; i < this.posts.length; i++) {
           slapp.client.chat.update({
             token: config.bot_token,
             ts: this.posts[i].ts,
             channel: this.posts[i].ch,
-            text: msg.text,
-            attachments: msg.attachments,
+            text: msg_text.text,
+            attachments: msg_text.attachments,
             parse: 'full',
             link_names: 1,
             as_user: true
@@ -1374,17 +1374,15 @@ module.exports = (app) => {
     kv.get('poll_db', function (err, val) {
       if (err) {
         console.log("ERROR: Polls | Unable to load poll database (" + err + ")");
-      
       } else if (typeof val !== "undefined") {
-        for (var i = 0; i < val.length; i++) poll_db[i] = new Poll(val[i]);
-        
+        for (var i in val.length) poll_db[i] = new Poll(val[i]);
         console.log("INFO: Polls | Poll database loaded");
       }
     });
   }
   
   function deletePollDB () {
-    kv.del('poll_info', function (err) {
+    kv.del('poll_db', function (err) {
       if (err) console.log("WARN: Polls | Unable to delete poll database (" + err + ")");
     });
   }

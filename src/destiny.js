@@ -5,7 +5,7 @@
 'use strict';
 
 const https = require('https');
-const needle = require('needle');
+//const needle = require('needle');
 
 var destiny_info = {},
     destiny_def = {},
@@ -24,7 +24,6 @@ module.exports = (app) => {
   let config = app.config;
   let func = app.func;
   let lang = app.lang;
-  let user = app.user;
   
   var module = {};
   
@@ -142,11 +141,11 @@ module.exports = (app) => {
 // ========== SCHEDULING ==========
 // ================================
   
-  // destiny_daily_update YmRmMjYzM2RmMmVlNDlhYWEwMmZiYjYxODMyNGNjODN8MzAgOSAqICogMCwxLDMsNCw2ICo=
+  // destiny_daily_update M2ZiMzQwOTAwODNhNGNmZTg5Y2E5ODM3ZGI5OWVjOTJ8MzAgOSAqICogMCwxLDMsNCw1LDYgKg==
   // destiny_weekly_update OWE3ODVkYTYwNTVhNDY1ZTg2NTEwNzJhYTM5NDIzZjF8MzAgOSAqICogMiAq
   // destiny_weekend_update OGUyNTRkNTBlNTllNGMzY2E0OWIzOTg4M2NjYjcyNjB8MzAgMTggKiAqIDUgKg==
   
-  function setSchedule (msg) {
+  /*function setSchedule (msg) {
     let ts = Date.now() + '';
     var data = {
       schedule: "30 9 * * 0,1,3,4,5,6 *",
@@ -211,7 +210,7 @@ module.exports = (app) => {
       if (err) console.log(err);
       else console.log(resp.body);
     });
-  }
+  }*/
   
   
   
@@ -580,7 +579,7 @@ module.exports = (app) => {
     else if ('loc' in act) text = act.loc;
     
     var time = "";
-    if (act.expirationDate != 0) time = lang.msg.dest.activetill + " " + moment(act.expirationDate).format('dd, D.M.YYYY HH:mm');
+    if (act.expirationDate != 0) time = lang.msg.dest.activetill + " " + moment(act.expirationDate).format(lang.msg.dest.dateformat);
     
     return {
       author_name: act.type || "",
@@ -630,7 +629,7 @@ module.exports = (app) => {
     });
     
     var time = "";
-    if (act.expirationDate != 0) time = lang.msg.dest.activetill + " " + moment(act.expirationDate).format('dd, D.M.YYYY HH:mm');
+    if (act.expirationDate != 0) time = lang.msg.dest.activetill + " " + moment(act.expirationDate).format(lang.msg.dest.dateformat);
     
     return {
       author_name: act.type || "",
@@ -744,7 +743,7 @@ module.exports = (app) => {
   
   // ===== /destiny schedule =====
   
-  slapp.command('/destiny', "set-s", (msg, cmd) => {
+  /*slapp.command('/destiny', "set-s", (msg, cmd) => {
     if (msg.body.user_id == config.admin_id) setSchedule(msg);
     return;
   });
@@ -757,7 +756,7 @@ module.exports = (app) => {
   slapp.command('/destiny', "list-s", (msg, cmd) => {
     if (msg.body.user_id == config.admin_id) listSchedule(msg);
     return;
-  });
+  });*/
   
   // ===== /destiny test =====
   
