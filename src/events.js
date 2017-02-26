@@ -424,7 +424,7 @@ module.exports = (app) => {
         ts: {created: 0}
       };
       event_db[0] = new Event(data);
-      event_db[0].setSchedule(msg);
+      event_db[0].setSchedule(msg, 0);
     };
   });
   
