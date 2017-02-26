@@ -44,7 +44,7 @@ var app = {
 };
 
 require('./src/destiny')(app);
-//require('./src/events')(app);
+require('./src/events')(app);
 require('./src/polls')(app);
 
 console.log("Listening on port " + process.env.PORT);
