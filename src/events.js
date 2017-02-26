@@ -418,7 +418,7 @@ module.exports = (app) => {
     if (msg.body.user_id == config.admin_id) {
       var data = {
         title: "test",
-        datetime: moment().add(15, 'm'),
+        datetime: moment().add(11, 'm'),
         members: [msg.body.user_id],
         creator: msg.body.user_id,
         ts: {created: 0}
@@ -431,7 +431,7 @@ module.exports = (app) => {
   // ===== External event schedule trigger =====
   
   slapp.event('event_schedule', (msg) => {
-    event_db[parseInt(msg.body.payload.event)].notifyMembers(msg.body.payload.event);
+    event_db[msg.body.event.payload].notifyMembers(msg.body.event.payload);
   });
   
   slapp.action('event_schedule_answer', (msg) => {
