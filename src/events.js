@@ -128,7 +128,8 @@ module.exports = (app) => {
     notifyMembers (slot) {
       var msg_text = {
         text: "",
-        attachments: []
+        attachments: [],
+        delete_original: true
       };
       var btns = [
         {
@@ -152,12 +153,11 @@ module.exports = (app) => {
           }
         }
       ];
-      console.log(msg_text);
-      console.log(msg_text.attachments[0]);
-      console.log(this.members);
+      
       msg_text.attachments[0] = this.generateAttachment(slot);
       msg_text.attachments[0].callback_id = 'event_schedule_answer';
       msg_text.attachments[0].actions = btns;
+      console.log(msg_text.attachments[0]);
       
       for (var i in this.members) user.sendDM(this.members[i], msg_text);
     }
@@ -212,7 +212,7 @@ module.exports = (app) => {
     generateAttachment (slot) {
       var temp_members = "";
       for (var i in this.members) {
-        temp_members += user.getUser(this.members[i]);
+        temp_members += user.getUser(this.members[i]).name;
         if (i < this.members.length - 1) temp_members += ", ";
       }
       
@@ -235,7 +235,7 @@ module.exports = (app) => {
         fallback: this.text,
         fields: att_fields,
         footer: "<@" + this.creator + ">",
-        ts: this.ts.created,
+        //ts: this.ts.created,
         color: this.options.color,
         mrkdwn_in: ['text', 'pretext', 'fields']
       };

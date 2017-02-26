@@ -1207,7 +1207,6 @@ module.exports = (app) => {
 
       var msg_text = {
         text: lang.msg.poll.newpollcreated,
-        fallback: lang.msg.poll.newpollcreated,
         attachments: [],
         delete_original: true
       }
