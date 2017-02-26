@@ -378,7 +378,7 @@ module.exports = (app) => {
   
   slapp.command('/dbevent', "test", (msg, cmd) => {
     if (msg.body.user_id == config.admin_id) {
-      var data = {title: "test"};
+      var data = {title: "test", ts: {created: 0}};
       event_db[0] = new Event(data);
       event_db[0].setSchedule(msg);
     };
