@@ -232,8 +232,8 @@ module.exports = (app) => {
         title: this.title,
         text: this.text,
         fallback: this.text,
-        //fields: att_fields,
-        footer: "<@" + this.creator + ">",
+        fields: att_fields,
+        footer: "<@" + this.creator + "|" + user.getUser(this.creator).name + ">",
         //ts: this.ts.created,
         color: this.options.color,
         mrkdwn_in: ['text', 'pretext', 'fields']
