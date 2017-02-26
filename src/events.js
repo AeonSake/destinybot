@@ -91,7 +91,7 @@ module.exports = (app) => {
       needle.post('beepboophq.com/api/v1/chronos/tasks', data, headers, (err, resp) => {
         if (resp.statusCode !== 201) console.log(resp.statusCode);
         if (err) console.log(err);
-        else console.log(resp.body.id);
+        else this.schedule_id = JSON.parse(resp.body).id;
       });
     }
     
@@ -152,6 +152,9 @@ module.exports = (app) => {
           }
         }
       ];
+      console.log(msg_text);
+      console.log(msg_text.attachments[0]);
+      console.log(this.members);
       msg_text.attachments[0] = this.generateAttachment(slot);
       msg_text.attachments[0].callback_id = 'event_schedule_answer';
       msg_text.attachments[0].actions = btns;
