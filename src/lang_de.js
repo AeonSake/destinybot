@@ -58,7 +58,9 @@ let lang = module.exports = {
     
     evt: {
       join: "Teilnehmen",
-      leave: "Verlassen"
+      leave: "Verlassen",
+      ok: "Ok",
+      cancel: "Absagen"
     },
     
     poll: {
@@ -107,6 +109,8 @@ let lang = module.exports = {
       deleted: "Event wurde erfolgreich gelöscht.",
       notfound: "Eine Abstimmung mit dieser ID konnte nicht gefunden werden.",
       notowner: "Nur der Ersteller dieser Abstimmung kann diese bearbeiten.",
+      confirmcancel: "Sind Sie sicher, dass Sie diesen Event absagen wollen?",
+      hascanceled: "hat für den folgenden Event abgesagt:",
       
       help: "Liste aller Befehle:\n`/event` : Hauptmenü\n`/event <title>;<dd.mm.yy>;<hh:mm>` : Schnell-Erstellung eines Events\n`/event create` : Erstellung eines Events\n`/event join <id>` : Dem Event mit der ID <id> beitreten\n`/event leave <id>` : Den Event mit der ID <id> verlassen\n`/event list` : Anzeigen aller Events\n`/event show <id>` : Anzeigen des Events mit der ID <id>\n`/event post <id>` : Posten des Events mit der ID <id> im aktuellen Channel\n`/event edit <id>` : Bearbeiten des Events mit der ID <id>\n `/event help` : Anzeigen der Hilfe"
     },

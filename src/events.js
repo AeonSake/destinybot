@@ -58,10 +58,10 @@ module.exports = (app) => {
       this.schedule_id = "";
     }
     
-    setSchedule(msg) {
+    setSchedule (msg, slot) {
       let ts = Date.now() + '';
       var data = {
-        schedule: moment().add(5, 'm'),
+        schedule: moment(this.datetime).subtract(10, 'm'),
         url: 'https://beepboophq.com/proxy/' + config.bb_project_id + '/slack/event',
         method: 'POST',
         headers: {
@@ -75,7 +75,7 @@ module.exports = (app) => {
             ts: ts,
             event_ts: ts,
             type: 'event_schedule',
-            payload: "Test",
+            payload: slot,
             user: config.admin_id,
             channel: config.event_ch
           }
@@ -87,7 +87,6 @@ module.exports = (app) => {
         },
         json: true
       };
-      console.log(msg.body.token);
 
       needle.post('beepboophq.com/api/v1/chronos/tasks', data, headers, (err, resp) => {
         if (resp.statusCode !== 201) console.log(resp.statusCode);
@@ -96,7 +95,7 @@ module.exports = (app) => {
       });
     }
     
-    editSchedule(msg) {
+    editSchedule (msg, slot) {
        var headers = {
         headers: {
           Authorization: 'Bearer ' + config.bb_token
@@ -107,11 +106,11 @@ module.exports = (app) => {
       needle.delete('https://beepboophq.com/api/v1/chronos/tasks/' + this.schedule_id, null, headers, (err, resp) => {
         if (err) console.log(err);
         if (resp.statusCode !== 200) console.log(resp.statusCode);
-        else this.setSchedule(msg);
+        else this.setSchedule(msg, slot);
       });
     }
     
-    deleteSchedule() {
+    deleteSchedule () {
       var headers = {
         headers: {
           Authorization: 'Bearer ' + config.bb_token
@@ -124,6 +123,45 @@ module.exports = (app) => {
         if (resp.statusCode !== 200) console.log(resp.statusCode);
         else this.schedule_id = "";
       });
+    }
+    
+    notifyMembers (slot) {
+      var msg_text = {
+        text: "",
+        attachments: []
+      };
+      var btns = [
+        {
+          name: 'ok',
+          value: slot,
+          text: lang.btn.ok,
+          type: 'button',
+          style: 'primary'
+        },
+        {
+          name: 'cancel',
+          value: slot,
+          text: lang.btn.cancel,
+          type: 'button',
+          style: 'danger',
+          confirm: {
+            title: lang.msg.confirm,
+            text: lang.msg.evtl.confirmcancel,
+            ok_text: lang.btn.yes,
+            dismiss_text: lang.btn.no
+          }
+        }
+      ];
+      msg_text.attachments[0] = this.generateAttachment(slot);
+      msg_text.attachments[0].callback_id = 'event_schedule_answer';
+      msg_text.attachments[0].actions = btns;
+      
+      for (var i in this.members) user.sendDM(this.members[i], msg_text);
+    }
+    
+    notifyCreator (user_id) {
+      var msg_text = user.getUser(user_id).name + " " + lang.msg.evt.hascanceled + " *" + this.title + "*";
+      user.sendDM(this.creator, func.generateInfoMsg(msg_text));
     }
 
     edit (data) {
@@ -207,7 +245,8 @@ module.exports = (app) => {
         name: 'join',
         value: slot,
         text: lang.btn.evt.join,
-        value: slot, type: 'button'
+        value: slot, 
+        type: 'button'
       });
       btns.push({
         name: 'leave',
@@ -218,7 +257,6 @@ module.exports = (app) => {
 
       var msg_text = {
         text: lang.msg.evt.neweventcreated,
-        fallback: lang.msg.evt.neweventcreated,
         attachments: [],
         delete_original: true
       }
@@ -378,7 +416,13 @@ module.exports = (app) => {
   
   slapp.command('/dbevent', "test", (msg, cmd) => {
     if (msg.body.user_id == config.admin_id) {
-      var data = {title: "test", ts: {created: 0}};
+      var data = {
+        title: "test",
+        datetime: moment().add(15, 'm'),
+        members: [msg.body.user_id],
+        creator: msg.body.user_id,
+        ts: {created: 0}
+      };
       event_db[0] = new Event(data);
       event_db[0].setSchedule(msg);
     };
@@ -387,7 +431,12 @@ module.exports = (app) => {
   // ===== External event schedule trigger =====
   
   slapp.event('event_schedule', (msg) => {
-    console.log(msg);
-    console.log(msg.body);
+    event_db[msg.body.payload].notifyMembers(msg.body.payload);
   });
+  
+  slapp.action('event_schedule_answer', (msg) => {
+    if (msg.body.actions[0].name == 'cancel') event_db[msg.body.actions[0].value].notifyCreator(msg.body.user.id);
+  });
+  
+  return module;
 };
