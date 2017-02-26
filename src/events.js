@@ -413,7 +413,6 @@ module.exports = (app) => {
   
   
   
-  
   slapp.command('/dbevent', "test", (msg, cmd) => {
     if (msg.body.user_id == config.admin_id) {
       var data = {
