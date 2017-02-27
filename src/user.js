@@ -48,7 +48,7 @@ module.exports = (slapp, kv, config, func) => {
       }
       else {
         user_db = [];
-        for (var i = 0; i < data.members.length; i++) {
+        for (var i in data.members) {
           user_db[i] = {
             id: data.members[i].id,
             name: data.members[i].name,
@@ -74,7 +74,7 @@ module.exports = (slapp, kv, config, func) => {
   
   // Function to fetch user DM channel id
   function getUserDM (user_id) {
-    for (var i = 0; i < user_db.length; i++) {
+    for (var i in user_db) {
       slapp.client.im.open({
         token: config.bot_token,
         user: user_id
@@ -87,7 +87,7 @@ module.exports = (slapp, kv, config, func) => {
   
   // Function to add DM channel id to user
   function addUserDM (user_id, dm_ch) {
-    for (var i = 0; i < user_db.length; i++) {
+    for (var i in user_db) {
       if (user_db[i].id == user_id) user_db[i].dm_ch = dm_ch;
     }
   }
@@ -115,7 +115,7 @@ module.exports = (slapp, kv, config, func) => {
   
   // Function to retrieve user info from database
   module.getUser = (user_id) => {
-    for (var i = 0; i < user_db.length; i++) {
+    for (var i in user_db) {
       if (user_db[i].id == user_id) return user_db[i];
     }
     return {};
@@ -123,7 +123,7 @@ module.exports = (slapp, kv, config, func) => {
   
   // Function to check if user is admin
   module.isAdmin = (user_id) => {
-    for (var i = 0; i < user_db.length; i++) {
+    for (var i in user_db.length) {
       if (user_db[i].id == user_id) return user_db[i].admin;
     }
     return false;
