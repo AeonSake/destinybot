@@ -1622,7 +1622,7 @@ module.exports = (app) => {
       
       data.ts = {created: msg.body.action_ts};
       data.id = getNextId();
-      poll_db[poll_db.length] = new Poll(data);
+      poll_db.push(new Poll(data));
       var msg_text = poll_db[poll_db.length - 1].generatePoll();
       //msg_text.channel = config.poll_ch;
       
