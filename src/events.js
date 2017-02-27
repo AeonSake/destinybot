@@ -482,6 +482,7 @@ module.exports = (app) => {
       
       msg.say(event_db[0].generateEvent(), (err, result) => {
         event_db[0].addPost(result.channel, result.ts);
+        console.log(event_db[0]);
       });
     };
   });
@@ -497,6 +498,7 @@ module.exports = (app) => {
   slapp.event('event_schedule_start', (msg) => {
     var slot = findEvent(msg.body.event.payload);
     if (slot != -1) {
+      console.log("found");
       event_db[slot].start();
       // saveEventDB();
     }
@@ -507,7 +509,7 @@ module.exports = (app) => {
     msg.respond({text: "", delete_original: true});
     if (msg.body.actions[0].name == 'cancel') {
       var slot = findEvent(msg.body.actions[0].value);
-      if (slot != -1) event_db[slot].notifyCreator();
+      if (slot != -1) event_db[slot].notifyCreator(msg.body.user.id);
     }
     return;
   });
