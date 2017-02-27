@@ -102,10 +102,10 @@ module.exports = (slapp, kv, config, func) => {
         token: config.bot_token,
         channel: user.dm_ch,
         text: msg_text.text,
-        attachments: msg_text.attachments,
-        parse: 'full',
-        link_names: true,
-        as_user: true
+        attachments: msg_text.attachments//,
+        //parse: 'full',
+        //link_names: true,
+        //as_user: true
       }, (err, data) => {
         if (err) console.log("ERROR: User | Unable to send user DM (" + err + ")");
       });

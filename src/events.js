@@ -128,8 +128,7 @@ module.exports = (app) => {
     notifyMembers (slot) {
       var msg_text = {
         text: lang.msg.evt.startingsoon,
-        attachments: [],
-        delete_original: true
+        attachments: []
       };
       var btns = [
         {
@@ -159,7 +158,6 @@ module.exports = (app) => {
       msg_text.attachments[0].actions = btns;
       
       for (var i in this.members) user.sendDM(this.members[i], msg_text);
-      return msg_text;
     }
     
     notifyCreator (user_id) {
@@ -435,7 +433,7 @@ module.exports = (app) => {
   
   slapp.event('event_schedule', (msg) => {
     //event_db[msg.body.event.payload].notifyMembers(msg.body.event.payload);
-    msg.say(event_db[msg.body.event.payload].notifyMembers(msg.body.event.payload));
+    event_db[msg.body.event.payload].notifyMembers(msg.body.event.payload);
     return;
   });
   
