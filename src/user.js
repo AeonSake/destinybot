@@ -96,17 +96,19 @@ module.exports = (slapp, kv, config, func) => {
   // Function for sending DMs to users
   module.sendDM = (user_id, msg_text) => {
     var user = module.getUser(user_id);
+    msg_text.channel = user.dm_ch;
+    msg_text.token = config.bot_token;
     
     if ('dm_ch' in user) {
-      slapp.client.chat.postMessage({
-        token: config.bot_token,
-        channel: user.dm_ch,
-        text: msg_text.text,
-        attachments: msg_text.attachments//,
+      slapp.client.chat.postMessage(msg_text
+        //token: config.bot_token,
+        //channel: user.dm_ch,
+        //text: msg_text.text,
+        //attachments: msg_text.attachments//,
         //parse: 'full',
         //link_names: true,
         //as_user: true
-      }, (err, data) => {
+      , (err, data) => {
         if (err) console.log("ERROR: User | Unable to send user DM (" + err + ")");
       });
     } else {
