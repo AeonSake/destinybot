@@ -104,6 +104,7 @@ module.exports = (slapp, kv, config, func) => {
         text: msg.text,
         attachments: msg.attachments,
         parse: 'full',
+        link_names: true,
         as_user: true
       }, (err, data) => {
         if (err) console.log("ERROR: User | Unable to send user DM (" + err + ")");
