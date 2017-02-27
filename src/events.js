@@ -39,6 +39,7 @@ module.exports = (app) => {
   
   class Event {
     constructor (data) {
+      this.id = data.id;
       this.title = data.title;
       this.text = data.text || "";
       this.datetime = data.datetime || 0;
@@ -52,15 +53,19 @@ module.exports = (app) => {
       this.state = data.state || 0; //0 = default, 1 = outdated, 2 = deleted
       if (!('options' in data)) data.options = {};
       this.options = {
-        max: data.options.max || 6,
+        max: data.options.max || 6, //max: 0 = all, etc
         color: data.options.color || func.getRandomColor()
-      }; //max: 0 = all, etc;
-      this.schedule_id = "";
+      };
+      if (!('schedule' in data)) data.schedule = {};
+      this.schedule = {
+        reminder: data.schedule.reminder || "",
+        start: data.schedule.start || ""
+      };
     }
     
-    setSchedule (msg, slot) {
+    setSchedules (msg) {
       let ts = Date.now() + '';
-      var data = {
+      var data_reminder = {
         schedule: moment(this.datetime).subtract(10, 'm'),
         url: 'https://beepboophq.com/proxy/' + config.bb_project_id + '/slack/event',
         method: 'POST',
@@ -74,8 +79,29 @@ module.exports = (app) => {
           event: {
             ts: ts,
             event_ts: ts,
-            type: 'event_schedule',
-            payload: slot,
+            type: 'event_schedule_reminder',
+            payload: this.id,
+            user: config.admin_id,
+            channel: config.event_ch
+          }
+        }
+      };
+      var data_start = {
+        schedule: moment(this.datetime),
+        url: 'https://beepboophq.com/proxy/' + config.bb_project_id + '/slack/event',
+        method: 'POST',
+        headers: {
+          'BB-Enrich': 'slack_team_id='+ msg.meta.team_id
+        },
+        payload: {
+          token: msg.body.token,
+          team_id: msg.meta.team_id,
+          type: 'event_callback',
+          event: {
+            ts: ts,
+            event_ts: ts,
+            type: 'event_schedule_start',
+            payload: this.id,
             user: config.admin_id,
             channel: config.event_ch
           }
@@ -88,14 +114,21 @@ module.exports = (app) => {
         json: true
       };
 
-      needle.post('beepboophq.com/api/v1/chronos/tasks', data, headers, (err, resp) => {
+      needle.post('beepboophq.com/api/v1/chronos/tasks', data_reminder, headers, (err, resp) => {
         if (resp.statusCode !== 201) console.log(resp.statusCode);
         if (err) console.log(err);
-        else this.schedule_id = JSON.parse(resp.body).id;
+        else {
+          this.schedule.reminder = JSON.parse(resp.body).id;
+          needle.post('beepboophq.com/api/v1/chronos/tasks', data_start, headers, (err, resp) => {
+            if (resp.statusCode !== 201) console.log(resp.statusCode);
+            if (err) console.log(err);
+            else this.schedule.start = JSON.parse(resp.body).id;
+          });
+        }
       });
     }
     
-    editSchedule (msg, slot) {
+    editSchedules (msg) {
        var headers = {
         headers: {
           Authorization: 'Bearer ' + config.bb_token
@@ -103,14 +136,20 @@ module.exports = (app) => {
         json: true
       };
       
-      needle.delete('https://beepboophq.com/api/v1/chronos/tasks/' + this.schedule_id, null, headers, (err, resp) => {
+      needle.delete('https://beepboophq.com/api/v1/chronos/tasks/' + this.schedule.reminder, null, headers, (err, resp) => {
         if (err) console.log(err);
         if (resp.statusCode !== 200) console.log(resp.statusCode);
-        else this.setSchedule(msg, slot);
+        else {
+          needle.delete('https://beepboophq.com/api/v1/chronos/tasks/' + this.schedule.start, null, headers, (err, resp) => {
+            if (err) console.log(err);
+            if (resp.statusCode !== 200) console.log(resp.statusCode);
+            else this.setSchedule(msg);
+          });
+        }
       });
     }
     
-    deleteSchedule () {
+    deleteSchedules () {
       var headers = {
         headers: {
           Authorization: 'Bearer ' + config.bb_token
@@ -118,14 +157,21 @@ module.exports = (app) => {
         json: true
       };
       
-      needle.delete('https://beepboophq.com/api/v1/chronos/tasks/' + this.schedule_id, null, headers, (err, resp) => {
+      needle.delete('https://beepboophq.com/api/v1/chronos/tasks/' + this.schedule.reminder, null, headers, (err, resp) => {
         if (err) console.log(err);
         if (resp.statusCode !== 200) console.log(resp.statusCode);
-        else this.schedule_id = "";
+        else {
+          this.schedule.reminder = "";
+          needle.delete('https://beepboophq.com/api/v1/chronos/tasks/' + this.schedule.start, null, headers, (err, resp) => {
+            if (err) console.log(err);
+            if (resp.statusCode !== 200) console.log(resp.statusCode);
+            else this.schedule.start = "";
+          });
+        }
       });
     }
     
-    notifyMembers (slot) {
+    notifyMembers () {
       var msg_text = {
         text: lang.msg.evt.startingsoon,
         attachments: []
@@ -133,14 +179,14 @@ module.exports = (app) => {
       var btns = [
         {
           name: 'ok',
-          value: slot,
+          value: this.id,
           text: lang.btn.evt.ok,
           type: 'button',
           style: 'primary'
         },
         {
           name: 'cancel',
-          value: slot,
+          value: this.id,
           text: lang.btn.evt.cancel,
           type: 'button',
           style: 'danger',
@@ -153,7 +199,7 @@ module.exports = (app) => {
         }
       ];
       
-      msg_text.attachments[0] = this.generateAttachment(slot);
+      msg_text.attachments[0] = this.generateAttachment();
       msg_text.attachments[0].callback_id = 'event_schedule_answer';
       msg_text.attachments[0].actions = btns;
       
@@ -173,12 +219,11 @@ module.exports = (app) => {
       this.state = data.state;
       this.ts.edited = data.ts.edited;
       this.options.max = data.options.max;
-      
-      if (temp != data.datetime) this.editSchedule();
     }
     
     getData () {
       return {
+        id: this.id,
         title: this.title,
         text: this.text,
         datetime: this.datetime,
@@ -207,7 +252,7 @@ module.exports = (app) => {
       this.posts.push({ch: ch, ts: ts});
     }
 
-    generateAttachment (slot) {
+    generateAttachment () {
       var temp_members = "";
       for (var i in this.members) {
         temp_members += user.getUser(this.members[i]).name;
@@ -227,7 +272,7 @@ module.exports = (app) => {
       ];
       
       return {
-        author_name: lang.wrd.event + " #" + (slot + 1) + (this.state == 2 ? " [" + lang.wrd.deleted + "]" : ""),
+        author_name: lang.wrd.event + " #" + (this.id + 1) + (this.state == 2 ? " [" + lang.wrd.deleted + "]" : ""),
         title: this.title,
         text: this.text,
         fallback: this.text,
@@ -239,19 +284,18 @@ module.exports = (app) => {
       };
     }
 
-    generateEvent (slot) {
+    generateEvent () {
       var btns = [];
 
       if (this.members.length < this.options.max) btns.push({
         name: 'join',
-        value: slot,
+        value: this.id,
         text: lang.btn.evt.join,
-        value: slot, 
         type: 'button'
       });
       btns.push({
         name: 'leave',
-        value: slot,
+        value: this.id,
         text: lang.btn.evt.leave,
         type: 'button'
       });
@@ -262,7 +306,7 @@ module.exports = (app) => {
         delete_original: true
       }
 
-      msg_text.attachments[0] = this.generateAttachment(slot);
+      msg_text.attachments[0] = this.generateAttachment();
       if (this.state == 0) {
         msg_text.attachments[0].callback_id = 'event_answer_callback';
         msg_text.attachments[0].actions = btns;
@@ -271,7 +315,7 @@ module.exports = (app) => {
       return msg_text;
     }
     
-    static generateDummy (slot, data) {
+    static generateDummy (data) {
       var temp_text = "<text>",
           temp_datetime = "<date>, <time>",
           temp_members = "user1, user2",
@@ -289,7 +333,7 @@ module.exports = (app) => {
       }
       if ('options' in data) {
         temp_max = data.options.max || 6;
-        temp_color = data.options.color || "#00CCCC";
+        temp_color = data.options.color || "";
       }
       
       var att_fields = [
@@ -306,7 +350,7 @@ module.exports = (app) => {
       
       
       return {
-        author_name: lang.wrd.event + " #" + (slot + 1) + (data.state == 2 ? " [" + lang.wrd.deleted + "]" : ""),
+        author_name: lang.wrd.event + " #" + (data.id + 1) + (data.state == 2 ? " [" + lang.wrd.deleted + "]" : ""),
         title: data.title || "<title>",
         text: temp_text,
         fallback: temp_text,
@@ -318,9 +362,9 @@ module.exports = (app) => {
       };
     }
 
-    update (slot) {
+    update () {
       if (this.state == 0 || this.state == 1) {
-        var msg_text = this.generateEvent(slot);
+        var msg_text = this.generateEvent();
 
         for (var i = 0; i < this.posts.length; i++) {
           slapp.client.chat.update({
@@ -330,7 +374,6 @@ module.exports = (app) => {
             text: msg_text.text,
             attachments: msg_text.attachments,
             parse: 'full',
-            link_names: 1,
             as_user: true
           }, (err, data) => {
             if (err && err.message != 'cant_update_message' && err.message != 'message_not_found' && err.message != 'channel_not_found' && err.message != 'edit_window_closed') console.log(err);
@@ -356,9 +399,9 @@ module.exports = (app) => {
       this.deleteSchedule();
     }
     
-    undelete() {
-      if (moment() > moment(this.datetime)) this.state = 1;
-      else this.state = 0;
+    start () {
+      this.state = 1;
+      this.update();
     }
     
     isAktive () {
@@ -372,6 +415,16 @@ module.exports = (app) => {
     isOwner (user_id) {
       return (this.creator == user_id);
     }
+  }
+  
+  function findEvent (id) {
+    for (var i in event_db) if (event_db[i].id == id) return i;
+    return -1;
+  }
+  
+  function getNextId () {
+    if (event_db.length == 0) return 0;
+    else return event_db[event_db.length].getData.id + 1;
   }
 
 
@@ -424,22 +477,37 @@ module.exports = (app) => {
         ts: {created: 0}
       };
       event_db[0] = new Event(data);
-      event_db[0].setSchedule(msg, 0);
-      msg.say(event_db[0].generateEvent(0));
+      event_db[0].setSchedules(msg, 0);
+      
+      var temp = event_db[0].generateEvent(0);
+      temp.as_user = true;
+      msg.say(temp);
     };
   });
   
   // ===== External event schedule trigger =====
   
-  slapp.event('event_schedule', (msg) => {
-    //event_db[msg.body.event.payload].notifyMembers(msg.body.event.payload);
-    event_db[msg.body.event.payload].notifyMembers(msg.body.event.payload);
+  slapp.event('event_schedule_remindner', (msg) => {
+    var slot = findEvent(msg.body.event.payload);
+    if (slot != -1) event_db[slot].notifyMembers();
+    return;
+  });
+  
+  slapp.event('event_schedule_start', (msg) => {
+    var slot = findEvent(msg.body.event.payload);
+    if (slot != -1) {
+      event_db[slot].start();
+      // saveEventDB();
+    }
     return;
   });
   
   slapp.action('event_schedule_answer', (msg) => {
     msg.respond({text: "", delete_original: true});
-    if (msg.body.actions[0].name == 'cancel') event_db[msg.body.actions[0].value].notifyCreator(msg.body.user.id);
+    if (msg.body.actions[0].name == 'cancel') {
+      var slot = findEvent(msg.body.actions[0].value);
+      if (slot != -1) event_db[slot].notifyCreator();
+    }
     return;
   });
   

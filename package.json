@@ -1,7 +1,7 @@
 {
   "name": "destinybot",
   "version": "1.0.0",
-  "description": "Destiny Bot",
+  "description": "DestinyBot",
   "author": "AeonSake",
   "main": "main.js",
     "scripts": {
