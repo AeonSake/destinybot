@@ -430,7 +430,7 @@ module.exports = (app) => {
   
   function getNextId () {
     if (event_db.length == 0) return 0;
-    else return event_db[event_db.length].getData.id + 1;
+    else return event_db[event_db.length - 1].getData.id + 1;
   }
 
 
