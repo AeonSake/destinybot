@@ -40,10 +40,10 @@ module.exports = (slapp, kv, config, func) => {
         console.log("WARN: User | Unable to load user info (" + err + "), using old data instead (if existing)");
         
         kv.get('user_db', function (err, val) {
-          if (err) {
+          if (err || typeof val == "undefined") {
             console.log("ERROR: User | Unable to load old user info (" + err + ")");
           }
-          else if (typeof val !== "undefined") user_db = val;
+          else user_db = val;
         });
       }
       else {
