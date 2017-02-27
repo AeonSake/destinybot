@@ -1656,7 +1656,7 @@ module.exports = (app) => {
   slapp.action('poll_show_filter_callback', (msg) => {
     var data = msg.body.actions[0].name.split("-");
     
-    msg.respond(poll_list_msg(0, parseInt(data[0], data[1], msg.body.user.id));
+    msg.respond(poll_list_msg(0, parseInt(data[0]), data[1], msg.body.user.id));
     return;
   });
   
