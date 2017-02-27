@@ -159,6 +159,7 @@ module.exports = (app) => {
       msg_text.attachments[0].actions = btns;
       
       for (var i in this.members) user.sendDM(this.members[i], msg_text);
+      return msg_text;
     }
     
     notifyCreator (user_id) {
@@ -433,7 +434,8 @@ module.exports = (app) => {
   // ===== External event schedule trigger =====
   
   slapp.event('event_schedule', (msg) => {
-    event_db[msg.body.event.payload].notifyMembers(msg.body.event.payload);
+    //event_db[msg.body.event.payload].notifyMembers(msg.body.event.payload);
+    msg.say(event_db[msg.body.event.payload].notifyMembers(msg.body.event.payload););
     return;
   });
   

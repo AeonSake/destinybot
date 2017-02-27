@@ -94,15 +94,15 @@ module.exports = (slapp, kv, config, func) => {
   }
   
   // Function for sending DMs to users
-  module.sendDM = (user_id, msg) => {
+  module.sendDM = (user_id, msg_text) => {
     var user = module.getUser(user_id);
     
     if ('dm_ch' in user) {
       slapp.client.chat.postMessage({
         token: config.bot_token,
         channel: user.dm_ch,
-        text: msg.text,
-        attachments: msg.attachments,
+        text: msg_text.text,
+        attachments: msg_text.attachments,
         parse: 'full',
         link_names: true,
         as_user: true
@@ -112,7 +112,7 @@ module.exports = (slapp, kv, config, func) => {
     } else {
       getUserDM(user_id);
       setTimeout(function() {
-        module.sendDM(user_id, msg);
+        module.sendDM(user_id, msg_text);
       }, 2000);
     }
   }
