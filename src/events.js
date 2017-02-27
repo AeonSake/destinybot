@@ -464,42 +464,31 @@ module.exports = (app) => {
 // ========== COMMANDS ==========
 // ==============================  
   
-  slapp.command('/dbevent', "route", (msg, cmd) => {
-    if (msg.body.user_id == config.admin_id) {
-      msg.respond({text: "Testing routes with response-url..."});
-      msg.route('evt_test', 60);
-    };
-    return;
-  });
-  
-  slapp.route('evt_test', (msg) => {
-    msg.respond(msg.body.response_url, {text: "Direct response", replace_original: true});
-    
-    return;
-  });
+
   
   
   slapp.command('/dbevent', "test", (msg, cmd) => {
     if (msg.body.user_id == config.admin_id) {
       var data = {
+        id: getNextId(),
         title: "test",
         datetime: moment().add(11, 'm'),
         members: [msg.body.user_id],
         creator: msg.body.user_id,
         ts: {created: 0}
       };
-      event_db[0] = new Event(data);
-      event_db[0].setSchedules(msg, 0);
+      event_db.push(new Event(data));
+      event_db[0].setSchedules(msg);
       
-      var temp = event_db[0].generateEvent(0);
-      temp.as_user = true;
-      msg.say(temp);
+      msg.say(event_db[0].generateEvent(), (err, result) => {
+        event_db[0].addPost(result.channel, result.ts);
+      });
     };
   });
   
   // ===== External event schedule trigger =====
   
-  slapp.event('event_schedule_remindner', (msg) => {
+  slapp.event('event_schedule_reminder', (msg) => {
     var slot = findEvent(msg.body.event.payload);
     if (slot != -1) event_db[slot].notifyMembers();
     return;
