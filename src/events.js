@@ -62,154 +62,6 @@ module.exports = (app) => {
         start: data.schedule.start || ""
       };
     }
-    
-    setSchedules (msg) {
-      let ts = Date.now() + '';
-      var data_reminder = {
-        schedule: moment(this.datetime).subtract(10, 'm'),
-        url: 'https://beepboophq.com/proxy/' + config.bb_project_id + '/slack/event',
-        method: 'POST',
-        headers: {
-          'BB-Enrich': 'slack_team_id='+ msg.meta.team_id
-        },
-        payload: {
-          token: msg.body.token,
-          team_id: msg.meta.team_id,
-          type: 'event_callback',
-          event: {
-            ts: ts,
-            event_ts: ts,
-            type: 'event_schedule_reminder',
-            payload: this.id,
-            user: config.admin_id,
-            channel: config.event_ch
-          }
-        }
-      };
-      var data_start = {
-        schedule: moment(this.datetime),
-        url: 'https://beepboophq.com/proxy/' + config.bb_project_id + '/slack/event',
-        method: 'POST',
-        headers: {
-          'BB-Enrich': 'slack_team_id='+ msg.meta.team_id
-        },
-        payload: {
-          token: msg.body.token,
-          team_id: msg.meta.team_id,
-          type: 'event_callback',
-          event: {
-            ts: ts,
-            event_ts: ts,
-            type: 'event_schedule_start',
-            payload: this.id,
-            user: config.admin_id,
-            channel: config.event_ch
-          }
-        }
-      };
-      var headers = {
-        headers: {
-          Authorization: 'Bearer ' + config.bb_token
-        },
-        json: true
-      };
-
-      needle.post('beepboophq.com/api/v1/chronos/tasks', data_reminder, headers, (err, resp) => {
-        if (resp.statusCode !== 201) console.log(resp.statusCode);
-        if (err) console.log(err);
-        else {
-          this.schedule.reminder = JSON.parse(resp.body).id;
-          needle.post('beepboophq.com/api/v1/chronos/tasks', data_start, headers, (err, resp) => {
-            if (resp.statusCode !== 201) console.log(resp.statusCode);
-            if (err) console.log(err);
-            else this.schedule.start = JSON.parse(resp.body).id;
-          });
-        }
-      });
-    }
-    
-    editSchedules (msg) {
-       var headers = {
-        headers: {
-          Authorization: 'Bearer ' + config.bb_token
-        },
-        json: true
-      };
-      
-      needle.delete('https://beepboophq.com/api/v1/chronos/tasks/' + this.schedule.reminder, null, headers, (err, resp) => {
-        if (err) console.log(err);
-        if (resp.statusCode !== 200) console.log(resp.statusCode);
-        else {
-          needle.delete('https://beepboophq.com/api/v1/chronos/tasks/' + this.schedule.start, null, headers, (err, resp) => {
-            if (err) console.log(err);
-            if (resp.statusCode !== 200) console.log(resp.statusCode);
-            else this.setSchedule(msg);
-          });
-        }
-      });
-    }
-    
-    deleteSchedules () {
-      var headers = {
-        headers: {
-          Authorization: 'Bearer ' + config.bb_token
-        },
-        json: true
-      };
-      
-      needle.delete('https://beepboophq.com/api/v1/chronos/tasks/' + this.schedule.reminder, null, headers, (err, resp) => {
-        if (err) console.log(err);
-        if (resp.statusCode !== 200) console.log(resp.statusCode);
-        else {
-          this.schedule.reminder = "";
-          needle.delete('https://beepboophq.com/api/v1/chronos/tasks/' + this.schedule.start, null, headers, (err, resp) => {
-            if (err) console.log(err);
-            if (resp.statusCode !== 200) console.log(resp.statusCode);
-            else this.schedule.start = "";
-          });
-        }
-      });
-    }
-    
-    notifyMembers () {
-      var msg_text = {
-        text: lang.msg.evt.startingsoon,
-        attachments: []
-      };
-      var btns = [
-        {
-          name: 'ok',
-          value: this.id,
-          text: lang.btn.evt.ok,
-          type: 'button',
-          style: 'primary'
-        },
-        {
-          name: 'cancel',
-          value: this.id,
-          text: lang.btn.evt.cancel,
-          type: 'button',
-          style: 'danger',
-          confirm: {
-            title: lang.msg.confirm,
-            text: lang.msg.evt.confirmcancel,
-            ok_text: lang.btn.yes,
-            dismiss_text: lang.btn.no
-          }
-        }
-      ];
-      
-      msg_text.attachments[0] = this.generateAttachment();
-      msg_text.attachments[0].callback_id = 'event_schedule_answer';
-      msg_text.attachments[0].actions = btns;
-      
-      for (var i in this.members) user.sendDM(this.members[i], msg_text);
-    }
-    
-    notifyCreator (user_id) {
-      var msg_text = user.getUser(user_id).name + " " + lang.msg.evt.hascanceled + " *" + this.title + "*";
-      user.sendDM(this.creator, func.generateInfoMsg(msg_text));
-    }
 
     edit (data) {
       var temp = this.datetime;
@@ -366,7 +218,7 @@ module.exports = (app) => {
       if (this.state == 0 || this.state == 1) {
         var msg_text = this.generateEvent();
 
-        for (var i = 0; i < this.posts.length; i++) {
+        for (var i in this.posts.length) {
           slapp.client.chat.update({
             token: config.bot_token,
             ts: this.posts[i].ts,
@@ -384,7 +236,7 @@ module.exports = (app) => {
     }
 
     delete () {
-      for (var i = 0; i < this.posts.length; i++) {
+      for (var i in this.posts.length) {
         slapp.client.chat.delete({
           token: config.bot_token,
           ts: this.posts[i].ts,
@@ -414,6 +266,154 @@ module.exports = (app) => {
     
     isOwner (user_id) {
       return (this.creator == user_id);
+    }
+    
+    setSchedules (msg) {
+      let ts = Date.now() + '';
+      var data_reminder = {
+        schedule: moment(this.datetime).subtract(10, 'm'),
+        url: 'https://beepboophq.com/proxy/' + config.bb_project_id + '/slack/event',
+        method: 'POST',
+        headers: {
+          'BB-Enrich': 'slack_team_id='+ msg.meta.team_id
+        },
+        payload: {
+          token: msg.body.token,
+          team_id: msg.meta.team_id,
+          type: 'event_callback',
+          event: {
+            ts: ts,
+            event_ts: ts,
+            type: 'event_schedule_reminder',
+            payload: this.id,
+            user: config.admin_id,
+            channel: config.event_ch
+          }
+        }
+      };
+      var data_start = {
+        schedule: moment(this.datetime),
+        url: 'https://beepboophq.com/proxy/' + config.bb_project_id + '/slack/event',
+        method: 'POST',
+        headers: {
+          'BB-Enrich': 'slack_team_id='+ msg.meta.team_id
+        },
+        payload: {
+          token: msg.body.token,
+          team_id: msg.meta.team_id,
+          type: 'event_callback',
+          event: {
+            ts: ts,
+            event_ts: ts,
+            type: 'event_schedule_start',
+            payload: this.id,
+            user: config.admin_id,
+            channel: config.event_ch
+          }
+        }
+      };
+      var headers = {
+        headers: {
+          Authorization: 'Bearer ' + config.bb_token
+        },
+        json: true
+      };
+
+      needle.post('beepboophq.com/api/v1/chronos/tasks', data_reminder, headers, (err, resp) => {
+        if (resp.statusCode !== 201) console.log(resp.statusCode);
+        if (err) console.log(err);
+        else {
+          this.schedule.reminder = JSON.parse(resp.body).id;
+          needle.post('beepboophq.com/api/v1/chronos/tasks', data_start, headers, (err, resp) => {
+            if (resp.statusCode !== 201) console.log(resp.statusCode);
+            if (err) console.log(err);
+            else this.schedule.start = JSON.parse(resp.body).id;
+          });
+        }
+      });
+    }
+    
+    editSchedules (msg) {
+       var headers = {
+        headers: {
+          Authorization: 'Bearer ' + config.bb_token
+        },
+        json: true
+      };
+      
+      needle.delete('https://beepboophq.com/api/v1/chronos/tasks/' + this.schedule.reminder, null, headers, (err, resp) => {
+        if (err) console.log(err);
+        if (resp.statusCode !== 200) console.log(resp.statusCode);
+        else {
+          needle.delete('https://beepboophq.com/api/v1/chronos/tasks/' + this.schedule.start, null, headers, (err, resp) => {
+            if (err) console.log(err);
+            if (resp.statusCode !== 200) console.log(resp.statusCode);
+            else this.setSchedule(msg);
+          });
+        }
+      });
+    }
+    
+    deleteSchedules () {
+      var headers = {
+        headers: {
+          Authorization: 'Bearer ' + config.bb_token
+        },
+        json: true
+      };
+      
+      needle.delete('https://beepboophq.com/api/v1/chronos/tasks/' + this.schedule.reminder, null, headers, (err, resp) => {
+        if (err) console.log(err);
+        if (resp.statusCode !== 200) console.log(resp.statusCode);
+        else {
+          this.schedule.reminder = "";
+          needle.delete('https://beepboophq.com/api/v1/chronos/tasks/' + this.schedule.start, null, headers, (err, resp) => {
+            if (err) console.log(err);
+            if (resp.statusCode !== 200) console.log(resp.statusCode);
+            else this.schedule.start = "";
+          });
+        }
+      });
+    }
+    
+    notifyMembers () {
+      var msg_text = {
+        text: lang.msg.evt.startingsoon,
+        attachments: []
+      };
+      var btns = [
+        {
+          name: 'ok',
+          value: this.id,
+          text: lang.btn.evt.ok,
+          type: 'button',
+          style: 'primary'
+        },
+        {
+          name: 'cancel',
+          value: this.id,
+          text: lang.btn.evt.cancel,
+          type: 'button',
+          style: 'danger',
+          confirm: {
+            title: lang.msg.confirm,
+            text: lang.msg.evt.confirmcancel,
+            ok_text: lang.btn.yes,
+            dismiss_text: lang.btn.no
+          }
+        }
+      ];
+      
+      msg_text.attachments[0] = this.generateAttachment();
+      msg_text.attachments[0].callback_id = 'event_schedule_answer';
+      msg_text.attachments[0].actions = btns;
+      
+      for (var i in this.members) user.sendDM(this.members[i], msg_text);
+    }
+    
+    notifyCreator (user_id) {
+      var msg_text = user.getUser(user_id).name + " " + lang.msg.evt.hascanceled + " *" + this.title + "*";
+      user.sendDM(this.creator, func.generateInfoMsg(msg_text));
     }
   }
   
@@ -464,7 +464,19 @@ module.exports = (app) => {
 // ========== COMMANDS ==========
 // ==============================  
   
+  slapp.command('/dbevent', "route", (msg, cmd) => {
+    if (msg.body.user_id == config.admin_id) {
+      msg.respond({text: "Testing routes with response-url..."});
+      msg.route('evt_test', 60);
+    };
+    return;
+  });
   
+  slapp.route('evt_test', (msg) => {
+    msg.respond(msg.body.response_url, {text: "Direct response", replace_original: true});
+    
+    return;
+  });
   
   
   slapp.command('/dbevent', "test", (msg, cmd) => {
