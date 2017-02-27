@@ -435,7 +435,7 @@ module.exports = (app) => {
   
   slapp.event('event_schedule', (msg) => {
     //event_db[msg.body.event.payload].notifyMembers(msg.body.event.payload);
-    msg.say(event_db[msg.body.event.payload].notifyMembers(msg.body.event.payload););
+    msg.say(event_db[msg.body.event.payload].notifyMembers(msg.body.event.payload));
     return;
   });
   
