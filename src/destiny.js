@@ -91,7 +91,7 @@ module.exports = (app) => {
     getItemDef();
     //getPerkDef();
     
-    callback();
+    if (typeof callback === "function") callback();
   }
   getDefinitions(getActivities);
   
@@ -132,7 +132,7 @@ module.exports = (app) => {
         prepareData(function(){
           destiny_info.xur.items = getItems(JSON.parse(body).Response.data.saleItemCategories[2].saleItems);
           console.log("INFO: Destiny | Xûr items loaded");
-          callback();
+          if (typeof callback === "function") callback();
         });
       });
     });
@@ -484,7 +484,7 @@ module.exports = (app) => {
     };
     if (destiny_info.armsday.active) destiny_info.armsday.items = getItems(destiny_activities.armsday.extended.orders);
     
-    callback();
+    if (typeof callback === "function") callback();
   }
   
   
