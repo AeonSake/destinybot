@@ -55,6 +55,7 @@ setTimeout(function(){
 }, 3000);
 
 slapp.message("(.*)", (msg) => {
+  console.log(msg.body);
   if (config.botonly && msg.body.event.channel == config.poll_ch /*&& msg.body.event.user != config.admin_id*/) {
     slapp.client.chat.delete({
       token: config.bot_token,
