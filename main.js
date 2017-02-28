@@ -58,6 +58,7 @@ slapp.message("(.*)", (msg) => {
   console.log(msg.body);
   if (config.botonly && msg.body.event.channel == config.bot_ch /*&& msg.body.event.user != config.admin_id*/) {
     console.log("yes");
+    
     slapp.client.chat.delete({
       token: config.bot_token,
       ts: msg.body.event.ts,
