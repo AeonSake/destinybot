@@ -53,3 +53,15 @@ server.listen(process.env.PORT);
 setTimeout(function(){
   console.log("INFO: Running " + config.title + " on version " + config.version);
 }, 3000);
+
+slapp.message("(.*)", (msg) => {
+  if (config.botonly && msg.body.event.channel == config.poll_ch /*&& msg.body.event.user != config.admin_id*/) {
+    slapp.client.chat.delete({
+      token: config.bot_token,
+      ts: msg.body.event.ts,
+      channel: msg.body.event.channel,
+      as_user: true
+    });
+  }
+  return;
+});
