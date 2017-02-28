@@ -1385,14 +1385,11 @@ module.exports = (app) => {
       if (err) {
         console.log("ERROR: Polls | Unable to load poll database (" + err + ")");
       } else if (typeof val !== "undefined") {
-        for (var i in val) {
-          if (i == 0) val[i].id = 0;
-          poll_db[i] = new Poll(val[i]);
-        }
+        for (var i in val) poll_db[i] = new Poll(val[i]);
         console.log("INFO: Polls | Poll database loaded");
       }
     });
-  } //temp changes for 1st startup
+  }
   
   function deletePollDB () {
     kv.del('poll_db', function (err) {
@@ -1400,6 +1397,7 @@ module.exports = (app) => {
     });
   }
   
+  deletePollDB();
   loadPollDB();
   
   
