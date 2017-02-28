@@ -33,7 +33,7 @@ module.exports = (app) => {
 // ========== FETCH DATA ==========
 // ================================
     
-  function getActivityDef () {
+  function getActivityDef (callback) {
     https.get('https://destiny.plumbing/' + config.lang + '/raw/DestinyActivityDefinition.json', function(res) {
       var body = "";
       res.on('data', function(d) {
@@ -42,11 +42,12 @@ module.exports = (app) => {
       res.on('end', function() {
         destiny_def.activity = JSON.parse(body);
         console.log("INFO: Destiny | Activity definitions loaded");
+        callback();
       });
     });
   }
   
-  function getPlaceDef () {
+  function getPlaceDef (callback) {
     https.get('https://destiny.plumbing/' + config.lang + '/raw/DestinyPlaceDefinition.json', function(res) {
       var body = "";
       res.on('data', function(d) {
@@ -55,11 +56,12 @@ module.exports = (app) => {
       res.on('end', function() {
         destiny_def.place = JSON.parse(body);
         console.log("INFO: Destiny | Place definitions loaded");
+        callback();
       });
     });
   }
   
-  function getItemDef () {
+  function getItemDef (callback) {
     https.get('https://destiny.plumbing/' + config.lang + '/items/All.json', function(res) {
       var body = "";
       res.on('data', function(d) {
@@ -68,11 +70,12 @@ module.exports = (app) => {
       res.on('end', function() {
         destiny_def.item = JSON.parse(body);
         console.log("INFO: Destiny | Item definitions loaded");
+        callback();
       });
     });
   }
   
-  function getPerkDef () {
+  function getPerkDef (callback) {
     https.get('https://destiny.plumbing/' + config.lang + '/raw/DestinySandboxPerkDefinition.json', function(res) {
       var body = "";
       res.on('data', function(d) {
@@ -81,17 +84,20 @@ module.exports = (app) => {
       res.on('end', function() {
         destiny_def.perk = JSON.parse(body);
         console.log("INFO: Destiny | Perk definitions loaded");
+        callback();
       });
     });
   }
   
   function getDefinitions (callback) {
-    getActivityDef();
-    getPlaceDef();
-    getItemDef();
-    //getPerkDef();
-    
-    if (typeof callback === "function") callback();
+    getActivityDef(function(){
+      getPlaceDef(function(){
+        getItemDef(function(){
+          //getPerkDef();
+          if (typeof callback === "function") callback();
+        });
+      });
+    });
   }
   getDefinitions(getActivities);
   
