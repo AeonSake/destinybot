@@ -61,6 +61,8 @@ slapp.message("(.*)", (msg) => {
       ts: msg.body.event.ts,
       channel: msg.body.event.channel,
       as_user: true
+    }, (err, data) => {
+      console.log(err);
     });
   }
   return;
