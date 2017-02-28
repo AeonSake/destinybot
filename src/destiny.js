@@ -85,15 +85,17 @@ module.exports = (app) => {
     });
   }
   
-  function getDefinitions () {
+  function getDefinitions (callback) {
     getActivityDef();
     getPlaceDef();
     getItemDef();
     //getPerkDef();
+    
+    callback();
   }
-  getDefinitions();
+  getDefinitions(getActivities);
   
-  function getActivities () {
+  function getActivities (callback) {
     var options = {
       host: 'www.bungie.net',
       path: '/Platform/Destiny/Advisors/V2/?lc=' + config.lang,
@@ -108,14 +110,13 @@ module.exports = (app) => {
       res.on('end', function() {
         destiny_activities = JSON.parse(body).Response.data.activities;
         console.log("INFO: Destiny | Activities loaded");
-        if (destiny_activities.xur.status.active) getXurItems();
-        else prepareData();
+        if (destiny_activities.xur.status.active) getXurItems(callback);
+        else prepareData(callback);
       });
     });
   }
-  setTimeout(getActivities, 2000);
   
-  function getXurItems () {
+  function getXurItems (callback) {
     var options = {
       host: 'www.bungie.net',
       path: '/Platform/Destiny/Advisors/Xur/',
@@ -128,9 +129,11 @@ module.exports = (app) => {
         body += d;
       });
       res.on('end', function() {
-        prepareData();
-        destiny_info.xur.items = getItems(JSON.parse(body).Response.data.saleItemCategories[2].saleItems);
-        console.log("INFO: Destiny | Xûr items loaded");
+        prepareData(function(){
+          destiny_info.xur.items = getItems(JSON.parse(body).Response.data.saleItemCategories[2].saleItems);
+          console.log("INFO: Destiny | Xûr items loaded");
+          callback();
+        });
       });
     });
   }
@@ -246,7 +249,7 @@ module.exports = (app) => {
     return items;
   }
   
-  function prepareData () {
+  function prepareData (callback) {
     destiny_info = {};
     // pve
     /*destiny_info.prisonofelders = {
@@ -480,6 +483,8 @@ module.exports = (app) => {
       //color: "#333333"
     };
     if (destiny_info.armsday.active) destiny_info.armsday.items = getItems(destiny_activities.armsday.extended.orders);
+    
+    callback();
   }
   
   
@@ -737,7 +742,7 @@ module.exports = (app) => {
   // ===== /destiny update =====
   
   slapp.command('/destiny', "update", (msg, cmd) => {
-    if (msg.body.user_id == config.admin_id) getActivities();
+    if (msg.body.user_id == config.admin_id) getDefinitions(getActivities);
     return;
   });
   
@@ -889,22 +894,20 @@ module.exports = (app) => {
   });
   
   slapp.event('destiny_weekly_update', (msg) => {
-    getActivities();
-    setTimeout(function(){
+    getActivities(function(){
       var msg_text = destiny_summary_msg(lang.msg.dest.weeklyreset);
       msg_text.attachments.push(destiny_moreinfo_att(0));
       msg_text.attachments[msg_text.attachments.length - 1].callback_id = 'destiny_public_moreinfo_callback';
       postToChannel(msg_text);
-    }, 2000);
+    });
     return;
   });
   
   slapp.event('destiny_weekend_update', (msg) => {
-    getActivities();
-    setTimeout(function(){
+    getActivities(function(){
       var msg_text = destiny_list_msg(lang.msg.dest.weekendupdate, ['trials', 'xur']);
       postToChannel(msg_text);
-    }, 2000);
+    });
     return;
   });
   

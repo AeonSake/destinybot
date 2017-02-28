@@ -1397,7 +1397,6 @@ module.exports = (app) => {
     });
   }
   
-  deletePollDB();
   loadPollDB();
   
   
