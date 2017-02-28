@@ -218,11 +218,7 @@ module.exports = (app) => {
       if (this.state == 0 || this.state == 1) {
         var msg_text = this.generateEvent();
         
-      console.log(msg_text);
-
-        for (var i in this.posts.length) {
-          
-      console.log("found");
+        for (var i in this.posts) {
           slapp.client.chat.update({
             token: config.bot_token,
             ts: this.posts[i].ts,
@@ -258,8 +254,6 @@ module.exports = (app) => {
     start () {
       this.state = 1;
       this.update();
-      
-      console.log("found");
     }
     
     isAktive () {
