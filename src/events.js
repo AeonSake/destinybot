@@ -277,7 +277,7 @@ module.exports = (app) => {
     setSchedules (msg) {
       let ts = Date.now() + '';
       var data_reminder = {
-        schedule: moment(this.datetime).subtract(10, 'm'),
+        schedule: moment(this.datetime).subtract(10, 'm').format(),
         url: 'https://beepboophq.com/proxy/' + config.bb_project_id + '/slack/event',
         method: 'POST',
         headers: {
@@ -298,7 +298,7 @@ module.exports = (app) => {
         }
       };
       var data_start = {
-        schedule: moment(this.datetime),
+        schedule: moment(this.datetime).format(),
         url: 'https://beepboophq.com/proxy/' + config.bb_project_id + '/slack/event',
         method: 'POST',
         headers: {
@@ -478,7 +478,7 @@ module.exports = (app) => {
       var data = {
         id: getNextId(),
         title: "test",
-        datetime: moment().add(11, 'm'),
+        datetime: moment().add(11, 'm').format(),
         members: [msg.body.user_id],
         creator: msg.body.user_id,
         ts: {created: 0}
@@ -488,7 +488,6 @@ module.exports = (app) => {
       
       msg.say(event_db[0].generateEvent(), (err, result) => {
         event_db[0].addPost(result.channel, result.ts);
-        console.log(event_db[0]);
       });
     };
   });
