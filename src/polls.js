@@ -1405,7 +1405,7 @@ module.exports = (app) => {
 // ========== COMMANDS ==========
 // ==============================  
   
-// ===== /poll create =====
+  // ===== /poll create =====
   
   slapp.command('/poll', "create", (msg, cmd) => {
     var data = {id: getNextId(), creator: msg.body.user_id};
@@ -1631,7 +1631,7 @@ module.exports = (app) => {
     }
   });
   
-// ===== /poll show =====
+  // ===== /poll show =====
   
   slapp.command('/poll', "(show|list)(.*)", (msg, cmd) => {
     var check = new RegExp("\\d{1,4}");
@@ -1674,26 +1674,7 @@ module.exports = (app) => {
     }
   });
   
-  // ===== /poll post =====
-  
-  slapp.command('/poll', "post \\d{1,4}", (msg, cmd) => {
-    var slot = findPoll(parseInt(cmd.substring(5)) - 1);
-    
-    if (slot != -1) {
-      msg.say(poll_db[slot].generatePoll(), (err, result) => {
-        if (err) console.log("Unable to post in channel (" + err + ")");
-        else {
-          poll_db[slot].addPost(result.channel, result.ts);
-          savePollDB();
-        }
-      });
-    }
-    else msg.respond(func.generateInfoMsg(lang.msg.poll.notfound));
-    
-    return;
-  });
-  
-// ===== /poll edit =====
+  // ===== /poll edit =====
   
   slapp.command('/poll', "edit(.*)", (msg, cmd) => {
     var check = new RegExp("\\d{1,4}");
@@ -2041,7 +2022,26 @@ module.exports = (app) => {
     }
   });
   
-// ===== /poll help =====
+  // ===== /poll post =====
+  
+  slapp.command('/poll', "post \\d{1,4}", (msg, cmd) => {
+    var slot = findPoll(parseInt(cmd.substring(5)) - 1);
+    
+    if (slot != -1) {
+      msg.say(poll_db[slot].generatePoll(), (err, result) => {
+        if (err) console.log("Unable to post in channel (" + err + ")");
+        else {
+          poll_db[slot].addPost(result.channel, result.ts);
+          savePollDB();
+        }
+      });
+    }
+    else msg.respond(func.generateInfoMsg(lang.msg.poll.notfound));
+    
+    return;
+  });
+  
+  // ===== /poll help =====
   
   slapp.command('/poll', "help", (msg, cmd) => {
     msg.respond(func.generateInfoMsg(lang.msg.poll.help));
@@ -2058,7 +2058,7 @@ module.exports = (app) => {
     return;
   });*/
   
-// ===== /poll =====
+  // ===== /poll =====
   
   slapp.command('/poll', "(.*)", (msg, cmd) => {
     var temp = cmd.split(";");
@@ -2107,7 +2107,7 @@ module.exports = (app) => {
     return;
   });
     
-// ===== Vote button callback =====
+  // ===== Vote button callback =====
   
   slapp.action('poll_answer_callback', (msg) => {
     var answer = parseInt(msg.body.actions[0].name);
