@@ -892,31 +892,6 @@ module.exports = (app) => {
     return;
   });
   
-  // ===== External update triggers =====
-  
-  slapp.event('destiny_daily_update', (msg) => {
-    getActivities();
-    return;
-  });
-  
-  slapp.event('destiny_weekly_update', (msg) => {
-    getActivities(function(){
-      var msg_text = destiny_summary_msg(lang.msg.dest.weeklyreset);
-      msg_text.attachments.push(destiny_moreinfo_att(0));
-      msg_text.attachments[msg_text.attachments.length - 1].callback_id = 'destiny_public_moreinfo_callback';
-      postToChannel(msg_text);
-    });
-    return;
-  });
-  
-  slapp.event('destiny_weekend_update', (msg) => {
-    getActivities(function(){
-      var msg_text = destiny_list_msg(lang.msg.dest.weekendupdate, ['trials', 'xur']);
-      postToChannel(msg_text);
-    });
-    return;
-  });
-  
   // ===== moreinfo callback =====
   
   slapp.action('destiny_moreinfo_callback', (msg) => {
@@ -981,6 +956,33 @@ module.exports = (app) => {
     msg.respond(msg_text);
     return;
   });
+  
+  // ===== External update triggers =====
+  
+  slapp.event('destiny_daily_update', (msg) => {
+    getActivities();
+    return;
+  });
+  
+  slapp.event('destiny_weekly_update', (msg) => {
+    getActivities(function(){
+      var msg_text = destiny_summary_msg(lang.msg.dest.weeklyreset);
+      msg_text.attachments.push(destiny_moreinfo_att(0));
+      msg_text.attachments[msg_text.attachments.length - 1].callback_id = 'destiny_public_moreinfo_callback';
+      postToChannel(msg_text);
+    });
+    return;
+  });
+  
+  slapp.event('destiny_weekend_update', (msg) => {
+    getActivities(function(){
+      var msg_text = destiny_list_msg(lang.msg.dest.weekendupdate, ['trials', 'xur']);
+      postToChannel(msg_text);
+    });
+    return;
+  });
+  
+  // evtl auf trials/xur/ironbanner schedule umstellen
   
   return module;
 };
