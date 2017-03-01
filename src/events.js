@@ -464,8 +464,45 @@ module.exports = (app) => {
 // ========== COMMANDS ==========
 // ==============================  
   
-
+  // ===== /event create =====
   
+  
+  
+  // ===== /event show =====
+  
+  
+  
+  // ===== /event edit =====
+  
+  
+  
+  // ===== /event post =====
+  
+  slapp.command('/dbevent', "post \\d{1,4}", (msg, cmd) => {
+    var slot = findEvent(parseInt(cmd.substring(5)) - 1);
+    
+    if (slot != -1) {
+      msg.say(event_db[slot].generateEvent(), (err, result) => {
+        if (err) console.log("Unable to post in channel (" + err + ")");
+        else {
+          event_db[slot].addPost(result.channel, result.ts);
+          //savePollDB();
+        }
+      });
+    }
+    else msg.respond(func.generateInfoMsg(lang.msg.evt.notfound));
+    
+    return;
+  });
+  
+  // ===== /event help =====
+  
+  slapp.command('/dbevent', "help", (msg, cmd) => {
+    msg.respond(func.generateInfoMsg(lang.msg.evt.help));
+    return;
+  });
+  
+  // ===== /event test =====
   
   slapp.command('/dbevent', "test", (msg, cmd) => {
     if (msg.body.user_id == config.admin_id) {
@@ -484,6 +521,22 @@ module.exports = (app) => {
         event_db[0].addPost(result.channel, result.ts);
       });
     };
+  });
+  
+  // ===== answer callback =====
+  
+  slapp.action('event_answer_callback', (msg) => {
+    var slot = findEvent(msg.body.actions[0].value);
+    switch (msg.body.actions[0].name) {
+      case 'join':
+        event_db[slot].join(msg.body.user.id);
+        break;
+      case 'leave':
+        event_db[slot].leave(msg.body.user.id);
+        break;
+    }
+    event_db[slot].update();
+    //saveEventDB();
   });
   
   // ===== External event schedule trigger =====
