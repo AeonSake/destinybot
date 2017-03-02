@@ -743,7 +743,7 @@ module.exports = (app) => {
       });
       atts[atts.length - 1].actions.push({
         name: members[i],
-        text: "<@" + members[i] + ">",
+        text: user.getUser(members[i]).name,
         type: 'button'
       });
     }
