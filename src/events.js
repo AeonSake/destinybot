@@ -1445,8 +1445,8 @@ module.exports = (app) => {
     } else {
       var temp = msg.body.text.split(";");
       if (temp.length == 2) {
-        if (moment().add(30, m) < moment(temp[0] + " " + temp[1])) {
-          data.datetime = moment(temp[0] + " " + temp[1]).format();
+        if (moment().add(30, 'm') < moment(temp[0].trim() + " " + temp[1].trim())) {
+          data.datetime = moment(temp[0].trim() + " " + temp[1].trim()).format();
           var msg_text = event_create_max_msg;
           msg_text.attachments[0] = Event.generateDummy(data);
           
