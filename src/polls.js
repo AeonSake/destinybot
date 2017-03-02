@@ -553,7 +553,7 @@ module.exports = (app) => {
           break;
         case 2:
           if (poll_db[j].isClosed()) {
-            if (pollcount >= page * 5 && pollcount < page * 5 + 5) mmsg_textsg.attachments = msg_text.attachments.concat(poll_db[j].generatePoll().attachments);
+            if (pollcount >= page * 5 && pollcount < page * 5 + 5) msg_text.attachments = msg_text.attachments.concat(poll_db[j].generatePoll().attachments);
             pollcount++;
           }
           break;
@@ -726,7 +726,7 @@ module.exports = (app) => {
       style: 'danger',
       confirm: {
         title: lang.msg.confirm,
-        text: lang.msg.confirmdelete,
+        text: lang.msg.poll.confirmdelete,
         ok_text: lang.btn.yes,
         dismiss_text: lang.btn.no
       }
@@ -949,14 +949,14 @@ module.exports = (app) => {
         {
           text: "",
           fallback: "",
-          callback_id: 'poll_create_max_callback',
+          callback_id: 'poll_edit_max_callback',
           actions: [],
           mrkdwn_in: ['text', 'pretext']
         },
         {
           text: "",
           fallback: "",
-          callback_id: 'poll_create_max_callback',
+          callback_id: 'poll_edit_max_callback',
           actions: [],
           mrkdwn_in: ['text', 'pretext']
         },
@@ -1265,19 +1265,19 @@ module.exports = (app) => {
               if (data.answers[i].votes.length == 0) votes = lang.msg.poll.novotes;
               else percent = Math.round((data.answers[i].votes.length / voter_count) * 100);
 
-              att_fields.push({
+              att_fields[i] = {
                 value: emoji_num[activeanswers] + " *" + data.answers[i].text + " (" + percent + "%)*\n" + votes,
                 short: false
-              });
+              };
               activeanswers++;
             }
           }
         } else {
           for (var i in data.answers) {
-            att_fields.push({
+            att_fields[i] = {
               value: emoji_num[i] + " *" + data.answers[i].text + " (0%)*\n" + lang.msg.poll.novotes,
               short: false
-            });
+            };
           }
         }
       }
@@ -1403,7 +1403,7 @@ module.exports = (app) => {
   
 // ==============================
 // ========== COMMANDS ==========
-// ==============================  
+// ==============================
   
   // ===== /poll create =====
   
@@ -1473,7 +1473,8 @@ module.exports = (app) => {
       return;
     } else {
       data.text = msg.body.text;
-      var msg_text = poll_create_text_msg;
+      var msg_text = poll_create_answers_msg;
+      if ('answers' in data && data.answers.length >= 2) msg_text = poll_create_answers_n_msg;
       msg_text.attachments[0] = Poll.generateDummy(data);
       
       msg.respond(msg_text);
@@ -1545,6 +1546,7 @@ module.exports = (app) => {
           msg.route('poll_create_answers_route', data, 60);
           return;
         case 'next':
+          if (!('options' in data)) data.options = {max: 1};
           var msg_text = poll_create_names_msg;
           msg_text.attachments[0] = Poll.generateDummy(data);
           msg.respond(msg_text);
@@ -1555,7 +1557,8 @@ module.exports = (app) => {
           return;
       }
       
-      data.options = {max: parseInt(msg.body.actions[0].name)};
+      if (!('options' in data)) data.options = {max: parseInt(msg.body.actions[0].name)};
+      else data.options.max = parseInt(msg.body.actions[0].name);
       var msg_text = poll_create_names_msg;
       msg_text.attachments[0] = Poll.generateDummy(data);
       msg.respond(msg_text);
