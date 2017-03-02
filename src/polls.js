@@ -1621,7 +1621,7 @@ module.exports = (app) => {
       data.id = getNextId();
       poll_db.push(new Poll(data));
       var msg_text = poll_db[poll_db.length - 1].generatePoll();
-      //msg_text.channel = config.poll_ch;
+      //msg_text.channel = config.bot_ch;
       
       msg.respond({text: "", delete_original: true});
       msg.say(msg_text, (err, result) => {

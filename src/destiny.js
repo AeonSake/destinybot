@@ -712,7 +712,7 @@ module.exports = (app) => {
   function postToChannel (msg) {
     slapp.client.chat.postMessage({
       token: config.bot_token,
-      channel: config.destiny_ch,
+      channel: config.bot_ch,
       text: msg.text,
       attachments: msg.attachments,
       parse: 'full',
