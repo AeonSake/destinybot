@@ -31,6 +31,796 @@ module.exports = (app) => {
 // ========== MESSAGES ==========
 // ==============================
   
+  // ===== MAIN =====
+
+  module.event_main_msg = {
+    text: "",
+    attachments: [
+      {
+        text: lang.msg.evt.main,
+        fallback: lang.msg.evt.main,
+        callback_id: 'event_main_callback',
+        actions: [
+          {
+            name: 'create',
+            text: lang.btn.create,
+            type: 'button'
+          },
+          {
+            name: 'show',
+            text: lang.btn.show,
+            type: 'button'
+          },
+          {
+            name: 'edit',
+            text: lang.btn.edit,
+            type: 'button'
+          },
+          {
+            name: 'help',
+            text: lang.btn.showhelp,
+            type: 'button'
+          }
+        ],
+        mrkdwn_in: ['text', 'pretext']
+      },
+      {
+        text: "",
+        fallback: "",
+        callback_id: 'dismiss_callback',
+        actions: [
+          {
+            name: 'dismiss',
+            text: lang.btn.dismiss,
+            type: 'button'
+          }
+        ],
+        mrkdwn_in: ['text', 'pretext']
+      }
+    ],
+    response_type: 'ephemeral',
+    replace_original: true
+  };
+
+  // ===== CREATE =====
+
+  var event_create_title_msg = {
+    text: lang.wrd.preview + ":",
+    attachments: [
+      {},
+      {
+        text: lang.msg.evt.entertitle,
+        fallback: lang.msg.evt.entertitle,
+        mrkdwn_in: ['text', 'pretext']
+      },
+      {
+        text: "",
+        fallback: "",
+        callback_id: 'event_create_menu_callback',
+        actions: [
+          {
+            name: 'cancel',
+            text: lang.btn.cancel,
+            type: 'button',
+            style: 'danger'
+          }
+        ],
+        mrkdwn_in: ['text', 'pretext']
+      }
+    ],
+    response_type: 'ephemeral',
+    replace_original: true
+  };
+
+  var event_create_title_n_msg = {
+    text: lang.wrd.preview + ":",
+    attachments: [
+      {},
+      {
+        text: lang.msg.evt.entertitle,
+        fallback: lang.msg.evt.entertitle,
+        mrkdwn_in: ['text', 'pretext']
+      },
+      {
+        text: "",
+        fallback: "",
+        callback_id: 'event_create_menu_callback',
+        actions: [
+          {
+            name: 'next',
+            text: lang.btn.next,
+            type: 'button'
+          },
+          {
+            name: 'cancel',
+            text: lang.btn.cancel,
+            type: 'button',
+            style: 'danger',
+            confirm: {
+              title: lang.msg.confirm,
+              text: lang.msg.confirmcancel,
+              ok_text: lang.btn.yes,
+              dismiss_text: lang.btn.no
+            }
+          }
+        ],
+        mrkdwn_in: ['text', 'pretext']
+      }
+    ],
+    response_type: 'ephemeral',
+    replace_original: true
+  };
+
+  var event_create_text_msg = {
+    text: lang.wrd.preview + ":",
+    attachments: [
+      {},
+      {
+        text: lang.msg.evt.entertext,
+        fallback: lang.msg.evt.entertext,
+        mrkdwn_in: ['text', 'pretext']
+      },
+      {
+        text: "",
+        fallback: "",
+        callback_id: 'event_create_menu_callback',
+        actions: [
+          {
+            name: 'back',
+            text: lang.btn.back,
+            type: 'button'
+          },
+          {
+            name: 'next',
+            text: lang.btn.next,
+            type: 'button'
+          },
+          {
+            name: 'cancel',
+            text: lang.btn.cancel,
+            type: 'button',
+            style: 'danger',
+            confirm: {
+              title: lang.msg.confirm,
+              text: lang.msg.confirmcancel,
+              ok_text: lang.btn.yes,
+              dismiss_text: lang.btn.no
+            }
+          }
+        ],
+        mrkdwn_in: ['text', 'pretext']
+      }
+    ],
+    response_type: 'ephemeral',
+    replace_original: true
+  };
+
+  var event_create_max_msg = {
+    text: lang.wrd.preview + ":",
+    attachments: [
+      {},
+      {
+        text: lang.msg.evt.entermax,
+        fallback: lang.msg.evt.entermax,
+        mrkdwn_in: ['text', 'pretext']
+      },
+      {
+        text: "",
+        fallback: "",
+        callback_id: 'event_create_max_callback',
+        actions: [
+          {
+            name: '0',
+            text: lang.btn.evt.nomax,
+            type: 'button'
+          },
+          {
+            name: '2',
+            text: "2",
+            type: 'button'
+          },
+          {
+            name: '3',
+            text: "3",
+            type: 'button'
+          },
+          {
+            name: '6',
+            text: "6",
+            type: 'button'
+          },
+          {
+            name: '12',
+            text: "12",
+            type: 'button'
+          },
+        ],
+        mrkdwn_in: ['text', 'pretext']
+      },
+      {
+        text: "",
+        fallback: "",
+        callback_id: 'event_create_menu_callback',
+        actions: [
+          {
+            name: 'next',
+            text: lang.btn.next,
+            type: 'button'
+          },
+          {
+            name: 'cancel',
+            text: lang.btn.cancel,
+            type: 'button',
+            style: 'danger',
+            confirm: {
+              title: lang.msg.confirm,
+              text: lang.msg.confirmcancel,
+              ok_text: lang.btn.yes,
+              dismiss_text: lang.btn.no
+            }
+          }
+        ],
+        mrkdwn_in: ['text', 'pretext']
+      }
+    ],
+    response_type: 'ephemeral',
+    replace_original: true
+  };
+
+  var event_create_final_msg = {
+    text: lang.wrd.preview + ":",
+    attachments: [
+      {},
+      {
+        text: "",
+        fallback: "",
+        callback_id: 'event_create_menu_callback',
+        actions: [
+          {
+            name: 'edit',
+            text: lang.btn.edit,
+            type: 'button'
+          },
+          {
+            name: 'done',
+            text: lang.btn.done,
+            type: 'button',
+            style: 'primary'
+          },
+          {
+            name: 'cancel',
+            text: lang.btn.cancel,
+            type: 'button',
+            style: 'danger',
+            confirm: {
+              title: lang.msg.confirm,
+              text: lang.msg.confirmcancel,
+              ok_text: lang.btn.yes,
+              dismiss_text: lang.btn.no
+            }
+          }
+        ],
+        mrkdwn_in: ['text', 'pretext']
+      }
+    ],
+    response_type: 'ephemeral',
+    replace_original: true
+  };
+  
+  // ===== SHOW =====
+  
+  function event_show_filter_att (mode, sort) {
+    var btns = [];
+    
+    if (mode != 0) btns.push({
+      name: "0-" + sort,
+      text: lang.btn.evt.allevents,
+      type: 'button'
+    });
+    if (mode != 1) btns.push({
+      name: "1-" + sort,
+      text: lang.btn.evt.comingevents,
+      type: 'button'
+    });
+    if (mode != 2) btns.push({
+      name: "2-" + sort,
+      text: lang.btn.evt.outdatedevents,
+      type: 'button'
+    });
+    if (mode != 3) btns.push({
+      name: "3-" + sort,
+      text: lang.btn.evt.myevents,
+      type: 'button'
+    });
+    if (sort == 'asc') btns.push({
+      name: mode + "-desc",
+      text: lang.btn.desc,
+      type: 'button'
+    });
+    if (sort == 'desc') btns.push({
+      name: mode + "-asc",
+      text: lang.btn.asc,
+      type: 'button'
+    });
+    
+    return {
+      text: lang.wrd.filter + ":",
+      fallback: "",
+      callback_id: 'event_show_filter_callback',
+      actions: btns,
+      mrkdwn_in: ['text', 'pretext']
+    };
+  }
+  
+  function event_show_pages_att (page, count, mode, sort) {
+    var btns = [],
+        max = Math.ceil(count / 5);
+    
+    if (page != 0) btns.push({
+      name: 'back-' + mode + "-" + sort,
+      value: page - 1,
+      text: "<",
+      type: 'button'
+    });
+    btns.push({
+      name: 'page',
+      text: lang.wrd.page + " " + (page + 1) + " / " + max,
+      type: 'button'
+    });
+    if (page + 1 < max) btns.push({
+      name: 'next-' + mode + "-" + sort,
+      value: page + 1,
+      text: ">",
+      type: 'button'
+    });
+    btns.push({
+      name: 'dismiss',
+      text: lang.btn.dismiss,
+      type: 'button'
+    });
+    
+    return {
+      text: lang.wrd.total + ": " + count + " " + (count > 1 ? lang.wrd.events : lang.wrd.event),
+      fallback: "",
+      callback_id: 'event_show_pages_callback',
+      actions: btns,
+      mrkdwn_in: ['text', 'pretext']
+    };
+  }
+  
+  function event_list_msg (page, mode, sort, user_id) {
+    var msg_text = {
+      text: "",
+      attachments: [],
+      response_type: 'ephemeral',
+      replace_original: true
+    };
+    var eventcount = 0;
+    // options.mode: 0 = all, 1 = coming, 2 = outdated, 3 = own
+    
+    for (var i in event_db) {
+      var j = (sort == 'asc' ? i : event_db.length - i - 1);
+      
+      switch(mode) {
+        case 0:
+          if (event_db[j].isVisible()) {
+            if (eventcount >= page * 5 && eventcount < page * 5 + 5) msg_text.attachments = msg_text.attachments.concat(event_db[j].generateEvent().attachments);
+            eventcount++;
+          }
+          break;
+        case 1:
+          if (event_db[j].isOpen()) {
+            if (eventcount >= page * 5 && eventcount < page * 5 + 5) msg_text.attachments = msg_text.attachments.concat(event_db[j].generateEvent().attachments);
+            eventcount++;
+          }
+          break;
+        case 2:
+          if (event_db[j].isClosed()) {
+            if (eventcount >= page * 5 && eventcount < page * 5 + 5) msg_text.attachments = msg_text.attachments.concat(event_db[j].generateEvent().attachments);
+            eventcount++;
+          }
+          break;
+        case 3:
+          if (event_db[j].isVisible() && event_db[j].isOwner(user_id)) {
+            if (eventcount >= page * 5 && eventcount < page * 5 + 5) {
+              msg_text.attachments = msg_text.attachments.concat(event_db[j].generateEvent().attachments);
+              msg_text.attachments.push(event_edit_del_att(event_db[j].getData().id));
+            }
+            eventcount++;
+          }
+          break;
+      }
+    }
+    
+    msg_text.attachments.push(event_show_filter_att(mode, sort));
+    if (eventcount == 0) {
+      msg_text.text = lang.msg.evt.nopollfound;
+      msg_text.attachments.push(event_dismiss_att);
+    } else msg_text.attachments.push(event_show_pages_att(page, eventcount, mode, sort));
+    
+    return msg_text;
+  }
+  
+  // ===== EDIT =====
+  
+  function event_edit_del_att (id) {
+    return {
+      text: "",
+      fallback: "",
+      callback_id: 'event_edit_del_callback',
+      actions: [
+        {
+          name: 'edit',
+          value: id,
+          text: lang.btn.edit,
+          type: 'button'
+        },
+        {
+          name: 'delete',
+          value: id,
+          text: lang.btn.delete,
+          type: 'button',
+          style: 'danger',
+          confirm: {
+            title: lang.msg.confirm,
+            text: lang.msg.evt.confirmdelete,
+            ok_text: lang.btn.yes,
+            dismiss_text: lang.btn.no
+          }
+        }
+      ],
+      mrkdwn_in: ['text', 'pretext']
+    };
+  }
+  
+  function event_edit_pages_att (page, count, sort) {
+    var btns = [],
+        max = Math.ceil(count / 5);
+    
+    if (page != 0) btns.push({
+      name: 'back-' + sort,
+      value: page - 1,
+      text: "<",
+      type: 'button'
+    });
+    btns.push({
+      name: 'page',
+      text: lang.wrd.page + " " + (page + 1) + " / " + max,
+      type: 'button'
+    });
+    if (page + 1 < max) btns.push({
+      name: 'next-' + sort,
+      value: page + 1,
+      text: ">",
+      type: 'button'
+    });
+    if (sort == 'asc') btns.push({
+      name: 'desc',
+      text: lang.btn.desc,
+      type: 'button'
+    });
+    else btns.push({
+      name: 'asc',
+      text: lang.btn.asc,
+      type: 'button'
+    });
+    btns.push({
+      name: 'dismiss',
+      text: lang.btn.dismiss,
+      type: 'button'
+    });
+    
+    return {
+      text: lang.wrd.total + ": " + count + " " + (count > 1 ? lang.wrd.events : lang.wrd.event),
+      fallback: "",
+      callback_id: 'event_edit_pages_callback',
+      actions: btns,
+      mrkdwn_in: ['text', 'pretext']
+    };
+  }
+  
+  function event_edit_list_msg (user_id, page, sort) {
+    var msg_text = {
+      text: "",
+      attachments: [],
+      response_type: 'ephemeral',
+      replace_original: true
+    };
+    var eventcount = 0;
+    
+    for (var i in event_db) {
+      var j = (sort == 'asc' ? i : event_db.length - i - 1);
+      
+      if (event_db[j].isVisible() && event_db[j].isOwner(user_id)) {
+        if (eventcount >= page * 5 && eventcount < page * 5 + 5) {
+          msg_text.attachments.push(event_db[j].generateAttachment());
+          msg_text.attachments.push(event_edit_del_att(event_db[j].getData().id));
+        }
+        eventcount++;
+      }
+    }
+    
+    if (eventcount == 0) {
+      msg_text.text = lang.msg.evt.nopollfound;
+      msg_text.attachments.push(event_dismiss_att);
+    } else msg_text.attachments.push(event_edit_pages_att(page, eventcount, sort));
+    
+    return msg_text;
+  }
+  
+  function event_edit_msg (state) {
+    var btns = [];
+    btns.push({
+      name: 'done',
+      text: lang.btn.done,
+      type: 'button',
+      style: 'primary'
+    });
+    btns.push({
+      name: 'cancel',
+      text: lang.btn.cancel,
+      type: 'button',
+      confirm: {
+        title: lang.msg.confirm,
+        text: lang.msg.confirmcancel,
+        ok_text: lang.btn.yes,
+        dismiss_text: lang.btn.no
+      }
+    });
+    if (state == 2) btns.push({
+      name: 'undelete',
+      text: lang.btn.undelete,
+      type: 'button'
+    });
+    if (state != 2) btns.push({
+      name: 'delete',
+      text: lang.btn.delete,
+      type: 'button',
+      style: 'danger',
+      confirm: {
+        title: lang.msg.confirm,
+        text: lang.msg.evt.confirmdelete,
+        ok_text: lang.btn.yes,
+        dismiss_text: lang.btn.no
+      }
+    });
+  
+    return {
+      text: lang.wrd.preview + ":",
+      attachments: [
+        {},
+        {
+          text: lang.msg.evt.selectedit,
+          fallback: lang.msg.evt.selectedit,
+          callback_id: 'event_edit_select_callback',
+          actions: [
+            {
+              name: 'title',
+              text: lang.btn.evt.title,
+              type: 'button'
+            },
+            {
+              name: 'text',
+              text: lang.btn.evt.text,
+              type: 'button'
+            },
+            {
+              name: 'members',
+              text: lang.btn.evt.members,
+              type: 'button'
+            },
+            {
+              name: 'max',
+              text: lang.btn.evt.max,
+              type: 'button'
+            }
+          ],
+          mrkdwn_in: ['text', 'pretext']
+        },
+        {
+          text: "",
+          fallback: "",
+          callback_id: 'event_edit_menu_callback',
+          actions: btns,
+          mrkdwn_in: ['text', 'pretext']
+        }
+      ],
+      response_type: 'ephemeral',
+      replace_original: true
+    }
+  }
+  
+  var event_edit_menu_att = {
+    text: "",
+    fallback: "",
+    callback_id: 'event_edit_menu_callback',
+    actions: [
+      {
+        name: 'back',
+        text: lang.btn.back,
+        type: 'button',
+      },
+      {
+        name: 'cancel',
+        text: lang.btn.cancel,
+        type: 'button',
+        style: 'danger',
+        confirm: {
+          title: lang.msg.confirm,
+          text: lang.msg.confirmcancel,
+          ok_text: lang.btn.yes,
+          dismiss_text: lang.btn.no
+        }
+      }
+    ],
+    mrkdwn_in: ['text', 'pretext']
+  };
+  
+  var event_edit_title_msg = {
+    text: "",
+    attachments: [
+      {
+        text: lang.msg.evt.entertitle,
+        fallback: lang.msg.evt.entertitle,
+        mrkdwn_in: ['text', 'pretext']
+      },
+      event_edit_menu_att
+    ],
+    response_type: 'ephemeral',
+    replace_original: true
+  };
+  
+  var event_edit_text_msg = {
+    text: "",
+    attachments: [
+      {
+        text: lang.msg.evt.entertext,
+        fallback: lang.msg.evt.entertext,
+        mrkdwn_in: ['text', 'pretext']
+      },
+      event_edit_menu_att
+    ],
+    response_type: 'ephemeral',
+    replace_original: true
+  };
+  
+  var event_edit_text_del_msg = {
+    text: "",
+    attachments: [
+      {
+        text: lang.msg.evt.entertext,
+        fallback: lang.msg.evt.entertext,
+        mrkdwn_in: ['text', 'pretext']
+      },
+      {
+        text: "",
+        fallback: "",
+        callback_id: 'event_edit_menu_callback',
+        actions: [
+          {
+            name: 'back',
+            text: lang.btn.back,
+            type: 'button',
+          },
+          {
+            name: 'delete',
+            text: lang.btn.evt.deletetext,
+            type: 'button',
+          },
+          {
+            name: 'cancel',
+            text: lang.btn.cancel,
+            type: 'button',
+            style: 'danger',
+            confirm: {
+              title: lang.msg.confirm,
+              text: lang.msg.confirmcancel,
+              ok_text: lang.btn.yes,
+              dismiss_text: lang.btn.no
+            }
+          }
+        ],
+        mrkdwn_in: ['text', 'pretext']
+      }
+    ],
+    response_type: 'ephemeral',
+    replace_original: true
+  };
+  
+  function event_edit_members_msg (members) {
+    var atts = [{
+      text: lang.msg.evt.removemembers,
+      fallback: lang.msg.evt.removemembers,
+        mrkdwn_in: ['text', 'pretext']
+    }];
+    
+    for (var i in members) {
+      if (i % 5 == 0) atts.push({
+        text: "",
+        fallback: "",
+        callback_id: 'event_edit_members_callback',
+        actions:[]
+      });
+      atts[atts.length - 1].actions.push({
+        name: members[i],
+        text: "<@" + members[i] + ">",
+        type: 'button'
+      });
+    }
+    
+    atts.push(event_edit_menu_att);
+    
+    return {
+      text: lang.wrd.preview + ":",
+      attachments: atts,
+      response_type: 'ephemeral',
+      replace_original: true
+    }
+  }
+  
+  var event_edit_max_msg = {
+    text: "",
+    attachments: [
+      {
+        text: lang.msg.evt.entermax,
+        fallback: lang.msg.evt.entermax,
+        mrkdwn_in: ['text', 'pretext']
+      },
+      {
+        text: "",
+        fallback: "",
+        callback_id: 'event_edit_max_callback',
+        actions: [
+          {
+            name: '0',
+            text: lang.btn.evt.nomax,
+            type: 'button'
+          },
+          {
+            name: '2',
+            text: "2",
+            type: 'button'
+          },
+          {
+            name: '3',
+            text: "3",
+            type: 'button'
+          },
+          {
+            name: '6',
+            text: "6",
+            type: 'button'
+          },
+          {
+            name: '12',
+            text: "12",
+            type: 'button'
+          },
+        ],
+        mrkdwn_in: ['text', 'pretext']
+      },
+      event_edit_menu_att
+    ],
+    response_type: 'ephemeral',
+    replace_original: true
+  };
+  
+  // ===== MISC =====
+  
+  var event_dismiss_att = {
+    text: "",
+    fallback: "",
+    callback_id: 'dismiss_callback',
+    actions: [
+      {
+        name: 'dismiss',
+        text: lang.btn.dismiss,
+        type: 'button'
+      }
+    ],
+    mrkdwn_in: ['text', 'pretext']
+  };
+  
   
   
 // ===========================
@@ -199,7 +989,6 @@ module.exports = (app) => {
           short: false
         }
       ];
-      
       
       return {
         author_name: lang.wrd.event + " #" + (data.id + 1) + (data.state == 2 ? " [" + lang.wrd.deleted + "]" : ""),
@@ -463,14 +1252,199 @@ module.exports = (app) => {
 // ==============================
 // ========== COMMANDS ==========
 // ==============================  
-  
+   
   // ===== /event create =====
   
+  slapp.command('/dbevent', "create", (msg, cmd) => {
+    var data = {id: getNextId(), creator: msg.body.user_id};
+    
+    var msg_text = event_create_title_msg;
+    msg_text.attachments[0] = Event.generateDummy(data);
+    
+    msg.respond(msg_text);
+    msg.route('event_create_title_route', data, 60);
+    return;
+  });
   
+  slapp.route('event_create_title_route', (msg, data) => {
+    if (msg.type == 'event') {
+      msg.route('event_create_title_route', data, 60);
+      return;
+    } else if (msg.type == 'action') {
+      switch (msg.body.actions[0].name) {
+        case 'next':
+          var msg_text = event_create_text_msg;
+          msg_text.attachments[0] = Event.generateDummy(data);
+          msg.respond(msg_text);
+          msg.route('event_create_text_route', data, 60);
+          break;
+        case 'cancel':
+          msg.respond({text: "", delete_original: true});
+          break;
+      }
+      return;
+    } else {
+      data.title = msg.body.text;
+      var msg_text = event_create_text_msg;
+      msg_text.attachments[0] = Event.generateDummy(data);
+      
+      msg.respond(msg_text);
+      msg.route('event_create_text_route', data, 60);
+      return;
+    }
+  });
+  
+  slapp.route('event_create_text_route', (msg, data) => {
+    if (msg.type == 'event') {
+      msg.route('event_create_text_route', data, 60);
+      return;
+    } else if (msg.type == 'action') {
+      switch (msg.body.actions[0].name) {
+        case 'back':
+          var msg_text = event_create_title_n_msg;
+          msg_text.attachments[0] = Event.generateDummy(data);
+          msg.respond(msg_text);
+          msg.route('event_create_title_route', data, 60);
+          break;
+        case 'next':
+          if (!('text' in data)) data.text = "";
+          var msg_text = event_create_max_msg;
+          msg_text.attachments[0] = Event.generateDummy(data);
+          msg.respond(msg_text);
+          msg.route('event_create_max_route', data, 60);
+          break;
+        case 'cancel':
+          msg.respond({text: "", delete_original: true});
+          break;
+      }
+      return;
+    } else {
+      data.text = msg.body.text;
+      var msg_text = event_create_max_msg;
+      msg_text.attachments[0] = Event.generateDummy(data);
+      
+      msg.respond(msg_text);
+      msg.route('event_create_max_route', data, 60);
+      return;
+    }
+  });
+  
+  slapp.route('event_create_max_route', (msg, data) => {
+    if (msg.type == 'event') {
+      msg.route('event_create_max_route', data, 60);
+      return;
+    } else if (msg.type == 'action') {
+      switch (msg.body.actions[0].name) {
+        case 'back':
+          var msg_text = event_create_text_msg;
+          msg_text.attachments[0] = Event.generateDummy(data);
+          msg.respond(msg_text);
+          msg.route('event_create_text_route', data, 60);
+          return;
+        case '0':
+        case '2':
+        case '3':
+        case '6':
+        case '12':
+          data.options = {max: parseInt(msg.body.actions[0].name)};
+        case 'next':
+          var msg_text = event_create_final_msg;
+          msg_text.attachments[0] = Event.generateDummy(data);
+          msg.respond(msg_text);
+          msg.route('event_create_final_route', data, 60);
+          return;
+        case 'cancel':
+          msg.respond({text: "", delete_original: true});
+          return;
+      }
+    } else {
+      data.options = {max: parseInt(msg.body.actions[0].name)};
+      var msg_text = event_create_final_msg;
+      msg_text.attachments[0] = Event.generateDummy(data);
+      msg.respond(msg_text);
+      msg.route('event_create_final_route', data, 60);
+      return;
+    }
+  });
+  
+  slapp.route('event_create_final_route', (msg, data) => {
+    if (msg.type != 'action') {
+      msg.route('event_create_final_route', data, 60);
+      return;
+    } else {
+      switch (msg.body.actions[0].name) {
+        case 'edit':
+          var msg_text = event_edit_msg(0);
+          msg_text.attachments[0] = Event.generateDummy(data);
+          msg.respond(msg_text);
+          data.create = true;
+          msg.route('event_edit_route', data, 60);
+          return;
+        case 'done':
+          break;
+        case 'cancel':
+          msg.respond({text: "", delete_original: true});
+          return;
+      }
+      
+      data.ts = {created: msg.body.action_ts};
+      data.id = getNextId();
+      event_db.push(new Event(data));
+      var slot = event_db.length - 1;
+      var msg_text = event_db[slot].generateEvent();
+      event_db[slot].setSchedules(msg);
+      //msg_text.channel = config.bot_ch;
+      
+      msg.respond({text: "", delete_original: true});
+      msg.say(msg_text, (err, result) => {
+        event_db[slot].addPost(result.channel, result.ts);
+        //saveEventDB();
+      });
+    }
+  });
   
   // ===== /event show =====
   
+  slapp.command('/dbevent', "(show|list)(.*)", (msg, cmd) => {
+    var check = new RegExp("\\d{1,4}");
+    
+    if (cmd.substring(0,4) == "show" && check.test(cmd.substring(5))) {
+      var slot = findEvent(parseInt(cmd.substring(5)) - 1);
+      
+      if (slot != -1) {
+        var msg_text = event_db[slot].generateEvent();
+        msg_text.text = "";
+        msg_text.attachments.push(event_dismiss_att);
+        msg.respond(msg_text);
+      } else msg.respond(func.generateInfoMsg(lang.msg.evt.notfound));
+    } else msg.respond(event_list_msg(0, 0, 'desc'));
+    
+    return;
+  });
   
+  slapp.action('event_show_filter_callback', (msg) => {
+    var data = msg.body.actions[0].name.split("-");
+    
+    msg.respond(event_list_msg(0, parseInt(data[0]), data[1], msg.body.user.id));
+    return;
+  });
+  
+  slapp.action('poll_show_pages_callback', (msg) => {
+    var data = msg.body.actions[0].name.split("-"),
+        page = parseInt(msg.body.actions[0].value);
+    
+    switch (data[0]) {
+      case 'back':
+      case 'next':
+        msg.respond(poll_list_msg(page, parseInt(data[1]), data[2], msg.body.user.id));
+        return;
+      case 'page':
+        return;
+      case 'dismiss':
+        msg.respond({text: "", delete_original: true});
+        return;
+    }
+  });
   
   // ===== /event edit =====
   

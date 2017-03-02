@@ -60,7 +60,17 @@ let lang = module.exports = {
       join: "Teilnehmen",
       leave: "Verlassen",
       ok: "Ok",
-      cancel: "Absagen"
+      cancel: "Absagen",
+      allevents: "Alle Events",
+      comingevents: "Kommende Events",
+      outdatedevents: "Abgelaufene Events",
+      myevents: "Meine Events",
+      title: "Titel",
+      text: "Text",
+      members: "Teilnehmer",
+      max: "Max. Teilnehmer",
+      deletetext: "Text entfernen",
+      nomax: "Kein Max."
     },
     
     poll: {
