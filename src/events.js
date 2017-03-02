@@ -1447,6 +1447,8 @@ module.exports = (app) => {
       if (temp.length == 2) {
         var parsed = moment(temp[0].trim().replace(/[\.\:\,\/ ]/g, "-") + " " + temp[1].trim().replace(/[\.\:\,\/ ]/g, "-"), "DD-MM-YYYY HH-mm");
         if (moment().add(30, 'm') < parsed) {
+          console.log(parsed);
+          console.log(parsed.format());
           data.datetime = parsed.format();
           var msg_text = event_create_max_msg;
           msg_text.attachments[0] = Event.generateDummy(data);
