@@ -117,7 +117,7 @@ module.exports = (app) => {
           short: false
         },
         {
-          title: lang.wrd.member + (this.options.max > 0 ? " (Max. " + this.options.max + ")" : ""),
+          title: lang.wrd.member + (this.options.max > 0 ? " (Max. " + this.options.max + "):" : ":"),
           value: temp_members,
           short: false
         }
@@ -194,7 +194,7 @@ module.exports = (app) => {
           short: false
         },
         {
-          name: lang.wrd.member + (temp_max > 0 ? " (Max. " + temp_max + ")" : ""),
+          name: lang.wrd.member + (temp_max > 0 ? " (Max. " + temp_max + "):" : ":"),
           value: temp_members,
           short: false
         }
