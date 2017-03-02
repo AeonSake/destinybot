@@ -150,16 +150,9 @@ module.exports = (app) => {
 // ========== SCHEDULING ==========
 // ================================
   
-  // destiny_daily_update M2ZiMzQwOTAwODNhNGNmZTg5Y2E5ODM3ZGI5OWVjOTJ8MzAgOSAqICogMCwxLDMsNCw1LDYgKg==
-  // destiny_weekly_update OWE3ODVkYTYwNTVhNDY1ZTg2NTEwNzJhYTM5NDIzZjF8MzAgOSAqICogMiAq
-  // destiny_weekend_update OGUyNTRkNTBlNTllNGMzY2E0OWIzOTg4M2NjYjcyNjB8MzAgMTggKiAqIDUgKg==
-  
   function setSchedule (msg, event_id, schedule) {
     let ts = Date.now() + '';
     var data = {
-      //schedule: "30 9 * * 0,1,3,4,5,6 *",
-      //schedule: "30 9 * * 2 *",
-      //schedule: "30 18 * * 5 *",
       schedule: schedule,
       url: 'https://beepboophq.com/proxy/' + config.bb_project_id + '/slack/event',
       method: 'POST',
@@ -215,7 +208,7 @@ module.exports = (app) => {
       },
       json: true
     };
-    needle.get('https://beepboophq.com/api/v1/chronos/tasks', headers, (err, resp) => {
+    needle.get('https://beepboophq.com/api/v1/chronos/tasks?inactive=false', headers, (err, resp) => {
       if (resp.statusCode !== 201) console.log(resp.statusCode);
       if (err) console.log(err);
       else console.log(resp.body);
@@ -986,18 +979,14 @@ module.exports = (app) => {
   });
   
   slapp.event('destiny_armsday_update', (msg) => {
-    getActivities(function(){
-      var msg_text = destiny_list_msg(lang.msg.dest.weekendupdate, ['armsday']);
-      postToChannel(msg_text);
-    });
+    var msg_text = destiny_list_msg(lang.msg.dest.weekendupdate, ['armsday']);
+    postToChannel(msg_text);
     return;
   });
   
   slapp.event('destiny_xur_update', (msg) => {
-    getActivities(function(){
-      var msg_text = destiny_list_msg(lang.msg.dest.weekendupdate, ['xur']);
-      postToChannel(msg_text);
-    });
+    var msg_text = destiny_list_msg(lang.msg.dest.weekendupdate, ['xur']);
+    postToChannel(msg_text);
     return;
   });
   
