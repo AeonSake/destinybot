@@ -119,6 +119,8 @@ let lang = module.exports = {
       entertitle: "Event-Titel eingeben: `/event <title>`",
       entertext: "Event-Text eingeben: `/event <text>` (optional)",
       enterdatetime: "Event-Datum/Zeit eingeben: `/event <DD.MM.YYYY>;<hh:mm>`",
+      wrongdatetimeinput: "*Falsches Format!*",
+      wrongdatetimestamp: "*Datum/Zeit muss mindestens 30 Minuten in der Zukunft liegen!*",
       entermax: "Wie viele Teilnehmer sollen maximal möglich sein? (Standard: 6)",
       
       neweventcreated: "Ein neuer Event wurde erstellt:",

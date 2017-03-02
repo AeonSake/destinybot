@@ -194,6 +194,89 @@ module.exports = (app) => {
     response_type: 'ephemeral',
     replace_original: true
   };
+  
+  var event_create_datetime_msg = {
+    text: lang.wrd.preview + ":",
+    attachments: [
+      {},
+      {
+        text: lang.msg.evt.enterdatetime,
+        fallback: lang.msg.evt.enterdatetime,
+        mrkdwn_in: ['text', 'pretext']
+      },
+      {
+        text: "",
+        fallback: "",
+        callback_id: 'event_create_menu_callback',
+        actions: [
+          {
+            name: 'back',
+            text: lang.btn.back,
+            type: 'button'
+          },
+          {
+            name: 'cancel',
+            text: lang.btn.cancel,
+            type: 'button',
+            style: 'danger',
+            confirm: {
+              title: lang.msg.confirm,
+              text: lang.msg.confirmcancel,
+              ok_text: lang.btn.yes,
+              dismiss_text: lang.btn.no
+            }
+          }
+        ],
+        mrkdwn_in: ['text', 'pretext']
+      }
+    ],
+    response_type: 'ephemeral',
+    replace_original: true
+  };
+  
+  var event_create_datetime_n_msg = {
+    text: lang.wrd.preview + ":",
+    attachments: [
+      {},
+      {
+        text: lang.msg.evt.enterdatetime,
+        fallback: lang.msg.evt.enterdatetime,
+        mrkdwn_in: ['text', 'pretext']
+      },
+      {
+        text: "",
+        fallback: "",
+        callback_id: 'event_create_menu_callback',
+        actions: [
+          {
+            name: 'back',
+            text: lang.btn.back,
+            type: 'button'
+          },
+          {
+            name: 'next',
+            text: lang.btn.next,
+            type: 'button'
+          },
+          {
+            name: 'cancel',
+            text: lang.btn.cancel,
+            type: 'button',
+            style: 'danger',
+            confirm: {
+              title: lang.msg.confirm,
+              text: lang.msg.confirmcancel,
+              ok_text: lang.btn.yes,
+              dismiss_text: lang.btn.no
+            }
+          }
+        ],
+        mrkdwn_in: ['text', 'pretext']
+      }
+    ],
+    response_type: 'ephemeral',
+    replace_original: true
+  };
 
   var event_create_max_msg = {
     text: lang.wrd.preview + ":",
@@ -1275,6 +1358,7 @@ module.exports = (app) => {
         case 'next':
           var msg_text = event_create_text_msg;
           msg_text.attachments[0] = Event.generateDummy(data);
+          
           msg.respond(msg_text);
           msg.route('event_create_text_route', data, 60);
           break;
@@ -1303,13 +1387,53 @@ module.exports = (app) => {
         case 'back':
           var msg_text = event_create_title_n_msg;
           msg_text.attachments[0] = Event.generateDummy(data);
+          
           msg.respond(msg_text);
           msg.route('event_create_title_route', data, 60);
           break;
         case 'next':
           if (!('text' in data)) data.text = "";
+          var msg_text = event_create_datetime_msg;
+          if ('datetime' in data) msg_text = event_create_datetime_n_msg;
+          msg_text.attachments[0] = Event.generateDummy(data);
+          
+          msg.respond(msg_text);
+          msg.route('event_create_datetime_route', data, 60);
+          break;
+        case 'cancel':
+          msg.respond({text: "", delete_original: true});
+          break;
+      }
+      return;
+    } else {
+      data.text = msg.body.text;
+      var msg_text = event_create_datetime_msg;
+      if ('datetime' in data) msg_text = event_create_datetime_n_msg;
+      msg_text.attachments[0] = Event.generateDummy(data);
+      
+      msg.respond(msg_text);
+      msg.route('event_create_datetime_route', data, 60);
+      return;
+    }
+  });
+  
+  slapp.route('event_create_datetime_route', (msg, data) => {
+    if (msg.type == 'event') {
+      msg.route('event_create_datetime_route', data, 60);
+      return;
+    } else if (msg.type == 'action') {
+      switch (msg.body.actions[0].name) {
+        case 'back':
+          var msg_text = event_create_text_msg;
+          msg_text.attachments[0] = Event.generateDummy(data);
+          
+          msg.respond(msg_text);
+          msg.route('event_create_text_route', data, 60);
+          break;
+        case 'next':
           var msg_text = event_create_max_msg;
           msg_text.attachments[0] = Event.generateDummy(data);
+          
           msg.respond(msg_text);
           msg.route('event_create_max_route', data, 60);
           break;
@@ -1319,12 +1443,35 @@ module.exports = (app) => {
       }
       return;
     } else {
-      data.text = msg.body.text;
-      var msg_text = event_create_max_msg;
-      msg_text.attachments[0] = Event.generateDummy(data);
-      
-      msg.respond(msg_text);
-      msg.route('event_create_max_route', data, 60);
+      var temp = msg.body.text.split(";");
+      if (temp.length == 2) {
+        if (moment().add(30, m) < moment(temp[0] + " " + temp[1])) {
+          data.datetime = moment(temp[0] + " " + temp[1]).format();
+          var msg_text = event_create_max_msg;
+          msg_text.attachments[0] = Event.generateDummy(data);
+          
+          msg.respond(msg_text);
+          msg.route('event_create_max_route', data, 60);
+        } else {
+          var msg_text = event_create_datetime_route;
+          if ('datetime' in data) msg_text = event_create_datetime_n_msg;
+          msg_text = func.cloneObject(msg_text);
+          msg_text.attachments[0] = Event.generateDummy(data);
+          msg_text.attachments[1].text = lang.msg.evt.wrongdatetimestamp+ "\n" + msg_text.attachments[1].text;
+          
+          msg.respond(msg_text);
+          msg.route('event_create_datetime_route', data, 60);
+        }
+      } else {
+        var msg_text = event_create_datetime_route;
+        if ('datetime' in data) msg_text = event_create_datetime_n_msg;
+        msg_text = func.cloneObject(msg_text);
+        msg_text.attachments[0] = Event.generateDummy(data);
+        msg_text.attachments[1].text = lang.msg.evt.wrongdatetimeinput+ "\n" + msg_text.attachments[1].text;
+
+        msg.respond(msg_text);
+        msg.route('event_create_datetime_route', data, 60);
+      }
       return;
     }
   });
@@ -1336,10 +1483,11 @@ module.exports = (app) => {
     } else if (msg.type == 'action') {
       switch (msg.body.actions[0].name) {
         case 'back':
-          var msg_text = event_create_text_msg;
+          var msg_text = event_create_datetime_n_msg;
           msg_text.attachments[0] = Event.generateDummy(data);
+          
           msg.respond(msg_text);
-          msg.route('event_create_text_route', data, 60);
+          msg.route('event_create_datetime_route', data, 60);
           return;
         case '0':
         case '2':
@@ -1350,6 +1498,7 @@ module.exports = (app) => {
         case 'next':
           var msg_text = event_create_final_msg;
           msg_text.attachments[0] = Event.generateDummy(data);
+          
           msg.respond(msg_text);
           msg.route('event_create_final_route', data, 60);
           return;
@@ -1361,6 +1510,7 @@ module.exports = (app) => {
       data.options = {max: parseInt(msg.body.actions[0].name)};
       var msg_text = event_create_final_msg;
       msg_text.attachments[0] = Event.generateDummy(data);
+      
       msg.respond(msg_text);
       msg.route('event_create_final_route', data, 60);
       return;
@@ -1374,10 +1524,11 @@ module.exports = (app) => {
     } else {
       switch (msg.body.actions[0].name) {
         case 'edit':
+          data.create = true;
           var msg_text = event_edit_msg(0);
           msg_text.attachments[0] = Event.generateDummy(data);
+          
           msg.respond(msg_text);
-          data.create = true;
           msg.route('event_edit_route', data, 60);
           return;
         case 'done':
@@ -1388,6 +1539,7 @@ module.exports = (app) => {
       }
       
       data.ts = {created: msg.body.action_ts};
+      data.members.push(msg.body.user.id);
       data.id = getNextId();
       event_db.push(new Event(data));
       var slot = event_db.length - 1;
