@@ -50,9 +50,7 @@ require('./src/polls')(app);
 console.log("Listening on port " + process.env.PORT);
 server.listen(process.env.PORT);
 
-setTimeout(function(){
-  console.log("INFO: Running " + config.title + " on version " + config.version);
-}, 3000);
+console.log("INFO: Running " + config.title + " on version " + config.version);
 
 slapp.message("(.*)", (msg) => {
   if (config.botonly && msg.body.event.channel == config.bot_ch && !user.isAdmin(msg.body.event.user)) {
