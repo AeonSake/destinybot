@@ -1455,6 +1455,7 @@ module.exports = (app) => {
         case 'back':
           var msg_text = poll_create_title_n_msg;
           msg_text.attachments[0] = Poll.generateDummy(data);
+          
           msg.respond(msg_text);
           msg.route('poll_create_title_route', data, 60);
           break;
@@ -1463,6 +1464,7 @@ module.exports = (app) => {
           var msg_text = poll_create_answers_msg;
           if ('answers' in data && data.answers.length >= 2) msg_text = poll_create_answers_n_msg;
           msg_text.attachments[0] = Poll.generateDummy(data);
+          
           msg.respond(msg_text);
           msg.route('poll_create_answers_route', data, 60);
           break;
@@ -1492,6 +1494,7 @@ module.exports = (app) => {
         case 'back':
           var msg_text = poll_create_text_msg;
           msg_text.attachments[0] = Poll.generateDummy(data);
+          
           msg.respond(msg_text);
           msg.route('poll_create_text_route', data, 60);
           break;
@@ -1499,6 +1502,7 @@ module.exports = (app) => {
           if (data.answers.length >= 2) {
             var msg_text = poll_create_max_msg(data.answers.length);
             msg_text.attachments[0] = Poll.generateDummy(data);
+            
             msg.respond(msg_text);
             msg.route('poll_create_max_route', data, 60);
           } else {
@@ -1521,11 +1525,13 @@ module.exports = (app) => {
         if (data.answers.length >= 2) var msg_text = poll_create_answers_n_msg;
         else var msg_text = poll_create_answers_msg;
         msg_text.attachments[0] = Poll.generateDummy(data);
+        
         msg.respond(msg_text);
         msg.route('poll_create_answers_route', data, 60);
       } else {
         var msg_text = poll_create_max_msg(data.answers.length);
         msg_text.attachments[0] = Poll.generateDummy(data);
+        
         msg.respond(msg_text);
         msg.route('poll_create_max_route', data, 60);
       }
@@ -1542,6 +1548,7 @@ module.exports = (app) => {
         case 'back':
           var msg_text = poll_create_answers_msg;
           msg_text.attachments[0] = Poll.generateDummy(data);
+          
           msg.respond(msg_text);
           msg.route('poll_create_answers_route', data, 60);
           return;
@@ -1549,6 +1556,7 @@ module.exports = (app) => {
           if (!('options' in data)) data.options = {max: 1};
           var msg_text = poll_create_names_msg;
           msg_text.attachments[0] = Poll.generateDummy(data);
+          
           msg.respond(msg_text);
           msg.route('poll_create_names_route', data, 60);
           return;
@@ -1561,6 +1569,7 @@ module.exports = (app) => {
       else data.options.max = parseInt(msg.body.actions[0].name);
       var msg_text = poll_create_names_msg;
       msg_text.attachments[0] = Poll.generateDummy(data);
+      
       msg.respond(msg_text);
       msg.route('poll_create_names_route', data, 60);
       return;
@@ -1582,6 +1591,7 @@ module.exports = (app) => {
         case 'back':
           var msg_text = poll_create_max_msg;
           msg_text.attachments[0] = Poll.generateDummy(data);
+          
           msg.respond(msg_text);
           msg.route('poll_create_max_route', data, 60);
           return;
@@ -1594,6 +1604,7 @@ module.exports = (app) => {
       
       var msg_text = poll_create_final_msg;
       msg_text.attachments[0] = Poll.generateDummy(data);
+      
       msg.respond(msg_text);
       msg.route('poll_create_final_route', data, 60);
       return;
@@ -1609,6 +1620,7 @@ module.exports = (app) => {
         case 'edit':
           var msg_text = poll_edit_msg(0);
           msg_text.attachments[0] = Poll.generateDummy(data);
+          
           msg.respond(msg_text);
           data.create = true;
           msg.route('poll_edit_route', data, 60);
