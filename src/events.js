@@ -1003,7 +1003,7 @@ module.exports = (app) => {
         fallback: this.text,
         fields: att_fields,
         footer: "<@" + this.creator + ">",
-        //ts: this.ts.created,
+        ts: this.ts.created,
         color: this.options.color,
         mrkdwn_in: ['text', 'pretext', 'fields']
       };
@@ -1067,7 +1067,7 @@ module.exports = (app) => {
           short: false
         },
         {
-          name: lang.wrd.member + (temp_max > 0 ? " (Max. " + temp_max + "):" : ":"),
+          title: lang.wrd.member + (temp_max > 0 ? " (Max. " + temp_max + "):" : ":"),
           value: temp_members,
           short: false
         }
@@ -1453,7 +1453,7 @@ module.exports = (app) => {
           msg.respond(msg_text);
           msg.route('event_create_max_route', data, 60);
         } else {
-          var msg_text = event_create_datetime_route;
+          var msg_text = event_create_datetime_msg;
           if ('datetime' in data) msg_text = event_create_datetime_n_msg;
           msg_text = func.cloneObject(msg_text);
           msg_text.attachments[0] = Event.generateDummy(data);
@@ -1463,7 +1463,7 @@ module.exports = (app) => {
           msg.route('event_create_datetime_route', data, 60);
         }
       } else {
-        var msg_text = event_create_datetime_route;
+        var msg_text = event_create_datetime_msg;
         if ('datetime' in data) msg_text = event_create_datetime_n_msg;
         msg_text = func.cloneObject(msg_text);
         msg_text.attachments[0] = Event.generateDummy(data);
