@@ -443,11 +443,12 @@ module.exports = (app) => {
     
     // special
     destiny_info.ironbanner = {
+      type: destiny_info.weeklycrucible.type,
       icon: 'https://bungie.net' + destiny_activities.ironbanner.display.icon,
-      title: destiny_def.activity[destiny_activities.ironbanner.display.activityHash].activityName,
+      title: destiny_info.weeklycrucible.title,
       active: destiny_activities.ironbanner.status.active,
       expirationDate: destiny_activities.ironbanner.status.expirationDate || 0,
-      insummary: true,
+      insummary: false,
       color: "#C98855"
     };
     
@@ -816,7 +817,7 @@ module.exports = (app) => {
         break;
       case 'pvp':
       case 'crucible':
-        msg_text = destiny_list_msg(lang.msg.dest.main, ['dailycrucible', 'weeklycrucible', 'ironbanner', 'trials']);
+        msg_text = destiny_list_msg(lang.msg.dest.main, ['dailycrucible', 'weeklycrucible', 'trials']);
         msg_text.attachments.push(destiny_moreinfo_att(3));
         break;
       case 'special':
