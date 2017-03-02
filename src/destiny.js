@@ -154,12 +154,13 @@ module.exports = (app) => {
   // destiny_weekly_update OWE3ODVkYTYwNTVhNDY1ZTg2NTEwNzJhYTM5NDIzZjF8MzAgOSAqICogMiAq
   // destiny_weekend_update OGUyNTRkNTBlNTllNGMzY2E0OWIzOTg4M2NjYjcyNjB8MzAgMTggKiAqIDUgKg==
   
-  /*function setSchedule (msg) {
+  function setSchedule (msg, event_id, schedule) {
     let ts = Date.now() + '';
     var data = {
-      schedule: "30 9 * * 0,1,3,4,5,6 *",
+      //schedule: "30 9 * * 0,1,3,4,5,6 *",
       //schedule: "30 9 * * 2 *",
       //schedule: "30 18 * * 5 *",
+      schedule: schedule,
       url: 'https://beepboophq.com/proxy/' + config.bb_project_id + '/slack/event',
       method: 'POST',
       headers: {
@@ -172,8 +173,8 @@ module.exports = (app) => {
         event: {
           ts: ts,
           event_ts: ts,
-          type: 'destiny_daily_update',
-          payload: "destiny_daily_update",
+          type: 'destiny_' + event_id + '_update',
+          payload: "destiny_" + event_id + "_update",
           user: msg.meta.user_id,
           channel: msg.meta.channel_id
         }
@@ -219,7 +220,7 @@ module.exports = (app) => {
       if (err) console.log(err);
       else console.log(resp.body);
     });
-  }*/
+  }
   
   
   
@@ -755,8 +756,9 @@ module.exports = (app) => {
   
   // ===== /destiny schedule =====
   
-  /*slapp.command('/destiny', "set-s", (msg, cmd) => {
-    if (msg.body.user_id == config.admin_id) setSchedule(msg);
+  slapp.command('/destiny', "set-s (.*)", (msg, cmd) => {
+    var temp = cmd.split(" ");
+    if (msg.body.user_id == config.admin_id) setSchedule(msg, temp[1], cmd.substr(6 + temp[1].length));
     return;
   });
   
@@ -768,7 +770,7 @@ module.exports = (app) => {
   slapp.command('/destiny', "list-s", (msg, cmd) => {
     if (msg.body.user_id == config.admin_id) listSchedule(msg);
     return;
-  });*/
+  });
   
   // ===== /destiny test =====
   
@@ -975,15 +977,37 @@ module.exports = (app) => {
     return;
   });
   
-  slapp.event('destiny_weekend_update', (msg) => {
+  slapp.event('destiny_ironbanner_update', (msg) => {
     getActivities(function(){
-      var msg_text = destiny_list_msg(lang.msg.dest.weekendupdate, ['trials', 'xur']);
+      var msg_text = destiny_list_msg(lang.msg.dest.weekendupdate, ['ironbanner']);
       postToChannel(msg_text);
     });
     return;
   });
   
-  // evtl auf trials/xur/ironbanner schedule umstellen
+  slapp.event('destiny_armsday_update', (msg) => {
+    getActivities(function(){
+      var msg_text = destiny_list_msg(lang.msg.dest.weekendupdate, ['armsday']);
+      postToChannel(msg_text);
+    });
+    return;
+  });
+  
+  slapp.event('destiny_xur_update', (msg) => {
+    getActivities(function(){
+      var msg_text = destiny_list_msg(lang.msg.dest.weekendupdate, ['xur']);
+      postToChannel(msg_text);
+    });
+    return;
+  });
+  
+  slapp.event('destiny_trials_update', (msg) => {
+    getActivities(function(){
+      var msg_text = destiny_list_msg(lang.msg.dest.weekendupdate, ['trials']);
+      postToChannel(msg_text);
+    });
+    return;
+  });
   
   return module;
 };
