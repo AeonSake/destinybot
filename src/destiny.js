@@ -577,7 +577,8 @@ module.exports = (app) => {
   function listItems (arr) {
     var text = "";
     for (var i in arr) {
-      text += arr[i].name + " <https://www.bungie.net/de/Armory/Detail?item=" + arr[i].hash + "|" + lang.msg.dest.link + ">\n";
+      text += arr[i].name + " <https://www.bungie.net/de/Armory/Detail?item=" + arr[i].hash + "|" + lang.msg.dest.link + ">";
+      if (i < arr.length - 1) text += "\n";
     }
     return text;
   }
@@ -840,7 +841,7 @@ module.exports = (app) => {
     };
     
     if (destiny_info.hasOwnProperty(key) && destiny_info[key].active) {
-      if (itemlist && 'items' in destiny_info[key]) for (var i in destiny_info[key].items) msg_text.attachments.push(getItemAttachment(destiny_info[key].item[i]));
+      if (itemlist && 'items' in destiny_info[key]) for (var i in destiny_info[key].items) msg_text.attachments.push(getItemAttachment(destiny_info[key].items[i]));
       else msg_text.attachments.push(getFullActivityAttachment(destiny_info[key]));
     } else return {text: "", replace_original: true};
     
