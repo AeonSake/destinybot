@@ -117,6 +117,7 @@ let lang = module.exports = {
       stats: "Stats:",
       perks: "Perks:",
       noactivities: "Keine Aktivitäten verfügbar.",
+      nodetails: "Keine Details verfügbar,",
       notactive: "Aktivität ist derzeit nicht aktiv.",
       moreinfo: "Mehr Informationen:",
       

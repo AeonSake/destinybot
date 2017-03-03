@@ -747,7 +747,7 @@ module.exports = (app) => {
       }
       if (stats.length != 0) fields.push({title: lang.msg.dest.stats, value: stats, short: true});
       
-      for (var i in items.perks) {
+      for (var i in item.perks) {
         perks += item.perks[i].name + "\n";
       }
       if (item.perks != 0) fields.push({title: lang.msg.dest.perks, value: perks, short: true});
@@ -786,7 +786,7 @@ module.exports = (app) => {
     return msg_text;
   }
   
-  function destiny_list_msg (text, keys, button) {
+  function destiny_list_msg (text, keys) {
     var msg_text = {
       text: text,
       attachments: [],
@@ -805,8 +805,23 @@ module.exports = (app) => {
         }
       }
     }
-    if (keys.length == 1 && button) {
-      msg_text.callback_id = 'destiny_public_moreinfo_callback';
+    
+    return msg_text;
+  }
+  
+  function destiny_public_msg (text, key) {
+    var msg_text = {
+      text: text,
+      attachments: [],
+      response_type: 'ephemeral',
+      replace_original: true
+    };
+    
+    if (destiny_info.hasOwnProperty(key) && destiny_info[key].active) msg_text.attachments.push(getActivityAttachment(destiny_info[key]));
+    else return {text: "", replace_original: true};
+    
+    if (button) {
+      msg_text.callback_id = 'destiny_public_details_callback';
       msg_text.actions = [{
         name: keys[0],
         text: lang.btn.dest.details,
@@ -817,7 +832,7 @@ module.exports = (app) => {
     return msg_text;
   }
   
-  function destiny_full_msg (text, key) {
+  function destiny_full_msg (text, key, itemlist) {
     var msg_text = {
       text: text,
       attachments: [],
@@ -826,9 +841,7 @@ module.exports = (app) => {
     };
     
     if (destiny_info.hasOwnProperty(key) && destiny_info[key].active) {
-      if (key == 'xur') {
-        for (var i in destiny_info[key].items) msg_text.attachments.push(getItemAttachment(destiny_info[key].items[i]));
-      }
+      if (itemlist) for (var i in destiny_info[key].items) msg_text.attachments.push(getItemAttachment(destiny_info[key].item[i]));
       else msg_text.attachments.push(getFullActivityAttachment(destiny_info[key]));
     } else return {text: "", replace_original: true};
     
@@ -853,6 +866,46 @@ module.exports = (app) => {
 // ==============================
 // ========== COMMANDS ==========
 // ==============================
+  
+  // ===== /destiny schedule =====
+  
+  slapp.command('/destiny', "set-s (.*)", (msg, cmd) => {
+    var temp = cmd.split(" ");
+    if (msg.body.user_id == config.admin_id) setSchedule(msg, temp[1], cmd.substr(6 + temp[1].length));
+    return;
+  });
+  
+  slapp.command('/destiny', "del-s (.*)", (msg, cmd) => {
+    if (msg.body.user_id == config.admin_id) deleteSchedule(msg, cmd.substr(6));
+    return;
+  });
+  
+  slapp.command('/destiny', "list-s", (msg, cmd) => {
+    if (msg.body.user_id == config.admin_id) listSchedule(msg);
+    return;
+  });
+  
+  // ===== /destiny test =====
+  
+  slapp.command('/destiny', "test (.*)", (msg, cmd) => {
+    if (msg.body.user_id == config.admin_id) {
+      var options = {
+        host: 'www.bungie.net',
+        path: '/Platform/Destiny/' + cmd.substring(5),
+        headers: {'X-API-Key': config.destiny_key}
+      }
+      
+      https.get(options, function(res) {
+        var body = "";
+        res.on('data', function(d) {
+          body += d;
+        });
+        res.on('end', function() {
+          msg.say({text: JSON.parse(body).Response});
+        });
+      });
+    };
+  });
   
   // ===== /destiny post =====
   
@@ -939,7 +992,10 @@ module.exports = (app) => {
           msg_text = destiny_full_msg("", 'srl');
           break;
         case 'xur':
-          msg_text = destiny_full_msg("", 'xur');
+          msg_text = destiny_public_msg("", 'xur');
+          break;
+        case 'xurfull':
+          msg_text = destiny_full_msg("", 'xur', true);
           break;
         case 'armsday':
           msg_text = destiny_full_msg("", 'armsday');
@@ -963,46 +1019,6 @@ module.exports = (app) => {
   slapp.command('/destiny', "update", (msg, cmd) => {
     if (msg.body.user_id == config.admin_id) getDefinitions(getActivities);
     return;
-  });
-  
-  // ===== /destiny schedule =====
-  
-  slapp.command('/destiny', "set-s (.*)", (msg, cmd) => {
-    var temp = cmd.split(" ");
-    if (msg.body.user_id == config.admin_id) setSchedule(msg, temp[1], cmd.substr(6 + temp[1].length));
-    return;
-  });
-  
-  slapp.command('/destiny', "del-s (.*)", (msg, cmd) => {
-    if (msg.body.user_id == config.admin_id) deleteSchedule(msg, cmd.substr(6));
-    return;
-  });
-  
-  slapp.command('/destiny', "list-s", (msg, cmd) => {
-    if (msg.body.user_id == config.admin_id) listSchedule(msg);
-    return;
-  });
-  
-  // ===== /destiny test =====
-  
-  slapp.command('/destiny', "test (.*)", (msg, cmd) => {
-    if (msg.body.user_id == config.admin_id) {
-      var options = {
-        host: 'www.bungie.net',
-        path: '/Platform/Destiny/' + cmd.substring(5),
-        headers: {'X-API-Key': config.destiny_key}
-      }
-      
-      https.get(options, function(res) {
-        var body = "";
-        res.on('data', function(d) {
-          body += d;
-        });
-        res.on('end', function() {
-          msg.say({text: JSON.parse(body).Response});
-        });
-      });
-    };
   });
   
   // ===== /destiny <cmd> =====
@@ -1106,7 +1122,7 @@ module.exports = (app) => {
     return;
   });
   
-  // ===== moreinfo callback =====
+  // ===== button callbacks =====
   
   slapp.action('destiny_moreinfo_callback', (msg) => {
     var msg_text = {};
@@ -1171,6 +1187,16 @@ module.exports = (app) => {
     return;
   });
   
+  slapp.action('destiny_public_details_callback', (msg) => {
+    var msg_text = destiny_full_msg("", msg.body.actions[0].name, true);
+    
+    msg_text.replace_original = false;
+    if (msg_text.attachments.length == 0) msg_text.attachments.push({text: lang.msg.dest.nodetails, fallback: lang.msg.dest.nodetails});
+    msg_text.attachments.push(destiny_dismiss_att);
+    msg.respond(msg_text);
+    return;
+  });
+  
   // ===== External update triggers =====
   
   slapp.event('destiny_daily_update', (msg) => {
@@ -1203,14 +1229,14 @@ module.exports = (app) => {
   });
   
   slapp.event('destiny_xur_update', (msg) => {
-    var msg_text = destiny_full_msg(lang.msg.dest.xurupdate, 'xur');
+    var msg_text = destiny_public_msg(lang.msg.dest.xurupdate, 'xur');
     postToChannel(msg_text);
     return;
   });
   
   slapp.event('destiny_trials_update', (msg) => {
     getActivities(function(){
-      var msg_text = destiny_full_msg(lang.msg.dest.trialsupdate, 'trials');
+      var msg_text = destiny_full_msg(lang.msg.dest.trialsupdate, 'trials', false);
       postToChannel(msg_text);
     });
     return;
