@@ -709,12 +709,12 @@ module.exports = (app) => {
     return msg_text;
   }
   
-  function postToChannel (msg) {
+  function postToChannel (msg_text) {
     slapp.client.chat.postMessage({
       token: config.bot_token,
       channel: config.bot_ch,
-      text: msg.text,
-      attachments: msg.attachments,
+      text: msg_text.text,
+      attachments: msg_text.attachments,
       parse: 'full',
       as_user: true
     }, (err, data) => {
@@ -731,7 +731,6 @@ module.exports = (app) => {
   // ===== /destiny post =====
   
   slapp.command('/destiny', "post(.*)", (msg, cmd) => {
-    console.log(msg.body);
     if (msg.body.user_id == config.admin_id) {
       var msg_text = {};
       switch (cmd.substr(5)) {
@@ -827,8 +826,9 @@ module.exports = (app) => {
 
       if ('attachments' in msg_text) {
         msg_text.attachments[msg_text.attachments.length - 1].callback_id = 'destiny_public_moreinfo_callback';
-        msg_text.attachments.push(destiny_dismiss_att);
         msg.say(msg_text);
+        
+        postToChannel(msg_text);
       }
     }
     return;
