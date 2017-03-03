@@ -594,7 +594,9 @@ module.exports = (app) => {
       
       var stats = "";
       for (var j in arr[i].stats) {
-        stats += arr[i].stats[j].name + " : " + arr[i].stats[j].value + " (" + Math.round((arr[i].stats[j].value / arr[i].stats[j].max) * 100) + "%)\n";
+        var percent = "";
+        if (arr[i].stats[j].value != arr[i].stats[j].max) percent = " (" + Math.round((arr[i].stats[j].value / arr[i].stats[j].max) * 100) + "%)";
+        stats += arr[i].stats[j].name + " : " + arr[i].stats[j].value + percent + "\n";
       }
       if (stats.length != 0) items.push({title: lang.msg.dest.stats, value: stats, short: true});
       
