@@ -820,7 +820,7 @@ module.exports = (app) => {
     if (destiny_info.hasOwnProperty(key) && destiny_info[key].active) msg_text.attachments.push(getActivityAttachment(destiny_info[key]));
     else return {text: "", replace_original: true};
     
-    if (button) {
+    if ('items' in destiny_info[key]) {
       msg_text.callback_id = 'destiny_public_details_callback';
       msg_text.actions = [{
         name: keys[0],
