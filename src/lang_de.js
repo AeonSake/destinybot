@@ -53,7 +53,8 @@ let lang = module.exports = {
       raids: "Raids",
       pvp: "PvP",
       special: "Spezielle Events",
-      vendors: "Händler"
+      vendors: "Händler",
+      details: "Details"
     },
     
     evt: {
@@ -109,6 +110,11 @@ let lang = module.exports = {
       recom: "Empfohlen:",
       light: "Licht",
       level: "Level",
+      warlock: "Warlock",
+      titan: "Titan",
+      hunter: "Jäger",
+      stats: "Stats:",
+      perks: "Perks:",
       noactivities: "Keine Aktivitäten verfügbar.",
       notactive: "Aktivität ist derzeit nicht aktiv.",
       moreinfo: "Mehr Informationen:",

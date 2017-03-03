@@ -75,6 +75,20 @@ module.exports = (app) => {
     });
   }
   
+  function getStatDef (callback) {
+    https.get('https://destiny.plumbing/' + config.lang + '/raw/DestinyStatDefinition.json', function(res) {
+      var body = "";
+      res.on('data', function(d) {
+        body += d;
+      });
+      res.on('end', function() {
+        destiny_def.stat = JSON.parse(body);
+        console.log("INFO: Destiny | Stat definitions loaded");
+        callback();
+      });
+    });
+  }
+  
   function getPerkDef (callback) {
     https.get('https://destiny.plumbing/' + config.lang + '/raw/DestinySandboxPerkDefinition.json', function(res) {
       var body = "";
@@ -93,8 +107,11 @@ module.exports = (app) => {
     getActivityDef(function(){
       getPlaceDef(function(){
         getItemDef(function(){
-          //getPerkDef();
-          if (typeof callback === "function") callback();
+          getStatDef(function(){
+            getPerkDef(function(){
+              if (typeof callback === "function") callback();
+            });
+          });
         });
       });
     });
@@ -242,11 +259,55 @@ module.exports = (app) => {
     for (var i in arr) {
       var itemhash = arr[i].item.itemHash;
       if (itemhash != 0) items.push({
-        name: destiny_def.item[itemhash].itemName
+        name: destiny_def.item[itemhash].itemName,
+        tier: destiny_def.item[itemhash].tierTypeName,
+        class: getClass(destiny_def.item[itemhash].itemCategoryHashes[0]),
+        type: destiny_def.item[itemhash].itemTypeName,
+        stats: getStats(arr[i].item.stats, destiny_def.item[itemhash].itemCategoryHashes[1]),
+        perks: getPerks(arr[i].item.perks)
       });
     }
     
     return items;
+  }
+  
+  function getClass (type) {
+    var classes = {21: lang.msg.dest.warlock, 22: lang.msg.dest.titan, 23: lang.msg.dest.hunter};
+    return classes[type] || 0;
+  }
+  
+  function getStats (arr, type) {
+    var stats = [];
+    
+    for (var i in arr) {
+      var stathash = arr[i].statHash;
+      if (stathash != 0) stats.push({
+        name: destiny_def.stat[stathash].statName,
+        value: arr[i].value,
+        max: (arr[i].maximumValue != 0 ? arr[i].maximumValue : getMaxStat(type))
+      });
+    }
+    
+    return stats;
+  }
+  
+  function getMaxStat (type) {
+    var maxvalues = {38: '38', 39: '25', 45: '46', 46: '41', 47: '61', 48: '56', 49: '25'};
+    return maxvalues[type] || '100';
+  }
+  
+  function getPerks (arr) {
+    var perks = [];
+    
+    for (var i in arr) {
+      var perkhash = arr[i].perkHash;
+      if (perkhash != 0) perks.push({
+        name: destiny_def.perk[perkhash].displayName,
+        desc: destiny_def.perk[perkhash].displayDescription
+      });
+    }
+    
+    return perks;
   }
   
   function prepareData (callback) {
@@ -521,6 +582,33 @@ module.exports = (app) => {
     return text;
   }
   
+  function listFullItems (arr) {
+    var items = [];
+    for (var i in arr) {
+      items.push({
+        title: arr[i].name,
+        value: arr[i].tier + (arr[i].class == 0 ? "" : " | " + arr[i].class) + " | " + arr[i].type,
+        short: false
+      });
+      
+      var stats = "";
+      for (var j in arr[i].stats) {
+        stats += arr[i].stats[j].name + " : " + arr[i].stats[j].value + " (" + Math.round((arr[i].stats[j].value / arr[i].stats[j].max) * 100) + ")";
+        if (j < arr[i].stats.length - 1) stats += "\n";
+      }
+      items.push({title: lang.msg.dest.stats, value: stats, short: true});
+      
+      var perks = "";
+      for (var j in arr[i].perks) {
+        stats += arr[i].perks[j].name;
+        if (j < arr[i].perks.length - 1) stats += "\n";
+      }
+      items.push({title: lang.msg.dest.perks, value: perks, short: true});
+    }
+    
+    return items;
+  }
+  
   function destiny_moreinfo_att (mode) {
     var att = {
       text: lang.msg.dest.moreinfo,
@@ -629,10 +717,10 @@ module.exports = (app) => {
       title: act.challenge,
       short: false
     });
-    if ('items' in act) fields.push({
-      value: listItems(act.items),
-      short: false
-    });
+    if ('items' in act) {
+      var temp = listFullItems(act.items);
+      for (var i in temp) fields.push(temp[i]);
+    }
     
     var time = "";
     if (act.expirationDate != 0) time = lang.msg.dest.activetill + " " + moment(act.expirationDate).format(lang.msg.dest.dateformat);
@@ -672,7 +760,7 @@ module.exports = (app) => {
     return msg_text;
   }
   
-  function destiny_list_msg (text, keys) {
+  function destiny_list_msg (text, keys, button) {
     var msg_text = {
       text: text,
       attachments: [],
@@ -690,6 +778,14 @@ module.exports = (app) => {
           if (destiny_info[key].active) msg_text.attachments.push(getActivityAttachment(destiny_info[key]));
         }
       }
+    }
+    if (keys.length == 1 && button) {
+      msg_text.callback_id = 'destiny_public_moreinfo_callback';
+      msg_text.actions = [{
+        name: keys[0],
+        text: lang.btn.dest.details,
+        type: 'button'
+      }];
     }
     
     return msg_text;
@@ -1064,27 +1160,27 @@ module.exports = (app) => {
   
   slapp.event('destiny_ironbanner_update', (msg) => {
     getActivities(function(){
-      var msg_text = destiny_list_msg(lang.msg.dest.ironbannerupdate, ['ironbanner']);
+      var msg_text = destiny_full_msg(lang.msg.dest.ironbannerupdate, 'ironbanner');
       postToChannel(msg_text);
     });
     return;
   });
   
   slapp.event('destiny_armsday_update', (msg) => {
-    var msg_text = destiny_list_msg(lang.msg.dest.armsdayupdate, ['armsday']);
+    var msg_text = destiny_full_msg(lang.msg.dest.armsdayupdate, 'armsday');
     postToChannel(msg_text);
     return;
   });
   
   slapp.event('destiny_xur_update', (msg) => {
-    var msg_text = destiny_list_msg(lang.msg.dest.xurupdate, ['xur']);
+    var msg_text = destiny_full_msg(lang.msg.dest.xurupdate, 'xur');
     postToChannel(msg_text);
     return;
   });
   
   slapp.event('destiny_trials_update', (msg) => {
     getActivities(function(){
-      var msg_text = destiny_list_msg(lang.msg.dest.trialsupdate, ['trials']);
+      var msg_text = destiny_full_msg(lang.msg.dest.trialsupdate, 'trials');
       postToChannel(msg_text);
     });
     return;
