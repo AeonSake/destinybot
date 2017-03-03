@@ -97,7 +97,6 @@ module.exports = (app) => {
       });
       res.on('end', function() {
         destiny_def.perk = JSON.parse(body);
-        console.log(destiny_def.perk);
         console.log("INFO: Destiny | Perk definitions loaded");
         callback();
       });
@@ -260,6 +259,7 @@ module.exports = (app) => {
     for (var i in arr) {
       var itemhash = arr[i].item.itemHash;
       if (itemhash != 0) items.push({
+        hash: itemhash,
         name: destiny_def.item[itemhash].itemName,
         tier: destiny_def.item[itemhash].tierTypeName,
         class: getClass(destiny_def.item[itemhash].itemCategoryHashes[0]),
@@ -306,7 +306,6 @@ module.exports = (app) => {
         name: destiny_def.perk[perkhash].displayName,
         desc: destiny_def.perk[perkhash].displayDescription
       });
-      perks[i].name;
     }
     
     return perks;
@@ -589,23 +588,21 @@ module.exports = (app) => {
     for (var i in arr) {
       items.push({
         title: arr[i].name,
-        value: arr[i].tier + (arr[i].class == 0 ? "" : " | " + arr[i].class) + " | " + arr[i].type,
+        value: arr[i].tier + (arr[i].class == 0 ? "" : " | " + arr[i].class) + " | " + arr[i].type + " | <https://www.bungie.net/de/Armory/Detail?item=" + arr[i].hash + "|" + lang.msg.dest.link + ">",
         short: false
       });
       
       var stats = "";
       for (var j in arr[i].stats) {
-        stats += arr[i].stats[j].name + " : " + arr[i].stats[j].value + " (" + Math.round((arr[i].stats[j].value / arr[i].stats[j].max) * 100) + ")\n";
-        //if (j < arr[i].stats.length - 1) stats += "\n";
+        stats += arr[i].stats[j].name + " : " + arr[i].stats[j].value + " (" + Math.round((arr[i].stats[j].value / arr[i].stats[j].max) * 100) + "%)\n";
       }
-      items.push({title: lang.msg.dest.stats, value: stats, short: true});
+      if (stats.length != 0) items.push({title: lang.msg.dest.stats, value: stats, short: true});
       
       var perks = "";
       for (var j in arr[i].perks) {
-        stats += arr[i].perks[j].name + "\n";
-        //if (j < arr[i].perks.length - 1) stats += "\n";
+        perks += arr[i].perks[j].name + "\n";
       }
-      items.push({title: lang.msg.dest.perks, value: perks, short: true});
+      if (items.perks != 0) items.push({title: lang.msg.dest.perks, value: perks, short: true});
     }
     
     return items;
@@ -740,6 +737,33 @@ module.exports = (app) => {
     };
   }
   
+  function getItemAttachment (item) {
+    var fields = [],
+        stats = "",
+        perks = "";
+    
+      for (var i in item.stats) {
+        stats += item.stats[i].name + " : " + item.stats[i].value + " (" + Math.round((item.stats[i].value / item.stats[i].max) * 100) + "%)\n";
+      }
+      if (stats.length != 0) fields.push({title: lang.msg.dest.stats, value: stats, short: true});
+      
+      for (var i in items.perks) {
+        perks += item.perks[i].name + "\n";
+      }
+      if (item.perks != 0) fields.push({title: lang.msg.dest.perks, value: perks, short: true});
+    
+    
+    return {
+      title: item.name,
+      title_link: "https://www.bungie.net/de/Armory/Detail?item=" + item.hash,
+      text: item.tier + (item.class == 0 ? "" : " | " + item.class) + " | " + item.type,
+      fallback: item.name,
+      fields: fields,
+      color: func.getRandomColor(),
+      mrkdwn_in: ['text', 'pretext', 'fields']
+    };
+  }
+  
   function destiny_summary_msg () {
     var msg_text = {
       text: lang.msg.dest.main,
@@ -801,8 +825,12 @@ module.exports = (app) => {
       replace_original: true
     };
     
-    if (destiny_info.hasOwnProperty(key) && destiny_info[key].active) msg_text.attachments.push(getFullActivityAttachment(destiny_info[key]));
-    else return {text: "", replace_original: true};
+    if (destiny_info.hasOwnProperty(key) && destiny_info[key].active) {
+      if (key == 'xur') {
+        for (var i in destiny_info[key].items) msg_text.attachments.push(getItemAttachment(destiny_info[key].items[i]));
+      }
+      else msg_text.attachments.push(getFullActivityAttachment(destiny_info[key]));
+    } else return {text: "", replace_original: true};
     
     return msg_text;
   }

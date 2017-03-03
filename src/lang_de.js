@@ -113,6 +113,7 @@ let lang = module.exports = {
       warlock: "Warlock",
       titan: "Titan",
       hunter: "Jäger",
+      link: "Link",
       stats: "Stats:",
       perks: "Perks:",
       noactivities: "Keine Aktivitäten verfügbar.",
