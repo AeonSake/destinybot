@@ -1057,7 +1057,7 @@ module.exports = (app) => {
         }
       }
       if ('options' in data) {
-        temp_max = data.options.max || 6;
+        temp_max = data.options.max;
         temp_color = data.options.color || "";
       }
       
