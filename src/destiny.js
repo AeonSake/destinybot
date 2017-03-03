@@ -730,12 +730,106 @@ module.exports = (app) => {
   
   // ===== /destiny post =====
   
-  slapp.command('/destiny', "post", (msg, cmd) => {
+  slapp.command('/destiny', "post(.*)", (msg, cmd) => {
+    console.log(msg.body);
     if (msg.body.user_id == config.admin_id) {
-      var msg_text = destiny_summary_msg(lang.msg.dest.main);
-      msg_text.attachments.push(destiny_moreinfo_att(0));
-      msg_text.attachments[msg_text.attachments.length - 1].callback_id = 'destiny_public_moreinfo_callback';
-      msg.say(msg_text);
+      var msg_text = {};
+      switch (cmd.substr(5)) {
+        case 'full':
+        case 'all':
+        case 'list':
+          msg_text = destiny_list_msg(lang.msg.dest.main, []);
+          msg_text.attachments.push(destiny_moreinfo_att(0));
+          break;
+        case 'daily':
+          msg_text = destiny_list_msg(lang.msg.dest.dailyupdate, ['dailychapter', 'dailycrucible']);
+          break;
+        case 'pve':
+          msg_text = destiny_list_msg(lang.msg.dest.main, ['elderchallenge', 'dailychapter', 'heroicstrike', 'nightfall']);
+          msg_text.attachments.push(destiny_moreinfo_att(1));
+          break;
+        case 'raid':
+        case 'raids':
+          msg_text = destiny_list_msg(lang.msg.dest.main, ['vaultofglass', 'crota', 'kingsfall', 'wrathofthemachine']);
+          msg_text.attachments.push(destiny_moreinfo_att(2));
+          break;
+        case 'pvp':
+        case 'crucible':
+          msg_text = destiny_list_msg(lang.msg.dest.main, ['dailycrucible', 'weeklycrucible', 'trials']);
+          msg_text.attachments.push(destiny_moreinfo_att(3));
+          break;
+        case 'special':
+        case 'events':
+        case 'specialevents':
+          msg_text = destiny_list_msg(lang.msg.dest.main, ['ironbanner', 'trials', 'srl', 'xur', 'armsday']);
+          msg_text.attachments.push(destiny_moreinfo_att(4));
+          break;
+        case 'elder':
+        case 'elderchallenge':
+          msg_text = destiny_full_msg("", 'elderchallenge');
+          break;
+        case 'story':
+        case 'dailystory':
+        case 'mission':
+        case 'dailymission':
+        case 'dailychapter':
+          msg_text = destiny_full_msg("", 'dailychapter');
+          break;
+        case 'strikes':
+        case 'heroicstrike':
+          msg_text = destiny_full_msg("", 'heroicstrike');
+          break;
+        case 'nightfall':
+        case 'nf':
+          msg_text = destiny_full_msg("", 'nightfall');
+          break;
+        case 'vaultofglass':
+        case 'vog':
+          msg_text = destiny_full_msg("", 'vaultofglass');
+          break;
+        case 'crota':
+          msg_text = destiny_full_msg("", 'crota');
+          break;
+        case 'kingsfall':
+        case 'kf':
+          msg_text = destiny_full_msg("", 'kingsfall');
+          break;
+        case 'wrathofthemachine':
+        case 'wotm':
+          msg_text = destiny_full_msg("", 'wrathofthemachine');
+          break;
+        case 'dailycrucible':
+          msg_text = destiny_full_msg("", 'dailycrucible');
+          break;
+        case 'weeklycrucible':
+          msg_text = destiny_full_msg("", 'weeklycrucible');
+          break;
+        case 'ironbanner':
+          msg_text = destiny_full_msg("", 'ironbanner');
+          break;
+        case 'trials':
+          msg_text = destiny_full_msg("", 'trials');
+          break;
+        case 'srl':
+          msg_text = destiny_full_msg("", 'srl');
+          break;
+        case 'xur':
+          msg_text = destiny_full_msg("", 'xur');
+          break;
+        case 'armsday':
+          msg_text = destiny_full_msg("", 'armsday');
+          break;
+        default:
+          msg_text = destiny_summary_msg(lang.msg.dest.main);
+          msg_text.attachments.push(destiny_moreinfo_att(0));
+          break;
+      }
+
+      if ('attachments' in msg_text) {
+        msg_text.attachments[msg_text.attachments.length - 1].callback_id = 'destiny_public_moreinfo_callback';
+        msg_text.attachments.push(destiny_dismiss_att);
+        msg.say(msg_text);
+      }
     }
     return;
   });
@@ -972,27 +1066,27 @@ module.exports = (app) => {
   
   slapp.event('destiny_ironbanner_update', (msg) => {
     getActivities(function(){
-      var msg_text = destiny_list_msg(lang.msg.dest.weekendupdate, ['ironbanner']);
+      var msg_text = destiny_list_msg(lang.msg.dest.ironbannerupdate, ['ironbanner']);
       postToChannel(msg_text);
     });
     return;
   });
   
   slapp.event('destiny_armsday_update', (msg) => {
-    var msg_text = destiny_list_msg(lang.msg.dest.weekendupdate, ['armsday']);
+    var msg_text = destiny_list_msg(lang.msg.dest.armsdayupdate, ['armsday']);
     postToChannel(msg_text);
     return;
   });
   
   slapp.event('destiny_xur_update', (msg) => {
-    var msg_text = destiny_list_msg(lang.msg.dest.weekendupdate, ['xur']);
+    var msg_text = destiny_list_msg(lang.msg.dest.xurupdate, ['xur']);
     postToChannel(msg_text);
     return;
   });
   
   slapp.event('destiny_trials_update', (msg) => {
     getActivities(function(){
-      var msg_text = destiny_list_msg(lang.msg.dest.weekendupdate, ['trials']);
+      var msg_text = destiny_list_msg(lang.msg.dest.trialsupdate, ['trials']);
       postToChannel(msg_text);
     });
     return;

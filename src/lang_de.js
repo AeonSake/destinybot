@@ -97,7 +97,10 @@ let lang = module.exports = {
       main: "Destiny | Aktivitäten Übersicht",
       weeklyreset: "Destiny | Wöchtentlicher Reset",
       dailyupdate: "Destiny | Tägliches Update",
-      weekendupdate: "Destiny | Wochenend-Update",
+      armsdayupdate: "Destiny | Waffentag Update",
+      ironbannerupdate: "Destiny | Eisenbanner Update",
+      xurupdate: "Destiny | Xûr Update",
+      trialsupdate: "Destiny | Prüfungen von Osiris Update",
       
       activetill: "Aktiv bis:",
       dateformat: "dd, D.M.YYYY, HH:mm",
