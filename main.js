@@ -53,8 +53,7 @@ server.listen(process.env.PORT);
 console.log("INFO: Running " + config.title + " on version " + config.version);
 
 slapp.message("(.*)", (msg) => {
-  console.log(msg.body);
-  if (config.botonly && msg.body.event.channel == config.bot_ch && !user.isAdmin(msg.body.event.user)) {
+  if (config.botonly && msg.body.event.channel == config.bot_ch && !user.isAdmin(msg.body.event.user) && !('bot_id' in msg.body.event)) {
     slapp.client.chat.delete({
       token: config.bot_token,
       ts: msg.body.event.ts,

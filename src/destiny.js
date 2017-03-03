@@ -827,8 +827,6 @@ module.exports = (app) => {
       if ('attachments' in msg_text) {
         msg_text.attachments[msg_text.attachments.length - 1].callback_id = 'destiny_public_moreinfo_callback';
         msg.say(msg_text);
-        
-        postToChannel(msg_text);
       }
     }
     return;
