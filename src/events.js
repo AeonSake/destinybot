@@ -1048,7 +1048,7 @@ module.exports = (app) => {
           temp_max = 6,
           temp_color = "";
       if ('text' in data) temp_text = data.text;
-      if ('datetime' in data) temp_datetime = moment(temp_datetime).format(lang.msg.evt.dateformat);
+      if ('datetime' in data) temp_datetime = moment(data.datetime).format(lang.msg.evt.dateformat);
       if ('members' in data) {
         temp_members = "";
         for (var i in data.members) {
@@ -1447,8 +1447,6 @@ module.exports = (app) => {
       if (temp.length == 2) {
         var parsed = moment(temp[0].trim().replace(/[\.\:\,\/ ]/g, "-") + " " + temp[1].trim().replace(/[\.\:\,\/ ]/g, "-"), "DD-MM-YYYY HH-mm");
         if (moment().add(30, 'm') < parsed) {
-          console.log(parsed);
-          console.log(parsed.format());
           data.datetime = parsed.format();
           var msg_text = event_create_max_msg;
           msg_text.attachments[0] = Event.generateDummy(data);
@@ -1510,7 +1508,7 @@ module.exports = (app) => {
           return;
       }
     } else {
-      data.options = {max: parseInt(msg.body.actions[0].name)};
+      data.options = {max: parseInt(msg.body.text)};
       var msg_text = event_create_final_msg;
       msg_text.attachments[0] = Event.generateDummy(data);
       
