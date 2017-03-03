@@ -577,8 +577,7 @@ module.exports = (app) => {
   function listItems (arr) {
     var text = "";
     for (var i in arr) {
-      text += arr[i].name;
-      if (i < arr.length - 1) text += ", ";
+      text += arr[i].name + "<https://www.bungie.net/de/Armory/Detail?item=" + arr[i].hash + "|" + lang.msg.dest.link + ">\n";
     }
     return text;
   }
@@ -602,7 +601,7 @@ module.exports = (app) => {
       for (var j in arr[i].perks) {
         perks += arr[i].perks[j].name + "\n";
       }
-      if (items.perks != 0) items.push({title: lang.msg.dest.perks, value: perks, short: true});
+      if (perks.length != 0) items.push({title: lang.msg.dest.perks, value: perks, short: true});
     }
     
     return items;
@@ -750,7 +749,7 @@ module.exports = (app) => {
       for (var i in item.perks) {
         perks += item.perks[i].name + "\n";
       }
-      if (item.perks != 0) fields.push({title: lang.msg.dest.perks, value: perks, short: true});
+      if (perks.length != 0) fields.push({title: lang.msg.dest.perks, value: perks, short: true});
     
     
     return {
@@ -821,8 +820,8 @@ module.exports = (app) => {
     else return {text: "", replace_original: true};
     
     if ('items' in destiny_info[key]) {
-      msg_text.callback_id = 'destiny_public_details_callback';
-      msg_text.actions = [{
+      msg_text.attachments[0].callback_id = 'destiny_public_details_callback';
+      msg_text.attachments[0].actions = [{
         name: key,
         text: lang.btn.dest.details,
         type: 'button'
@@ -841,7 +840,7 @@ module.exports = (app) => {
     };
     
     if (destiny_info.hasOwnProperty(key) && destiny_info[key].active) {
-      if (itemlist) for (var i in destiny_info[key].items) msg_text.attachments.push(getItemAttachment(destiny_info[key].item[i]));
+      if (itemlist && 'items' in destiny_info[key]) for (var i in destiny_info[key].items) msg_text.attachments.push(getItemAttachment(destiny_info[key].item[i]));
       else msg_text.attachments.push(getFullActivityAttachment(destiny_info[key]));
     } else return {text: "", replace_original: true};
     
@@ -1105,7 +1104,7 @@ module.exports = (app) => {
         msg_text = destiny_full_msg("", 'srl');
         break;
       case 'xur':
-        msg_text = destiny_full_msg("", 'xur');
+        msg_text = destiny_full_msg("", 'xur', true);
         break;
       case 'armsday':
         msg_text = destiny_full_msg("", 'armsday');
