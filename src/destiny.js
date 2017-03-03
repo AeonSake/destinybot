@@ -301,6 +301,7 @@ module.exports = (app) => {
     
     for (var i in arr) {
       var perkhash = arr[i].perkHash;
+      console.log(perkhash);
       if (perkhash != 0) perks.push({
         name: destiny_def.perk[perkhash].displayName,
         desc: destiny_def.perk[perkhash].displayDescription
