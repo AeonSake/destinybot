@@ -823,7 +823,7 @@ module.exports = (app) => {
     if ('items' in destiny_info[key]) {
       msg_text.callback_id = 'destiny_public_details_callback';
       msg_text.actions = [{
-        name: keys[0],
+        name: key,
         text: lang.btn.dest.details,
         type: 'button'
       }];
