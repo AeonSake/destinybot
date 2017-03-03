@@ -577,7 +577,7 @@ module.exports = (app) => {
   function listItems (arr) {
     var text = "";
     for (var i in arr) {
-      text += arr[i].name + "<https://www.bungie.net/de/Armory/Detail?item=" + arr[i].hash + "|" + lang.msg.dest.link + ">\n";
+      text += arr[i].name + " <https://www.bungie.net/de/Armory/Detail?item=" + arr[i].hash + "|" + lang.msg.dest.link + ">\n";
     }
     return text;
   }
@@ -820,7 +820,7 @@ module.exports = (app) => {
     else return {text: "", replace_original: true};
     
     if ('items' in destiny_info[key]) {
-      msg_text.attachments[0].callback_id = 'destiny_public_details_callback';
+      msg_text.attachments[0].callback_id = 'destiny_public_moreinfo_callback';
       msg_text.attachments[0].actions = [{
         name: key,
         text: lang.btn.dest.details,
@@ -1177,20 +1177,15 @@ module.exports = (app) => {
         msg_text = destiny_list_msg(lang.msg.dest.main, ['ironbanner', 'trials', 'srl', 'xur', 'armsday']);
         msg_text.attachments.push(destiny_moreinfo_att(4));
         break;
+      case 'xur':
+        msg_text = destiny_full_msg("", 'xur', true);
+        break;
+      default:
+        return;
     }
     
     msg_text.replace_original = false;
-    if (msg_text.attachments.length == 1) msg_text.attachments.unshift({text: lang.msg.dest.noactivities, fallback: lang.msg.dest.noactivities});
-    msg_text.attachments.push(destiny_dismiss_att);
-    msg.respond(msg_text);
-    return;
-  });
-  
-  slapp.action('destiny_public_details_callback', (msg) => {
-    var msg_text = destiny_full_msg("", msg.body.actions[0].name, true);
-    
-    msg_text.replace_original = false;
-    if (msg_text.attachments.length == 0) msg_text.attachments.push({text: lang.msg.dest.nodetails, fallback: lang.msg.dest.nodetails});
+    if (msg_text.attachments.length <= 1) msg_text.attachments.unshift({text: lang.msg.dest.noactivities, fallback: lang.msg.dest.noactivities});
     msg_text.attachments.push(destiny_dismiss_att);
     msg.respond(msg_text);
     return;
