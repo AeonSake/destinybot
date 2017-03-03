@@ -97,6 +97,7 @@ module.exports = (app) => {
       });
       res.on('end', function() {
         destiny_def.perk = JSON.parse(body);
+        console.log(destiny_def.perk);
         console.log("INFO: Destiny | Perk definitions loaded");
         callback();
       });
@@ -301,11 +302,11 @@ module.exports = (app) => {
     
     for (var i in arr) {
       var perkhash = arr[i].perkHash;
-      console.log(perkhash);
       if (perkhash != 0) perks.push({
         name: destiny_def.perk[perkhash].displayName,
         desc: destiny_def.perk[perkhash].displayDescription
       });
+      perks[i].name;
     }
     
     return perks;
@@ -594,15 +595,15 @@ module.exports = (app) => {
       
       var stats = "";
       for (var j in arr[i].stats) {
-        stats += arr[i].stats[j].name + " : " + arr[i].stats[j].value + " (" + Math.round((arr[i].stats[j].value / arr[i].stats[j].max) * 100) + ")";
-        if (j < arr[i].stats.length - 1) stats += "\n";
+        stats += arr[i].stats[j].name + " : " + arr[i].stats[j].value + " (" + Math.round((arr[i].stats[j].value / arr[i].stats[j].max) * 100) + ")\n";
+        //if (j < arr[i].stats.length - 1) stats += "\n";
       }
       items.push({title: lang.msg.dest.stats, value: stats, short: true});
       
       var perks = "";
       for (var j in arr[i].perks) {
-        stats += arr[i].perks[j].name;
-        if (j < arr[i].perks.length - 1) stats += "\n";
+        stats += arr[i].perks[j].name + "\n";
+        //if (j < arr[i].perks.length - 1) stats += "\n";
       }
       items.push({title: lang.msg.dest.perks, value: perks, short: true});
     }
