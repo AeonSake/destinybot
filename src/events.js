@@ -1540,12 +1540,12 @@ module.exports = (app) => {
       }
       
       data.ts = {created: msg.body.action_ts};
-      data.members.push(msg.body.user.id);
       data.id = getNextId();
       event_db.push(new Event(data));
-      var slot = event_db.length - 1;
-      var msg_text = event_db[slot].generateEvent();
+      var slot = findEvent(data.id);
+      event_db[slot].join(msg.body.user.id);
       event_db[slot].setSchedules(msg);
+      var msg_text = event_db[slot].generateEvent();
       //msg_text.channel = config.bot_ch;
       
       msg.respond({text: "", delete_original: true});
