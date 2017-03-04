@@ -577,7 +577,7 @@ module.exports = (app) => {
   function listItems (arr) {
     var text = "";
     for (var i in arr) {
-      text += arr[i].name + " <https://www.bungie.net/de/Armory/Detail?item=" + arr[i].hash + "|" + lang.msg.dest.link + ">";
+      text += "<https://www.bungie.net/de/Armory/Detail?item=" + arr[i].hash + "|" + arr[i].name + ">";
       if (i < arr.length - 1) text += "\n";
     }
     return text;
