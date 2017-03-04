@@ -1000,7 +1000,10 @@ module.exports = (app) => {
           msg_text = destiny_full_msg("", 'xur', true);
           break;
         case 'armsday':
-          msg_text = destiny_full_msg("", 'armsday');
+          msg_text = destiny_public_msg("", 'armsday');
+          break;
+        case 'armsdayfull':
+          msg_text = destiny_full_msg("", 'armsday', true);
           break;
         default:
           msg_text = destiny_summary_msg(lang.msg.dest.main);
@@ -1110,7 +1113,7 @@ module.exports = (app) => {
         msg_text = destiny_full_msg("", 'xur', true);
         break;
       case 'armsday':
-        msg_text = destiny_full_msg("", 'armsday');
+        msg_text = destiny_full_msg("", 'armsday', true);
         break;
       default:
         msg_text = destiny_summary_msg(lang.msg.dest.main);
@@ -1183,6 +1186,9 @@ module.exports = (app) => {
       case 'xur':
         msg_text = destiny_full_msg("", 'xur', true);
         break;
+      case 'armsday':
+        msg_text = destiny_full_msg("", 'armsday', true);
+        break;
       default:
         return;
     }
@@ -1220,7 +1226,7 @@ module.exports = (app) => {
   });
   
   slapp.event('destiny_armsday_update', (msg) => {
-    var msg_text = destiny_full_msg(lang.msg.dest.armsdayupdate, 'armsday');
+    var msg_text = destiny_public_msg(lang.msg.dest.armsdayupdate, 'armsday');
     postToChannel(msg_text);
     return;
   });
