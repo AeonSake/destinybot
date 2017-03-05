@@ -745,7 +745,9 @@ module.exports = (app) => {
         perks = "";
     
       for (var i in item.stats) {
-        stats += item.stats[i].name + " : " + item.stats[i].value + " (" + Math.round((item.stats[i].value / item.stats[i].max) * 100) + "%)\n";
+        if (item.stats.length == 3 && item.stats[i].value != 0) {
+          stats += item.stats[i].name + " : " + item.stats[i].value + " (" + Math.round((item.stats[i].value / item.stats[i].max) * 100) + "%)\n";
+        } else stats += item.stats[i].name + " : " + item.stats[i].value;
       }
       if (stats.length != 0) fields.push({title: lang.msg.dest.stats, value: stats, short: true});
       

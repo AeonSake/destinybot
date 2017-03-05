@@ -27,6 +27,18 @@ config:
     friendly_name: Bot channel ID
     type: secret
     global: true
+  - name: destiny_ch
+    friendly_name: Destiny channel ID
+    type: secret
+    global: true
+  - name: event_ch
+    friendly_name: Event channel ID
+    type: secret
+    global: true
+  - name: poll_ch
+    friendly_name: Poll channel ID
+    type: secret
+    global: true
 slackscopes:
   - bot
   - commands
