@@ -1196,7 +1196,7 @@ module.exports = (app) => {
     }
     
     msg_text.replace_original = false;
-    if (if 'attachments' in msg_text && msg_text.attachments.length <= 1) msg_text.attachments.unshift({text: lang.msg.dest.noactivities, fallback: lang.msg.dest.noactivities});
+    if ('attachments' in msg_text && msg_text.attachments.length <= 1) msg_text.attachments.unshift({text: lang.msg.dest.noactivities, fallback: lang.msg.dest.noactivities});
     msg_text.attachments.push(destiny_dismiss_att);
     msg.respond(msg_text);
     return;
