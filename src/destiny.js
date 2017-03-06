@@ -1195,11 +1195,11 @@ module.exports = (app) => {
         return;
     }
     
-    msg_text.replace_original = false;
     if ('attachments' in msg_text) {
       if (msg_text.attachments.length <= 1) msg_text.attachments.unshift({text: lang.msg.dest.noactivities, fallback: lang.msg.dest.noactivities});
       msg_text.attachments.push(destiny_dismiss_att);
     } else msg_text = func.generateInfoMsg(lang.msg.dest.notactive);
+    msg_text.replace_original = false;
     msg.respond(msg_text);
     return;
   });
