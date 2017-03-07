@@ -595,7 +595,7 @@ module.exports = (app) => {
       var stats = "";
       for (var j in arr[i].stats) {
         var percent = "";
-        if (arr[i].stats[j].value != arr[i].stats[j].max) percent = " (" + Math.round((arr[i].stats[j].value / arr[i].stats[j].max) * 100) + "%)";
+        if (arr[i].stats.length == 3) percent = " (" + Math.round((arr[i].stats[j].value / arr[i].stats[j].max) * 100) + "%)";
         stats += arr[i].stats[j].name + " : " + arr[i].stats[j].value + percent + "\n";
       }
       if (stats.length != 0) items.push({title: lang.msg.dest.stats, value: stats, short: true});
@@ -671,7 +671,6 @@ module.exports = (app) => {
     if ('skulls' in act) text = listSkulls(act.skulls.skulls);
     else if ('challenge' in act) text = act.challenge;
     else if ('items' in act) text = listItems(act.items);
-    else if ('loc' in act) text = act.loc;
     
     var time = "";
     if (act.expirationDate != 0) time = lang.msg.dest.activetill + " " + moment(act.expirationDate).format(lang.msg.dest.dateformat);
