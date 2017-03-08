@@ -116,7 +116,6 @@ module.exports = (app) => {
       });
     });
   }
-  getDefinitions(getActivities);
   
   function getActivities (callback) {
     var options = {
@@ -160,6 +159,8 @@ module.exports = (app) => {
       });
     });
   }
+  
+  getDefinitions(getActivities);
   
   
   
