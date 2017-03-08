@@ -851,19 +851,6 @@ module.exports = (app) => {
     return msg_text;
   }
   
-  function postToChannel (msg_text) {
-    slapp.client.chat.postMessage({
-      token: config.bot_token,
-      channel: config.bot_ch,
-      text: msg_text.text,
-      attachments: msg_text.attachments,
-      parse: 'full',
-      as_user: true
-    }, (err, data) => {
-      if (err) console.log("ERROR: Unable to post to destiny channel (" + err + ")");
-    });
-  }
-  
   
   
 // ==============================
@@ -1215,7 +1202,8 @@ module.exports = (app) => {
       var msg_text = destiny_summary_msg(lang.msg.dest.weeklyreset);
       msg_text.attachments.push(destiny_moreinfo_att(0));
       msg_text.attachments[msg_text.attachments.length - 1].callback_id = 'destiny_public_moreinfo_callback';
-      postToChannel(msg_text);
+      msg_text.channel = config.destiny_ch;
+      msg.say(msg_text);
     });
     return;
   });
@@ -1223,27 +1211,31 @@ module.exports = (app) => {
   slapp.event('destiny_ironbanner_update', (msg) => {
     getActivities(function(){
       var msg_text = destiny_full_msg(lang.msg.dest.ironbannerupdate, 'ironbanner');
-      postToChannel(msg_text);
+      msg_text.channel = config.destiny_ch;
+      msg.say(msg_text);
     });
     return;
   });
   
   slapp.event('destiny_armsday_update', (msg) => {
     var msg_text = destiny_public_msg(lang.msg.dest.armsdayupdate, 'armsday');
-    postToChannel(msg_text);
+    msg_text.channel = config.destiny_ch;
+    msg.say(msg_text);
     return;
   });
   
   slapp.event('destiny_xur_update', (msg) => {
     var msg_text = destiny_public_msg(lang.msg.dest.xurupdate, 'xur');
-    postToChannel(msg_text);
+    msg_text.channel = config.destiny_ch;
+    msg.say(msg_text);
     return;
   });
   
   slapp.event('destiny_trials_update', (msg) => {
     getActivities(function(){
       var msg_text = destiny_full_msg(lang.msg.dest.trialsupdate, 'trials', false);
-      postToChannel(msg_text);
+      msg_text.channel = config.destiny_ch;
+      msg.say(msg_text);
     });
     return;
   });
