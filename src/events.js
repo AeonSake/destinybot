@@ -688,6 +688,11 @@ module.exports = (app) => {
               type: 'button'
             },
             {
+              name: 'datetime',
+              text: lang.btn.evt.datetime,
+              type: 'button'
+            },
+            {
               name: 'members',
               text: lang.btn.evt.members,
               type: 'button'
@@ -805,6 +810,20 @@ module.exports = (app) => {
         ],
         mrkdwn_in: ['text', 'pretext']
       }
+    ],
+    response_type: 'ephemeral',
+    replace_original: true
+  };
+  
+  var event_edit_datetime_msg = {
+    text: "",
+    attachments: [
+      {
+        text: lang.msg.evt.enterdatetime,
+        fallback: lang.msg.evt.enterdatetime,
+        mrkdwn_in: ['text', 'pretext']
+      },
+      event_edit_menu_att
     ],
     response_type: 'ephemeral',
     replace_original: true
@@ -944,6 +963,11 @@ module.exports = (app) => {
       this.state = data.state;
       this.ts.edited = data.ts.edited;
       this.options.max = data.options.max;
+      
+      for (var i in data.deletemembers) {
+        var temp = this.members.indexOf(data.deletemembers[i]);
+        if (temp != -1) this.members.splice(temp, 1);
+      }
     }
     
     getData () {
@@ -1546,12 +1570,12 @@ module.exports = (app) => {
       event_db[slot].join(msg.body.user.id);
       event_db[slot].setSchedules(msg);
       var msg_text = event_db[slot].generateEvent();
-      //msg_text.channel = config.bot_ch;
+      msg_text.channel = config.event_ch;
       
       msg.respond({text: "", delete_original: true});
       msg.say(msg_text, (err, result) => {
         event_db[slot].addPost(result.channel, result.ts);
-        //saveEventDB();
+        saveEventDB();
       });
     }
   });
@@ -1601,7 +1625,330 @@ module.exports = (app) => {
   
   // ===== /event edit =====
   
+  slapp.command('/dbevent', "edit(.*)", (msg, cmd) => {
+    var check = new RegExp("\\d{1,4}");
+    
+    if (check.test(cmd.substring(5))) {
+      var slot = findEvent(parseInt(cmd.substring(5)) - 1);
+      
+      if (slot != -1 && (event_db[slot].isVisible() || user.isAdmin(msg.body.user_id))) {
+        if (event_db[slot].isOwner(msg.body.user_id) || user.isAdmin(msg.body.user_id)) {
+          var data = event_db[slot].getData(),
+              msg_text = event_edit_msg(data.state);
+          msg_text.attachments[0] = Event.generateDummy(data);
+          msg.respond(msg_text);
+          msg.route('event_edit_route', data, 60);
+          return;
+        } else msg.respond(func.generateInfoMsg(lang.msg.evt.notowner));
+      } else msg.respond(func.generateInfoMsg(lang.msg.evt.notfound));
+    } else msg.respond(event_edit_list_msg(msg.body.user_id, 0, 'desc'));
+    
+    return;
+  });
   
+  slapp.action('event_edit_pages_callback', (msg) => {
+    var data = msg.body.actions[0].name.split("-");
+    
+    switch (data[0]) {
+      case 'back':
+      case 'next':
+        msg.respond(event_edit_list_msg(msg.body.user.id, parseInt(msg.body.actions[0].value), data[1]));
+        return;
+      case 'page':
+        return;
+      case 'asc':
+      case 'desc':
+        msg.respond(event_edit_list_msg(msg.body.user.id, 0, data[0]));
+        return;
+      case 'dismiss':
+        msg.respond({text: "", delete_original: true});
+        return;
+    }
+  });
+  
+  slapp.action('event_edit_del_callback', (msg) => {
+    var slot = findEvent(parseInt(msg.body.actions[0].value));
+    
+    if (slot != -1) {
+      switch (msg.body.actions[0].name) {
+        case 'edit':
+          var data = event_db[slot].getData(),
+              msg_text = event_edit_msg(data.state);
+          msg_text.attachments[0] = Event.generateDummy(data);
+          msg.respond(msg_text);
+          msg.route('event_edit_route', data, 60);
+          break;
+        case 'delete':
+          event_db[slot].delete();
+          saveEventDB();
+          msg.respond(func.generateInfoMsg(lang.msg.evt.deleted));
+          break;
+      }
+    } else msg.respond(func.generateInfoMsg(lang.msg.evt.notfound));
+    return;
+  });
+  
+  slapp.route('event_edit_route', (msg, data) => {
+    if (msg.type != 'action') {
+      msg.route('event_edit_route', data, 60);
+      return;
+    } else {
+      switch (msg.body.actions[0].name) {
+        case 'title':
+          msg.respond(event_edit_title_msg);
+          msg.route('event_edit_title_route', data, 60);
+          return;
+        case 'text':
+          if (data.text == "") msg.respond(event_edit_text_msg);
+          else msg.respond(event_edit_text_del_msg);
+          msg.route('event_edit_text_route', data, 60);
+          return;
+        case 'datetime':
+          msg.respond(event_edit_datetime_msg);
+          msg.route('event_edit_datetime_route', data, 60);
+          return;
+        case 'members':
+          msg.respond(event_edit_members_msg(data.members));
+          msg.route('event_edit_members_route', data, 60);
+          return;
+        case 'max':
+          msg.respond(event_edit_max_msg);
+          msg.route('event_edit_max_route', data, 60);
+          return;
+        case 'done':
+          break;
+        case 'cancel':
+          msg.respond({text: "", delete_original: true});
+          return;
+        case 'undelete':
+          data.state = 0;
+          data.edited = true;
+          var msg_text = event_edit_msg(data.state);
+          msg_text.attachments[0] = Event.generateDummy(data);
+          msg.respond(msg_text);
+          msg.route('event_edit_route', data, 60);
+          return;
+        case 'delete':
+          var slot = findEvent(data.id);
+          if (slot != -1) {
+            event_db[slot].delete();
+            saveEventDB();
+            msg.respond(func.generateInfoMsg(lang.msg.evt.deleted));
+          } else msg.respond(func.generateInfoMsg(lang.msg.evt.notfound));
+          return;
+      }
+      
+      if (data.create) {
+        var msg_text = event_create_final_msg;
+        msg_text.attachments[0] = Event.generateDummy(data);
+        msg.respond(msg_text);
+        msg.route('event_create_final_route', data, 60);
+      } else if (data.edited) {
+        var slot = findEvent(data.id);
+        if (slot != -1) {
+          data.ts.edited = msg.body.action_ts;
+          event_db[slot].edit(data);
+          event_db[slot].update();
+          saveEventDB();
+          msg.respond({text: "", delete_original: true});
+        } else msg.respond(func.generateInfoMsg(lang.msg.evt.notfound));
+      } else msg.respond({text: "", delete_original: true});
+      return;
+    }
+  });
+  
+  slapp.route('event_edit_title_route', (msg, data) => {
+    if (msg.type == 'event') {
+      msg.route('event_edit_title_route', data, 60);
+      return;
+    } else if (msg.type == 'action') {
+      switch (msg.body.actions[0].name) {
+        case 'back':
+          var msg_text = event_edit_msg(data.state);
+          msg_text.attachments[0] = Event.generateDummy(data);
+          msg.respond(msg_text);
+          msg.route('event_edit_route', data, 60);
+          break;
+        case 'cancel':
+          msg.respond({text: "", delete_original: true});
+          break;
+      }
+      return;
+    } else {
+      data.title = msg.body.text;
+      data.edited = true;
+      
+      var msg_text = event_edit_msg(data.state);
+      msg_text.attachments[0] = Event.generateDummy(data);
+      msg.respond(msg_text);
+      msg.route('event_edit_route', data, 60);
+      return;
+    }
+  });
+  
+  slapp.route('event_edit_text_route', (msg, data) => {
+    if (msg.type == 'event') {
+      msg.route('event_edit_text_route', data, 60);
+      return;
+    } else if (msg.type == 'action') {
+      switch (msg.body.actions[0].name) {
+        case 'back':
+          var msg_text = event_edit_msg(data.state);
+          msg_text.attachments[0] = Event.generateDummy(data);
+          msg.respond(msg_text);
+          msg.route('event_edit_route', data, 60);
+          break;
+        case 'delete':
+          data.text = "";
+          data.edited = true;
+          var msg_text = event_edit_msg(data.state);
+          msg_text.attachments[0] = Event.generateDummy(data);
+          msg.respond(msg_text);
+          msg.route('event_edit_route', data, 60);
+          break;
+        case 'cancel':
+          msg.respond({text: "", delete_original: true});
+          break;
+      }
+      return;
+    } else {
+      data.text = msg.body.text;
+      data.edited = true;
+      
+      var msg_text = event_edit_msg(data.state);
+      msg_text.attachments[0] = Event.generateDummy(data);
+      msg.respond(msg_text);
+      msg.route('event_edit_route', data, 60);
+      return;
+    }
+  });
+  
+  slapp.route('event_edit_datetime_route', (msg, data) => {
+    if (msg.type == 'event') {
+      msg.route('event_edit_datetime_route', data, 60);
+      return;
+    } else if (msg.type == 'action') {
+      switch (msg.body.actions[0].name) {
+        case 'back':
+          var msg_text = event_edit_msg(data.state);
+          msg_text.attachments[0] = Event.generateDummy(data);
+          msg.respond(msg_text);
+          msg.route('event_edit_route', data, 60);
+          break;
+        case 'cancel':
+          msg.respond({text: "", delete_original: true});
+          break;
+      }
+      return;
+    } else {
+      var temp = msg.body.text.split(";");
+      
+      if (temp.length == 2) {
+        var parsed = moment(temp[0].trim().replace(/[\.\:\,\/ ]/g, "-") + " " + temp[1].trim().replace(/[\.\:\,\/ ]/g, "-"), "DD-MM-YYYY HH-mm");
+        if (moment().add(30, 'm') < parsed) {
+          data.datetime = parsed.format();
+          data.edited = true;
+
+          var msg_text = event_edit_msg(data.state);
+          msg_text.attachments[0] = Event.generateDummy(data);
+          msg.respond(msg_text);
+          msg.route('event_edit_route', data, 60);
+        } else {
+          var msg_text = event_edit_datetime_msg;
+          msg_text.attachments[0] = Event.generateDummy(data);
+          msg_text.attachments[1].text = lang.msg.evt.wrongdatetimestamp+ "\n" + msg_text.attachments[1].text;
+          msg.respond(msg_text);
+          msg.route('event_edit_datetime_route', data, 60);
+        }
+      } else {
+        var msg_text = event_edit_datetime_msg;
+        msg_text.attachments[0] = Event.generateDummy(data);
+        msg_text.attachments[1].text = lang.msg.evt.wrongdatetimeinput+ "\n" + msg_text.attachments[1].text;
+        msg.respond(msg_text);
+        msg.route('event_edit_datetime_route', data, 60);
+      }
+      return;
+    }
+  });
+  
+  slapp.route('event_edit_members_route', (msg, data) => {
+    if (msg.type != 'action') {
+      msg.route('event_edit_members_route', data, 60);
+      return;
+    } else {
+      switch (msg.body.actions[0].name) {
+        case 'delete':
+          data.edited = true;
+          var slot = parseInt(msg.body.actions[0].value);
+          if (data.answers[slot].state == 2) data.answers.splice(slot, 1);
+          else data.answers[slot].state = 3;
+          msg.respond(poll_edit_answers_msg(data.answers));
+          msg.route('poll_edit_answers_route', data, 60);
+          return;
+        case 'back':
+          var msg_text = poll_edit_msg(data.state);
+          msg_text.attachments[0] = Poll.generateDummy(data);
+          msg.respond(msg_text);
+          msg.route('poll_edit_route', data, 60);
+          return;
+        case 'cancel':
+          msg.respond({text: "", delete_original: true});
+          return;
+      }
+      
+      data.members.splice(data.members.indexOf(msg.body.actions[0].name), 1);
+      if (!('deletemembers' in data)) data.deletemembers = [];
+      data.deletemembers.push(msg.body.actions[0].name);
+      data.edited = true;
+      
+      var msg_text = event_edit_msg(data.state);
+      msg_text.attachments[0] = Event.generateDummy(data);
+      msg.respond(msg_text);
+      msg.route('event_edit_route', data, 60);
+      return;
+    }
+  });
+  
+  slapp.route('event_edit_max_route', (msg, data) => {
+    if (msg.type == 'event') {
+      msg.route('event_edit_max_route', data, 60);
+      return;
+    } else if (msg.type == 'action') {
+      switch (msg.body.actions[0].name) {
+        case 'back':
+          var msg_text = event_edit_msg(data.state);
+          msg_text.attachments[0] = Event.generateDummy(data);
+          msg.respond(msg_text);
+          msg.route('event_edit_route', data, 60);
+          return;
+        case 'cancel':
+          msg.respond({text: "", delete_original: true});
+          return;
+        case '0':
+        case '2':
+        case '3':
+        case '6':
+        case '12':
+          data.options.max = parseInt(msg.body.text);
+          data.edited = true;
+          
+          var msg_text = event_edit_msg(data.state);
+          msg_text.attachments[0] = Event.generateDummy(data);
+          msg.respond(msg_text);
+          msg.route('event_edit_route', data, 60);
+          return;
+      }
+    } else {
+      data.options.max = parseInt(msg.body.actions[0].name);
+      data.edited = true;
+      
+      var msg_text = event_edit_msg(data.state);
+      msg_text.attachments[0] = Event.generateDummy(data);
+      msg.respond(msg_text);
+      msg.route('event_edit_route', data, 60);
+      return; 
+    }
+  });
   
   // ===== /event post =====
   
@@ -1613,7 +1960,7 @@ module.exports = (app) => {
         if (err) console.log("Unable to post in channel (" + err + ")");
         else {
           event_db[slot].addPost(result.channel, result.ts);
-          //savePollDB();
+          saveEventDB();
         }
       });
     }
@@ -1629,27 +1976,6 @@ module.exports = (app) => {
     return;
   });
   
-  // ===== /event test =====
-  
-  slapp.command('/dbevent', "test", (msg, cmd) => {
-    if (msg.body.user_id == config.admin_id) {
-      var data = {
-        id: getNextId(),
-        title: "test",
-        datetime: moment().add(11, 'm').format(),
-        members: [msg.body.user_id],
-        creator: msg.body.user_id,
-        ts: {created: 0}
-      };
-      event_db.push(new Event(data));
-      event_db[0].setSchedules(msg);
-      
-      msg.say(event_db[0].generateEvent(), (err, result) => {
-        event_db[0].addPost(result.channel, result.ts);
-      });
-    };
-  });
-  
   // ===== answer callback =====
   
   slapp.action('event_answer_callback', (msg) => {
@@ -1663,7 +1989,7 @@ module.exports = (app) => {
         break;
     }
     event_db[slot].update();
-    //saveEventDB();
+    saveEventDB();
   });
   
   // ===== External event schedule trigger =====
@@ -1678,7 +2004,7 @@ module.exports = (app) => {
     var slot = findEvent(msg.body.event.payload);
     if (slot != -1) {
       event_db[slot].start();
-      // saveEventDB();
+      saveEventDB();
     }
     return;
   });

@@ -68,6 +68,7 @@ let lang = module.exports = {
       myevents: "Meine Events",
       title: "Titel",
       text: "Text",
+      datetime: "Datum/Zeit",
       members: "Teilnehmer",
       max: "Max. Teilnehmer",
       deletetext: "Text entfernen",
@@ -137,11 +138,12 @@ let lang = module.exports = {
       neweventcreated: "Ein neuer Event wurde erstellt:",
       dateformat: "[Am] dd, [*]D.M.YYYY[*], [um] [*]HH:mm[*]",
       
+      removemembers: "Welcher Teilnehmer soll entfernt werden?",
       confirmdelete: "Sind Sie sicher, dass Sie diesen Event löschen wollen?",
       deleted: "Event wurde erfolgreich gelöscht.",
       
-      notfound: "Eine Abstimmung mit dieser ID konnte nicht gefunden werden.",
-      notowner: "Nur der Ersteller dieser Abstimmung kann diese bearbeiten.",
+      notfound: "Ein Event mit dieser ID konnte nicht gefunden werden.",
+      notowner: "Nur der Ersteller dieses Events kann diese bearbeiten.",
       
       startingsoon: "Ein Event an dem Sie teilnehmen beginnt in Kürze!",
       confirmcancel: "Sind Sie sicher, dass Sie diesen Event absagen wollen?",
