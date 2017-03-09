@@ -1340,7 +1340,7 @@ module.exports = (app) => {
       if (err) {
         console.log("ERROR: Events | Unable to load event database (" + err + ")");
       } else if (typeof val !== "undefined") {
-        for (var i in val) console.log(val[i]);
+        for (var i in val) event_db[i] = new Event(val[i]);
         console.log("INFO: Events | Event database loaded");
       }
     });
