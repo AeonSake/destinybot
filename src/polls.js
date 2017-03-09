@@ -2098,9 +2098,9 @@ module.exports = (app) => {
     switch (msg.body.actions[0].name) {
       case 'create':
         var data = {id: getNextId(), creator: msg.body.user.id};
+        
         var msg_text = poll_create_title_msg;
         msg_text.attachments[0] = Poll.generateDummy(data);
-        
         msg.respond(msg_text);
         msg.route('poll_create_title_route', data, 60);
         break;

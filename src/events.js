@@ -1322,9 +1322,9 @@ module.exports = (app) => {
     if (event_db.length == 0) return 0;
     else return event_db[event_db.length - 1].getData.id + 1;
   }
-
-
-
+  
+  
+  
 // ====================================
 // ========== EVENT DATABASE ==========
 // ====================================
@@ -1973,6 +1973,61 @@ module.exports = (app) => {
   
   slapp.command('/dbevent', "help", (msg, cmd) => {
     msg.respond(func.generateInfoMsg(lang.msg.evt.help));
+    return;
+  });
+  
+  // ===== /event =====
+  
+  slapp.command('/dbevent', "(.*)", (msg, cmd) => {
+    var temp = cmd.split(";");
+    if (temp[temp.length - 1].trim() == "") temp = temp.slice(0, -1);
+    
+    if (temp.length == 3) {
+      var parsed = moment(temp[0].trim().replace(/[\.\:\,\/ ]/g, "-") + " " + temp[1].trim().replace(/[\.\:\,\/ ]/g, "-"), "DD-MM-YYYY HH-mm");
+      
+      if (moment().add(30, 'm') < parsed) {
+        var data = {id: getNextId(), title: temp[0], text: "", datetime: parsed.format(), creator: msg.body.user_id};
+      
+        var msg_text = event_create_final_msg;
+        msg_text.attachments[0] = Event.generateDummy(data);
+        msg.respond(msg_text);
+        msg.route('event_create_final_route', data, 60);
+        return;
+      } else {
+        msg.respond(module.event_main_msg);
+        return;
+      }
+    } else {
+      msg.respond(module.event_main_msg);
+      return;
+    }
+  });
+  
+  slapp.action('event_main_callback', (msg) => {
+    switch (msg.body.actions[0].name) {
+      case 'create':
+        var data = {id: getNextId(), creator: msg.body.user.id};
+        
+        var msg_text = event_create_title_msg;
+        msg_text.attachments[0] = Event.generateDummy(data);
+        msg.respond(msg_text);
+        msg.route('event_create_title_route', data, 60);
+        break;
+      case 'show':
+        msg.respond(event_list_msg(0, 0, 'desc'));
+        break;
+      case 'edit':
+        msg.respond(event_edit_list_msg(msg.body.user_id, 0, 'desc'));
+        break;
+      case 'help':
+        msg.respond({
+          text: lang.msg.evt.help,
+          attachments: [event_dismiss_att],
+          response_type: 'ephemeral',
+          replace_original: true
+        });
+        break;
+    }
     return;
   });
   
