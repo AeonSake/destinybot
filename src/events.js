@@ -492,13 +492,13 @@ module.exports = (app) => {
           }
           break;
         case 1:
-          if (event_db[j].isOpen()) {
+          if (event_db[j].isAktive()) {
             if (eventcount >= page * 5 && eventcount < page * 5 + 5) msg_text.attachments = msg_text.attachments.concat(event_db[j].generateEvent().attachments);
             eventcount++;
           }
           break;
         case 2:
-          if (event_db[j].isClosed()) {
+          if (event_db[j].isVisible() && !event_db[j].isAktive()) {
             if (eventcount >= page * 5 && eventcount < page * 5 + 5) msg_text.attachments = msg_text.attachments.concat(event_db[j].generateEvent().attachments);
             eventcount++;
           }
@@ -517,7 +517,7 @@ module.exports = (app) => {
     
     msg_text.attachments.push(event_show_filter_att(mode, sort));
     if (eventcount == 0) {
-      msg_text.text = lang.msg.evt.nopollfound;
+      msg_text.text = lang.msg.evt.noeventfound;
       msg_text.attachments.push(event_dismiss_att);
     } else msg_text.attachments.push(event_show_pages_att(page, eventcount, mode, sort));
     
@@ -1340,7 +1340,10 @@ module.exports = (app) => {
       if (err) {
         console.log("ERROR: Events | Unable to load event database (" + err + ")");
       } else if (typeof val !== "undefined") {
-        for (var i in val.length) event_db[i] = new Event(val[i]);
+        for (var i in val.length) {
+          event_db[i] = new Event(val[i]);
+          console.log(val[i]);
+        }
         console.log("INFO: Events | Event database loaded");
       }
     });
@@ -1983,7 +1986,7 @@ module.exports = (app) => {
     if (temp[temp.length - 1].trim() == "") temp = temp.slice(0, -1);
     
     if (temp.length == 3) {
-      var parsed = moment(temp[0].trim().replace(/[\.\:\,\/ ]/g, "-") + " " + temp[1].trim().replace(/[\.\:\,\/ ]/g, "-"), "DD-MM-YYYY HH-mm");
+      var parsed = moment(temp[1].trim().replace(/[\.\:\,\/ ]/g, "-") + " " + temp[2].trim().replace(/[\.\:\,\/ ]/g, "-"), "DD-MM-YYYY HH-mm");
       
       if (moment().add(30, 'm') < parsed) {
         var data = {id: getNextId(), title: temp[0], text: "", datetime: parsed.format(), creator: msg.body.user_id};

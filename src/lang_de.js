@@ -142,6 +142,7 @@ let lang = module.exports = {
       confirmdelete: "Sind Sie sicher, dass Sie diesen Event löschen wollen?",
       deleted: "Event wurde erfolgreich gelöscht.",
       
+      noeventfound: "Kein Event gefunden.",
       notfound: "Ein Event mit dieser ID konnte nicht gefunden werden.",
       notowner: "Nur der Ersteller dieses Events kann diese bearbeiten.",
       
@@ -149,7 +150,7 @@ let lang = module.exports = {
       confirmcancel: "Sind Sie sicher, dass Sie diesen Event absagen wollen?",
       hascanceled: "hat für den folgenden Event abgesagt:",
       
-      help: "Liste aller Befehle:\n`/event` : Hauptmenü\n`/event <title>;<dd.mm.yy>;<hh:mm>` : Schnell-Erstellung eines Events\n`/event create` : Erstellung eines Events\n`/event list` : Anzeigen aller Events\n`/event show <id>` : Anzeigen des Events mit der ID <id>\n`/event edit <id>` : Bearbeiten des Events mit der ID <id>\n`/event post <id>` : Posten des Events mit der ID <id> im aktuellen Channel\n`/event help` : Anzeigen der Hilfe"
+      help: "Liste aller Befehle:\n`/event` : Hauptmenü\n`/event <title>;<DD.MM.YYYY>;<hh:mm>` : Schnell-Erstellung eines Events\n`/event create` : Erstellung eines Events\n`/event list` : Anzeigen aller Events\n`/event show <id>` : Anzeigen des Events mit der ID <id>\n`/event edit <id>` : Bearbeiten des Events mit der ID <id>\n`/event post <id>` : Posten des Events mit der ID <id> im aktuellen Channel\n`/event help` : Anzeigen der Hilfe"
     },
     
     poll: {
