@@ -1362,7 +1362,7 @@ module.exports = (app) => {
    
   // ===== /event create =====
   
-  slapp.command('/dbevent', "create", (msg, cmd) => {
+  slapp.command('/event', "create", (msg, cmd) => {
     var data = {id: getNextId(), creator: msg.body.user_id};
     
     var msg_text = event_create_title_msg;
@@ -1582,7 +1582,7 @@ module.exports = (app) => {
   
   // ===== /event show =====
   
-  slapp.command('/dbevent', "(show|list)(.*)", (msg, cmd) => {
+  slapp.command('/event', "(show|list)(.*)", (msg, cmd) => {
     var check = new RegExp("\\d{1,4}");
     
     if (cmd.substring(0,4) == "show" && check.test(cmd.substring(5))) {
@@ -1625,7 +1625,7 @@ module.exports = (app) => {
   
   // ===== /event edit =====
   
-  slapp.command('/dbevent', "edit(.*)", (msg, cmd) => {
+  slapp.command('/event', "edit(.*)", (msg, cmd) => {
     var check = new RegExp("\\d{1,4}");
     
     if (check.test(cmd.substring(5))) {
@@ -1952,7 +1952,7 @@ module.exports = (app) => {
   
   // ===== /event post =====
   
-  slapp.command('/dbevent', "post \\d{1,4}", (msg, cmd) => {
+  slapp.command('/event', "post \\d{1,4}", (msg, cmd) => {
     var slot = findEvent(parseInt(cmd.substring(5)) - 1);
     
     if (slot != -1) {
@@ -1971,14 +1971,14 @@ module.exports = (app) => {
   
   // ===== /event help =====
   
-  slapp.command('/dbevent', "help", (msg, cmd) => {
+  slapp.command('/event', "help", (msg, cmd) => {
     msg.respond(func.generateInfoMsg(lang.msg.evt.help));
     return;
   });
   
   // ===== /event =====
   
-  slapp.command('/dbevent', "(.*)", (msg, cmd) => {
+  slapp.command('/event', "(.*)", (msg, cmd) => {
     var temp = cmd.split(";");
     if (temp[temp.length - 1].trim() == "") temp = temp.slice(0, -1);
     

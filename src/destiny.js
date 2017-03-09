@@ -1051,6 +1051,7 @@ module.exports = (app) => {
         break;
       case 'elder':
       case 'elderchallenge':
+      case 'poe':
         msg_text = destiny_full_msg("", 'elderchallenge');
         break;
       case 'story':
