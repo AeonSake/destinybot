@@ -48,15 +48,13 @@ let config = module.exports = {
   
   // Destiny config
   destiny_key: process.env.destiny_key,
-  //destiny_ch: process.env.destiny_ch,
-  destiny_ch: process.env.destiny_ch || module.bot_ch,
-  //destiny_ch: (process.env.destiny_ch == "" ? this.bot_ch : process.env.destiny_ch),
+  destiny_ch: process.env.destiny_ch || process.env.bot_ch,
   
   // Poll config
-  poll_ch: process.env.poll_ch,
+  poll_ch: process.env.poll_ch || process.env.bot_ch,
   
   // Events config
-  event_ch: process.env.event_ch,
+  event_ch: process.env.event_ch || process.env.bot_ch,
   
   
   
