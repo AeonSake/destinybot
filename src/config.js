@@ -34,7 +34,7 @@ let config = module.exports = {
   bb_persist_provider: process.env.PERSIST_PROVIDER || 'beepboop',
   
   // Project config
-  version: "5.4.73",
+  version: "5.4.74",
   title: "DestinyBot",
   admin_id: process.env.admin_id,
   admin_ch: "",
@@ -48,13 +48,13 @@ let config = module.exports = {
   
   // Destiny config
   destiny_key: process.env.destiny_key,
-  destiny_ch: process.env.destiny_ch || this.bot_ch,
+  destiny_ch: (process.env.destiny_ch ? process.env.destiny_ch : this.bot_ch),
   
   // Poll config
-  poll_ch: process.env.poll_ch || this.bot_ch,
+  poll_ch: (process.env.poll_ch ? process.env.poll_ch : this.bot_ch),
   
   // Events config
-  event_ch: process.env.event_ch || this.bot_ch,
+  event_ch: (process.env.event_ch ? process.env.event_ch : this.bot_ch),
   
   
   

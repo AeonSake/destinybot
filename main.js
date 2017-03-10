@@ -51,7 +51,6 @@ console.log("Listening on port " + process.env.PORT);
 server.listen(process.env.PORT);
 
 console.log("INFO: Running " + config.title + " on version " + config.version);
-
 console.log(config.destiny_ch);
 
 slapp.message("(.*)", (msg) => {
