@@ -51,7 +51,6 @@ console.log("Listening on port " + process.env.PORT);
 server.listen(process.env.PORT);
 
 console.log("INFO: Running " + config.title + " on version " + config.version);
-console.log(config.bot_ch + " | " + config.destiny_ch);
 
 slapp.message("(.*)", (msg) => {
   if (config.botonly && msg.body.event.channel == config.bot_ch && !user.isAdmin(msg.body.event.user) && !('bot_id' in msg.body.event)) {
@@ -66,3 +65,16 @@ slapp.message("(.*)", (msg) => {
   }
   return;
 });
+
+
+
+console.log(config.destiny_ch);
+console.log(config.destiny_ch === undefined);
+console.log(config.destiny_ch === 'undefined');
+console.log(config.destiny_ch == undefined);
+console.log(config.destiny_ch == "");
+console.log(config.destiny_ch == null);
+console.log(config.destiny_ch === null);
+console.log(config.destiny_ch === false);
+console.log(typeof config.destiny_ch !== 'undefined');
+
