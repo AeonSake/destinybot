@@ -69,12 +69,12 @@ slapp.message("(.*)", (msg) => {
 
 
 console.log(config.destiny_ch);
-console.log(config.destiny_ch === undefined);
-console.log(config.destiny_ch === 'undefined');
-console.log(config.destiny_ch == undefined);
-console.log(config.destiny_ch == "");
-console.log(config.destiny_ch == null);
-console.log(config.destiny_ch === null);
-console.log(config.destiny_ch === false);
-console.log(typeof config.destiny_ch !== 'undefined');
+console.log(process.env.destiny_ch === undefined);
+console.log(process.env.destiny_ch === 'undefined');
+console.log(process.env.destiny_ch == undefined);
+console.log(process.env.destiny_ch == "");
+console.log(process.env.destiny_ch == null);
+console.log(process.env.destiny_ch === null);
+console.log(process.env.destiny_ch === false);
+console.log(typeof process.env.destiny_ch !== 'undefined');
 
