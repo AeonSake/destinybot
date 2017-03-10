@@ -77,4 +77,5 @@ console.log(process.env.destiny_ch == null);
 console.log(process.env.destiny_ch === null);
 console.log(process.env.destiny_ch === false);
 console.log(typeof process.env.destiny_ch !== 'undefined');
-
+console.log(process.env.destiny_ch == "" ? "nope" : process.env.destiny_ch);
+console.log(process.env.destiny_ch != "" ? "nope" : process.env.destiny_ch);
