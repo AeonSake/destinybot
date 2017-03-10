@@ -49,7 +49,7 @@ let config = module.exports = {
   // Destiny config
   destiny_key: process.env.destiny_key,
   //destiny_ch: process.env.destiny_ch,
-  destiny_ch: (process.env.destiny_ch != "" ? process.env.destiny_ch : this.bot_ch),
+  destiny_ch: (process.env.destiny_ch == "" ? this.bot_ch : process.env.destiny_ch),
   
   // Poll config
   poll_ch: (process.env.poll_ch !== 'undefined' ? process.env.poll_ch : this.bot_ch),
