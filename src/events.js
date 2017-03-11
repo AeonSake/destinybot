@@ -1606,14 +1606,14 @@ module.exports = (app) => {
     return;
   });
   
-  slapp.action('poll_show_pages_callback', (msg) => {
+  slapp.action('event_show_pages_callback', (msg) => {
     var data = msg.body.actions[0].name.split("-"),
         page = parseInt(msg.body.actions[0].value);
     
     switch (data[0]) {
       case 'back':
       case 'next':
-        msg.respond(poll_list_msg(page, parseInt(data[1]), data[2], msg.body.user.id));
+        msg.respond(event_list_msg(page, parseInt(data[1]), data[2], msg.body.user.id));
         return;
       case 'page':
         return;
