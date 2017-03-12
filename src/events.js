@@ -1877,19 +1877,11 @@ module.exports = (app) => {
       return;
     } else {
       switch (msg.body.actions[0].name) {
-        case 'delete':
-          data.edited = true;
-          var slot = parseInt(msg.body.actions[0].value);
-          if (data.answers[slot].state == 2) data.answers.splice(slot, 1);
-          else data.answers[slot].state = 3;
-          msg.respond(poll_edit_answers_msg(data.answers));
-          msg.route('poll_edit_answers_route', data, 60);
-          return;
         case 'back':
-          var msg_text = poll_edit_msg(data.state);
-          msg_text.attachments[0] = Poll.generateDummy(data);
+          var msg_text = event_edit_msg(data.state);
+          msg_text.attachments[0] = Event.generateDummy(data);
           msg.respond(msg_text);
-          msg.route('poll_edit_route', data, 60);
+          msg.route('event_edit_route', data, 60);
           return;
         case 'cancel':
           msg.respond({text: "", delete_original: true});
