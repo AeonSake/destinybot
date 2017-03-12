@@ -985,7 +985,7 @@ module.exports = (app) => {
     }
 
     join (user_id) {
-      if (this.members.length < this.options.max) {
+      if (this.options.max == 0 || this.members.length < this.options.max) {
         if (this.members.indexOf(user_id) == -1) {
           this.members.push(user_id);
           return 0;
