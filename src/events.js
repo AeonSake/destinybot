@@ -1077,7 +1077,7 @@ module.exports = (app) => {
       if ('members' in data) {
         temp_members = "";
         for (var i in data.members) {
-          temp_members += user.getUser(data.members[i]);
+          temp_members += user.getUser(data.members[i]).name;
           if (i < data.members.length - 1) temp_members += ", ";
         }
       }
