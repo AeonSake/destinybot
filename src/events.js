@@ -976,6 +976,7 @@ module.exports = (app) => {
         title: this.title,
         text: this.text,
         datetime: this.datetime,
+        members: this.members,
         creator: this.creator,
         ts: {created: this.ts.created},
         state: this.state,
