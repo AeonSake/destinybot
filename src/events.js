@@ -1922,7 +1922,7 @@ module.exports = (app) => {
         case '3':
         case '6':
         case '12':
-          data.options.max = parseInt(msg.body.text);
+          data.options.max = parseInt(msg.body.actions[0].name);
           data.edited = true;
           
           var msg_text = event_edit_msg(data.state);
@@ -1932,7 +1932,7 @@ module.exports = (app) => {
           return;
       }
     } else {
-      data.options.max = parseInt(msg.body.actions[0].name);
+      data.options.max = parseInt(msg.body.text);
       data.edited = true;
       
       var msg_text = event_edit_msg(data.state);
