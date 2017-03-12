@@ -1036,7 +1036,7 @@ module.exports = (app) => {
     generateEvent () {
       var btns = [];
 
-      if (this.members.length < this.options.max) btns.push({
+      if (this.options.max == 0 || this.members.length < this.options.max) btns.push({
         name: 'join',
         value: this.id,
         text: lang.btn.evt.join,
