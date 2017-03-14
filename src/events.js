@@ -655,7 +655,7 @@ module.exports = (app) => {
       text: lang.btn.undelete,
       type: 'button'
     });
-    if (state != 2) btns.push({
+    if (state != 2 && state != -1) btns.push({
       name: 'delete',
       text: lang.btn.delete,
       type: 'button',
@@ -955,14 +955,18 @@ module.exports = (app) => {
       };
     }
 
-    edit (data) {
+    edit (data, msg) {
       var temp = this.datetime;
       this.title = data.title;
       this.text = data.text;
-      this.datetime = data.datetime;
       this.state = data.state;
       this.ts.edited = data.ts.edited;
       this.options.max = data.options.max;
+      
+      if (this.datetime != data.datetime) {
+        this.datetime = data.datetime;
+        this.editSchedules(msg);
+      }
       
       for (var i in data.deletemembers) {
         var temp = this.members.indexOf(data.deletemembers[i]);
@@ -1240,11 +1244,11 @@ module.exports = (app) => {
       
       needle.delete('https://beepboophq.com/api/v1/chronos/tasks/' + this.schedule.reminder, null, headers, (err, resp) => {
         if (err) console.log(err);
-        if (resp.statusCode !== 200) console.log(resp.statusCode);
+        else if (resp.statusCode !== 200) console.log(resp.statusCode);
         else {
           needle.delete('https://beepboophq.com/api/v1/chronos/tasks/' + this.schedule.start, null, headers, (err, resp) => {
             if (err) console.log(err);
-            if (resp.statusCode !== 200) console.log(resp.statusCode);
+            else if (resp.statusCode !== 200) console.log(resp.statusCode);
             else this.setSchedule(msg);
           });
         }
@@ -1748,7 +1752,7 @@ module.exports = (app) => {
         var slot = findEvent(data.id);
         if (slot != -1) {
           data.ts.edited = msg.body.action_ts;
-          event_db[slot].edit(data);
+          event_db[slot].edit(data, msg);
           event_db[slot].update();
           saveEventDB();
           msg.respond({text: "", delete_original: true});
