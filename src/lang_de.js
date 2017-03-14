@@ -133,7 +133,7 @@ let lang = module.exports = {
       enterdatetime: "Event-Datum/Zeit eingeben: `/event <DD.MM.YYYY>;<hh:mm>`",
       wrongdatetimeinput: "*Falsches Format!*",
       wrongdatetimestamp: "*Datum/Zeit muss mindestens 30 Minuten in der Zukunft liegen!*",
-      entermax: "Wie viele Teilnehmer sollen maximal möglich sein? (Standard: kein Max.)",
+      entermax: "Wie viele Teilnehmer sollen maximal möglich sein? (Standard: 6)",
       
       neweventcreated: "Ein neuer Event wurde erstellt:",
       dateformat: "[Am] dd, [*]D.M.YYYY[*], [um] [*]HH:mm[*]",

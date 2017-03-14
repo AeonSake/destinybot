@@ -945,9 +945,10 @@ module.exports = (app) => {
       this.state = data.state || 0; //0 = default, 1 = outdated, 2 = deleted
       if (!('options' in data)) data.options = {};
       this.options = {
-        max: data.options.max || 0, //max: 0 = all, etc
+        max: 6, //max: 0 = all, etc
         color: data.options.color || func.getRandomColor()
       };
+      if ('max' in data.options) this.options.max = data.options.max;
       if (!('schedule' in data)) data.schedule = {};
       this.schedule = {
         reminder: data.schedule.reminder || "",

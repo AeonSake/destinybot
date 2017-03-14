@@ -1042,10 +1042,11 @@ module.exports = (app) => {
       this.state = data.state || 0; //0 = default, 1 = vote closed, 2 = deleted
       if (!('options' in data)) data.options = {};
       this.options = {
-        max: data.options.max || 1, //max: 0 = all, etc
+        max: 1, //max: 0 = all, etc
         names: true, //names: true = show user names, false = don't show user names
         color: data.options.color || func.getRandomColor()
       };
+      if ('max' in data.options) this.options.max = data.options.max;
       if ('names' in data.options) this.options.names = data.options.names;
     }
 
