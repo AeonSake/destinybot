@@ -1249,7 +1249,7 @@ module.exports = (app) => {
           needle.delete('https://beepboophq.com/api/v1/chronos/tasks/' + this.schedule.start, null, headers, (err, resp) => {
             if (err) console.log(err);
             else if (resp.statusCode !== 200) console.log(resp.statusCode);
-            else this.setSchedule(msg);
+            else this.setSchedules(msg);
           });
         }
       });
