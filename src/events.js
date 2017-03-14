@@ -1149,7 +1149,7 @@ module.exports = (app) => {
       }
       this.posts = [];
       this.state = 2;
-      this.deleteSchedule();
+      this.deleteSchedules();
     }
     
     start () {
