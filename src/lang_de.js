@@ -105,7 +105,7 @@ let lang = module.exports = {
       trialsupdate: "Destiny | Prüfungen von Osiris Update",
       
       activetill: "Aktiv bis:",
-      dateformat: "dd, D.M.YYYY, HH:mm",
+      dateformat: "dd, D.M.YYYY, HH:mm [(]z[)]",
       raid: "Raid",
       nochallenge: "Keine Herausforderung",
       recom: "Empfohlen:",
@@ -136,7 +136,7 @@ let lang = module.exports = {
       entermax: "Wie viele Teilnehmer sollen maximal möglich sein? (Standard: 6)",
       
       neweventcreated: "Ein neuer Event wurde erstellt:",
-      dateformat: "[Am] dd, [*]D.M.YYYY[*], [um] [*]HH:mm[*]",
+      dateformat: "[Am] dd, [*]D.M.YYYY[*], [um] [*]HH:mm[*] [(]z[)]",
       
       editlist: "Liste Ihrer Events:",
       selectedit: "Welche Information soll bearbeitet werden?",
