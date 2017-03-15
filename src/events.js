@@ -1853,6 +1853,7 @@ module.exports = (app) => {
         var parsed = moment(temp[0].trim().replace(/[\.\:\,\/ ]/g, "-") + " " + temp[1].trim().replace(/[\.\:\,\/ ]/g, "-"), "DD-MM-YYYY HH-mm");
         if (moment().add(30, 'm') < parsed) {
           data.datetime = parsed.format();
+          data.state = 0;
           data.edited = true;
 
           var msg_text = event_edit_msg(data.state);
