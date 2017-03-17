@@ -273,11 +273,11 @@ module.exports = (app) => {
           console.log("found " + data.results[i].payload.event.type);
         }
       }
-      /*for (var key in destiny_schedules) {
+      for (var key in destiny_schedules) {
         if (destiny_schedules.hasOwnProperty(key)) setSchedule(msg, destiny_schedules[key].name, destiny_schedules[key].schedule, function(newdata) {
           destiny_schedules[key].id = newdata.id;
         });
-      }*/
+      }
     });
   }
   
