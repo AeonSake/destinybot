@@ -267,7 +267,7 @@ module.exports = (app) => {
       for (var key in destiny_schedules) {
         if (destiny_schedules.hasOwnProperty(key)) setSchedule(msg, destiny_schedules[key].name, destiny_schedules[key].schedule, function(newdata) {
           destiny_schedules[key].id = newdata.id;
-          console.log(newdata.id);
+          console.log(newdata);
         });
       }
     });
