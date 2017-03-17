@@ -267,8 +267,7 @@ module.exports = (app) => {
       }
       for (var key in destiny_schedules) {
         if (destiny_schedules.hasOwnProperty(key)) setSchedule(msg, destiny_schedules[key].name, destiny_schedules[key].schedule, function(newdata) {
-          destiny_schedules[key].id = newdata.id;
-          console.log(newdata + " " + newdata.id + typeof newdata);
+          destiny_schedules[key].id = JSON.parse(newdata).id;
         });
       }
     });
@@ -954,10 +953,8 @@ module.exports = (app) => {
   
   slapp.command('/destiny', "update", (msg, cmd) => {
     if (msg.body.user_id == config.admin_id) {
-      console.log(moment("2000-1-1 18:00 +0000", 'YYYY-MM-DD HH:mm Z').add(15, 'm').format());
-      console.log(moment("2000-1-1 18:00 +0000").add(15, 'm').format());
-      console.log(moment("18:00", "HH:mm").add(15, 'm').format());
-      console.log(moment().format());
+      console.log(moment("18:00").add(15, 'm').format());
+      console.log(moment("18:00").add(15, 'm').format("mm HH"));
       
       resetSchedules(msg);
       getDefinitions(getActivities);
