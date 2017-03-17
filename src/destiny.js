@@ -953,8 +953,8 @@ module.exports = (app) => {
   
   slapp.command('/destiny', "update", (msg, cmd) => {
     if (msg.body.user_id == config.admin_id) {
-      console.log(moment("18:00").add(15, 'm').format());
-      console.log(moment("18:00").add(15, 'm').format("mm HH"));
+      console.log(moment("19:00", "HH:mm").add(15, 'm').format());
+      console.log(moment("19:00", "HH:mm").add(15, 'm').format("mm HH"));
       
       resetSchedules(msg);
       getDefinitions(getActivities);
