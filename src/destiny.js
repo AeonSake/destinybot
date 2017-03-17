@@ -227,10 +227,7 @@ module.exports = (app) => {
     needle.post('beepboophq.com/api/v1/chronos/tasks', data, headers, (err, resp) => {
       if (resp.statusCode !== 201) console.log(resp.statusCode);
       if (err) console.log(err);
-      else {
-        console.log(resp.body);
-        callback(resp.body);
-      }
+      else if (typeof callback === "function") callback(resp.body);
     });
   }
   
@@ -246,7 +243,7 @@ module.exports = (app) => {
       if (err) console.log(err);
       else {
         console.log(resp.body);
-        callback(resp.body);
+        if (typeof callback === "function") callback(resp.body);
       }
     });
   }
@@ -263,7 +260,7 @@ module.exports = (app) => {
       if (err) console.log(err);
       else {
         console.log(resp.body);
-        callback(resp.body);
+        if (typeof callback === "function") callback(resp.body);
       }
     });
   }
