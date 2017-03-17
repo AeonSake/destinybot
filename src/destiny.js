@@ -288,7 +288,7 @@ module.exports = (app) => {
         destiny_schedules[key].schedule = destiny_schedules[key].schedule.replace("# #", moment("2000-1-1 18:00 +0000", 'YYYY-MM-DD HH:mm Z').add(15, 'm').format('mm HH'));
       }
     }
-    console.log("Destiny | Update schedules set");
+    console.log("INFO: Destiny | Update schedules set");
   }
   
   setEventTime();
@@ -962,7 +962,7 @@ module.exports = (app) => {
   
   slapp.command('/destiny', "update", (msg, cmd) => {
     if (msg.body.user_id == config.admin_id) {
-      setEventTime();
+      resetSchedules(msg);
       getDefinitions(getActivities);
     }
     return;
