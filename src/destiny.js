@@ -271,8 +271,9 @@ module.exports = (app) => {
   function resetSchedules (msg) {
     listSchedules(msg, function(resp) {
       var data = resp.body;
+      console.log(typeof data);
       for (var i in data.results) {
-        if (/destiny_(.*)_update/.test(data.body.results[i].payload.type)) deleteSchedule(msg, data.body.results[i].id);
+        if (/destiny_(.*)_update/.test(data.results[i].payload.type)) deleteSchedule(msg, data.body.results[i].id);
       }
       for (var key in destiny_schedules) {
         if (destiny_schedules.hasOwnProperty(key)) setSchedule(msg, destiny_schedules[key].name, destiny_schedules[key].schedule, function(data) {
