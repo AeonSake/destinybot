@@ -9,7 +9,33 @@ const needle = require('needle');
 
 var destiny_info = {},
     destiny_def = {},
-    destiny_activities = {};
+    destiny_activities = {},
+    destiny_schedules = {
+      daily: {
+        name: "destiny_daily_update",
+        schedule: "15 9 * * 0,1,3,4,5,6 *"
+      },
+      weekly: {
+        name: "destiny_weekly_update",
+        schedule: "15 9 * * 2 *"
+      },
+      armsday: {
+        name: "destiny_armsday_update",
+        schedule: "15 9 * * 3 *"
+      },
+      xur: {
+        name: "destiny_xur_update",
+        schedule: "15 9 * * 5 *"
+      },
+      ironbanner: {
+        name: "destiny_ironbanner_update",
+        schedule: "# # * * 2 *"
+      },
+      trials: {
+        name: "destiny_trials_update",
+        schedule: "# # * * 5 *"
+      }
+    };
 
 
 
@@ -168,7 +194,7 @@ module.exports = (app) => {
 // ========== SCHEDULING ==========
 // ================================
   
-  function setSchedule (msg, event_id, schedule) {
+  function setSchedule (msg, event_id, schedule, callback) {
     let ts = Date.now() + '';
     var data = {
       schedule: schedule,
@@ -201,11 +227,14 @@ module.exports = (app) => {
     needle.post('beepboophq.com/api/v1/chronos/tasks', data, headers, (err, resp) => {
       if (resp.statusCode !== 201) console.log(resp.statusCode);
       if (err) console.log(err);
-      else console.log(resp.body);
+      else {
+        console.log(resp.body);
+        callback(resp);
+      }
     });
   }
   
-  function deleteSchedule (msg, id) {
+  function deleteSchedule (msg, id, callback) {
     var headers = {
       headers: {
         Authorization: 'Bearer ' + config.bb_token
@@ -215,11 +244,14 @@ module.exports = (app) => {
     needle.delete('https://beepboophq.com/api/v1/chronos/tasks/' + id, null, headers, (err, resp) => {
       if (resp.statusCode !== 201) console.log(resp.statusCode);
       if (err) console.log(err);
-      else console.log(resp.body);
+      else {
+        console.log(resp.body);
+        callback(resp);
+      }
     });
   }
   
-  function listSchedule (msg) {
+  function listSchedules (msg, callback) {
     var headers = {
       headers: {
         Authorization: 'Bearer ' + config.bb_token
@@ -229,9 +261,36 @@ module.exports = (app) => {
     needle.get('https://beepboophq.com/api/v1/chronos/tasks?inactive=false', headers, (err, resp) => {
       if (resp.statusCode !== 201) console.log(resp.statusCode);
       if (err) console.log(err);
-      else console.log(resp.body);
+      else {
+        console.log(resp.body);
+        callback(resp);
+      }
     });
   }
+  
+  function resetSchedules (msg) {
+    listSchedules(msg, function(resp) {
+      var data = JSON.parse(resp.body);
+      for (var i in data.results) {
+        if (/destiny_(.*)_update/.test(data.body.results[i].payload.type)) deleteSchedule(msg, data.body.results[i].id);
+      }
+      for (var key in destiny_schedules) {
+        if (destiny_schedules.hasOwnProperty(key)) setSchedule(msg, destiny_schedules[key].name, destiny_schedules[key].schedule, function(data) {
+          destiny_schedules[key].id = data.id;
+        });
+      }
+    });
+  }
+  
+  function setEventTime() {
+    for (var key in destiny_schedules) {
+      if (destiny_schedules.hasOwnProperty(key)) {
+        destiny_schedules[key].schedule = destiny_schedules[key].schedule.replace("# #", moment("2000-1-1 18:00 +0000", 'YYYY-MM-DD HH:mm Z').add(15, 'm').format('mm HH'));
+      }
+    }
+  }
+  
+  setEventTime();
   
   
   
@@ -872,7 +931,7 @@ module.exports = (app) => {
   });
   
   slapp.command('/destiny', "list-s", (msg, cmd) => {
-    if (msg.body.user_id == config.admin_id) listSchedule(msg);
+    if (msg.body.user_id == config.admin_id) listSchedules(msg);
     return;
   });
   
@@ -896,6 +955,16 @@ module.exports = (app) => {
         });
       });
     };
+  });
+    
+  // ===== /destiny update =====
+  
+  slapp.command('/destiny', "update", (msg, cmd) => {
+    if (msg.body.user_id == config.admin_id) {
+      setEventTime();
+      getDefinitions(getActivities);
+    }
+    return;
   });
   
   // ===== /destiny post =====
@@ -1008,10 +1077,10 @@ module.exports = (app) => {
     return;
   });
   
-  // ===== /destiny update =====
+  // ===== /destiny help =====
   
-  slapp.command('/destiny', "update", (msg, cmd) => {
-    if (msg.body.user_id == config.admin_id) getDefinitions(getActivities);
+  slapp.command('/destiny', "help", (msg, cmd) => {
+    msg.respond(func.generateInfoMsg(lang.msg.dest.help));
     return;
   });
   

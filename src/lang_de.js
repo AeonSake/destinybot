@@ -122,7 +122,7 @@ let lang = module.exports = {
       notactive: "Aktivität ist derzeit nicht aktiv.",
       moreinfo: "Mehr Informationen:",
       
-      help: ""
+      help: "Folgende Befehle sind verfügbar:\n`/destiny <activity>` : Zeigt Informationen zu der jeweiligen Aktivität an\n\nAktivitäten sind:\n`full`, `list`, `all` : Gesamte Liste an aktuellen Aktivitäten\n`daily` : Tägliche Aktivitäten\n`pve` : Gefängnis der Alten, Tägliche Story, Strikes, Dämmerungsstrike\n`raid`, `raids` : Raids\n`pvp`, `crucible` : Tägliche und wöchentliche Schmelztiegelplaylist und Prüfungen von Osiris\n`special`, `events`, `specialevents` : Eisenbanner, Waffentag, Xûr, Prüfungen von Osiris, SRL\n`elder`, `elderchallenge`, `poe` : Gefängnis der Alten\n`story`, `dailystory`, `mission`, `dailymission`, `dailychapter` : Tägliche heroische Story-Mission\n`strikes`, `heroicstrike` : Wöchentliche Strike-Playlist\n`nightfall`, `nf` : Dämmerungsstrike\n`vaultofglass`, `vog` : Gläserne Kammer\n`crota` : Crota’s Ende\n`kingsfall`, `kf` : Königsfall\n`wrathofthemachine`, `wotm` : Zorn der Maschine\n`dailycrucible` : Tägliche Schmelztiegel-Playlist\n`weeklycrucible` : Wöchentliche Schmelztiegel-Playlist\n`ironbanner` : Eisenbanner\n`trials` : Prüfungen von Osiris\n`srl` : SRL\n`xur` : Xûr\n`armsday` : Waffentag"\n
     },
     
     evt: {
@@ -153,7 +153,7 @@ let lang = module.exports = {
       confirmcancel: "Sind Sie sicher, dass Sie diesen Event absagen wollen?",
       hascanceled: "hat für den folgenden Event abgesagt:",
       
-      help: "Liste aller Befehle:\n`/event` : Hauptmenü\n`/event <title>;<DD.MM.YYYY>;<hh:mm>` : Schnell-Erstellung eines Events\n`/event create` : Erstellung eines Events\n`/event list` : Anzeigen aller Events\n`/event show <id>` : Anzeigen des Events mit der ID <id>\n`/event edit <id>` : Bearbeiten des Events mit der ID <id>\n`/event post <id>` : Posten des Events mit der ID <id> im aktuellen Channel\n`/event help` : Anzeigen der Hilfe"
+      help: "Mit Events können Veranstaltungen besser organisiert werden. Benutzer können teilnehmen oder auch absagen und gibt so einen besseren Überblick (z.B. hilfreich bei Raid-Organisation). Jeder Event hat ein fixes Datum/Zeit und 10 Minuten vor dem Event werden alle zugesagten Teilnehmer benachrichtigt. Sollte ein Teilnehmer dennoch absagen, wird der Veranstalter/Ersteller benachrichtigt.\n\nFolgende Befehle sind verfügbar:\n`/event` : Hauptmenü\n`/event <title>;<DD.MM.YYYY>;<hh:mm>` : Schnell-Erstellung eines Events\n`/event create` : Erstellung eines Events\n`/event list` : Anzeigen aller Events\n`/event show <id>` : Anzeigen des Events mit der ID <id>\n`/event edit <id>` : Bearbeiten des Events mit der ID <id>\n`/event post <id>` : Posten des Events mit der ID <id> im aktuellen Channel\n`/event help` : Anzeigen der Hilfe"
     },
     
     poll: {
@@ -183,7 +183,7 @@ let lang = module.exports = {
       notfound: "Eine Abstimmung mit dieser ID konnte nicht gefunden werden.",
       notowner: "Nur der Ersteller dieser Abstimmung kann diese bearbeiten.",
       
-      help: "Liste aller Befehle:\n`/poll` : Hauptmenü\n`/poll <title>;<answer1>;<answer2>;...` : Schnell-Erstellung einer Abstimmung\n`/poll create` : Erstellung einer Abstimmung\n`/poll list` : Anzeigen aller Abstimmungen\n`/poll show <id>` : Anzeigen der Abstimmung mit der ID <id>\n`/poll edit <id>` : Bearbeiten der Abstimmung mit der ID <id>\n`/poll post <id>` : Posten der Abstimmung mit der ID <id> im aktuellen Channel\n`/poll help` : Anzeigen der Hilfe"
+      help: "Mit Polls können dynamische Umfragen/Abstimmungen mit bis zu 10 Antworten erstellt werden. Es kann zusätzlich eingestellt werden, wie viele Auswahlmöglichkeiten die Benutzer zu Verfügung haben und ob die Umfrage anonym sein soll. Der Ersteller kann Umfragen auch schließen um keine weiteren Antworten zuzulassen.\n\nFolgende Befehle sind verfügbar:\n`/poll` : Hauptmenü\n`/poll <title>;<answer1>;<answer2>;...` : Schnell-Erstellung einer Abstimmung\n`/poll create` : Erstellung einer Abstimmung\n`/poll list` : Anzeigen aller Abstimmungen\n`/poll show <id>` : Anzeigen der Abstimmung mit der ID <id>\n`/poll edit <id>` : Bearbeiten der Abstimmung mit der ID <id>\n`/poll post <id>` : Posten der Abstimmung mit der ID <id> im aktuellen Channel\n`/poll help` : Anzeigen der Hilfe"
     }
   }
 };
