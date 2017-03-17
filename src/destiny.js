@@ -270,7 +270,7 @@ module.exports = (app) => {
   
   function resetSchedules (msg) {
     listSchedules(msg, function(resp) {
-      var data = JSON.parse(resp.body);
+      var data = resp.body;
       for (var i in data.results) {
         if (/destiny_(.*)_update/.test(data.body.results[i].payload.type)) deleteSchedule(msg, data.body.results[i].id);
       }
