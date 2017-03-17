@@ -29,11 +29,11 @@ var destiny_info = {},
       },
       ironbanner: {
         name: "destiny_ironbanner_update",
-        schedule: "# # * * 2 *"
+        schedule: "15 18 * * 2 *"
       },
       trials: {
         name: "destiny_trials_update",
-        schedule: "# # * * 5 *"
+        schedule: "15 18 * * 5 *"
       }
     };
 
@@ -260,7 +260,6 @@ module.exports = (app) => {
   }
   
   function resetSchedules (msg) {
-    setEventTimes();
     listSchedules(msg, function(data) {
       for (var i in data.results) {
         if (/destiny_(.*)_update/.test(data.results[i].payload.event.type)) deleteSchedule(msg, data.results[i].id);
@@ -272,17 +271,6 @@ module.exports = (app) => {
       }
     });
   }
-  
-  function setEventTimes() {
-    for (var key in destiny_schedules) {
-      if (destiny_schedules.hasOwnProperty(key)) {
-        destiny_schedules[key].schedule = destiny_schedules[key].schedule.replace("# #", moment("2000-1-1 18:00 +0000", 'YYYY-MM-DD HH:mm Z').add(15, 'm').format('mm HH'));
-      }
-    }
-    console.log("INFO: Destiny | Update schedules set");
-  }
-  
-  setEventTimes();
   
   
   
@@ -909,24 +897,6 @@ module.exports = (app) => {
 // ========== COMMANDS ==========
 // ==============================
   
-  // ===== /destiny schedule =====
-  
-  slapp.command('/destiny', "set-s (.*)", (msg, cmd) => {
-    var temp = cmd.split(" ");
-    if (msg.body.user_id == config.admin_id) setSchedule(msg, temp[1], cmd.substr(6 + temp[1].length));
-    return;
-  });
-  
-  slapp.command('/destiny', "del-s (.*)", (msg, cmd) => {
-    if (msg.body.user_id == config.admin_id) deleteSchedule(msg, cmd.substr(6));
-    return;
-  });
-  
-  slapp.command('/destiny', "list-s", (msg, cmd) => {
-    if (msg.body.user_id == config.admin_id) listSchedules(msg);
-    return;
-  });
-  
   // ===== /destiny test =====
   
   slapp.command('/destiny', "test (.*)", (msg, cmd) => {
@@ -953,10 +923,6 @@ module.exports = (app) => {
   
   slapp.command('/destiny', "update", (msg, cmd) => {
     if (msg.body.user_id == config.admin_id) {
-      console.log(moment("19:15", "HH:mm").format());
-      console.log(moment.utc("19:15", "HH:mm").format());
-      console.log(moment.utc("19:15", "HH:mm").format("mm HH"));
-      
       resetSchedules(msg);
       getDefinitions(getActivities);
     }
