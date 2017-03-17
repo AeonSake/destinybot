@@ -272,8 +272,8 @@ module.exports = (app) => {
     listSchedules(msg, function(data) {
       for (var i in data.results) {
         if (/destiny_(.*)_update/.test(data.results[i].payload.event.type)) {
-          deleteSchedule(msg, data.body.results[i].id);
-          console.log("found " + data.results[i].payload.type);
+          deleteSchedule(msg, data.results[i].id);
+          console.log("found " + data.results[i].payload.event.type);
         }
       }
       /*for (var key in destiny_schedules) {
