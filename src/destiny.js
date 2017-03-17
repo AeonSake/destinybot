@@ -229,7 +229,7 @@ module.exports = (app) => {
       if (err) console.log(err);
       else {
         console.log(resp.body);
-        callback(resp);
+        callback(resp.body);
       }
     });
   }
@@ -246,7 +246,7 @@ module.exports = (app) => {
       if (err) console.log(err);
       else {
         console.log(resp.body);
-        callback(resp);
+        callback(resp.body);
       }
     });
   }
@@ -263,21 +263,22 @@ module.exports = (app) => {
       if (err) console.log(err);
       else {
         console.log(resp.body);
-        callback(resp);
+        callback(resp.body);
       }
     });
   }
   
   function resetSchedules (msg) {
-    listSchedules(msg, function(resp) {
-      var data = resp.body;
-      console.log(typeof data);
+    listSchedules(msg, function(data) {
       for (var i in data.results) {
-        if (/destiny_(.*)_update/.test(data.results[i].payload.type)) deleteSchedule(msg, data.body.results[i].id);
+        if (/destiny_(.*)_update/.test(data.results[i].payload.type)) {
+          deleteSchedule(msg, data.body.results[i].id);
+          console.log("found " + data.results[i].payload.type);
+        }
       }
       for (var key in destiny_schedules) {
-        if (destiny_schedules.hasOwnProperty(key)) setSchedule(msg, destiny_schedules[key].name, destiny_schedules[key].schedule, function(data) {
-          destiny_schedules[key].id = data.id;
+        if (destiny_schedules.hasOwnProperty(key)) setSchedule(msg, destiny_schedules[key].name, destiny_schedules[key].schedule, function(newdata) {
+          destiny_schedules[key].id = newdata.id;
         });
       }
     });
