@@ -241,10 +241,7 @@ module.exports = (app) => {
     needle.delete('https://beepboophq.com/api/v1/chronos/tasks/' + id, null, headers, (err, resp) => {
       if (resp.statusCode !== 201) console.log(resp.statusCode);
       if (err) console.log(err);
-      else {
-        console.log(resp.body);
-        if (typeof callback === "function") callback(resp.body);
-      }
+      else if (typeof callback === "function") callback(resp.body);
     });
   }
   
@@ -258,24 +255,19 @@ module.exports = (app) => {
     needle.get('https://beepboophq.com/api/v1/chronos/tasks?inactive=false', headers, (err, resp) => {
       if (resp.statusCode !== 201) console.log(resp.statusCode);
       if (err) console.log(err);
-      else {
-        console.log(resp.body);
-        if (typeof callback === "function") callback(resp.body);
-      }
+      else if (typeof callback === "function") callback(resp.body);
     });
   }
   
   function resetSchedules (msg) {
     listSchedules(msg, function(data) {
       for (var i in data.results) {
-        if (/destiny_(.*)_update/.test(data.results[i].payload.event.type)) {
-          deleteSchedule(msg, data.results[i].id);
-          console.log("found " + data.results[i].payload.event.type);
-        }
+        if (/destiny_(.*)_update/.test(data.results[i].payload.event.type)) deleteSchedule(msg, data.results[i].id);
       }
       for (var key in destiny_schedules) {
         if (destiny_schedules.hasOwnProperty(key)) setSchedule(msg, destiny_schedules[key].name, destiny_schedules[key].schedule, function(newdata) {
           destiny_schedules[key].id = newdata.id;
+          console.log(newdata.id);
         });
       }
     });
