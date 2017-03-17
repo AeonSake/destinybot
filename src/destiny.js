@@ -210,8 +210,8 @@ module.exports = (app) => {
         event: {
           ts: ts,
           event_ts: ts,
-          type: 'destiny_' + event_id + '_update',
-          payload: "destiny_" + event_id + "_update",
+          type: event_id,
+          payload: event_id,
           user: msg.meta.user_id,
           channel: msg.meta.channel_id
         }
@@ -271,8 +271,7 @@ module.exports = (app) => {
   function resetSchedules (msg) {
     listSchedules(msg, function(data) {
       for (var i in data.results) {
-        console.log(data.results[i].payload);
-        if (/destiny_(.*)_update/.test(data.results[i].payload.type)) {
+        if (/destiny_(.*)_update/.test(data.results[i].payload.event.type)) {
           deleteSchedule(msg, data.body.results[i].id);
           console.log("found " + data.results[i].payload.type);
         }
