@@ -271,16 +271,17 @@ module.exports = (app) => {
   function resetSchedules (msg) {
     listSchedules(msg, function(data) {
       for (var i in data.results) {
+        console.log(data.results[i].payload);
         if (/destiny_(.*)_update/.test(data.results[i].payload.type)) {
           deleteSchedule(msg, data.body.results[i].id);
           console.log("found " + data.results[i].payload.type);
         }
       }
-      for (var key in destiny_schedules) {
+      /*for (var key in destiny_schedules) {
         if (destiny_schedules.hasOwnProperty(key)) setSchedule(msg, destiny_schedules[key].name, destiny_schedules[key].schedule, function(newdata) {
           destiny_schedules[key].id = newdata.id;
         });
-      }
+      }*/
     });
   }
   
