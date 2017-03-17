@@ -953,6 +953,7 @@ module.exports = (app) => {
   
   slapp.command('/destiny', "update", (msg, cmd) => {
     if (msg.body.user_id == config.admin_id) {
+      console.log(moment("19:15", "HH:mm").format());
       console.log(moment.utc("19:15", "HH:mm").format());
       console.log(moment.utc("19:15", "HH:mm").format("mm HH"));
       
