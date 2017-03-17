@@ -239,7 +239,7 @@ module.exports = (app) => {
       json: true
     };
     needle.delete('https://beepboophq.com/api/v1/chronos/tasks/' + id, null, headers, (err, resp) => {
-      if (resp.statusCode !== 201) console.log(resp.statusCode);
+      if (resp.statusCode !== 200) console.log(resp.statusCode);
       if (err) console.log(err);
       else if (typeof callback === "function") callback(resp.body);
     });
@@ -253,7 +253,7 @@ module.exports = (app) => {
       json: true
     };
     needle.get('https://beepboophq.com/api/v1/chronos/tasks?inactive=false', headers, (err, resp) => {
-      if (resp.statusCode !== 201) console.log(resp.statusCode);
+      if (resp.statusCode !== 200) console.log(resp.statusCode);
       if (err) console.log(err);
       else if (typeof callback === "function") callback(resp.body);
     });
@@ -267,7 +267,7 @@ module.exports = (app) => {
       for (var key in destiny_schedules) {
         if (destiny_schedules.hasOwnProperty(key)) setSchedule(msg, destiny_schedules[key].name, destiny_schedules[key].schedule, function(newdata) {
           destiny_schedules[key].id = newdata.id;
-          console.log(newdata);
+          console.log(newdata + " " + newdata.id);
         });
       }
     });
