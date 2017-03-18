@@ -23,10 +23,10 @@ let lang = module.exports = {
     page: "Seite",
     total: "Gesamt",
     filter: "Filter",
+    outdated: "Abgelaufen",
+    closed: "Geschlossen",
     deleted: "Gelöscht",
     member: "Teilnehmer",
-    
-    
   },
   
   btn: {

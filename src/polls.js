@@ -1168,8 +1168,12 @@ module.exports = (app) => {
         };
       }
       
+      var temp_state = "";
+      if (this.state == 1) temp_state = " [" + lang.wrd.closed + "]";
+      else if (this.state == 2) temp_state = " [" + lang.wrd.deleted + "]";
+      
       return {
-        author_name: lang.wrd.poll + " #" + (this.id + 1) + (this.state == 2 ? " [" + lang.wrd.deleted + "]" : ""),
+        author_name: lang.wrd.poll + " #" + (this.id + 1) + temp_state,
         title: this.title,
         text: this.text,
         fallback: this.text,
@@ -1218,7 +1222,7 @@ module.exports = (app) => {
       if (this.state == 0) {
         msg_text.attachments[1] = btn1;
         if (btn2.actions.length > 0) msg_text.attachments[2] = btn2;
-      } else if (this.state == 1) msg_text.attachments[1] = {text: lang.msg.poll.pollclosed, fallback: lang.msg.poll.pollclosed}
+      }
 
       return msg_text;
     }
@@ -1283,8 +1287,12 @@ module.exports = (app) => {
         }
       }
       
+      var temp_state = "";
+      if (data.state == 1) temp_state = " [" + lang.wrd.closed + "]";
+      else if (data.state == 2) temp_state = " [" + lang.wrd.deleted + "]";
+      
       return {
-        author_name: lang.wrd.poll + " #" + (data.id + 1) + (data.state == 2 ? " [" + lang.wrd.deleted + "]" : ""),
+        author_name: lang.wrd.poll + " #" + (data.id + 1) + temp_state,
         title: data.title || "<title>",
         text: temp_text,
         fallback: temp_text,

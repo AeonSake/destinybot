@@ -1025,9 +1025,12 @@ module.exports = (app) => {
           short: false
         }
       ];
+      var temp_state = "";
+      if (this.state == 1) temp_state = " [" + lang.wrd.outdated + "]";
+      else if (this.state == 2) temp_state = " [" + lang.wrd.deleted + "]";
       
       return {
-        author_name: lang.wrd.event + " #" + (this.id + 1) + (this.state == 2 ? " [" + lang.wrd.deleted + "]" : ""),
+        author_name: lang.wrd.event + " #" + (this.id + 1) + temp_state,
         title: this.title,
         text: this.text,
         fallback: this.text,
@@ -1102,9 +1105,12 @@ module.exports = (app) => {
           short: false
         }
       ];
+      var temp_state = "";
+      if (data.state == 1) temp_state = " [" + lang.wrd.outdated + "]";
+      else if (data.state == 2) temp_state = " [" + lang.wrd.deleted + "]";
       
       return {
-        author_name: lang.wrd.event + " #" + (data.id + 1) + (data.state == 2 ? " [" + lang.wrd.deleted + "]" : ""),
+        author_name: lang.wrd.event + " #" + (data.id + 1) + temp_state,
         title: data.title || "<title>",
         text: temp_text,
         fallback: temp_text,
