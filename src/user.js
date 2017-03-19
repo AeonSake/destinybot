@@ -74,15 +74,13 @@ module.exports = (slapp, kv, config, func) => {
   
   // Function to fetch user DM channel id
   function getUserDM (user_id) {
-    for (var i in user_db) {
-      slapp.client.im.open({
-        token: config.bot_token,
-        user: user_id
-      }, (err, data) => {
-        if (err) console.log("WARN: User | Unable to fetch user channel (" + err + ")");
-        else addUserDM(user_id, data.channel.id);
-      });
-    }
+    slapp.client.im.open({
+      token: config.bot_token,
+      user: user_id
+    }, (err, data) => {
+      if (err) console.log("WARN: User | Unable to fetch user channel (" + err + ")");
+      else addUserDM(user_id, data.channel.id);
+    });
   }
   
   // Function to add DM channel id to user
@@ -123,7 +121,7 @@ module.exports = (slapp, kv, config, func) => {
   
   // Function to check if user is admin
   module.isAdmin = (user_id) => {
-    for (var i in user_db.length) {
+    for (var i in user_db) {
       if (user_db[i].id == user_id) return user_db[i].admin;
     }
     return false;
