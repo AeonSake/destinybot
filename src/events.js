@@ -1643,6 +1643,11 @@ module.exports = (app) => {
     if (check.test(cmd.substring(5))) {
       var slot = findEvent(parseInt(cmd.substring(5)) - 1);
       
+      console.log(slot != -1);
+      console.log(event_db[slot].isVisible());
+      console.log(event_db[slot].isOwner(msg.body.user_id));
+      console.log(user.isAdmin(msg.body.user_id));
+      
       if (slot != -1 && (event_db[slot].isVisible() || user.isAdmin(msg.body.user_id))) {
         if (event_db[slot].isOwner(msg.body.user_id) || user.isAdmin(msg.body.user_id)) {
           var data = event_db[slot].getData(),
