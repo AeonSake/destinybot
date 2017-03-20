@@ -1035,6 +1035,7 @@ module.exports = (app) => {
         text: this.text,
         fallback: this.text,
         fields: att_fields,
+        footer_icon: user.getUser(this.creator).avatar_24,
         footer: user.getUser(this.creator).name,
         ts: this.ts.created,
         color: this.options.color,
@@ -1115,7 +1116,8 @@ module.exports = (app) => {
         text: temp_text,
         fallback: temp_text,
         fields: att_fields,
-        footer: "@" + user.getUser(data.creator).name,
+        footer_icon: user.getUser(data.creator).avatar_24,
+        footer: user.getUser(data.creator).name,
         ts: temp_ts,
         color: temp_color,
         mrkdwn_in: ['text', 'pretext', 'fields']
