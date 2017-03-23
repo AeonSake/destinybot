@@ -13,7 +13,7 @@ var destiny_info = {},
     destiny_schedules = {
       daily: {
         name: "destiny_daily_update",
-        schedule: "15 9 * * 0,1,3,4,5,6 *"
+        schedule: "15 9 * * 0,1,4,6 *"
       },
       weekly: {
         name: "destiny_weekly_update",
@@ -36,6 +36,11 @@ var destiny_info = {},
         schedule: "15 18 * * 5 *"
       }
     };
+
+// TODO:
+// Fix UTC/PST DST event times
+// rewrite activities structure
+// Destiny 2 entries
 
 
 
@@ -1251,16 +1256,20 @@ module.exports = (app) => {
   });
   
   slapp.event('destiny_armsday_update', (msg) => {
-    var msg_text = destiny_public_msg(lang.msg.dest.armsdayupdate, 'armsday');
-    msg_text.channel = config.destiny_ch;
-    msg.say(msg_text);
+    getActivities(function(){
+      var msg_text = destiny_public_msg(lang.msg.dest.armsdayupdate, 'armsday');
+      msg_text.channel = config.destiny_ch;
+      msg.say(msg_text);
+    });
     return;
   });
   
   slapp.event('destiny_xur_update', (msg) => {
-    var msg_text = destiny_public_msg(lang.msg.dest.xurupdate, 'xur');
-    msg_text.channel = config.destiny_ch;
-    msg.say(msg_text);
+    getActivities(function(){
+      var msg_text = destiny_public_msg(lang.msg.dest.xurupdate, 'xur');
+      msg_text.channel = config.destiny_ch;
+      msg.say(msg_text);
+    });
     return;
   });
   
