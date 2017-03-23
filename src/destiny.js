@@ -393,6 +393,20 @@ module.exports = (app) => {
       color: "#5941E0"
     };
     
+    /*destiny_info.weeklystory = {
+      type: destiny_activities.weeklystory.display.advisorTypeCategory,
+      icon: 'https://bungie.net' + destiny_activities.weeklystory.display.icon,
+      title: destiny_def.activity[destiny_activities.weeklystory.display.activityHash].activityName,
+      desc: destiny_def.activity[destiny_activities.weeklystory.display.activityHash].activityDescription,
+      loc: destiny_def.place[destiny_activities.weeklystory.display.placeHash].placeName,
+      level: destiny_activities.weeklystory.activityTiers[0].activityData.displayLevel,
+      light: destiny_activities.weeklystory.activityTiers[0].activityData.recommendedLight,
+      active: destiny_activities.weeklystory.status.active,
+      expirationDate: destiny_activities.weeklystory.status.expirationDate || 0,
+      insummary: true,
+      color: "#5941E0"
+    };*/
+    
     destiny_info.heroicstrike = {
       type: destiny_activities.heroicstrike.display.advisorTypeCategory,
       icon: 'https://bungie.net' + destiny_activities.heroicstrike.display.icon,
@@ -436,6 +450,7 @@ module.exports = (app) => {
       desc: destiny_def.activity[destiny_activities.vaultofglass.display.activityHash].activityDescription,
       loc: destiny_def.place[destiny_activities.vaultofglass.display.placeHash].placeName,
       challenge: lang.msg.dest.nochallenge,
+      //challenges: destiny_activities.vaultofglass.activityTiers[2].skullCategories[0].skulls[0].displayName || lang.msg.dest.nochallenge,
       normal: {
         title: destiny_activities.vaultofglass.activityTiers[0].tierDisplayName,
         level: destiny_activities.vaultofglass.activityTiers[0].activityData.displayLevel,
@@ -446,6 +461,11 @@ module.exports = (app) => {
         level: destiny_activities.vaultofglass.activityTiers[1].activityData.displayLevel,
         light: destiny_activities.vaultofglass.activityTiers[1].activityData.recommendedLight
       },
+      /*heroic: {
+        title: destiny_activities.vaultofglass.activityTiers[2].tierDisplayName,
+        level: destiny_activities.vaultofglass.activityTiers[2].activityData.displayLevel,
+        light: destiny_activities.vaultofglass.activityTiers[2].activityData.recommendedLight
+      },*/
       active: destiny_activities.vaultofglass.status.active,
       expirationDate: destiny_activities.vaultofglass.status.expirationDate || 0,
       insummary: false,
@@ -459,6 +479,7 @@ module.exports = (app) => {
       desc: destiny_def.activity[destiny_activities.crota.display.activityHash].activityDescription,
       loc: destiny_def.place[destiny_activities.crota.display.placeHash].placeName,
       challenge: lang.msg.dest.nochallenge,
+      //challenges: destiny_activities.crota.activityTiers[2].skullCategories[0].skulls[0].displayName || lang.msg.dest.nochallenge,
       normal: {
         title: destiny_activities.crota.activityTiers[0].tierDisplayName,
         level: destiny_activities.crota.activityTiers[0].activityData.displayLevel,
@@ -469,6 +490,11 @@ module.exports = (app) => {
         level: destiny_activities.crota.activityTiers[1].activityData.displayLevel,
         light: destiny_activities.crota.activityTiers[1].activityData.recommendedLight
       },
+      /*heroic: {
+        title: destiny_activities.crota.activityTiers[2].tierDisplayName,
+        level: destiny_activities.crota.activityTiers[2].activityData.displayLevel,
+        light: destiny_activities.crota.activityTiers[2].activityData.recommendedLight
+      },*/
       active: destiny_activities.crota.status.active,
       expirationDate: destiny_activities.crota.status.expirationDate || 0,
       insummary: false,
@@ -482,6 +508,7 @@ module.exports = (app) => {
       desc: destiny_def.activity[destiny_activities.kingsfall.display.activityHash].activityDescription,
       loc: destiny_def.place[destiny_activities.kingsfall.display.placeHash].placeName,
       challenge: destiny_activities.kingsfall.activityTiers[0].skullCategories[0].skulls[0].displayName,
+      //challenges: destiny_activities.kingsfall.activityTiers[2].skullCategories[0].skulls[0].displayName || lang.msg.dest.nochallenge,
       normal: {
         title: destiny_activities.kingsfall.activityTiers[0].tierDisplayName,
         level: destiny_activities.kingsfall.activityTiers[0].activityData.displayLevel,
@@ -492,6 +519,11 @@ module.exports = (app) => {
         level: destiny_activities.kingsfall.activityTiers[1].activityData.displayLevel,
         light: destiny_activities.kingsfall.activityTiers[1].activityData.recommendedLight
       },
+      /*heroic: {
+        title: destiny_activities.kingsfall.activityTiers[2].tierDisplayName,
+        level: destiny_activities.kingsfall.activityTiers[2].activityData.displayLevel,
+        light: destiny_activities.kingsfall.activityTiers[2].activityData.recommendedLight
+      },*/
       active: destiny_activities.kingsfall.status.active,
       expirationDate: destiny_activities.kingsfall.status.expirationDate || 0,
       insummary: false,
@@ -505,6 +537,7 @@ module.exports = (app) => {
       desc: destiny_def.activity[destiny_activities.wrathofthemachine.display.activityHash].activityDescription,
       loc: destiny_def.place[destiny_activities.wrathofthemachine.display.placeHash].placeName,
       challenge: destiny_activities.wrathofthemachine.activityTiers[0].skullCategories[0].skulls[0].displayName,
+      //challenges: destiny_activities.wrathofthemachine.activityTiers[2].skullCategories[0].skulls[0].displayName || lang.msg.dest.nochallenge,
       normal: {
         title: destiny_activities.wrathofthemachine.activityTiers[0].tierDisplayName,
         level: destiny_activities.wrathofthemachine.activityTiers[0].activityData.displayLevel,
@@ -515,11 +548,29 @@ module.exports = (app) => {
         level: destiny_activities.wrathofthemachine.activityTiers[1].activityData.displayLevel,
         light: destiny_activities.wrathofthemachine.activityTiers[1].activityData.recommendedLight
       },
+      /*heroic: {
+        title: destiny_activities.wrathofthemachine.activityTiers[2].tierDisplayName,
+        level: destiny_activities.wrathofthemachine.activityTiers[2].activityData.displayLevel,
+        light: destiny_activities.wrathofthemachine.activityTiers[2].activityData.recommendedLight
+      },*/
       active: destiny_activities.wrathofthemachine.status.active,
       expirationDate: destiny_activities.wrathofthemachine.status.expirationDate || 0,
       insummary: true,
+      //insummary: false,
       //color: "#333333"
     };
+    
+    /*destiny_info.weeklyfeaturedraid = {
+      type: destiny_activities.weeklyfeaturedraid.display.advisorTypeCategory,
+      icon: 'https://bungie.net' + destiny_activities.weeklyfeaturedraid.display.icon,
+      title: destiny_def.activity[destiny_activities.weeklyfeaturedraid.display.activityHash].activityName,
+      desc: destiny_def.activity[destiny_activities.weeklyfeaturedraid.display.activityHash].activityDescription,
+      challenges: getSkulls(destiny_activities.weeklyfeaturedraid.activityTiers[2].skullCategories),
+      active: destiny_activities.weeklyfeaturedraid.status.active,
+      expirationDate: destiny_activities.weeklyfeaturedraid.status.expirationDate || 0,
+      insummary: true,
+      color: "#9D3532"
+    };*/
     
     // pvp
     destiny_info.dailycrucible = {
