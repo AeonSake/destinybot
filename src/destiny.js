@@ -841,14 +841,14 @@ module.exports = (app) => {
     
       for (var i in item.stats) {
         if (item.stats.length == 3 && item.stats[i].value != 0) {
-          stats += item.stats[i].name + " : " + item.stats[i].value + " (" + Math.round((item.stats[i].value / item.stats[i].max) * 100) + "%)\n";
+          var max = item.stats[i].max;
+          if (item.stats.filter(function(j) { return j.value != 0 }).length != 1) max *= 2;
+          stats += item.stats[i].name + " : " + item.stats[i].value + " (" + Math.round((item.stats[i].value / max) * 100) + "%)\n";
         } else stats += item.stats[i].name + " : " + item.stats[i].value + "\n";
       }
       if (stats.length != 0) fields.push({title: lang.msg.dest.stats, value: stats, short: true});
       
-      for (var i in item.perks) {
-        perks += item.perks[i].name + "\n";
-      }
+      for (var i in item.perks) perks += item.perks[i].name + "\n";
       if (perks.length != 0) fields.push({title: lang.msg.dest.perks, value: perks, short: true});
     
     
