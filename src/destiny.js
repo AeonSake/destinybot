@@ -842,7 +842,7 @@ module.exports = (app) => {
       for (var i in item.stats) {
         if (item.stats.length == 3 && item.stats[i].value != 0) {
           var max = item.stats[i].max;
-          if (item.stats.filter(function(j) { return j.value != 0 }).length != 1) max *= 2;
+          if (item.stats.filter(function(j) { return j.value != 0 }).length == 1) max *= 2;
           stats += item.stats[i].name + " : " + item.stats[i].value + " (" + Math.round((item.stats[i].value / max) * 100) + "%)\n";
         } else stats += item.stats[i].name + " : " + item.stats[i].value + "\n";
       }
