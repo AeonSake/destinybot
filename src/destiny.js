@@ -40,7 +40,6 @@ var destiny_info = {},
 // TODO:
 // Fix UTC/PST DST event times
 // rewrite activities structure
-// Destiny 2 entries
 
 
 
@@ -379,7 +378,7 @@ module.exports = (app) => {
       //color: "#333333"
     };
     
-    destiny_info.dailychapter = {
+    /*destiny_info.dailychapter = {
       type: destiny_activities.dailychapter.display.advisorTypeCategory,
       icon: 'https://bungie.net' + destiny_activities.dailychapter.display.icon,
       title: destiny_def.activity[destiny_activities.dailychapter.display.activityHash].activityName,
@@ -391,9 +390,9 @@ module.exports = (app) => {
       expirationDate: destiny_activities.dailychapter.status.expirationDate || 0,
       insummary: true,
       color: "#5941E0"
-    };
+    };*/
     
-    /*destiny_info.weeklystory = {
+    destiny_info.weeklystory = {
       type: destiny_activities.weeklystory.display.advisorTypeCategory,
       icon: 'https://bungie.net' + destiny_activities.weeklystory.display.icon,
       title: destiny_def.activity[destiny_activities.weeklystory.display.activityHash].activityName,
@@ -405,7 +404,7 @@ module.exports = (app) => {
       expirationDate: destiny_activities.weeklystory.status.expirationDate || 0,
       insummary: true,
       color: "#5941E0"
-    };*/
+    };
     
     destiny_info.heroicstrike = {
       type: destiny_activities.heroicstrike.display.advisorTypeCategory,
@@ -560,7 +559,7 @@ module.exports = (app) => {
       //color: "#333333"
     };
     
-    /*destiny_info.weeklyfeaturedraid = {
+    destiny_info.weeklyfeaturedraid = {
       type: destiny_activities.weeklyfeaturedraid.display.advisorTypeCategory,
       icon: 'https://bungie.net' + destiny_activities.weeklyfeaturedraid.display.icon,
       title: destiny_def.activity[destiny_activities.weeklyfeaturedraid.display.activityHash].activityName,
@@ -570,7 +569,7 @@ module.exports = (app) => {
       expirationDate: destiny_activities.weeklyfeaturedraid.status.expirationDate || 0,
       insummary: true,
       color: "#9D3532"
-    };*/
+    };
     
     // pvp
     destiny_info.dailycrucible = {
