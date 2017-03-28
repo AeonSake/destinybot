@@ -72,7 +72,7 @@ module.exports = (app) => {
       res.on('end', function() {
         destiny_def.activity = JSON.parse(body);
         console.log("INFO: Destiny | Activity definitions loaded");
-        callback();
+        if (typeof callback === 'function') callback();
       });
     });
   }
@@ -86,7 +86,7 @@ module.exports = (app) => {
       res.on('end', function() {
         destiny_def.place = JSON.parse(body);
         console.log("INFO: Destiny | Place definitions loaded");
-        callback();
+        if (typeof callback === 'function') callback();
       });
     });
   }
@@ -100,7 +100,7 @@ module.exports = (app) => {
       res.on('end', function() {
         destiny_def.item = JSON.parse(body);
         console.log("INFO: Destiny | Item definitions loaded");
-        callback();
+        if (typeof callback === 'function') callback();
       });
     });
   }
@@ -114,7 +114,7 @@ module.exports = (app) => {
       res.on('end', function() {
         destiny_def.stat = JSON.parse(body);
         console.log("INFO: Destiny | Stat definitions loaded");
-        callback();
+        if (typeof callback === 'function') callback();
       });
     });
   }
@@ -128,7 +128,7 @@ module.exports = (app) => {
       res.on('end', function() {
         destiny_def.perk = JSON.parse(body);
         console.log("INFO: Destiny | Perk definitions loaded");
-        callback();
+        if (typeof callback === 'function') callback();
       });
     });
   }
@@ -139,7 +139,7 @@ module.exports = (app) => {
         getItemDef(function(){
           getStatDef(function(){
             getPerkDef(function(){
-              if (typeof callback === "function") callback();
+              if (typeof callback === 'function') callback();
             });
           });
         });
@@ -184,7 +184,7 @@ module.exports = (app) => {
         prepareData(function(){
           destiny_info.xur.items = getItems(JSON.parse(body).Response.data.saleItemCategories[2].saleItems);
           console.log("INFO: Destiny | Xûr items loaded");
-          if (typeof callback === "function") callback();
+          if (typeof callback === 'function') callback();
         });
       });
     });
@@ -231,7 +231,7 @@ module.exports = (app) => {
     needle.post('beepboophq.com/api/v1/chronos/tasks', data, headers, (err, resp) => {
       if (resp.statusCode !== 201) console.log(resp.statusCode);
       if (err) console.log(err);
-      else if (typeof callback === "function") callback(resp.body);
+      else if (typeof callback === 'function') callback(resp.body);
     });
   }
   
@@ -245,7 +245,7 @@ module.exports = (app) => {
     needle.delete('https://beepboophq.com/api/v1/chronos/tasks/' + id, null, headers, (err, resp) => {
       if (resp.statusCode !== 200) console.log(resp.statusCode);
       if (err) console.log(err);
-      else if (typeof callback === "function") callback(resp.body);
+      else if (typeof callback === 'function') callback(resp.body);
     });
   }
   
@@ -259,7 +259,7 @@ module.exports = (app) => {
     needle.get('https://beepboophq.com/api/v1/chronos/tasks?inactive=false', headers, (err, resp) => {
       if (resp.statusCode !== 200) console.log(resp.statusCode);
       if (err) console.log(err);
-      else if (typeof callback === "function") callback(resp.body);
+      else if (typeof callback === 'function') callback(resp.body);
     });
   }
   
@@ -378,25 +378,15 @@ module.exports = (app) => {
       //color: "#333333"
     };
     
-    /*destiny_info.dailychapter = {
-      type: destiny_activities.dailychapter.display.advisorTypeCategory,
-      icon: 'https://bungie.net' + destiny_activities.dailychapter.display.icon,
-      title: destiny_def.activity[destiny_activities.dailychapter.display.activityHash].activityName,
-      desc: destiny_def.activity[destiny_activities.dailychapter.display.activityHash].activityDescription,
-      loc: destiny_def.place[destiny_activities.dailychapter.display.placeHash].placeName,
-      level: destiny_activities.dailychapter.activityTiers[0].activityData.displayLevel,
-      light: destiny_activities.dailychapter.activityTiers[0].activityData.recommendedLight,
-      active: destiny_activities.dailychapter.status.active,
-      expirationDate: destiny_activities.dailychapter.status.expirationDate || 0,
-      insummary: true,
-      color: "#5941E0"
-    };*/
-    
     destiny_info.weeklystory = {
       type: destiny_activities.weeklystory.display.advisorTypeCategory,
       icon: 'https://bungie.net' + destiny_activities.weeklystory.display.icon,
       title: destiny_def.activity[destiny_activities.weeklystory.display.activityHash].activityName,
       desc: destiny_def.activity[destiny_activities.weeklystory.display.activityHash].activityDescription,
+      skulls: {
+        title: destiny_activities.weeklystory.extended.skullCategories[0].title,
+        skulls: getSkulls(destiny_activities.weeklystory.extended.skullCategories)
+      },
       loc: destiny_def.place[destiny_activities.weeklystory.display.placeHash].placeName,
       level: destiny_activities.weeklystory.activityTiers[0].activityData.displayLevel,
       light: destiny_activities.weeklystory.activityTiers[0].activityData.recommendedLight,
@@ -460,11 +450,11 @@ module.exports = (app) => {
         level: destiny_activities.vaultofglass.activityTiers[1].activityData.displayLevel,
         light: destiny_activities.vaultofglass.activityTiers[1].activityData.recommendedLight
       },
-      /*heroic: {
+      heroic: {
         title: destiny_activities.vaultofglass.activityTiers[2].tierDisplayName,
         level: destiny_activities.vaultofglass.activityTiers[2].activityData.displayLevel,
         light: destiny_activities.vaultofglass.activityTiers[2].activityData.recommendedLight
-      },*/
+      },
       active: destiny_activities.vaultofglass.status.active,
       expirationDate: destiny_activities.vaultofglass.status.expirationDate || 0,
       insummary: false,
@@ -489,11 +479,11 @@ module.exports = (app) => {
         level: destiny_activities.crota.activityTiers[1].activityData.displayLevel,
         light: destiny_activities.crota.activityTiers[1].activityData.recommendedLight
       },
-      /*heroic: {
+      heroic: {
         title: destiny_activities.crota.activityTiers[2].tierDisplayName,
         level: destiny_activities.crota.activityTiers[2].activityData.displayLevel,
         light: destiny_activities.crota.activityTiers[2].activityData.recommendedLight
-      },*/
+      },
       active: destiny_activities.crota.status.active,
       expirationDate: destiny_activities.crota.status.expirationDate || 0,
       insummary: false,
@@ -506,7 +496,6 @@ module.exports = (app) => {
       title: destiny_def.activity[destiny_activities.kingsfall.display.activityHash].activityName,
       desc: destiny_def.activity[destiny_activities.kingsfall.display.activityHash].activityDescription,
       loc: destiny_def.place[destiny_activities.kingsfall.display.placeHash].placeName,
-      challenge: destiny_activities.kingsfall.activityTiers[0].skullCategories[0].skulls[0].displayName,
       //challenges: destiny_activities.kingsfall.activityTiers[2].skullCategories[0].skulls[0].displayName || lang.msg.dest.nochallenge,
       normal: {
         title: destiny_activities.kingsfall.activityTiers[0].tierDisplayName,
@@ -534,8 +523,7 @@ module.exports = (app) => {
       icon: 'https://bungie.net' + destiny_activities.wrathofthemachine.display.icon,
       title: destiny_def.activity[destiny_activities.wrathofthemachine.display.activityHash].activityName,
       desc: destiny_def.activity[destiny_activities.wrathofthemachine.display.activityHash].activityDescription,
-      loc: destiny_def.place[destiny_activities.wrathofthemachine.display.placeHash].placeName,
-      challenge: destiny_activities.wrathofthemachine.activityTiers[0].skullCategories[0].skulls[0].displayName,
+      loc: destiny_def.place[destiny_activities.wrathofthemachine.display.placeHash].placeName
       //challenges: destiny_activities.wrathofthemachine.activityTiers[2].skullCategories[0].skulls[0].displayName || lang.msg.dest.nochallenge,
       normal: {
         title: destiny_activities.wrathofthemachine.activityTiers[0].tierDisplayName,
@@ -547,15 +535,14 @@ module.exports = (app) => {
         level: destiny_activities.wrathofthemachine.activityTiers[1].activityData.displayLevel,
         light: destiny_activities.wrathofthemachine.activityTiers[1].activityData.recommendedLight
       },
-      /*heroic: {
+      heroic: {
         title: destiny_activities.wrathofthemachine.activityTiers[2].tierDisplayName,
         level: destiny_activities.wrathofthemachine.activityTiers[2].activityData.displayLevel,
         light: destiny_activities.wrathofthemachine.activityTiers[2].activityData.recommendedLight
-      },*/
+      },
       active: destiny_activities.wrathofthemachine.status.active,
       expirationDate: destiny_activities.wrathofthemachine.status.expirationDate || 0,
-      insummary: true,
-      //insummary: false,
+      insummary: false,
       //color: "#333333"
     };
     
@@ -564,7 +551,7 @@ module.exports = (app) => {
       icon: 'https://bungie.net' + destiny_activities.weeklyfeaturedraid.display.icon,
       title: destiny_def.activity[destiny_activities.weeklyfeaturedraid.display.activityHash].activityName,
       desc: destiny_def.activity[destiny_activities.weeklyfeaturedraid.display.activityHash].activityDescription,
-      challenges: getSkulls(destiny_activities.weeklyfeaturedraid.activityTiers[2].skullCategories),
+      challenges: getSkulls(destiny_activities.weeklyfeaturedraid.activityTiers[0].skullCategories),
       active: destiny_activities.weeklyfeaturedraid.status.active,
       expirationDate: destiny_activities.weeklyfeaturedraid.status.expirationDate || 0,
       insummary: true,
@@ -642,7 +629,7 @@ module.exports = (app) => {
     };
     if (destiny_info.armsday.active) destiny_info.armsday.items = getItems(destiny_activities.armsday.extended.orders);
     
-    if (typeof callback === "function") callback();
+    if (typeof callback === 'function') callback();
   }
   
   
