@@ -438,7 +438,6 @@ module.exports = (app) => {
       title: destiny_def.activity[destiny_activities.vaultofglass.display.activityHash].activityName,
       desc: destiny_def.activity[destiny_activities.vaultofglass.display.activityHash].activityDescription,
       loc: destiny_def.place[destiny_activities.vaultofglass.display.placeHash].placeName,
-      challenge: lang.msg.dest.nochallenge,
       //challenges: destiny_activities.vaultofglass.activityTiers[2].skullCategories[0].skulls[0].displayName || lang.msg.dest.nochallenge,
       normal: {
         title: destiny_activities.vaultofglass.activityTiers[0].tierDisplayName,
@@ -467,7 +466,6 @@ module.exports = (app) => {
       title: destiny_def.activity[destiny_activities.crota.display.activityHash].activityName,
       desc: destiny_def.activity[destiny_activities.crota.display.activityHash].activityDescription,
       loc: destiny_def.place[destiny_activities.crota.display.placeHash].placeName,
-      challenge: lang.msg.dest.nochallenge,
       //challenges: destiny_activities.crota.activityTiers[2].skullCategories[0].skulls[0].displayName || lang.msg.dest.nochallenge,
       normal: {
         title: destiny_activities.crota.activityTiers[0].tierDisplayName,
@@ -523,7 +521,7 @@ module.exports = (app) => {
       icon: 'https://bungie.net' + destiny_activities.wrathofthemachine.display.icon,
       title: destiny_def.activity[destiny_activities.wrathofthemachine.display.activityHash].activityName,
       desc: destiny_def.activity[destiny_activities.wrathofthemachine.display.activityHash].activityDescription,
-      loc: destiny_def.place[destiny_activities.wrathofthemachine.display.placeHash].placeName
+      loc: destiny_def.place[destiny_activities.wrathofthemachine.display.placeHash].placeName,
       //challenges: destiny_activities.wrathofthemachine.activityTiers[2].skullCategories[0].skulls[0].displayName || lang.msg.dest.nochallenge,
       normal: {
         title: destiny_activities.wrathofthemachine.activityTiers[0].tierDisplayName,
