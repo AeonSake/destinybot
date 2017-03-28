@@ -557,7 +557,7 @@ module.exports = (app) => {
     };
     
     // pvp
-    destiny_info.dailycrucible = {
+    /*destiny_info.dailycrucible = {
       type: destiny_activities.dailycrucible.display.advisorTypeCategory,
       icon: 'https://bungie.net' + destiny_activities.dailycrucible.display.icon,
       title: destiny_def.activity[destiny_activities.dailycrucible.display.activityHash].activityName,
@@ -565,7 +565,7 @@ module.exports = (app) => {
       expirationDate: destiny_activities.dailycrucible.status.expirationDate || 0,
       insummary: true,
       color: "#9D3532"
-    };
+    };*/
     
     destiny_info.weeklycrucible = {
       type: destiny_activities.weeklycrucible.display.advisorTypeCategory,
