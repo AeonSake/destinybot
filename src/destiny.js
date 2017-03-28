@@ -505,11 +505,11 @@ module.exports = (app) => {
         level: destiny_activities.kingsfall.activityTiers[1].activityData.displayLevel,
         light: destiny_activities.kingsfall.activityTiers[1].activityData.recommendedLight
       },
-      /*heroic: {
+      heroic: {
         title: destiny_activities.kingsfall.activityTiers[2].tierDisplayName,
         level: destiny_activities.kingsfall.activityTiers[2].activityData.displayLevel,
         light: destiny_activities.kingsfall.activityTiers[2].activityData.recommendedLight
-      },*/
+      },
       active: destiny_activities.kingsfall.status.active,
       expirationDate: destiny_activities.kingsfall.status.expirationDate || 0,
       insummary: false,
@@ -533,11 +533,11 @@ module.exports = (app) => {
         level: destiny_activities.wrathofthemachine.activityTiers[1].activityData.displayLevel,
         light: destiny_activities.wrathofthemachine.activityTiers[1].activityData.recommendedLight
       },
-      heroic: {
+      /*heroic: {
         title: destiny_activities.wrathofthemachine.activityTiers[2].tierDisplayName,
         level: destiny_activities.wrathofthemachine.activityTiers[2].activityData.displayLevel,
         light: destiny_activities.wrathofthemachine.activityTiers[2].activityData.recommendedLight
-      },
+      },*/
       active: destiny_activities.wrathofthemachine.status.active,
       expirationDate: destiny_activities.wrathofthemachine.status.expirationDate || 0,
       insummary: false,
