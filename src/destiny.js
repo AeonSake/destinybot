@@ -588,7 +588,7 @@ module.exports = (app) => {
       color: "#C98855"
     };
     
-    destiny_info.srl = {
+    /*destiny_info.srl = {
       type: destiny_activities.srl.display.advisorTypeCategory,
       icon: 'https://bungie.net' + destiny_activities.srl.display.icon,
       title: lang.msg.dest.srl,
@@ -596,7 +596,7 @@ module.exports = (app) => {
       expirationDate: destiny_activities.srl.status.expirationDate || 0,
       insummary: true,
       color: "#E62836"
-    };
+    };*/
     
     destiny_info.trials = {
       type: destiny_activities.trials.display.advisorTypeCategory,
