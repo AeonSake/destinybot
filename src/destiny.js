@@ -19,6 +19,10 @@ var destiny_info = {},
         name: "destiny_weekly_update",
         schedule: "15 9 * * 2 *"
       },
+      special: {
+        name: "destiny_special_update",
+        schedule: "15 18 * * 2 *"
+      },
       armsday: {
         name: "destiny_armsday_update",
         schedule: "15 9 * * 3 *"
@@ -26,10 +30,6 @@ var destiny_info = {},
       xur: {
         name: "destiny_xur_update",
         schedule: "15 9 * * 5 *"
-      },
-      ironbanner: {
-        name: "destiny_ironbanner_update",
-        schedule: "15 18 * * 2 *"
       },
       trials: {
         name: "destiny_trials_update",
@@ -1296,7 +1296,7 @@ module.exports = (app) => {
     return;
   });
   
-  slapp.event('destiny_ironbanner_update', (msg) => {
+  slapp.event('destiny_special_update', (msg) => {
     getActivities(function(){
       var msg_text = destiny_full_msg(lang.msg.dest.ironbannerupdate, 'ironbanner');
       msg_text.channel = config.destiny_ch;

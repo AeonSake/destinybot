@@ -141,6 +141,7 @@ let lang = module.exports = {
       editlist: "Liste Ihrer Events:",
       selectedit: "Welche Information soll bearbeitet werden?",
       removemembers: "Welcher Teilnehmer soll entfernt werden?",
+      wrongmax: "*Error*: Falsches Format!",
       
       confirmdelete: "Sind Sie sicher, dass Sie diesen Event löschen wollen?",
       deleted: "Event wurde erfolgreich gelöscht.",

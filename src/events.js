@@ -1533,7 +1533,8 @@ module.exports = (app) => {
         case '3':
         case '6':
         case '12':
-          data.options = {max: parseInt(msg.body.actions[0].name)};
+          if (!('options' in data)) data.options = {max: parseInt(msg.body.actions[0].name)};
+          else data.options.max = parseInt(msg.body.actions[0].name);
         case 'next':
           var msg_text = event_create_final_msg;
           msg_text.attachments[0] = Event.generateDummy(data);
@@ -1546,7 +1547,19 @@ module.exports = (app) => {
           return;
       }
     } else {
-      data.options = {max: parseInt(msg.body.text)};
+      var temp = parseInt(msg.body.text),
+          check = new RegExp("\\d{1,3}");
+      if (check.test(temp)) {
+        if (!('options' in data)) data.options = {max: temp};
+        else data.options.max = temp;
+      } else {
+        var msg_text = event_create_max_msg;
+        msg_text.attachments[0] = Event.generateDummy(data); //show error msg
+        
+        msg.respond(msg_text);
+        msg.route('event_create_max_route', data, 60);
+        return;
+      }
       var msg_text = event_create_final_msg;
       msg_text.attachments[0] = Event.generateDummy(data);
       
@@ -1936,7 +1949,8 @@ module.exports = (app) => {
         case '3':
         case '6':
         case '12':
-          data.options.max = parseInt(msg.body.actions[0].name);
+          if (!('options' in data)) data.options = {max: parseInt(msg.body.actions[0].name)};
+          else data.options.max = parseInt(msg.body.actions[0].name);
           data.edited = true;
           
           var msg_text = event_edit_msg(data.state);
@@ -1946,9 +1960,19 @@ module.exports = (app) => {
           return;
       }
     } else {
-      data.options.max = parseInt(msg.body.text);
-      data.edited = true;
-      
+      var temp = parseInt(msg.body.text),
+          check = new RegExp("\\d{1,3}");
+      if (check.test(temp)) {
+        if (!('options' in data)) data.options = {max: temp};
+        else data.options.max = temp;
+        data.edited = true;
+      } else {
+        var msg_text = lang.msg.evt.wrongmax + "\n" + event_edit_max_msg;
+        
+        msg.respond(msg_text);
+        msg.route('event_edit_max_route', data, 60);
+        return;
+      }
       var msg_text = event_edit_msg(data.state);
       msg_text.attachments[0] = Event.generateDummy(data);
       msg.respond(msg_text);
