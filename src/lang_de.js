@@ -146,7 +146,7 @@ let lang = module.exports = {
       confirmdelete: "Sind Sie sicher, dass Sie diesen Event löschen wollen?",
       deleted: "Event wurde erfolgreich gelöscht.",
       
-      noeventfound: "Kein Event gefunden.",
+      noeventsfound: "Keine Events gefunden.",
       notfound: "Ein Event mit dieser ID konnte nicht gefunden werden.",
       notowner: "Nur der Ersteller dieses Events kann diese bearbeiten.",
       
@@ -180,7 +180,7 @@ let lang = module.exports = {
       deleted: "Abstimmung wurde erfolgreich gelöscht.",
       
       success: "Erfolgreich abgestimmt.",
-      nopollfound: "Keine Abstimmungen gefunden.",
+      nopollsfound: "Keine Abstimmungen gefunden.",
       notfound: "Eine Abstimmung mit dieser ID konnte nicht gefunden werden.",
       notowner: "Nur der Ersteller dieser Abstimmung kann diese bearbeiten.",
       

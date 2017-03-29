@@ -517,7 +517,7 @@ module.exports = (app) => {
     
     msg_text.attachments.push(event_show_filter_att(mode, sort));
     if (eventcount == 0) {
-      msg_text.text = lang.msg.evt.noeventfound;
+      msg_text.text = lang.msg.evt.noeventsfound;
       msg_text.attachments.push(event_dismiss_att);
     } else msg_text.attachments.push(event_show_pages_att(page, eventcount, mode, sort));
     
@@ -624,7 +624,7 @@ module.exports = (app) => {
     }
     
     if (eventcount == 0) {
-      msg_text.text = lang.msg.evt.nopollfound;
+      msg_text.text = lang.msg.evt.noeventsfound;
       msg_text.attachments.push(event_dismiss_att);
     } else msg_text.attachments.push(event_edit_pages_att(page, eventcount, sort));
     

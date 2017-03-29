@@ -571,7 +571,7 @@ module.exports = (app) => {
     
     msg_text.attachments.push(poll_show_filter_att(mode, sort));
     if (pollcount == 0) {
-      msg_text.text = lang.msg.poll.nopollfound;
+      msg_text.text = lang.msg.poll.nopollsfound;
       msg_text.attachments.push(poll_dismiss_att);
     } else msg_text.attachments.push(poll_show_pages_att(page, pollcount, mode, sort));
     
@@ -678,7 +678,7 @@ module.exports = (app) => {
     }
     
     if (pollcount == 0) {
-      msg_text.text = lang.msg.poll.nopollfound;
+      msg_text.text = lang.msg.poll.nopollsfound;
       msg_text.attachments.push(poll_dismiss_att);
     } else msg_text.attachments.push(poll_edit_pages_att(page, pollcount, sort));
     
