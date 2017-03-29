@@ -1356,6 +1356,8 @@ module.exports = (app) => {
       } else if (typeof val !== "undefined") {
         for (var i in val) event_db[i] = new Event(val[i]);
         console.log("INFO: Events | Event database loaded");
+        event_db = [];
+        saveEventDB();
       }
     });
   }
