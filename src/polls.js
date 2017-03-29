@@ -1398,8 +1398,6 @@ module.exports = (app) => {
       } else if (typeof val !== "undefined") {
         for (var i in val) poll_db[i] = new Poll(val[i]);
         console.log("INFO: Polls | Poll database loaded");
-        poll_db = [];
-        savePollDB();
       }
     });
   }
