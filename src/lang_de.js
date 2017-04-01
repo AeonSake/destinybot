@@ -98,9 +98,8 @@ let lang = module.exports = {
     dest: {
       main: "Destiny | Aktivitäten Übersicht",
       weeklyreset: "Destiny | Wöchtentlicher Reset",
-      dailyupdate: "Destiny | Tägliches Update",
       armsdayupdate: "Destiny | Waffentag Update",
-      ironbannerupdate: "Destiny | Eisenbanner Update",
+      specialupdate: "Destiny | Spezielle Events Update",
       xurupdate: "Destiny | Xûr Update",
       trialsupdate: "Destiny | Prüfungen von Osiris Update",
       
@@ -109,20 +108,22 @@ let lang = module.exports = {
       raid: "Raid",
       nochallenge: "Keine Herausforderung",
       recom: "Empfohlen:",
-      light: "Licht",
-      level: "Level",
+      level: "Level:",
+      light: "Licht:",
       warlock: "Warlock",
       titan: "Titan",
       hunter: "Jäger",
       link: "Link",
       stats: "Stats:",
       perks: "Perks:",
+      price: "Preis:",
+      rewards: "Belohnungen:",
       noactivities: "Keine Aktivitäten verfügbar.",
-      nodetails: "Keine Details verfügbar,",
+      nodetails: "Keine Details verfügbar.",
       notactive: "Aktivität ist derzeit nicht aktiv.",
       moreinfo: "Mehr Informationen:",
       
-      help: "Folgende Befehle sind verfügbar:\n`/destiny <activity>` : Zeigt Informationen zu der jeweiligen Aktivität an\n\nAktivitäten sind:\n`full`, `list`, `all` : Gesamte Liste an aktuellen Aktivitäten\n`daily` : Tägliche Aktivitäten\n`pve` : Gefängnis der Alten, Tägliche Story, Strikes, Dämmerungsstrike\n`raid`, `raids` : Raids\n`pvp`, `crucible` : Tägliche und wöchentliche Schmelztiegelplaylist und Prüfungen von Osiris\n`special`, `events`, `specialevents` : Eisenbanner, Waffentag, Xûr, Prüfungen von Osiris, SRL\n`elder`, `elderchallenge`, `poe` : Gefängnis der Alten\n`story`, `dailystory`, `mission`, `dailymission`, `dailychapter` : Tägliche heroische Story-Mission\n`strikes`, `heroicstrike` : Wöchentliche Strike-Playlist\n`nightfall`, `nf` : Dämmerungsstrike\n`vaultofglass`, `vog` : Gläserne Kammer\n`crota` : Crota’s Ende\n`kingsfall`, `kf` : Königsfall\n`wrathofthemachine`, `wotm` : Zorn der Maschine\n`dailycrucible` : Tägliche Schmelztiegel-Playlist\n`weeklycrucible` : Wöchentliche Schmelztiegel-Playlist\n`ironbanner` : Eisenbanner\n`trials` : Prüfungen von Osiris\n`srl` : SRL\n`xur` : Xûr\n`armsday` : Waffentag\n"
+      help: "Folgende Befehle sind verfügbar:\n`/destiny <activity>` : Zeigt Informationen zu der jeweiligen Aktivität an\n\nAktivitäten sind:\n`full`, `list`, `all` : Gesamte Liste an aktuellen Aktivitäten\n`pve` : Gefängnis der Alten, Wöchentliche Story, Strikes, Dämmerungsstrike\n`raid`, `raids` : Raids\n`pvp`, `crucible` : Tägliche und wöchentliche Schmelztiegelplaylist und Prüfungen von Osiris\n`special`, `events`, `specialevents` : Eisenbanner, Waffentag, Xûr, Prüfungen von Osiris, SRL\n`elder`, `elderchallenge`, `poe` : Gefängnis der Alten\n`story`, `weeklystory`, `mission`, `weeklymission` : Wöchentliche heroische Story-Playlist\n`strikes`, `heroicstrike` : Wöchentliche Strike-Playlist\n`nightfall`, `nf` : Dämmerungsstrike\n`weeklyfeaturedraid`, `weeklyraid` : Wöchentlich empfohlener Raid\n`vaultofglass`, `vog` : Gläserne Kammer\n`crota` : Crota’s Ende\n`kingsfall`, `kf` : Königsfall\n`wrathofthemachine`, `wotm` : Zorn der Maschine\n`weeklycrucible` : Wöchentliche Schmelztiegel-Playlist\n`ironbanner` : Eisenbanner\n`trials` : Prüfungen von Osiris\n`srl` : SRL\n`xur` : Xûr\n`armsday` : Waffentag\n"
     },
     
     evt: {
