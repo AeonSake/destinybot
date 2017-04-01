@@ -37,8 +37,6 @@ var destiny_info = {},
       }
     };
 
-console.log(moment().tz("America/Los_Angeles").isDST());
-
 
 
 // ============================
@@ -54,6 +52,8 @@ module.exports = (app) => {
   let lang = app.lang;
   
   var module = {};
+
+console.log(moment().tz("America/Los_Angeles").isDST());
   
   
   
