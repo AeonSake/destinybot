@@ -317,7 +317,7 @@ module.exports = (app) => {
     var items = "";
     
     for (var i in arr) {
-      console.log(arr[i].item.itemhash);
+      console.log(arr);
       if ('item' in arr[i]) items += "<https://www.bungie.net/de/Armory/Detail?item=" + arr[i].item.itemhash + "|" + destiny_def.item[arr[i].item.itemhash].itemName + ">" + "\n";
     }
     
