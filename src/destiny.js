@@ -317,8 +317,7 @@ module.exports = (app) => {
     var items = "";
     
     for (var i in arr) {
-      console.log(arr);
-      if ('item' in arr[i]) items += "<https://www.bungie.net/de/Armory/Detail?item=" + arr[i].item.itemhash + "|" + destiny_def.item[arr[i].item.itemhash].itemName + ">" + "\n";
+      if ('item' in arr[i]) items += "<https://www.bungie.net/de/Armory/Detail?item=" + arr[i].item.itemHash + "|" + destiny_def.item[arr[i].item.itemHash].itemName + ">" + "\n";
     }
     
     return items;
@@ -350,7 +349,7 @@ module.exports = (app) => {
         
         fields.push({
           title: lang.msg.dest.price,
-          value: (arr[i].item.costs[0].value > 0 ? arr[i].item.costs[0].value + "x " : "") + destiny_def.item[arr[i].item.costs[0].itemhash].itemName,
+          value: (arr[i].item.costs[0].value > 0 ? arr[i].item.costs[0].value + "x " : "") + destiny_def.item[arr[i].item.costs[0].itemHash].itemName,
           short: true
         });
         
