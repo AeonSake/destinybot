@@ -21,7 +21,7 @@ var destiny_info = {},
       },
       special: {//DST dependent
         name: "destiny_special_update",
-        schedule: "15 18 * * 2 *"
+        schedule: "15 # * * 2 *"
       },
       armsday: {
         name: "destiny_armsday_update",
@@ -33,7 +33,7 @@ var destiny_info = {},
       },
       trials: {//DST dependent
         name: "destiny_trials_update",
-        schedule: "15 18 * * 5 *"
+        schedule: "15 # * * 5 *"
       }
     };
 
@@ -52,8 +52,6 @@ module.exports = (app) => {
   let lang = app.lang;
   
   var module = {};
-
-console.log(moment().tz("America/Los_Angeles").isDST());
   
   
   
@@ -267,6 +265,7 @@ console.log(moment().tz("America/Los_Angeles").isDST());
       for (var i in data.results) {
         if (/destiny_(.*)_update/.test(data.results[i].payload.event.type)) deleteSchedule(msg, data.results[i].id);
       }
+      setScheduleTimes();
       for (var key in destiny_schedules) {
         if (destiny_schedules.hasOwnProperty(key)) setSchedule(msg, destiny_schedules[key].name, destiny_schedules[key].schedule, function(newdata) {
           destiny_schedules[key].id = JSON.parse(newdata).id;
@@ -274,6 +273,14 @@ console.log(moment().tz("America/Los_Angeles").isDST());
       }
     });
   }
+  
+  function setScheduleTimes () {
+    for (var key in destiny_schedules) {
+      destiny_schedules[key].schedule = destiny_schedules[key].schedule.replace("#", (moment().tz("America/Los_Angeles").isDST() ? "18" : "19"));
+    }
+  }
+  
+  setScheduleTimes();
   
   
   
@@ -460,7 +467,7 @@ console.log(moment().tz("America/Los_Angeles").isDST());
         
         if (act.expirationDate != 0) time = lang.msg.dest.activetill + " " + moment(act.expirationDate).format(lang.msg.dest.dateformat);
         
-        if (act.status.active) {
+        if ('status' in act && act.status.active) {
           destiny_info[key] = {
             short: {
               author_name: author,
