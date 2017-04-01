@@ -480,7 +480,7 @@ module.exports = (app) => {
               footer: time,
               color: "",
               mrkdwn_in: ['text', 'pretext', 'fields']
-            }];
+            }]
           };
         
           if ('activityTiers' in act) {
