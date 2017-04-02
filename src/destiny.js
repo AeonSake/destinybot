@@ -349,7 +349,7 @@ module.exports = (app) => {
         
         fields.push({
           title: lang.msg.dest.price,
-          value: (arr[i].item.costs[0].value > 0 ? arr[i].item.costs[0].value + "x " : "") + destiny_def.item[arr[i].item.costs[0].itemHash].itemName,
+          value: getCosts(arr[i].costs),
           short: true
         });
         
@@ -417,6 +417,16 @@ module.exports = (app) => {
     }
     
     return rewards;
+  }
+  
+  function getCosts (arr) {
+    var costs = "";
+    
+    for (var i in arr) {
+      costs += (arr[i].value > 0 ? arr[i].value + "x " : "") + destiny_def.item[arr[i].itemHash].itemName + "\n";
+    }
+    
+    return costs;
   }
   
   function generateAttachments (callback) {
