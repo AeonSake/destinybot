@@ -529,7 +529,7 @@ module.exports = (app) => {
             });
             
             destiny_info[key].full.push({
-              title: act.activityTiers[0].tierDisplayName || "",
+              title: act.activityTiers[i].tierDisplayName || "",
               text: "",
               fallback: "",
               fields: fields,
