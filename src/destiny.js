@@ -438,7 +438,7 @@ module.exports = (app) => {
             title = "",
             text = "",
             text_full = "",
-            //fields = [],
+            fields = [],
             time = "";
         
         if ('display' in act) {
@@ -496,7 +496,7 @@ module.exports = (app) => {
             title: title,
             text: text_full,
             fallback: title,
-            //fields: fields,
+            fields: fields,
             footer: time,
             color: "",
             mrkdwn_in: ['text', 'pretext', 'fields']
