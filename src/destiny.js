@@ -442,7 +442,7 @@ module.exports = (app) => {
             time = "";
         
         if ('display' in act) {
-          if ('activityHash' in act.display) {
+          if ('activityHash' in act.display && act.display.advisorTypeCategory != destiny_def.activity[act.display.activityHash].activityName) {
             author = act.display.advisorTypeCategory;
             title = destiny_def.activity[act.display.activityHash].activityName;
           } else title = act.display.advisorTypeCategory;
@@ -460,24 +460,12 @@ module.exports = (app) => {
               short: false
             });
           }
-          if ('orders' in act.extended && act.extended.orders.length != 0) text += getItems(act.extended.orders) + "\n";
+          if ('orders' in act.extended && act.extended.orders.length != 0) text += getItems(act.extended.orders);
         }
         
-        /*if ('activityTiers' in act) {
-          if (act.activityTiers.length == 1) {
-            if ('skullCategories' in act.activityTiers[0] && act.activityTiers[0].skullCategories.length != 0) text += getSkulls(act.activityTiers[0].skullCategories) + "\n";
-            if ('activityData' in act.activityTiers[i]) fields.push({
-              title: lang.msg.dest.recom,
-              value: lang.msg.dest.level + " " + act.activityTiers[0].activityData.displayLevel + "\n" + lang.msg.dest.light + " " + act.activityTiers[0].activityData.recommendedLight,
-              short: true
-            });
-            if ('rewards' in act.activityTiers[0] && act.activityTiers[0].rewards.length != 0) fields.push({
-              title: lang.msg.dest.rewards,
-              value: getRewards(act.activityTiers[0].rewards),
-              short: true
-            });
-          }
-        }*/
+        if ('activityTiers' in act) {
+          if ('skullCategories' in act.activityTiers[act.activityTiers.length - 1]) text += getSkulls(act.activityTiers[act.activityTiers.length - 1].skullCategories) + "\n";
+        }
         
         if (act.expirationDate != 0) time = lang.msg.dest.activetill + " " + moment(act.expirationDate).format(lang.msg.dest.dateformat);
         
@@ -872,10 +860,10 @@ module.exports = (app) => {
         msg_text = destiny_single_msg("", 'srl');
         break;
       case 'xur':
-        msg_text = destiny_single_msg("", 'xur', true);
+        msg_text = destiny_single_msg("", 'xur');
         break;
       case 'armsday':
-        msg_text = destiny_single_msg("", 'armsday', true);
+        msg_text = destiny_single_msg("", 'armsday');
         break;
       default:
         msg_text = destiny_summary_msg();
