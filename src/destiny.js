@@ -443,7 +443,7 @@ module.exports = (app) => {
         }
         
         if ('extended' in act) {
-          if ('skullCategories' in act.extended) {
+          if ('skullCategories' in act.extended && act.extended.skullCategories.length != 0) {
             text += getSkulls(act.extended.skullCategories) + "\n";
             fields.push({
               title: act.extended.skullCategories[0].title,
@@ -451,13 +451,13 @@ module.exports = (app) => {
               short: false
             });
           }
-          if ('orders' in act.extended) text += getItems(act.extended.orders) + "\n";
+          if ('orders' in act.extended && act.extended.orders.length != 0) text += getItems(act.extended.orders) + "\n";
         }
         
         if ('activityTiers' in act) {
           if (act.activityTiers.length == 1) {
-            if ('skullCategories' in act.activityTiers[0]) text += getSkulls(act.activityTiers[0].skullCategories) + "\n";
-            if ('rewards' in act.activityTiers[0]) fields.push({
+            if ('skullCategories' in act.activityTiers[0] && act.activityTiers[0].skullCategories.length != 0) text += getSkulls(act.activityTiers[0].skullCategories) + "\n";
+            if ('rewards' in act.activityTiers[0] && act.activityTiers[0].rewards.length != 0) fields.push({
               title: lang.msg.dest.rewards,
               value: getRewards(act.activityTiers[0].rewards),
               short: false
@@ -492,10 +492,8 @@ module.exports = (app) => {
         if ('activityTiers' in act) {
           for (var i in act.activityTiers) {
             let fields = [];
-            
-            console.log(act.activityTiers[i]);
 
-            if ('skullCategories' in act.activityTiers[i]) fields.push({
+            if ('skullCategories' in act.activityTiers[i] && act.activityTiers[i].skullCategories.length != 0) fields.push({
               title: act.activityTiers[i].skullCategories[0].title,
               value: getSkullsFull(act.activityTiers[i].skullCategories),
               short: false
@@ -505,7 +503,7 @@ module.exports = (app) => {
               value: lang.msg.dest.level + " " + act.activityTiers[i].activityData.displayLevel + "\n" + lang.msg.dest.light + " " + act.activityTiers[i].activityData.recommendedLight,
               short: true
             });
-            if ('rewards' in act.activityTiers[i]) fields.push({
+            if ('rewards' in act.activityTiers[i] && act.activityTiers[i].rewards.length != 0) fields.push({
               title: lang.msg.dest.rewards,
               value: getRewards(act.activityTiers[i].rewards),
               short: true
