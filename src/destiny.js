@@ -35,6 +35,22 @@ var destiny_info = {},
         name: "destiny_trials_update",
         schedule: "15 # * * 5 *"
       }
+    },
+    destiny_colors = {
+      weeklystory: "#577DBC",
+      heroicstrike: "#577DBC",
+      nightfall: "#577DBC",
+      elderchallenge: "#41584A",
+      weeklyfeaturedraid: "#C3BCB4",
+      vaultofglass: "#C3BCB4",
+      crota: "#C3BCB4",
+      kingsfall: "#C3BCB4",
+      wrathofthemachine: "",
+      weeklycrucible: "#A53531",
+      ironbanner: "#AC7E54",
+      trials: "#F8DC63",
+      armsday: "#727272",
+      xur: "#333333"
     };
 
 
@@ -439,7 +455,8 @@ module.exports = (app) => {
             text = "",
             text_full = "",
             fields = [],
-            time = "";
+            time = "",
+            color = (destiny_colors.hasOwnProperty(key) ? destiny_colors[key] : "");
         
         if ('display' in act) {
           if ('activityHash' in act.display && act.display.advisorTypeCategory != destiny_def.activity[act.display.activityHash].activityName) {
@@ -476,7 +493,7 @@ module.exports = (app) => {
             text: text,
             fallback: title,
             footer: time,
-            color: "",
+            color: color,
             mrkdwn_in: ['text', 'pretext', 'fields']
           },
           full: [{
@@ -486,7 +503,7 @@ module.exports = (app) => {
             fallback: title,
             fields: fields,
             footer: time,
-            color: "",
+            color: color,
             mrkdwn_in: ['text', 'pretext', 'fields']
           }]
         };
