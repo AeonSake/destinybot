@@ -490,11 +490,11 @@ module.exports = (app) => {
             mrkdwn_in: ['text', 'pretext', 'fields']
           }]
         };
-
+        
         if ('activityTiers' in act) {
           for (var i in act.activityTiers) {
             let fields = [];
-
+            
             if ('skullCategories' in act.activityTiers[i] && act.activityTiers[i].skullCategories.length != 0) fields.push({
               title: act.activityTiers[i].skullCategories[0].title,
               value: getSkullsFull(act.activityTiers[i].skullCategories),
@@ -510,7 +510,7 @@ module.exports = (app) => {
               value: getRewards(act.activityTiers[i].rewards),
               short: true
             });
-
+            
             destiny_info[key].full.push({
               title: act.activityTiers[0].tierDisplayName || "",
               text: "",
@@ -521,6 +521,8 @@ module.exports = (app) => {
             });
           }
         }
+        
+        if ('orders' in act.extended && act.extended.orders.length != 0) destiny_info[key].full = destiny_info[key].full.concat(getItemsFull(act.extended.orders));
       }
     }
     
