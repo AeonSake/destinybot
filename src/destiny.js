@@ -423,7 +423,7 @@ module.exports = (app) => {
     destiny_info = {};
     
     for (var key in destiny_activities) {
-      if (destiny_activities.hasOwnProperty(key)) {
+      if (destiny_activities.hasOwnProperty(key) && 'status' in destiny_activities[key] && destiny_activities[key].status.active) {
         var act = destiny_activities[key],
             author = "",
             title = "",
@@ -467,58 +467,58 @@ module.exports = (app) => {
         
         if (act.expirationDate != 0) time = lang.msg.dest.activetill + " " + moment(act.expirationDate).format(lang.msg.dest.dateformat);
         
-        if ('status' in act && act.status.active) {
-          destiny_info[key] = {
-            short: {
-              author_name: author,
-              title: title,
-              text: text,
-              fallback: title,
-              footer: time,
-              color: "",
-              mrkdwn_in: ['text', 'pretext', 'fields']
-            },
-            full: [{
-              author_name: author,
-              title: title,
-              text: text_full,
-              fallback: title,
+        destiny_info[key] = {
+          short: {
+            author_name: author,
+            title: title,
+            text: text,
+            fallback: title,
+            footer: time,
+            color: "",
+            mrkdwn_in: ['text', 'pretext', 'fields']
+          },
+          full: [{
+            author_name: author,
+            title: title,
+            text: text_full,
+            fallback: title,
+            fields: fields,
+            footer: time,
+            color: "",
+            mrkdwn_in: ['text', 'pretext', 'fields']
+          }]
+        };
+
+        if ('activityTiers' in act) {
+          for (var i in act.activityTiers) {
+            let fields = [];
+            
+            console.log(act.activityTiers[i]);
+
+            if ('skullCategories' in act.activityTiers[i]) fields.push({
+              title: act.activityTiers[i].skullCategories[0].title,
+              value: getSkullsFull(act.activityTiers[i].skullCategories),
+              short: false
+            });
+            if ('activityData' in act.activityTiers[i]) fields.push({
+              title: lang.msg.dest.recom,
+              value: lang.msg.dest.level + " " + act.activityTiers[i].activityData.displayLevel + "\n" + lang.msg.dest.light + " " + act.activityTiers[i].activityData.recommendedLight,
+              short: true
+            });
+            if ('rewards' in act.activityTiers[i]) fields.push({
+              title: lang.msg.dest.rewards,
+              value: getRewards(act.activityTiers[i].rewards),
+              short: true
+            });
+
+            destiny_info[key].full.push({
+              title: act.activityTiers[0].tierDisplayName || "",
+              text: "",
+              fallback: "",
               fields: fields,
-              footer: time,
-              color: "",
+              color: destiny_info[key].full[0].color,
               mrkdwn_in: ['text', 'pretext', 'fields']
-            }]
-          };
-        
-          if ('activityTiers' in act) {
-            for (var i in act.activityTiers) {
-              let fields = [];
-              
-              if ('skullCategories' in act.activityTiers[i]) fields.push({
-                title: act.activityTiers[i].skullCategories[0].title,
-                value: getSkullsFull(act.activityTiers[i].skullCategories),
-                short: false
-              });
-              if ('activityData' in act.activityTiers[i]) fields.push({
-                title: lang.msg.dest.recom,
-                value: lang.msg.dest.level + " " + act.activityTiers[i].activityData.displayLevel + "\n" + lang.msg.dest.light + " " + act.activityTiers[i].activityData.recommendedLight,
-                short: true
-              });
-              if ('rewards' in act.activityTiers[i]) fields.push({
-                title: lang.msg.dest.rewards,
-                value: getRewards(act.activityTiers[i].rewards),
-                short: true
-              });
-              
-              destiny_info[key].full.push({
-                title: act.activityTiers[0].tierDisplayName || "",
-                text: "",
-                fallback: "",
-                fields: fields,
-                color: destiny_info[key].full[0].color,
-                mrkdwn_in: ['text', 'pretext', 'fields']
-              });
-            }
+            });
           }
         }
       }
