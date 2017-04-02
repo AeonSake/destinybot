@@ -292,11 +292,9 @@ module.exports = (app) => {
     var skulls = "";
     
     for (var i in arr) {
-      for (var j in arr[i].skulls) {
-        skulls += arr[i].skulls[j].displayName;
-        if (j < arr[i].skulls.length) skulls += ", ";
-      }
+      for (var j in arr[i].skulls) skulls += arr[i].skulls[j].displayName + ", ";
     }
+    if (skulls.length != 0) skulls = skulls.slice(0, -2);
     
     return skulls;
   }
@@ -317,7 +315,8 @@ module.exports = (app) => {
     var items = "";
     
     for (var i in arr) {
-      if ('item' in arr[i]) items += "<https://www.bungie.net/de/Armory/Detail?item=" + arr[i].item.itemHash + "|" + destiny_def.item[arr[i].item.itemHash].itemName + ">" + "\n";
+      if ('item' in arr[i]) items += "<https://www.bungie.net/de/Armory/Detail?item=" + arr[i].item.itemHash + "|" + destiny_def.item[arr[i].item.itemHash].itemName + ">";
+      if (i < arr.length - 1) items += "\n";
     }
     
     return items;
@@ -412,7 +411,7 @@ module.exports = (app) => {
     
     for (var i in arr) {
       for (var j in arr[i].rewardItems) {
-        rewards += (arr[i].rewardItems[j].value > 0 ? arr[i].rewardItems[j].value + "x " : "") + destiny_def.item[arr[i].rewardItems[j].itemHash] + "\n";
+        rewards += (arr[i].rewardItems[j].value > 0 ? arr[i].rewardItems[j].value + "x " : "") + destiny_def.item[arr[i].rewardItems[j].itemHash].itemName + "\n";
       }
     }
     
@@ -439,7 +438,7 @@ module.exports = (app) => {
             title = "",
             text = "",
             text_full = "",
-            fields = [],
+            //fields = [],
             time = "";
         
         if ('display' in act) {
@@ -464,16 +463,21 @@ module.exports = (app) => {
           if ('orders' in act.extended && act.extended.orders.length != 0) text += getItems(act.extended.orders) + "\n";
         }
         
-        if ('activityTiers' in act) {
+        /*if ('activityTiers' in act) {
           if (act.activityTiers.length == 1) {
             if ('skullCategories' in act.activityTiers[0] && act.activityTiers[0].skullCategories.length != 0) text += getSkulls(act.activityTiers[0].skullCategories) + "\n";
+            if ('activityData' in act.activityTiers[i]) fields.push({
+              title: lang.msg.dest.recom,
+              value: lang.msg.dest.level + " " + act.activityTiers[0].activityData.displayLevel + "\n" + lang.msg.dest.light + " " + act.activityTiers[0].activityData.recommendedLight,
+              short: true
+            });
             if ('rewards' in act.activityTiers[0] && act.activityTiers[0].rewards.length != 0) fields.push({
               title: lang.msg.dest.rewards,
               value: getRewards(act.activityTiers[0].rewards),
-              short: false
+              short: true
             });
           }
-        }
+        }*/
         
         if (act.expirationDate != 0) time = lang.msg.dest.activetill + " " + moment(act.expirationDate).format(lang.msg.dest.dateformat);
         
@@ -492,7 +496,7 @@ module.exports = (app) => {
             title: title,
             text: text_full,
             fallback: title,
-            fields: fields,
+            //fields: fields,
             footer: time,
             color: "",
             mrkdwn_in: ['text', 'pretext', 'fields']
@@ -633,8 +637,8 @@ module.exports = (app) => {
     };
     
     if (destiny_info.hasOwnProperty(key)) {
-      if (short) msg_text.attachments = destiny_info[key].short;
-      else msg_text.attachments = destiny_info[key].full;
+      if (short) msg_text.attachments.push(destiny_info[key].short);
+      else msg_text.attachments.push(destiny_info[key].full);
     }
     
     return msg_text;
