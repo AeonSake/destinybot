@@ -522,7 +522,7 @@ module.exports = (app) => {
           }
         }
         
-        if ('orders' in act.extended && act.extended.orders.length != 0) destiny_info[key].full = destiny_info[key].full.concat(getItemsFull(act.extended.orders));
+        if ('extended' in act && 'orders' in act.extended && act.extended.orders.length != 0) destiny_info[key].full = destiny_info[key].full.concat(getItemsFull(act.extended.orders));
       }
     }
     
