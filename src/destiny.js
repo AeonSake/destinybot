@@ -755,9 +755,25 @@ module.exports = (app) => {
           break;
         case 'xur':
           msg_text = destiny_single_msg("", 'xur', true);
+          if ('attachments' in msg_text) {
+            msg_text.attachments[0].callback_id = 'destiny_public_moreinfo_callback';
+            msg_text.attachments[0].actions = [{
+              name: 'xur',
+              text: lang.btn.dest.details,
+              type: 'button',
+            }];
+          }
           break;
         case 'armsday':
           msg_text = destiny_single_msg("", 'armsday', true);
+          if ('attachments' in msg_text) {
+            msg_text.attachments[0].callback_id = 'destiny_public_moreinfo_callback';
+            msg_text.attachments[0].actions = [{
+              name: 'armsday',
+              text: lang.btn.dest.details,
+              type: 'button',
+            }];
+          }
           break;
         default:
           msg_text = destiny_summary_msg();
@@ -974,9 +990,11 @@ module.exports = (app) => {
   
   slapp.event('destiny_special_update', (msg) => {
     getActivities(function(){
-      var msg_text = destiny_list_msg(lang.msg.dest.specialupdate, ['ironbanner', 'srl', 'armsday', 'xur', 'trials']);
-      msg_text.channel = config.destiny_ch;
-      msg.say(msg_text);
+      var msg_text = destiny_list_msg(lang.msg.dest.specialupdate, ['ironbanner', 'srl']);
+      if ('attachments' in msg_text) {
+        msg_text.channel = config.destiny_ch;
+        msg.say(msg_text);
+      }
     });
     return;
   });
@@ -984,21 +1002,16 @@ module.exports = (app) => {
   slapp.event('destiny_armsday_update', (msg) => {
     getActivities(function(){
       var msg_text = destiny_single_msg(lang.msg.dest.armsdayupdate, 'armsday', true);
-      msg_text.attachments.push({
-        text: "",
-        fallback: "",
-        callback_id: 'destiny_public_moreinfo_callback',
-        actions: [
-          {
-            name: 'armsday',
-            text: lang.btn.dest.details,
-            type: 'button',
-          }
-        ],
-        mrkdwn_in: ['text', 'pretext']
-      });
-      msg_text.channel = config.destiny_ch;
-      msg.say(msg_text);
+      if ('attachments' in msg_text) {
+        msg_text.attachments[0].callback_id = 'destiny_public_moreinfo_callback';
+        msg_text.attachments[0].actions = [{
+          name: 'armsday',
+          text: lang.btn.dest.details,
+          type: 'button',
+        }];
+        msg_text.channel = config.destiny_ch;
+        msg.say(msg_text);
+      }
     });
     return;
   });
@@ -1006,21 +1019,16 @@ module.exports = (app) => {
   slapp.event('destiny_xur_update', (msg) => {
     getActivities(function(){
       var msg_text = destiny_single_msg(lang.msg.dest.xurupdate, 'xur', true);
-      msg_text.attachments.push({
-        text: "",
-        fallback: "",
-        callback_id: 'destiny_public_moreinfo_callback',
-        actions: [
-          {
-            name: 'xur',
-            text: lang.btn.dest.details,
-            type: 'button',
-          }
-        ],
-        mrkdwn_in: ['text', 'pretext']
-      });
-      msg_text.channel = config.destiny_ch;
-      msg.say(msg_text);
+      if ('attachments' in msg_text) {
+        msg_text.attachments[0].callback_id = 'destiny_public_moreinfo_callback';
+        msg_text.attachments[0].actions = [{
+          name: 'xur',
+          text: lang.btn.dest.details,
+          type: 'button',
+        }];
+        msg_text.channel = config.destiny_ch;
+        msg.say(msg_text);
+      }
     });
     return;
   });
@@ -1028,8 +1036,10 @@ module.exports = (app) => {
   slapp.event('destiny_trials_update', (msg) => {
     getActivities(function(){
       var msg_text = destiny_single_msg(lang.msg.dest.trialsupdate, 'trials');
-      msg_text.channel = config.destiny_ch;
-      msg.say(msg_text);
+      if ('attachments' in msg_text) {
+        msg_text.channel = config.destiny_ch;
+        msg.say(msg_text);
+      }
     });
     return;
   });
