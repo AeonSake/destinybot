@@ -175,7 +175,7 @@ module.exports = (app) => {
         destiny_activities = JSON.parse(body).Response.data.activities;
         console.log("INFO: Destiny | Activities loaded");
         if (destiny_activities.xur.status.active) getXurItems(callback);
-        else generateAttachments(callback);
+        else processAdvisorData(callback);
       });
     });
   }
@@ -193,7 +193,7 @@ module.exports = (app) => {
         body += d;
       });
       res.on('end', function() {
-        generateAttachments(function(){
+        processAdvisorData(function(){
           destiny_info.xur.short.text = getItems(JSON.parse(body).Response.data.saleItemCategories[2].saleItems);
           destiny_info.xur.full = destiny_info.xur.full.concat(getItemsFull(JSON.parse(body).Response.data.saleItemCategories[2].saleItems));
           console.log("INFO: Destiny | Xûr items loaded");
@@ -292,7 +292,7 @@ module.exports = (app) => {
   
   function setScheduleTimes () {
     for (var key in destiny_schedules) {
-      destiny_schedules[key].schedule = destiny_schedules[key].schedule.replace("#", (moment().tz("America/Los_Angeles").isDST() ? "18" : "19"));
+      destiny_schedules[key].schedule = destiny_schedules[key].schedule.replace("#", (moment().tz("America/Los_Angeles").isDST() ? "17" : "18"));
     }
   }
   
@@ -444,7 +444,7 @@ module.exports = (app) => {
     return costs;
   }
   
-  function generateAttachments (callback) {
+  function processAdvisorData (callback) {
     destiny_info = {};
     
     for (var key in destiny_activities) {
@@ -1008,7 +1008,7 @@ module.exports = (app) => {
   slapp.event('destiny_special_update', (msg) => {
     getActivities(function(){
       var msg_text = destiny_list_msg(lang.msg.dest.specialupdate, ['ironbanner', 'srl']);
-      if ('attachments' in msg_text) {
+      if ('attachments' in msg_text && msg_text.attachments.length > 0) {
         msg_text.channel = config.destiny_ch;
         msg.say(msg_text);
       }
@@ -1019,7 +1019,7 @@ module.exports = (app) => {
   slapp.event('destiny_armsday_update', (msg) => {
     getActivities(function(){
       var msg_text = destiny_single_msg(lang.msg.dest.armsdayupdate, 'armsday', true);
-      if ('attachments' in msg_text) {
+      if ('attachments' in msg_text && msg_text.attachments.length > 0) {
         msg_text.attachments[0].callback_id = 'destiny_public_moreinfo_callback';
         msg_text.attachments[0].actions = [{
           name: 'armsday',
@@ -1036,7 +1036,7 @@ module.exports = (app) => {
   slapp.event('destiny_xur_update', (msg) => {
     getActivities(function(){
       var msg_text = destiny_single_msg(lang.msg.dest.xurupdate, 'xur', true);
-      if ('attachments' in msg_text) {
+      if ('attachments' in msg_text && msg_text.attachments.length > 0) {
         msg_text.attachments[0].callback_id = 'destiny_public_moreinfo_callback';
         msg_text.attachments[0].actions = [{
           name: 'xur',
@@ -1053,7 +1053,7 @@ module.exports = (app) => {
   slapp.event('destiny_trials_update', (msg) => {
     getActivities(function(){
       var msg_text = destiny_single_msg(lang.msg.dest.trialsupdate, 'trials');
-      if ('attachments' in msg_text) {
+      if ('attachments' in msg_text && msg_text.attachments.length > 0) {
         msg_text.channel = config.destiny_ch;
         msg.say(msg_text);
       }
