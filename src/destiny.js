@@ -645,7 +645,9 @@ module.exports = (app) => {
     
     if (destiny_info.hasOwnProperty(key)) {
       if (short) msg_text.attachments.push(destiny_info[key].short);
-      else msg_text.attachments = destiny_info[key].full;
+      else {
+        for (var i in destiny_info[key].full) msg_text.attachments.push(destiny_info[key].full[i]);
+      }
     }
     
     return msg_text;
