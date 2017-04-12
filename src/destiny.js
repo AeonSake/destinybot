@@ -472,7 +472,7 @@ module.exports = (app) => {
           if ('skullCategories' in act.extended && act.extended.skullCategories.length != 0) {
             text += getSkulls(act.extended.skullCategories) + "\n";
             fields.push({
-              title: act.extended.skullCategories[0].title,
+              title: act.extended.skullCategories[0].title + ":",
               value: getSkullsFull(act.extended.skullCategories),
               short: false
             });
