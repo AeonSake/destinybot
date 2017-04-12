@@ -22,11 +22,11 @@ module.exports = (slapp, kv, config, func) => {
       token: config.bot_token
     }, (err, data) => {
       if (err) {
-        console.log("ERROR: User | Unable to load team info (" + err + ")");
+        console.log("ERROR: Team | Unable to load team info (" + err + ")");
       }
       else {
         team_db = data.team;
-        console.log("INFO: User | Team info loaded");
+        console.log("INFO: Team | Team info loaded");
       }
     });
   }
@@ -37,11 +37,11 @@ module.exports = (slapp, kv, config, func) => {
       token: config.bot_token
     }, (err, data) => {
       if (err) {
-        console.log("WARN: User | Unable to load user info (" + err + "), using old data instead (if existing)");
+        console.log("WARN: Team | Unable to load user info (" + err + "), using old data instead (if existing)");
         
         kv.get('user_db', function (err, val) {
           if (err || typeof val == "undefined") {
-            console.log("ERROR: User | Unable to load old user info (" + err + ")");
+            console.log("ERROR: Team | Unable to load old user info (" + err + ")");
           }
           else user_db = val;
         });
@@ -63,10 +63,10 @@ module.exports = (slapp, kv, config, func) => {
           };
         }
         
-        console.log("INFO: User | User info loaded");
+        console.log("INFO: Team | User info loaded");
         
         kv.set('user_db', user_db, function (err) {
-          if (err) console.log("WARN: User | Unable to save user info (" + err + ")");
+          if (err) console.log("WARN: Team | Unable to save user info (" + err + ")");
         });
       }
     });
@@ -78,7 +78,7 @@ module.exports = (slapp, kv, config, func) => {
       token: config.bot_token,
       user: user_id
     }, (err, data) => {
-      if (err) console.log("WARN: User | Unable to fetch user channel (" + err + ")");
+      if (err) console.log("WARN: Team | Unable to fetch user channel (" + err + ")");
       else addUserDM(user_id, data.channel.id);
     });
   }
@@ -101,7 +101,7 @@ module.exports = (slapp, kv, config, func) => {
         text: msg_text.text,
         attachments: msg_text.attachments
       }, (err, data) => {
-        if (err) console.log("ERROR: User | Unable to send user DM (" + err + ")");
+        if (err) console.log("ERROR: Team | Unable to send user DM (" + err + ")");
       });
     } else {
       getUserDM(user_id);
