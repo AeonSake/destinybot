@@ -1784,7 +1784,11 @@ module.exports = (app) => {
       msg.route('event_edit_route', data, 60);
       return;
     } else {
-      switch (msg.body.actions[0].name) {
+      var key = "";
+      if ('selected_options' in msg.body.actions[0]) key = msg.body.actions[0].selected_options[0].value;
+      else key = msg.body.actions[0].name;
+      
+      switch (key) {
         case 'title':
           msg.respond(event_edit_title_msg);
           msg.route('event_edit_title_route', data, 60);
