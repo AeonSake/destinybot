@@ -448,6 +448,11 @@ module.exports = (app) => {
       console.log("test");
     }
     
+    pages.push({
+      text: lang.wrd.page + " " + (page + 1) + " / " + max,
+      value: page + '-' + mode + "-" + sort
+    });
+    
     if (page != 0) btns.push({
       name: 'back-' + mode + "-" + sort,
       value: page - 1,
