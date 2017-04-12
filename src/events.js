@@ -999,7 +999,6 @@ module.exports = (app) => {
       var temp = this.datetime;
       this.title = data.title;
       this.text = data.text;
-      this.state = data.state;
       this.ts.edited = data.ts.edited;
       this.options.max = data.options.max;
       this.options.invite = data.options.invite;
@@ -1009,6 +1008,13 @@ module.exports = (app) => {
         this.datetime = data.datetime;
         this.editSchedules(msg);
       }
+      
+      if (this.state == 2 && this.state != data.state) {
+        if (moment(this.datetime) > moment()) {
+          this.state = 0;
+          this.setSchedules(msg);
+        } else this.state = 1;
+      } else this.state = data.state;
       
       for (var i in data.deletemembers) {
         var temp = this.members.indexOf(data.deletemembers[i]);
