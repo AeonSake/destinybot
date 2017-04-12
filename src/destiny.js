@@ -796,7 +796,7 @@ module.exports = (app) => {
           break;
         default:
           msg_text = destiny_summary_msg();
-          msg_text.attachments.push(destiny_moreinfo_att(0));
+          //msg_text.attachments.push(destiny_moreinfo_att(0));
           break;
       }
 
@@ -904,7 +904,7 @@ module.exports = (app) => {
         break;
       default:
         msg_text = destiny_summary_msg();
-        msg_text.attachments.push(destiny_moreinfo_att(0));
+        //msg_text.attachments.push(destiny_moreinfo_att(0));
         break;
     }
     
@@ -999,8 +999,8 @@ module.exports = (app) => {
   slapp.event('destiny_weekly_update', (msg) => {
     getActivities(function(){
       var msg_text = destiny_summary_msg(lang.msg.dest.weeklyreset);
-      msg_text.attachments.push(destiny_moreinfo_att(0));
-      msg_text.attachments[msg_text.attachments.length - 1].callback_id = 'destiny_public_moreinfo_callback';
+      //msg_text.attachments.push(destiny_moreinfo_att(0));
+      //msg_text.attachments[msg_text.attachments.length - 1].callback_id = 'destiny_public_moreinfo_callback';
       msg_text.channel = config.destiny_ch;
       msg.say(msg_text);
     });
