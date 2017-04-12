@@ -463,11 +463,11 @@ module.exports = (app) => {
       name: 'page',
       text: lang.wrd.page + " " + (page + 1) + " / " + max,
       type: 'select',
-      options: pages
-      /*selected_options: [{
+      options: pages,
+      selected_options: [{
         text: lang.wrd.page + " " + (page + 1) + " / " + max,
         value: page + '-' + mode + "-" + sort
-      }]*/
+      }]
     });
     if (page + 1 < max) btns.push({
       name: 'next-' + mode + "-" + sort,
