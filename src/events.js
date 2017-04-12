@@ -437,7 +437,13 @@ module.exports = (app) => {
   
   function event_show_pages_att (page, count, mode, sort) {
     var btns = [],
-        max = Math.ceil(count / 5);
+        max = Math.ceil(count / 5),
+        pages = [];
+    
+    for (var i in max) pages.push({
+      text: lang.wrd.page + " " + (i + 1) + " / " + max,
+      value: i + '-' + mode + "-" + sort
+    });
     
     if (page != 0) btns.push({
       name: 'back-' + mode + "-" + sort,
@@ -448,7 +454,12 @@ module.exports = (app) => {
     btns.push({
       name: 'page',
       text: lang.wrd.page + " " + (page + 1) + " / " + max,
-      type: 'button'
+      type: 'select',
+      options: pages
+      /*selected_options: [{
+        text: lang.wrd.page + " " + (page + 1) + " / " + max,
+        value: page + '-' + mode + "-" + sort
+      }]*/
     });
     if (page + 1 < max) btns.push({
       name: 'next-' + mode + "-" + sort,
@@ -558,7 +569,13 @@ module.exports = (app) => {
   
   function event_edit_pages_att (page, count, sort) {
     var btns = [],
-        max = Math.ceil(count / 5);
+        max = Math.ceil(count / 5),
+        pages = [];
+    
+    for (var i in max) pages.push({
+      text: lang.wrd.page + " " + (i + 1) + " / " + max,
+      value: i + "-" + sort
+    });
     
     if (page != 0) btns.push({
       name: 'back-' + sort,
@@ -569,7 +586,12 @@ module.exports = (app) => {
     btns.push({
       name: 'page',
       text: lang.wrd.page + " " + (page + 1) + " / " + max,
-      type: 'button'
+      type: 'select',
+      options: pages,
+      selected_options: [{
+        text: lang.wrd.page + " " + (page + 1) + " / " + max,
+        value: page + "-" + sort
+      }]
     });
     if (page + 1 < max) btns.push({
       name: 'next-' + sort,
@@ -617,7 +639,29 @@ module.exports = (app) => {
       if (event_db[j].isVisible() && event_db[j].isOwner(user_id)) {
         if (eventcount >= page * 5 && eventcount < page * 5 + 5) {
           msg_text.attachments.push(event_db[j].generateAttachment());
-          msg_text.attachments.push(event_edit_del_att(event_db[j].getData().id));
+          msg_text.attachments[msg_text.attachments.length - 1].callback_id = 'event_edit_del_callback';
+          var id = event_db[j].getData().id;
+          msg_text.attachments[msg_text.attachments.length - 1].actions = [
+            {
+              name: 'edit',
+              value: id,
+              text: lang.btn.edit,
+              type: 'button'
+            },
+            {
+              name: 'delete',
+              value: id,
+              text: lang.btn.delete,
+              type: 'button',
+              style: 'danger',
+              confirm: {
+                title: lang.msg.confirm,
+                text: lang.msg.evt.confirmdelete,
+                ok_text: lang.btn.yes,
+                dismiss_text: lang.btn.no
+              }
+            }
+          ];
         }
         eventcount++;
       }
@@ -946,9 +990,12 @@ module.exports = (app) => {
       if (!('options' in data)) data.options = {};
       this.options = {
         max: 6, //max: 0 = all, etc
+        invite: false,
+        invited: data.options.invited || [],
         color: data.options.color || func.getRandomColor()
       };
       if ('max' in data.options) this.options.max = data.options.max;
+      if ('invite' in data.options) this.options.invite = data.options.invite;
       if (!('schedule' in data)) data.schedule = {};
       this.schedule = {
         reminder: data.schedule.reminder || "",
@@ -963,6 +1010,8 @@ module.exports = (app) => {
       this.state = data.state;
       this.ts.edited = data.ts.edited;
       this.options.max = data.options.max;
+      this.options.invite = data.options.invite;
+      this.options.invited = data.options.invited;
       
       if (this.datetime != data.datetime) {
         this.datetime = data.datetime;
@@ -985,7 +1034,7 @@ module.exports = (app) => {
         creator: this.creator,
         ts: {created: this.ts.created},
         state: this.state,
-        options: {max: this.options.max, color: this.options.color}
+        options: {max: this.options.max, invite: this.options.invite, invited: this.options.invited, color: this.options.color}
       };
     }
 
@@ -1013,6 +1062,7 @@ module.exports = (app) => {
         temp_members += user.getUser(this.members[i]).name;
         if (i < this.members.length - 1) temp_members += ", ";
       }
+      if (temp_members.length == 0) temp_members = lang.msg.evt.nomembers;
       
       var att_fields = [
         {
@@ -1025,9 +1075,11 @@ module.exports = (app) => {
           short: false
         }
       ];
-      var temp_state = "";
-      if (this.state == 1) temp_state = " [" + lang.wrd.outdated + "]";
-      else if (this.state == 2) temp_state = " [" + lang.wrd.deleted + "]";
+      
+      var temp_state = " ";
+      if (this.options.invite) temp_state += "[" + lang.wrd.oninvite + "]";
+      if (this.state == 1) temp_state += "[" + lang.wrd.outdated + "]";
+      else if (this.state == 2) temp_state += "[" + lang.wrd.deleted + "]";
       
       return {
         author_name: lang.wrd.event + " #" + (this.id + 1) + temp_state,
@@ -1046,7 +1098,7 @@ module.exports = (app) => {
     generateEvent () {
       var btns = [];
 
-      if (this.options.max == 0 || this.members.length < this.options.max) btns.push({
+      if ((this.options.max == 0 || this.members.length < this.options.max) && !this.options.invite) btns.push({
         name: 'join',
         value: this.id,
         text: lang.btn.evt.join,
@@ -1080,6 +1132,7 @@ module.exports = (app) => {
           temp_members = "user1, user2",
           temp_ts = 0,
           temp_max = 6,
+          temp_invite = false;
           temp_color = "";
       if ('text' in data) temp_text = data.text;
       if ('datetime' in data) temp_datetime = moment(data.datetime).format(lang.msg.evt.dateformat);
@@ -1089,9 +1142,11 @@ module.exports = (app) => {
           temp_members += user.getUser(data.members[i]).name;
           if (i < data.members.length - 1) temp_members += ", ";
         }
+        if (temp_members.length == 0) temp_members = lang.msg.evt.nomembers;
       }
       if ('options' in data) {
         temp_max = data.options.max;
+        temp_invite = data.options.invite;
         temp_color = data.options.color || "";
       }
       
@@ -1106,9 +1161,11 @@ module.exports = (app) => {
           short: false
         }
       ];
-      var temp_state = "";
-      if (data.state == 1) temp_state = " [" + lang.wrd.outdated + "]";
-      else if (data.state == 2) temp_state = " [" + lang.wrd.deleted + "]";
+      
+      var temp_state = " ";
+      if (temp_invite) temp_state += "[" + lang.wrd.oninvite + "]";
+      if (data.state == 1) temp_state += "[" + lang.wrd.outdated + "]";
+      else if (data.state == 2) temp_state += "[" + lang.wrd.deleted + "]";
       
       return {
         author_name: lang.wrd.event + " #" + (data.id + 1) + temp_state,
@@ -1634,19 +1691,21 @@ module.exports = (app) => {
   });
   
   slapp.action('event_show_pages_callback', (msg) => {
-    var data = msg.body.actions[0].name.split("-"),
-        page = parseInt(msg.body.actions[0].value);
-    
-    switch (data[0]) {
-      case 'back':
-      case 'next':
-        msg.respond(event_list_msg(page, parseInt(data[1]), data[2], msg.body.user.id));
-        return;
-      case 'page':
-        return;
-      case 'dismiss':
-        msg.respond({text: "", delete_original: true});
-        return;
+    if ('selected_options' in msg.body.actions[0]) {
+      var data = msg.body.actions[0].selected_options[0].value.split("-");
+      msg.respond(event_list_msg(parseInt(data[0]), parseInt(data[1]), data[2], msg.body.user.id));
+      return;
+    } else {
+      var data = msg.body.actions[0].name.split("-");
+      switch (data[0]) {
+        case 'back':
+        case 'next':
+          msg.respond(event_list_msg(parseInt(msg.body.actions[0].value), parseInt(data[1]), data[2], msg.body.user.id));
+          return;
+        case 'dismiss':
+          msg.respond({text: "", delete_original: true});
+          return;
+      }
     }
   });
   
@@ -1674,22 +1733,25 @@ module.exports = (app) => {
   });
   
   slapp.action('event_edit_pages_callback', (msg) => {
-    var data = msg.body.actions[0].name.split("-");
-    
-    switch (data[0]) {
-      case 'back':
-      case 'next':
-        msg.respond(event_edit_list_msg(msg.body.user.id, parseInt(msg.body.actions[0].value), data[1]));
-        return;
-      case 'page':
-        return;
-      case 'asc':
-      case 'desc':
-        msg.respond(event_edit_list_msg(msg.body.user.id, 0, data[0]));
-        return;
-      case 'dismiss':
-        msg.respond({text: "", delete_original: true});
-        return;
+    if ('selected_options' in msg.body.actions[0]) {
+      var data = msg.body.actions[0].selected_options[0].value.split("-");
+      msg.respond(event_edit_list_msg(msg.body.user.id, parseInt(data[0]), data[1]));
+      return;
+    } else {
+      var data = msg.body.actions[0].name.split("-");
+      switch (data[0]) {
+        case 'back':
+        case 'next':
+          msg.respond(event_edit_list_msg(msg.body.user.id, parseInt(msg.body.actions[0].value), data[1]));
+          return;
+        case 'asc':
+        case 'desc':
+          msg.respond(event_edit_list_msg(msg.body.user.id, 0, data[0]));
+          return;
+        case 'dismiss':
+          msg.respond({text: "", delete_original: true});
+          return;
+      }
     }
   });
   

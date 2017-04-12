@@ -25,6 +25,7 @@ let lang = module.exports = {
     filter: "Filter",
     outdated: "Abgelaufen",
     closed: "Geschlossen",
+    oninvite: "Mit Einladung",
     deleted: "Gelöscht",
     member: "Teilnehmer",
   },
