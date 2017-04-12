@@ -20,7 +20,7 @@ module.exports = (app) => {
   let config = app.config;
   let func = app.func;
   let lang = app.lang;
-  let user = app.user;
+  let team = app.team;
   
   var module = {};
   
@@ -1150,7 +1150,7 @@ module.exports = (app) => {
         
         for (var j in this.answers[i].votes) {
           if (this.options.names) {
-            votes += user.getUser(this.answers[i].votes[j]).name + ", ";
+            votes += team.getUser(this.answers[i].votes[j]).name + ", ";
           } else {
             votes = (j + 1);
           }
@@ -1178,8 +1178,8 @@ module.exports = (app) => {
         text: this.text,
         fallback: this.text,
         fields: att_fields,
-        //footer_icon: user.getUser(this.creator).avatar_24,
-        footer: user.getUser(this.creator).name,
+        //footer_icon: team.getUser(this.creator).avatar_24,
+        footer: team.getUser(this.creator).name,
         ts: this.ts.created,
         color: this.options.color,
         mrkdwn_in: ['text', 'pretext', 'fields']
@@ -1259,7 +1259,7 @@ module.exports = (app) => {
             if (data.answers[i].state != 3) {
               for (var j in data.answers[i].votes) {
                 if (data.options.names) {
-                  votes += user.getUser(data.answers[i].votes[j]).name + ", ";
+                  votes += team.getUser(data.answers[i].votes[j]).name + ", ";
                 } else {
                   votes = (j + 1);
                 }
@@ -1298,8 +1298,8 @@ module.exports = (app) => {
         text: temp_text,
         fallback: temp_text,
         fields: att_fields,
-        //footer_icon: user.getUser(data.creator).avatar_24,
-        footer: user.getUser(data.creator).name,
+        //footer_icon: team.getUser(data.creator).avatar_24,
+        footer: team.getUser(data.creator).name,
         ts: temp_ts,
         color: temp_color,
         mrkdwn_in: ['text', 'pretext', 'fields']
@@ -1708,8 +1708,8 @@ module.exports = (app) => {
     if (check.test(cmd.substring(5))) {
       var slot = findPoll(parseInt(cmd.substring(5)) - 1);
       
-      if (slot != -1 && (poll_db[slot].isVisible() || user.isAdmin(msg.body.user_id))) {
-        if (poll_db[slot].isOwner(msg.body.user_id) || user.isAdmin(msg.body.user_id)) {
+      if (slot != -1 && (poll_db[slot].isVisible() || team.isAdmin(msg.body.user_id))) {
+        if (poll_db[slot].isOwner(msg.body.user_id) || team.isAdmin(msg.body.user_id)) {
           var data = poll_db[slot].getData(),
               msg_text = poll_edit_msg(data.state);
           msg_text.attachments[0] = Poll.generateDummy(data);

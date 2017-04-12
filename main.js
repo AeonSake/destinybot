@@ -31,7 +31,7 @@ var server = slapp.attachToExpress(express());
 var kv = BeepBoopPersist({provider: config.bb_persist_provider});
 
 const func = require('./src/func')(slapp, config, lang);
-const user = require('./src/user')(slapp, kv, config, func);
+const team = require('./src/team')(slapp, kv, config, func);
 
 var app = {
   slapp,
@@ -40,7 +40,7 @@ var app = {
   config,
   func,
   lang,
-  user
+  team
 };
 
 require('./src/destiny')(app);

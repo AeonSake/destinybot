@@ -21,7 +21,7 @@ module.exports = (app) => {
   let config = app.config;
   let func = app.func;
   let lang = app.lang;
-  let user = app.user;
+  let team = app.team;
   
   var module = {};
   
@@ -889,7 +889,7 @@ module.exports = (app) => {
       });
       atts[atts.length - 1].actions.push({
         name: members[i],
-        text: user.getUser(members[i]).name,
+        text: team.getUser(members[i]).name,
         type: 'button'
       });
     }
@@ -1059,7 +1059,7 @@ module.exports = (app) => {
     generateAttachment () {
       var temp_members = "";
       for (var i in this.members) {
-        temp_members += user.getUser(this.members[i]).name;
+        temp_members += team.getUser(this.members[i]).name;
         if (i < this.members.length - 1) temp_members += ", ";
       }
       if (temp_members.length == 0) temp_members = lang.msg.evt.nomembers;
@@ -1087,8 +1087,8 @@ module.exports = (app) => {
         text: this.text,
         fallback: this.text,
         fields: att_fields,
-        //footer_icon: user.getUser(this.creator).avatar_24,
-        footer: user.getUser(this.creator).name,
+        //footer_icon: team.getUser(this.creator).avatar_24,
+        footer: team.getUser(this.creator).name,
         ts: this.ts.created,
         color: this.options.color,
         mrkdwn_in: ['text', 'pretext', 'fields']
@@ -1139,7 +1139,7 @@ module.exports = (app) => {
       if ('members' in data) {
         temp_members = "";
         for (var i in data.members) {
-          temp_members += user.getUser(data.members[i]).name;
+          temp_members += team.getUser(data.members[i]).name;
           if (i < data.members.length - 1) temp_members += ", ";
         }
         if (temp_members.length == 0) temp_members = lang.msg.evt.nomembers;
@@ -1173,8 +1173,8 @@ module.exports = (app) => {
         text: temp_text,
         fallback: temp_text,
         fields: att_fields,
-        //footer_icon: user.getUser(data.creator).avatar_24,
-        footer: user.getUser(data.creator).name,
+        //footer_icon: team.getUser(data.creator).avatar_24,
+        footer: team.getUser(data.creator).name,
         ts: temp_ts,
         color: temp_color,
         mrkdwn_in: ['text', 'pretext', 'fields']
@@ -1375,12 +1375,12 @@ module.exports = (app) => {
       msg_text.attachments[0].callback_id = 'event_schedule_answer';
       msg_text.attachments[0].actions = btns;
       
-      for (var i in this.members) user.sendDM(this.members[i], msg_text);
+      for (var i in this.members) team.sendDM(this.members[i], msg_text);
     }
     
     notifyCreator (user_id) {
-      var msg_text = user.getUser(user_id).name + " " + lang.msg.evt.hascanceled + " *" + this.title + "*";
-      user.sendDM(this.creator, func.generateInfoMsg(msg_text));
+      var msg_text = team.getUser(user_id).name + " " + lang.msg.evt.hascanceled + " *" + this.title + "*";
+      team.sendDM(this.creator, func.generateInfoMsg(msg_text));
     }
   }
   
@@ -1719,8 +1719,8 @@ module.exports = (app) => {
     if (check.test(cmd.substring(5))) {
       var slot = findEvent(parseInt(cmd.substring(5)) - 1);
       
-      if (slot != -1 && (event_db[slot].isVisible() || user.isAdmin(msg.body.user_id))) {
-        if (event_db[slot].isOwner(msg.body.user_id) || user.isAdmin(msg.body.user_id)) {
+      if (slot != -1 && (event_db[slot].isVisible() || team.isAdmin(msg.body.user_id))) {
+        if (event_db[slot].isOwner(msg.body.user_id) || team.isAdmin(msg.body.user_id)) {
           var data = event_db[slot].getData(),
               msg_text = event_edit_msg(data.state);
           msg_text.attachments[0] = Event.generateDummy(data);
