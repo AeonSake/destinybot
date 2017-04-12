@@ -440,10 +440,13 @@ module.exports = (app) => {
         max = Math.ceil(count / 5),
         pages = [];
     
-    for (var i in max) pages.push({
+    for (var i in max) {
+      pages.push({
       text: lang.wrd.page + " " + (i + 1) + " / " + max,
       value: i + '-' + mode + "-" + sort
     });
+      console.log("test");
+    }
     
     if (page != 0) btns.push({
       name: 'back-' + mode + "-" + sort,
