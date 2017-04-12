@@ -440,17 +440,9 @@ module.exports = (app) => {
         max = Math.ceil(count / 5),
         pages = [];
     
-    for (var i in max) {
-      pages.push({
+    for (var i = 0; i < max; i++) pages.push({
       text: lang.wrd.page + " " + (i + 1) + " / " + max,
       value: i + '-' + mode + "-" + sort
-    });
-      console.log("test");
-    }
-    
-    pages.push({
-      text: lang.wrd.page + " " + (page + 1) + " / " + max,
-      value: page + '-' + mode + "-" + sort
     });
     
     if (page != 0) btns.push({
@@ -463,11 +455,7 @@ module.exports = (app) => {
       name: 'page',
       text: lang.wrd.page + " " + (page + 1) + " / " + max,
       type: 'select',
-      options: pages,
-      selected_options: [{
-        text: lang.wrd.page + " " + (page + 1) + " / " + max,
-        value: page + '-' + mode + "-" + sort
-      }]
+      options: pages
     });
     if (page + 1 < max) btns.push({
       name: 'next-' + mode + "-" + sort,
@@ -580,7 +568,7 @@ module.exports = (app) => {
         max = Math.ceil(count / 5),
         pages = [];
     
-    for (var i in max) pages.push({
+    for (var i = 0; i < max; i++) pages.push({
       text: lang.wrd.page + " " + (i + 1) + " / " + max,
       value: i + "-" + sort
     });
@@ -595,11 +583,7 @@ module.exports = (app) => {
       name: 'page',
       text: lang.wrd.page + " " + (page + 1) + " / " + max,
       type: 'select',
-      options: pages,
-      selected_options: [{
-        text: lang.wrd.page + " " + (page + 1) + " / " + max,
-        value: page + "-" + sort
-      }]
+      options: pages
     });
     if (page + 1 < max) btns.push({
       name: 'next-' + sort,
@@ -684,14 +668,13 @@ module.exports = (app) => {
   }
   
   function event_edit_msg (state) {
-    var btns = [];
-    btns.push({
+    var btns = [{
       name: 'done',
       text: lang.btn.done,
       type: 'button',
       style: 'primary'
-    });
-    btns.push({
+    },
+    {
       name: 'cancel',
       text: lang.btn.cancel,
       type: 'button',
@@ -701,7 +684,7 @@ module.exports = (app) => {
         ok_text: lang.btn.yes,
         dismiss_text: lang.btn.no
       }
-    });
+    }];
     if (state == 2) btns.push({
       name: 'undelete',
       text: lang.btn.undelete,
@@ -730,29 +713,31 @@ module.exports = (app) => {
           callback_id: 'event_edit_select_callback',
           actions: [
             {
-              name: 'title',
-              text: lang.btn.evt.title,
-              type: 'button'
-            },
-            {
-              name: 'text',
-              text: lang.btn.evt.text,
-              type: 'button'
-            },
-            {
-              name: 'datetime',
-              text: lang.btn.evt.datetime,
-              type: 'button'
-            },
-            {
-              name: 'members',
-              text: lang.btn.evt.members,
-              type: 'button'
-            },
-            {
-              name: 'max',
-              text: lang.btn.evt.max,
-              type: 'button'
+              name: 'edit_list',
+              text: lang.btn.plschoose,
+              type: 'select',
+              options: [
+                {
+                  value: 'title',
+                  text: lang.btn.evt.title
+                },
+                {
+                  value: 'text',
+                  text: lang.btn.evt.text
+                },
+                {
+                  value: 'datetime',
+                  text: lang.btn.evt.datetime
+                },
+                {
+                  value: 'members',
+                  text: lang.btn.evt.members
+                },
+                {
+                  value: 'max',
+                  text: lang.btn.evt.max
+                }
+              ]
             }
           ],
           mrkdwn_in: ['text', 'pretext']
@@ -1838,6 +1823,9 @@ module.exports = (app) => {
             saveEventDB();
             msg.respond(func.generateInfoMsg(lang.msg.evt.deleted));
           } else msg.respond(func.generateInfoMsg(lang.msg.evt.notfound));
+          return;
+        default:
+          msg.route('event_edit_route', data, 60);
           return;
       }
       
