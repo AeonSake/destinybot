@@ -1201,6 +1201,7 @@ module.exports = (app) => {
 
     delete () {
       for (var i in this.posts.length) {
+        console.log(this.posts[i].ts + " " + this.posts[i].ch);
         slapp.client.chat.delete({
           token: config.bot_token,
           ts: this.posts[i].ts,
@@ -2059,6 +2060,7 @@ module.exports = (app) => {
         if (err) console.log("Unable to post in channel (" + err + ")");
         else {
           event_db[slot].addPost(result.channel, result.ts);
+          console.log(result.ts + " " + result.channel);
           saveEventDB();
         }
       });
