@@ -139,6 +139,7 @@ let lang = module.exports = {
       
       neweventcreated: "Ein neuer Event wurde erstellt:",
       dateformat: "[Am] dd, [*]D.M.YYYY[*], [um] [*]HH:mm[*] [(]z[)]",
+      nomembers: "Keine Teilnehmer",
       
       editlist: "Liste Ihrer Events:",
       selectedit: "Welche Information soll bearbeitet werden?",

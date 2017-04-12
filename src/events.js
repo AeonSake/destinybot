@@ -1593,6 +1593,7 @@ module.exports = (app) => {
           if (!('options' in data)) data.options = {max: parseInt(msg.body.actions[0].name)};
           else data.options.max = parseInt(msg.body.actions[0].name);
         case 'next':
+          if (!('members' in data)) data.members = [];
           var msg_text = event_create_final_msg;
           msg_text.attachments[0] = Event.generateDummy(data);
           
@@ -1609,6 +1610,7 @@ module.exports = (app) => {
       if (check.test(temp)) {
         if (!('options' in data)) data.options = {max: temp};
         else data.options.max = temp;
+        if (!('members' in data)) data.members = [];
       } else {
         var msg_text = event_create_max_msg;
         msg_text.attachments[0] = Event.generateDummy(data); //show error msg
