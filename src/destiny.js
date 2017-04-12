@@ -554,44 +554,30 @@ module.exports = (app) => {
 // ========== MESSAGES ==========
 // ==============================
   
-  function destiny_moreinfo_att (mode) {
+  function destiny_moreinfo_att () {
     var att = {
       text: lang.msg.dest.moreinfo,
       fallback: lang.msg.dest.moreinfo,
       callback_id: 'destiny_moreinfo_callback',
-      actions: [],
+      actions: [{
+        name: 'info_list',
+        text: lang.btn.plschoose,
+        type: 'select',
+        options: []
+      }],
       mrkdwn_in: ['text', 'pretext']
     };
-    if (mode != 0) att.actions.push({
-      name: 'summary',
-      text: lang.btn.dest.summary,
-      type: 'button'
-    });
-    if (mode != 1) att.actions.push({
-      name: 'pve',
-      text: lang.btn.dest.pve,
-      type: 'button'
-    });
-    if (mode != 2) att.actions.push({
-      name: 'raids',
-      text: lang.btn.dest.raids,
-      type: 'button'
-    });
-    if (mode != 3) att.actions.push({
-      name: 'pvp',
-      text: lang.btn.dest.pvp,
-      type: 'button'
-    });
-    if (mode != 4) att.actions.push({
-      name: 'special',
-      text: lang.btn.dest.special,
-      type: 'button'
-    });
-    /*if (mode != 5) att.actions.push({
-      name: 'vendors',
-      text: lang.btn.dest.vendors,
-      type: 'button'
-    });*/
+    
+    for (var key in destiny_info) {
+      if (destiny_info.hasOwnProperty(key)) {
+        var type = destiny_info[key].short.author_name;
+        if (type == "") type = destiny_info[key].short.title;
+        att.actions[0].options.push({
+          value: key,
+          text: type
+        });
+      }
+    }
     
     return att;
   }
