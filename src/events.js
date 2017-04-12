@@ -513,8 +513,36 @@ module.exports = (app) => {
         case 3:
           if (event_db[j].isVisible() && event_db[j].isOwner(user_id)) {
             if (eventcount >= page * 5 && eventcount < page * 5 + 5) {
-              msg_text.attachments = msg_text.attachments.concat(event_db[j].generateEvent().attachments);
-              msg_text.attachments.push(event_edit_del_att(event_db[j].getData().id));
+              var temp_atts = event_db[j].generateEvent().attachments,
+                  id = event_db[j].getData().id;
+              temp_atts.push({
+                text: "",
+                fallback: "",
+                callback_id: 'event_edit_del_callback',
+                actions: [
+                  {
+                    name: 'edit',
+                    value: id,
+                    text: lang.btn.edit,
+                    type: 'button'
+                  },
+                  {
+                    name: 'delete',
+                    value: id,
+                    text: lang.btn.delete,
+                    type: 'button',
+                    style: 'danger',
+                    confirm: {
+                      title: lang.msg.confirm,
+                      text: lang.msg.evt.confirmdelete,
+                      ok_text: lang.btn.yes,
+                      dismiss_text: lang.btn.no
+                    }
+                  }
+                ],
+                mrkdwn_in: ['text', 'pretext']
+              });
+              msg_text.attachments.concat(temp_atts);
             }
             eventcount++;
           }
@@ -532,36 +560,6 @@ module.exports = (app) => {
   }
   
   // ===== EDIT =====
-  
-  function event_edit_del_att (id) {
-    return {
-      text: "",
-      fallback: "",
-      callback_id: 'event_edit_del_callback',
-      actions: [
-        {
-          name: 'edit',
-          value: id,
-          text: lang.btn.edit,
-          type: 'button'
-        },
-        {
-          name: 'delete',
-          value: id,
-          text: lang.btn.delete,
-          type: 'button',
-          style: 'danger',
-          confirm: {
-            title: lang.msg.confirm,
-            text: lang.msg.evt.confirmdelete,
-            ok_text: lang.btn.yes,
-            dismiss_text: lang.btn.no
-          }
-        }
-      ],
-      mrkdwn_in: ['text', 'pretext']
-    };
-  }
   
   function event_edit_pages_att (page, count, sort) {
     var btns = [],
@@ -630,10 +628,10 @@ module.exports = (app) => {
       
       if (event_db[j].isVisible() && event_db[j].isOwner(user_id)) {
         if (eventcount >= page * 5 && eventcount < page * 5 + 5) {
-          msg_text.attachments.push(event_db[j].generateAttachment());
-          msg_text.attachments[msg_text.attachments.length - 1].callback_id = 'event_edit_del_callback';
-          var id = event_db[j].getData().id;
-          msg_text.attachments[msg_text.attachments.length - 1].actions = [
+          var temp_att = event_db[j].generateAttachment(),
+              id = event_db[j].getData().id;
+          temp_att.callback_id = 'event_edit_del_callback';
+          temp_att.actions = [
             {
               name: 'edit',
               value: id,
@@ -654,6 +652,7 @@ module.exports = (app) => {
               }
             }
           ];
+          msg_text.attachments.push(temp_att);
         }
         eventcount++;
       }
@@ -1106,11 +1105,10 @@ module.exports = (app) => {
 
       var msg_text = {
         text: lang.msg.evt.neweventcreated,
-        attachments: [],
+        attachments: [this.generateAttachment()],
         delete_original: true
       }
-
-      msg_text.attachments[0] = this.generateAttachment();
+      
       if (this.state == 0) {
         msg_text.attachments[0].callback_id = 'event_answer_callback';
         msg_text.attachments[0].actions = btns;

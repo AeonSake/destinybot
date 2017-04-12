@@ -47,6 +47,7 @@ let lang = module.exports = {
     asc: "Aufsteigend",
     desc: "Absteigend",
     all: "Alle",
+    plschoose: "Bitte auswählen",
     
     dest: {
       summary: "Übersicht",
