@@ -1132,7 +1132,7 @@ module.exports = (app) => {
           temp_members = "user1, user2",
           temp_ts = 0,
           temp_max = 6,
-          temp_invite = false;
+          temp_invite = false,
           temp_color = "";
       if ('text' in data) temp_text = data.text;
       if ('datetime' in data) temp_datetime = moment(data.datetime).format(lang.msg.evt.dateformat);
