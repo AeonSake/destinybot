@@ -1200,8 +1200,7 @@ module.exports = (app) => {
     }
 
     delete () {
-      for (var i in this.posts.length) {
-        console.log(this.posts[i].ts + " " + this.posts[i].ch);
+      for (var i in this.posts) {
         slapp.client.chat.delete({
           token: config.bot_token,
           ts: this.posts[i].ts,
@@ -2055,12 +2054,11 @@ module.exports = (app) => {
   slapp.command('/event', "post \\d{1,4}", (msg, cmd) => {
     var slot = findEvent(parseInt(cmd.substring(5)) - 1);
     
-    if (slot != -1) {
+    if (slot != -1 && (event_db[slot].state != 2 || team.isAdmin(msg.body.user_id))) {
       msg.say(event_db[slot].generateEvent(), (err, result) => {
-        if (err) console.log("Unable to post in channel (" + err + ")");
+        if (err) console.log("Event | Unable to post in channel (" + err + ")");
         else {
           event_db[slot].addPost(result.channel, result.ts);
-          console.log(result.ts + " " + result.channel);
           saveEventDB();
         }
       });
