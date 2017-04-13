@@ -911,7 +911,7 @@ module.exports = (app) => {
   slapp.action('destiny_moreinfo_callback', (msg) => {
     try {
       var msg_text = {},
-          key = msg.body.actions[0].selected_options.[0].value;
+          key = msg.body.actions[0].selected_options[0].value;
 
       if (destiny_info.hasOwnProperty(key)) msg_text = destiny_single_msg("", key);
       if ('attachments' in msg_text) msg_text.attachments.push(destiny_dismiss_att);
