@@ -687,27 +687,32 @@ module.exports = (app) => {
         case 'all':
         case 'list':
           msg_text = destiny_list_msg(lang.msg.dest.main, []);
-          msg_text.attachments.push(destiny_moreinfo_att(0));
+          msg_text.attachments.push(destiny_moreinfo_att());
+          msg_text.attachments[msg_text.attachments.length - 1].callback_id = 'destiny_public_moreinfo_callback';
           break;
         case 'pve':
           msg_text = destiny_list_msg(lang.msg.dest.main, ['elderchallenge', 'weeklystory', 'heroicstrike', 'nightfall']);
-          msg_text.attachments.push(destiny_moreinfo_att(1));
+          msg_text.attachments.push(destiny_moreinfo_att());
+          msg_text.attachments[msg_text.attachments.length - 1].callback_id = 'destiny_public_moreinfo_callback';
           break;
         case 'raid':
         case 'raids':
           msg_text = destiny_list_msg(lang.msg.dest.main, ['weeklyfeaturedraid', 'vaultofglass', 'crota', 'kingsfall', 'wrathofthemachine']);
-          msg_text.attachments.push(destiny_moreinfo_att(2));
+          msg_text.attachments.push(destiny_moreinfo_att());
+          msg_text.attachments[msg_text.attachments.length - 1].callback_id = 'destiny_public_moreinfo_callback';
           break;
         case 'pvp':
         case 'crucible':
           msg_text = destiny_list_msg(lang.msg.dest.main, ['weeklycrucible', 'trials']);
-          msg_text.attachments.push(destiny_moreinfo_att(3));
+          msg_text.attachments.push(destiny_moreinfo_att());
+          msg_text.attachments[msg_text.attachments.length - 1].callback_id = 'destiny_public_moreinfo_callback';
           break;
         case 'special':
         case 'events':
         case 'specialevents':
           msg_text = destiny_list_msg(lang.msg.dest.main, ['ironbanner', 'armsday', 'xur', 'trials']);
-          msg_text.attachments.push(destiny_moreinfo_att(4));
+          msg_text.attachments.push(destiny_moreinfo_att());
+          msg_text.attachments[msg_text.attachments.length - 1].callback_id = 'destiny_public_moreinfo_callback';
           break;
         case 'elder':
         case 'elderchallenge':
@@ -782,7 +787,8 @@ module.exports = (app) => {
           break;
         default:
           msg_text = destiny_summary_msg();
-          //msg_text.attachments.push(destiny_moreinfo_att(0));
+          msg_text.attachments.push(destiny_moreinfo_att());
+          msg_text.attachments[msg_text.attachments.length - 1].callback_id = 'destiny_public_moreinfo_callback';
           break;
       }
 
@@ -807,27 +813,27 @@ module.exports = (app) => {
       case 'all':
       case 'list':
         msg_text = destiny_list_msg(lang.msg.dest.main, []);
-        msg_text.attachments.push(destiny_moreinfo_att(0));
+        msg_text.attachments.push(destiny_moreinfo_att());
         break;
       case 'pve':
         msg_text = destiny_list_msg(lang.msg.dest.main, ['elderchallenge', 'weeklystory', 'heroicstrike', 'nightfall']);
-        msg_text.attachments.push(destiny_moreinfo_att(1));
+        msg_text.attachments.push(destiny_moreinfo_att());
         break;
       case 'raid':
       case 'raids':
         msg_text = destiny_list_msg(lang.msg.dest.main, ['weeklyfeaturedraid', 'vaultofglass', 'crota', 'kingsfall', 'wrathofthemachine']);
-        msg_text.attachments.push(destiny_moreinfo_att(2));
+        msg_text.attachments.push(destiny_moreinfo_att());
         break;
       case 'pvp':
       case 'crucible':
         msg_text = destiny_list_msg(lang.msg.dest.main, ['weeklycrucible', 'trials']);
-        msg_text.attachments.push(destiny_moreinfo_att(3));
+        msg_text.attachments.push(destiny_moreinfo_att());
         break;
       case 'special':
       case 'events':
       case 'specialevents':
         msg_text = destiny_list_msg(lang.msg.dest.main, ['ironbanner', 'trials', 'srl', 'xur', 'armsday']);
-        msg_text.attachments.push(destiny_moreinfo_att(4));
+        msg_text.attachments.push(destiny_moreinfo_att());
         break;
       case 'elder':
       case 'elderchallenge':
@@ -890,7 +896,7 @@ module.exports = (app) => {
         break;
       default:
         msg_text = destiny_summary_msg();
-        //msg_text.attachments.push(destiny_moreinfo_att(0));
+        msg_text.attachments.push(destiny_moreinfo_att());
         break;
     }
     
@@ -903,34 +909,45 @@ module.exports = (app) => {
   // ===== button callbacks =====
   
   slapp.action('destiny_moreinfo_callback', (msg) => {
-    var msg_text = {};
-    switch (msg.body.actions[0].name) {
-      case 'summary':
-        msg_text = destiny_summary_msg();
-        msg_text.attachments.push(destiny_moreinfo_att(0));
-        break;
-      case 'pve':
-        msg_text = destiny_list_msg(lang.msg.dest.main, ['elderchallenge', 'weeklystory', 'heroicstrike', 'nightfall']);
-        msg_text.attachments.push(destiny_moreinfo_att(1));
-        break;
-      case 'raids':
-        msg_text = destiny_list_msg(lang.msg.dest.main, ['weeklyfeaturedraid', 'vaultofglass', 'crota', 'kingsfall', 'wrathofthemachine']);
-        msg_text.attachments.push(destiny_moreinfo_att(2));
-        break;
-      case 'pvp':
-        msg_text = destiny_list_msg(lang.msg.dest.main, ['weeklycrucible', 'ironbanner', 'trials']);
-        msg_text.attachments.push(destiny_moreinfo_att(3));
-        break;
-      case 'special':
-        msg_text = destiny_list_msg(lang.msg.dest.main, ['ironbanner', 'srl', 'armsday', 'xur', 'trials']);
-        msg_text.attachments.push(destiny_moreinfo_att(4));
-        break;
+    try {
+      var msg_text = {},
+          key = msg.body.actions[0].selected_options.[0].value;
+
+      if (destiny_info.hasOwnProperty(key)) msg_text = destiny_single_msg("", key);
+      if ('attachments' in msg_text) msg_text.attachments.push(destiny_dismiss_att);
+      else msg_text = func.generateInfoMsg(lang.msg.dest.notactive);
+      msg.respond(msg_text);
+      return;
+    } catch(err) {
+      var msg_text = {};
+      switch (msg.body.actions[0].name) {
+        case 'summary':
+          msg_text = destiny_summary_msg();
+          msg_text.attachments.push(destiny_moreinfo_att(0));
+          break;
+        case 'pve':
+          msg_text = destiny_list_msg(lang.msg.dest.main, ['elderchallenge', 'weeklystory', 'heroicstrike', 'nightfall']);
+          msg_text.attachments.push(destiny_moreinfo_att(1));
+          break;
+        case 'raids':
+          msg_text = destiny_list_msg(lang.msg.dest.main, ['weeklyfeaturedraid', 'vaultofglass', 'crota', 'kingsfall', 'wrathofthemachine']);
+          msg_text.attachments.push(destiny_moreinfo_att(2));
+          break;
+        case 'pvp':
+          msg_text = destiny_list_msg(lang.msg.dest.main, ['weeklycrucible', 'ironbanner', 'trials']);
+          msg_text.attachments.push(destiny_moreinfo_att(3));
+          break;
+        case 'special':
+          msg_text = destiny_list_msg(lang.msg.dest.main, ['ironbanner', 'srl', 'armsday', 'xur', 'trials']);
+          msg_text.attachments.push(destiny_moreinfo_att(4));
+          break;
+      }
+
+      if (msg_text.attachments.length == 1) msg_text.attachments.unshift({text: lang.msg.dest.noactivities, fallback: lang.msg.dest.noactivities});
+      msg_text.attachments.push(destiny_dismiss_att);
+      msg.respond(msg_text);
+      return; 
     }
-    
-    if (msg_text.attachments.length == 1) msg_text.attachments.unshift({text: lang.msg.dest.noactivities, fallback: lang.msg.dest.noactivities});
-    msg_text.attachments.push(destiny_dismiss_att);
-    msg.respond(msg_text);
-    return;
   });
   
   slapp.action('destiny_public_moreinfo_callback', (msg) => {
@@ -985,8 +1002,8 @@ module.exports = (app) => {
   slapp.event('destiny_weekly_update', (msg) => {
     getActivities(function(){
       var msg_text = destiny_summary_msg(lang.msg.dest.weeklyreset);
-      //msg_text.attachments.push(destiny_moreinfo_att(0));
-      //msg_text.attachments[msg_text.attachments.length - 1].callback_id = 'destiny_public_moreinfo_callback';
+      msg_text.attachments.push(destiny_moreinfo_att());
+      msg_text.attachments[msg_text.attachments.length - 1].callback_id = 'destiny_public_moreinfo_callback';
       msg_text.channel = config.destiny_ch;
       msg.say(msg_text);
     });
