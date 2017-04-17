@@ -909,99 +909,30 @@ module.exports = (app) => {
   // ===== button callbacks =====
   
   slapp.action('destiny_moreinfo_callback', (msg) => {
-    try {
-      var msg_text = {},
-          key = msg.body.actions[0].selected_options[0].value;
+    var msg_text = {},
+        key = msg.body.actions[0].selected_options[0].value;
 
-      if (destiny_info.hasOwnProperty(key)) msg_text = destiny_single_msg("", key);
+    if (destiny_info.hasOwnProperty(key)) {
+      msg_text = destiny_single_msg("", key);
       if ('attachments' in msg_text) msg_text.attachments.push(destiny_dismiss_att);
       else msg_text = func.generateInfoMsg(lang.msg.dest.notactive);
       msg.respond(msg_text);
-      return;
-    } catch(err) {
-      var msg_text = {};
-      switch (msg.body.actions[0].name) {
-        case 'summary':
-          msg_text = destiny_summary_msg();
-          msg_text.attachments.push(destiny_moreinfo_att(0));
-          break;
-        case 'pve':
-          msg_text = destiny_list_msg(lang.msg.dest.main, ['elderchallenge', 'weeklystory', 'heroicstrike', 'nightfall']);
-          msg_text.attachments.push(destiny_moreinfo_att(1));
-          break;
-        case 'raids':
-          msg_text = destiny_list_msg(lang.msg.dest.main, ['weeklyfeaturedraid', 'vaultofglass', 'crota', 'kingsfall', 'wrathofthemachine']);
-          msg_text.attachments.push(destiny_moreinfo_att(2));
-          break;
-        case 'pvp':
-          msg_text = destiny_list_msg(lang.msg.dest.main, ['weeklycrucible', 'ironbanner', 'trials']);
-          msg_text.attachments.push(destiny_moreinfo_att(3));
-          break;
-        case 'special':
-          msg_text = destiny_list_msg(lang.msg.dest.main, ['ironbanner', 'srl', 'armsday', 'xur', 'trials']);
-          msg_text.attachments.push(destiny_moreinfo_att(4));
-          break;
-      }
-
-      if (msg_text.attachments.length == 1) msg_text.attachments.unshift({text: lang.msg.dest.noactivities, fallback: lang.msg.dest.noactivities});
-      msg_text.attachments.push(destiny_dismiss_att);
-      msg.respond(msg_text);
-      return; 
     }
+    return;
   });
   
   slapp.action('destiny_public_moreinfo_callback', (msg) => {
-    try {
-      var msg_text = {},
-          key = msg.body.actions[0].selected_options[0].value;
+    var msg_text = {},
+        key = msg.body.actions[0].selected_options[0].value;
 
-      if (destiny_info.hasOwnProperty(key)) msg_text = destiny_single_msg("", key);
+    if (destiny_info.hasOwnProperty(key)) {
+      msg_text = destiny_single_msg("", key);
       if ('attachments' in msg_text) msg_text.attachments.push(destiny_dismiss_att);
       else msg_text = func.generateInfoMsg(lang.msg.dest.notactive);
       msg_text.replace_original = false;
       msg.respond(msg_text);
-      return;
-    } catch(err) {
-      var msg_text = {};
-      switch (msg.body.actions[0].name) {
-         case 'summary':
-          msg_text = destiny_summary_msg();
-          msg_text.attachments.push(destiny_moreinfo_att(0));
-          break;
-        case 'pve':
-          msg_text = destiny_list_msg(lang.msg.dest.main, ['elderchallenge', 'weeklystory', 'heroicstrike', 'nightfall']);
-          msg_text.attachments.push(destiny_moreinfo_att(1));
-          break;
-        case 'raids':
-          msg_text = destiny_list_msg(lang.msg.dest.main, ['weeklyfeaturedraid', 'vaultofglass', 'crota', 'kingsfall', 'wrathofthemachine']);
-          msg_text.attachments.push(destiny_moreinfo_att(2));
-          break;
-        case 'pvp':
-          msg_text = destiny_list_msg(lang.msg.dest.main, ['weeklycrucible', 'ironbanner', 'trials']);
-          msg_text.attachments.push(destiny_moreinfo_att(3));
-          break;
-        case 'special':
-          msg_text = destiny_list_msg(lang.msg.dest.main, ['ironbanner', 'srl', 'armsday', 'xur', 'trials']);
-          msg_text.attachments.push(destiny_moreinfo_att(4));
-          break;
-        case 'xur':
-          msg_text = destiny_single_msg("", 'xur');
-          break;
-        case 'armsday':
-          msg_text = destiny_single_msg("", 'armsday');
-          break;
-        default:
-          return;
-      }
-
-      if ('attachments' in msg_text) {
-        if (msg_text.attachments.length <= 1) msg_text.attachments.unshift({text: lang.msg.dest.noactivities, fallback: lang.msg.dest.noactivities});
-        msg_text.attachments.push(destiny_dismiss_att);
-      } else msg_text = func.generateInfoMsg(lang.msg.dest.notactive);
-      msg_text.replace_original = false;
-      msg.respond(msg_text);
-      return;
     }
+    return;
   });
   
   // ===== External update triggers =====
