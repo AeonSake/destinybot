@@ -910,7 +910,10 @@ module.exports = (app) => {
   
   slapp.action('destiny_moreinfo_callback', (msg) => {
     var msg_text = {},
-        key = msg.body.actions[0].selected_options[0].value;
+        key;
+    
+    if ('selected_options' in msg.body.actions[0]) key = msg.body.actions[0].selected_options[0].value;
+    else key = msg.body.actions[0].name;
 
     if (destiny_info.hasOwnProperty(key)) {
       msg_text = destiny_single_msg("", key);
@@ -923,7 +926,10 @@ module.exports = (app) => {
   
   slapp.action('destiny_public_moreinfo_callback', (msg) => {
     var msg_text = {},
-        key = msg.body.actions[0].selected_options[0].value;
+        key;
+    
+    if ('selected_options' in msg.body.actions[0]) key = msg.body.actions[0].selected_options[0].value;
+    else key = msg.body.actions[0].name;
 
     if (destiny_info.hasOwnProperty(key)) {
       msg_text = destiny_single_msg("", key);
