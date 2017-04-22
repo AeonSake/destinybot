@@ -97,7 +97,7 @@ module.exports = (app) => {
     
     for (var i = 0; i <= 11; i++) month_options.push({text: i, value: i});
     
-    for (var i = parseInt(moment().format("YYYY")); i > 1900; i--) day_options.push({text: i, value: i});
+    for (var i = parseInt(moment().format("YYYY")); i > 1900; i--) year_options.push({text: i, value: i});
     
     var actions = [
       {
