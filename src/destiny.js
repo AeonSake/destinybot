@@ -61,7 +61,6 @@ var destiny_info = {},
 
 module.exports = (app) => {
   let slapp = app.slapp;
-  let kv = app.kv;
   let moment = app.moment;
   let config = app.config;
   let func = app.func;
