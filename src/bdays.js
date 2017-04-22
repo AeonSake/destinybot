@@ -159,10 +159,10 @@ module.exports = (app) => {
       text: "",
       attachments: [
         {
-          text: lang.msg.bday.reminder.replace("###", user.real_name + " (<@" + user.id + ">)").replace("%%%", parseInt(moment().format("YYYY")) - parseInt(bday_db[user_id].date.year)),
-          fallback: lang.msg.bday.reminder.replace("###", user.real_name + " (<@" + user.id + ">)").replace("%%%", parseInt(moment().format("YYYY")) - parseInt(bday_db[user_id].date.year)),
+          text: lang.msg.bday.reminder.replace("###", "*" + user.real_name + "* (<@" + user.id + ">)").replace("%%%", parseInt(moment().format("YYYY")) - parseInt(bday_db[user_id].date.year)),
+          fallback: lang.msg.bday.reminder.replace("###", "*" + user.real_name + "* (<@" + user.id + ">)").replace("%%%", parseInt(moment().format("YYYY")) - parseInt(bday_db[user_id].date.year)),
           footer: moment().format("dd, D.M.YYYY"),
-          color: user.color,
+          color: func.getRandomColor(),
           mrkdwn_in: ['text', 'pretext']
         }
       ],
