@@ -84,7 +84,7 @@ module.exports = (app) => {
   
 // ===== EDIT =====
   
-  function bday_edit_msg (user_id, show_done) {
+  function bday_edit_msg (user_id) {
     var day_options = [],
         month_options = [],
         year_options = [],
@@ -94,7 +94,7 @@ module.exports = (app) => {
     if ('month' in date) {
       if ('year' in date) day_max = parseInt(moment().set('day', 1).set('month', date.month).set('year', date.year).endOf('month').format("D"));
       else day_max = parseInt(moment().set('day', 1).set('month', date.month).endOf('month').format("D"));
-      if (date.day > day_max) date.day = day_max;
+      if (date.day > day_max) bday_db[user_id].date.day = day_max;
     }
     
     for (var i = 1; i <= day_max; i++) day_options.push({text: i, value: i});
@@ -123,7 +123,7 @@ module.exports = (app) => {
         options: year_options
       }
     ];
-    if (show_done) actions.push({
+    if (('day' in date) && ('month' in date) && ('year' in date)) actions.push({
       name: 'done',
       text: lang.btn.done,
       type: 'button',
@@ -331,9 +331,7 @@ module.exports = (app) => {
   });
   
   slapp.action('bday_edit_callback', (msg) => {
-    var key = msg.body.actions[0].name,
-        date_before = bday_db[msg.body.user.id].date,
-        done_before = ('day' in date_before) && ('month' in date_before) && ('year' in date_before);
+    var key = msg.body.actions[0].name;
 
     switch (key) {
       case 'day':
@@ -350,10 +348,7 @@ module.exports = (app) => {
         return;
     }
     
-    var date_after = bday_db[msg.body.user.id].date,
-        done_after = ('day' in date_after) && ('month' in date_after) && ('year' in date_after);
-    
-    msg.respond(bday_edit_msg(msg.body.user.id, !done_before && done_after));
+    msg.respond(bday_edit_msg(msg.body.user.id));
     return;
   });
   

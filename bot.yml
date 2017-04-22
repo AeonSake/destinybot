@@ -39,6 +39,10 @@ config:
     friendly_name: Poll channel ID
     type: secret
     global: true
+  - name: bday_ch
+    friendly_name: Birthday channel ID
+    type: secret
+    global: true
 slackscopes:
   - bot
   - commands
