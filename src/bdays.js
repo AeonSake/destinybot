@@ -91,11 +91,11 @@ module.exports = (app) => {
         date = bday_db[user_id].date,
         day_max = 31;
     
-    if ('month' in date) day_max = parseInt(moment().set('day', 1).set('month', date.month).endOf('month').format("M"));
+    if ('month' in date) day_max = parseInt(moment().set('day', 1).set('month', date.month).endOf('month').format("D"));
     
     for (var i = 1; i <= day_max; i++) day_options.push({text: i, value: i});
     
-    for (var i = 0; i <= 11; i++) month_options.push({text: i, value: i});
+    for (var i = 0; i <= 11; i++) month_options.push({text: i + 1, value: i});
     
     for (var i = parseInt(moment().format("YYYY")); i > 1900; i--) year_options.push({text: i, value: i});
     
@@ -129,6 +129,8 @@ module.exports = (app) => {
     if ('day' in date) actions[0].selected_options = [{text: date.day, value: date.day}];
     if ('month' in date) actions[1].selected_options = [{text: date.month, value: date.month}];
     if ('year' in date) actions[2].selected_options = [{text: date.year, value: date.year}];
+    
+    console.log(actions[0]);
     
     return {
       text: "",
@@ -334,8 +336,6 @@ module.exports = (app) => {
     switch (key) {
       case 'day':
         bday_db[msg.body.user.id].date.day = parseInt(msg.body.actions[0].selected_options[0].value);
-        console.log(msg.body.actions);
-        console.log(msg.body.actions[0].selected_options);
         break;
       case 'month':
         bday_db[msg.body.user.id].date.month = parseInt(msg.body.actions[0].selected_options[0].value) - 1;
@@ -350,6 +350,8 @@ module.exports = (app) => {
     
     var date_after = bday_db[msg.body.user.id].date,
         done_after = ('day' in date_after) && ('month' in date_after) && ('year' in date_after);
+    
+    console.log(bday_db);
     
     msg.respond(bday_edit_msg(msg.body.user.id, !done_before && done_after));
     return;
