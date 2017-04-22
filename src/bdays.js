@@ -6,7 +6,7 @@
 
 const needle = require('needle');
 
-var bday_db = [];
+var bday_db = {};
 
 
 
@@ -225,10 +225,7 @@ module.exports = (app) => {
 // ================================
   
   function setSchedule (msg, user_id) {
-    var schedule = {};
-    for (var i in bday_db) {
-      if (bday_db[i].user_id == user_id) schedule = bday_db[i].date;
-    }
+    var schedule = bday_db[user_id].date;
     let ts = Date.now() + '';
     var data = {
       schedule: moment(schedule).add(config.bday_hour, 'h').format(),
@@ -258,7 +255,9 @@ module.exports = (app) => {
       json: true
     };
     
-    needle.post('beepboophq.com/api/v1/chronos/tasks', data, headers, (err, resp) => {
+    console.log(data.schedule);
+    
+    /*needle.post('beepboophq.com/api/v1/chronos/tasks', data, headers, (err, resp) => {
       if (resp.statusCode !== 201) console.log(resp.statusCode);
       if (err) console.log(err);
       else {
@@ -266,26 +265,26 @@ module.exports = (app) => {
           if (bday_db[i].user_id == user_id) bday_db[i].schedule_id = JSON.parse(resp.body).id;
         }
       };
-    });
+    });*/
   }
   
   function resetSchedule (msg, user_id) {
-    var schedule_id = "";
-    for (var i in bday_db) {
-      if (bday_db[i].user_id == user_id) schedule_id = bday_db[i].schedule_id;
+    var schedule_id = bday_db[user_id].schedule_id;
+    if (schedule_id = "") setSchedule(msg, user_id);
+    else {
+      var headers = {
+        headers: {
+          Authorization: 'Bearer ' + config.bb_token
+        },
+        json: true
+      };
+
+      needle.delete('https://beepboophq.com/api/v1/chronos/tasks/' + schedule_id, null, headers, (err, resp) => {
+          if (err) console.log(err);
+          else if (resp.statusCode !== 200) console.log(resp.statusCode);
+          else setSchedule(msg, user_id);
+      });
     }
-    var headers = {
-      headers: {
-        Authorization: 'Bearer ' + config.bb_token
-      },
-      json: true
-    };
-    
-    needle.delete('https://beepboophq.com/api/v1/chronos/tasks/' + schedule_id, null, headers, (err, resp) => {
-        if (err) console.log(err);
-        else if (resp.statusCode !== 200) console.log(resp.statusCode);
-        else setSchedule(msg, user_id);
-    });
   }
   
   
@@ -344,6 +343,8 @@ module.exports = (app) => {
         bday_db[msg.body.user.id].date.year = parseInt(msg.body.actions[0].selected_options[0].value);
         break;
       case 'done':
+        setSchedule(msg, msg.body.user.id);
+        saveBdayDB();
         msg.respond({text: "", delete_original: true});
         return;
     }
