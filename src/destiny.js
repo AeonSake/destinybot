@@ -542,7 +542,8 @@ module.exports = (app) => {
       }
     }
     
-    //assign colors
+    destiny_activities = {};
+    if (global.gc) global.gc();
     
     if (typeof callback === 'function') callback();
   }
