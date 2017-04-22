@@ -34,7 +34,7 @@ let config = module.exports = {
   bb_persist_provider: process.env.PERSIST_PROVIDER || 'beepboop',
   
   // Project config
-  version: "5.9.0",
+  version: "5.9.1",
   title: "DestinyBot",
   admin_id: process.env.admin_id,
   admin_ch: "",
@@ -57,7 +57,8 @@ let config = module.exports = {
   event_ch: process.env.event_ch || process.env.bot_ch,
  
   // Birthday config
-  event_ch: process.env.bday_ch || process.env.bday_ch,
+  bday_ch: process.env.bday_ch || process.env.bot_ch,
+  bday_hour: 8,
   
   
   // Validation function

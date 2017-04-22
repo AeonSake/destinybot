@@ -790,7 +790,7 @@ module.exports = (app) => {
       {
         name: 'back',
         text: lang.btn.back,
-        type: 'button',
+        type: 'button'
       },
       {
         name: 'cancel',
