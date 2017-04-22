@@ -269,7 +269,7 @@ module.exports = (app) => {
   
   function resetSchedule (msg, user_id) {
     var schedule_id = bday_db[user_id].schedule_id;
-    if (schedule_id = "") setSchedule(msg, user_id);
+    if (schedule_id == "") setSchedule(msg, user_id);
     else {
       var headers = {
         headers: {
