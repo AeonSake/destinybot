@@ -324,8 +324,7 @@ module.exports = (app) => {
   // ===== /bday edit =====
   
   slapp.command('/bday', "edit", (msg, cmd) => {
-    var date = bday_db[msg.body.user_id].date;
-    msg.respond(bday_edit_msg(msg.body.user_id, ('day' in date) && ('month' in date) && ('year' in date)));
+    msg.respond(bday_edit_msg(msg.body.user_id));
     return;
   });
   
@@ -353,6 +352,38 @@ module.exports = (app) => {
     return;
   });
   
+  // ===== /bday init =====
+  
+  slapp.command('/bday', "init", (msg, cmd) => {
+    if (msg.body.user_id == config.admin_id) {
+      var users = team.getUserList();
+      for (var i in users) {
+        if (users[i][0] != 'B' && team.isActive(users[i]) && !bday_db.hasOwnProperty(users[i])) {
+          console.log(team.getUserName(users[i]));
+          //bday_db[users[i]] = {date: {}, schedule_id: ""};
+          //team.sendDM(users[i], bday_edit_msg(users[i]));
+        }
+      }
+      bday_db[config.admin_id] = {date: {}, schedule_id: ""};
+      team.sendDM(config.admin_id, bday_edit_msg(users[i]));
+      saveBdayDB();
+    }
+    return;
+  });
+  
+  slapp.event('(team_join|user_change)', (msg) => {
+  var users = team.getUserList();
+    for (var i in users) {
+      if (users[i][0] != 'B' && team.isActive(users[i]) && !bday_db.hasOwnProperty(users[i])) {
+        console.log(team.getUserName(users[i]));
+        //bday_db[users[i]] = {date: {}, schedule_id: ""};
+        //team.sendDM(users[i], bday_edit_msg(users[i]));
+      }
+    }
+    saveBdayDB();
+    return;
+  });
+  
   // ===== /poll help =====
   
   slapp.command('/bday', "help", (msg, cmd) => {
@@ -376,6 +407,7 @@ module.exports = (app) => {
       case 'list':
         break;
       case 'edit':
+        msg_text = bday_edit_msg(msg.body.user.id);
         break;
       case 'help':
         msg.respond({
