@@ -1022,7 +1022,7 @@ module.exports = (app) => {
   };
   
   
-
+  
 // ===========================
 // ========== CLASS ==========
 // ===========================
@@ -1150,7 +1150,7 @@ module.exports = (app) => {
         
         for (var j in this.answers[i].votes) {
           if (this.options.names) {
-            votes += team.getUser(this.answers[i].votes[j]).name + ", ";
+            votes += team.getUserName(this.answers[i].votes[j]) + ", ";
           } else {
             votes = (j + 1);
           }
@@ -1178,8 +1178,7 @@ module.exports = (app) => {
         text: this.text,
         fallback: this.text,
         fields: att_fields,
-        //footer_icon: team.getUser(this.creator).avatar_24,
-        footer: team.getUser(this.creator).name,
+        footer: team.getUserName(this.creator),
         ts: this.ts.created,
         color: this.options.color,
         mrkdwn_in: ['text', 'pretext', 'fields']
@@ -1259,7 +1258,7 @@ module.exports = (app) => {
             if (data.answers[i].state != 3) {
               for (var j in data.answers[i].votes) {
                 if (data.options.names) {
-                  votes += team.getUser(data.answers[i].votes[j]).name + ", ";
+                  votes += team.getUserName(data.answers[i].votes[j]) + ", ";
                 } else {
                   votes = (j + 1);
                 }
@@ -1298,8 +1297,7 @@ module.exports = (app) => {
         text: temp_text,
         fallback: temp_text,
         fields: att_fields,
-        //footer_icon: team.getUser(data.creator).avatar_24,
-        footer: team.getUser(data.creator).name,
+        footer: team.getUserName(data.creator),
         ts: temp_ts,
         color: temp_color,
         mrkdwn_in: ['text', 'pretext', 'fields']

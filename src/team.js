@@ -5,7 +5,7 @@
 'use strict';
 
 var team_db = {};
-var user_db = [];
+var user_db = {};
 
 
 
@@ -47,13 +47,14 @@ module.exports = (slapp, kv, config, func) => {
         });
       }
       else {
-        user_db = [];
+        user_db = {};
         for (var i in data.members) {
-          user_db[i] = {
+          user_db[data.members[i].id] = {
             id: data.members[i].id,
             name: data.members[i].name,
             real_name: data.members[i].real_name,
             tz_offset: data.members[i].tz_offset,
+            color: data.members[i].color,
             avatar_24: data.members[i].profile.image_24,
             avatar_48: data.members[i].profile.image_48,
             avatar_192: data.members[i].profile.image_192,
@@ -79,51 +80,59 @@ module.exports = (slapp, kv, config, func) => {
       user: user_id
     }, (err, data) => {
       if (err) console.log("WARN: Team | Unable to fetch user channel (" + err + ")");
-      else addUserDM(user_id, data.channel.id);
+      else if (user_db.hasOwnProperty(user_id)) user_db[user_id].dm_ch = data.channel.id;
     });
-  }
-  
-  // Function to add DM channel id to user
-  function addUserDM (user_id, dm_ch) {
-    for (var i in user_db) {
-      if (user_db[i].id == user_id) user_db[i].dm_ch = dm_ch;
-    }
   }
   
   // Function for sending DMs to users
   module.sendDM = (user_id, msg_text) => {
-    var user = module.getUser(user_id);
-    
-    if ('dm_ch' in user) {
-      slapp.client.chat.postMessage({
-        token: config.bot_token,
-        channel: user.dm_ch,
-        text: msg_text.text,
-        attachments: msg_text.attachments
-      }, (err, data) => {
-        if (err) console.log("ERROR: Team | Unable to send user DM (" + err + ")");
-      });
-    } else {
-      getUserDM(user_id);
-      setTimeout(function() {
-        module.sendDM(user_id, msg_text);
-      }, 2000);
+    if (user_db.hasOwnProperty(user_id)) {
+      if ('dm_ch' in user_db[user_id]) {
+        slapp.client.chat.postMessage({
+          token: config.bot_token,
+          channel: user_db[user_id].dm_ch,
+          text: msg_text.text,
+          attachments: msg_text.attachments
+        }, (err, data) => {
+          if (err) console.log("ERROR: Team | Unable to send user DM (" + err + ")");
+        });
+      } else {
+        getUserDM(user_id);
+        setTimeout(function() {
+          module.sendDM(user_id, msg_text);
+        }, 2000);
+      } 
     }
   }
   
+  // Function to retrieve user name
+  module.getUserName = (user_id) => {
+    if (user_db.hasOwnProperty(user_id)) return user_db[user_id].name;
+    return "";
+  };
+  
   // Function to retrieve user info from database
-  module.getUser = (user_id) => {
-    for (var i in user_db) {
-      if (user_db[i].id == user_id) return user_db[i];
-    }
+  module.getUserInfo = (user_id) => {
+    if (user_db.hasOwnProperty(user_id)) return user_db[user_id];
     return {};
+  };
+  
+  // Function to retrieve all users as id list from database
+  module.getUserList = () => {
+    var arr = [];
+    for (var key in user_db) arr.push(key);
+    return arr;
+  };
+  
+  // Function to check if user is active
+  module.isActive = (user_id) => {
+    if (user_db.hasOwnProperty(user_id)) return !user_db[user_id].deleted;
+    return false;
   };
   
   // Function to check if user is admin
   module.isAdmin = (user_id) => {
-    for (var i in user_db) {
-      if (user_db[i].id == user_id) return user_db[i].admin;
-    }
+    if (user_db.hasOwnProperty(user_id)) return user_db[user_id].admin;
     return false;
   };
   

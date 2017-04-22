@@ -881,7 +881,7 @@ module.exports = (app) => {
       });
       atts[atts.length - 1].actions.push({
         name: members[i],
-        text: team.getUser(members[i]).name,
+        text: team.getUserName(members[i]),
         type: 'button'
       });
     }
@@ -1057,7 +1057,7 @@ module.exports = (app) => {
     generateAttachment () {
       var temp_members = "";
       for (var i in this.members) {
-        temp_members += team.getUser(this.members[i]).name;
+        temp_members += team.getUserName(this.members[i]);
         if (i < this.members.length - 1) temp_members += ", ";
       }
       if (temp_members.length == 0) temp_members = lang.msg.evt.nomembers;
@@ -1085,8 +1085,7 @@ module.exports = (app) => {
         text: this.text,
         fallback: this.text,
         fields: att_fields,
-        //footer_icon: team.getUser(this.creator).avatar_24,
-        footer: team.getUser(this.creator).name,
+        footer: team.getUserName(this.creator),
         ts: this.ts.created,
         color: this.options.color,
         mrkdwn_in: ['text', 'pretext', 'fields']
@@ -1136,7 +1135,7 @@ module.exports = (app) => {
       if ('members' in data) {
         temp_members = "";
         for (var i in data.members) {
-          temp_members += team.getUser(data.members[i]).name;
+          temp_members += team.getUserName(data.members[i]);
           if (i < data.members.length - 1) temp_members += ", ";
         }
         if (temp_members.length == 0) temp_members = lang.msg.evt.nomembers;
@@ -1170,8 +1169,7 @@ module.exports = (app) => {
         text: temp_text,
         fallback: temp_text,
         fields: att_fields,
-        //footer_icon: team.getUser(data.creator).avatar_24,
-        footer: team.getUser(data.creator).name,
+        footer: team.getUserName(data.creator),
         ts: temp_ts,
         color: temp_color,
         mrkdwn_in: ['text', 'pretext', 'fields']
@@ -1376,7 +1374,7 @@ module.exports = (app) => {
     }
     
     notifyCreator (user_id) {
-      var msg_text = team.getUser(user_id).name + " " + lang.msg.evt.hascanceled + " *" + this.title + "*";
+      var msg_text = team.getUserName(user_id) + " " + lang.msg.evt.hascanceled + " *" + this.title + "*";
       team.sendDM(this.creator, func.generateInfoMsg(msg_text));
     }
   }
