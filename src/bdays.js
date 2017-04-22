@@ -94,6 +94,7 @@ module.exports = (app) => {
     if ('month' in date) {
       if ('year' in date) day_max = parseInt(moment().set('day', 1).set('month', date.month).set('year', date.year).endOf('month').format("D"));
       else day_max = parseInt(moment().set('day', 1).set('month', date.month).endOf('month').format("D"));
+      if (date.day > day_max) date.day = day_max;
     }
     
     for (var i = 1; i <= day_max; i++) day_options.push({text: i, value: i});
@@ -130,8 +131,8 @@ module.exports = (app) => {
     });
     
     if ('day' in date) actions[0].text = date.day;
-    if ('month' in date) actions[1].text =date.month;
-    if ('year' in date) actions[2].text =date.year;
+    if ('month' in date) actions[1].text = date.month + 1;
+    if ('year' in date) actions[2].text = date.year;
     
     return {
       text: "",
@@ -339,7 +340,7 @@ module.exports = (app) => {
         bday_db[msg.body.user.id].date.day = parseInt(msg.body.actions[0].selected_options[0].value);
         break;
       case 'month':
-        bday_db[msg.body.user.id].date.month = parseInt(msg.body.actions[0].selected_options[0].value) - 1;
+        bday_db[msg.body.user.id].date.month = parseInt(msg.body.actions[0].selected_options[0].value);
         break;
       case 'year':
         bday_db[msg.body.user.id].date.year = parseInt(msg.body.actions[0].selected_options[0].value);
