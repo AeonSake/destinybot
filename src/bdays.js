@@ -349,7 +349,7 @@ module.exports = (app) => {
     var date_after = bday_db[msg.body.user.id].date,
         done_after = ('day' in date_after) && ('month' in date_after) && ('year' in date_after);
     
-    if (!done_before && done_after) msg.respond(bday_edit_msg(msg.body.user.id, true));
+    msg.respond(bday_edit_msg(msg.body.user.id, !done_before && done_after));
     return;
   });
   
