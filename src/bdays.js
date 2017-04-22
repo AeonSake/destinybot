@@ -356,7 +356,7 @@ module.exports = (app) => {
         }
       }
       bday_db[config.admin_id] = {date: {}, schedule_id: ""};
-      team.sendDM(config.admin_id, bday_edit_msg(users[i]));
+      team.sendDM(config.admin_id, bday_edit_msg(config.admin_id));
       saveBdayDB();
     }
     return;
