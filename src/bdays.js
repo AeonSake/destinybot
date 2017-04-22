@@ -91,7 +91,10 @@ module.exports = (app) => {
         date = bday_db[user_id].date,
         day_max = 31;
     
-    if ('month' in date) day_max = parseInt(moment().set('day', 1).set('month', date.month).endOf('month').format("D"));
+    if ('month' in date) {
+      if ('year' in date) day_max = parseInt(moment().set('day', 1).set('month', date.month).set('year', date.year).endOf('month').format("D"));
+      else day_max = parseInt(moment().set('day', 1).set('month', date.month).endOf('month').format("D"));
+    }
     
     for (var i = 1; i <= day_max; i++) day_options.push({text: i, value: i});
     
@@ -126,11 +129,9 @@ module.exports = (app) => {
       style: 'primary'
     });
     
-    if ('day' in date) actions[0].selected_options = [{text: date.day, value: date.day}];
-    if ('month' in date) actions[1].selected_options = [{text: date.month, value: date.month}];
-    if ('year' in date) actions[2].selected_options = [{text: date.year, value: date.year}];
-    
-    console.log(actions[0]);
+    if ('day' in date) actions[0].text = date.day;
+    if ('month' in date) actions[1].text =date.month;
+    if ('year' in date) actions[2].text =date.year;
     
     return {
       text: "",
@@ -350,8 +351,6 @@ module.exports = (app) => {
     
     var date_after = bday_db[msg.body.user.id].date,
         done_after = ('day' in date_after) && ('month' in date_after) && ('year' in date_after);
-    
-    console.log(bday_db);
     
     msg.respond(bday_edit_msg(msg.body.user.id, !done_before && done_after));
     return;
