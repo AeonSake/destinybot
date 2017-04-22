@@ -228,7 +228,8 @@ module.exports = (app) => {
     var schedule = bday_db[user_id].date;
     let ts = Date.now() + '';
     var data = {
-      schedule: moment(schedule).add(config.bday_hour, 'h').format(),
+      //schedule: moment(schedule).add(config.bday_hour, 'h').format(),
+      schedule: moment().add(1, 'm').format(),
       url: 'https://beepboophq.com/proxy/' + config.bb_project_id + '/slack/event',
       method: 'POST',
       headers: {
@@ -308,16 +309,6 @@ module.exports = (app) => {
     
     
     //msg.respond(msg_text);
-    return;
-  });
-  
-  // ===== /bday test =====
-  
-  slapp.command('/bday', "test", (msg, cmd) => {
-    if (msg.body.user_id == config.admin_id) bday_db[msg.body.user_id] = {
-      date: {},
-      schedule_id: ""
-    };
     return;
   });
   
@@ -419,6 +410,13 @@ module.exports = (app) => {
         break;
     }
     msg.respond(msg_text);
+    return;
+  });
+  
+  // ===== External event schedule trigger =====
+  
+  slapp.event('bday_schedule_reminder', (msg) => {
+    msg.say(bday_reminder_msg(msg.body.event.user));
     return;
   });
   
