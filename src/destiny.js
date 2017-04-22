@@ -483,7 +483,7 @@ module.exports = (app) => {
           if ('skullCategories' in act.activityTiers[act.activityTiers.length - 1]) text += getSkulls(act.activityTiers[act.activityTiers.length - 1].skullCategories) + "\n";
         }
         
-        if (act.expirationDate != 0) time = lang.msg.dest.activetill + " " + moment(act.expirationDate).format(lang.msg.dest.dateformat);
+        if (act.status.expirationDate != 0) time = lang.msg.dest.activetill + " " + moment(act.status.expirationDate).format(lang.msg.dest.dateformat);
         
         destiny_info[key] = {
           short: {
