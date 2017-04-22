@@ -28,6 +28,9 @@ let lang = module.exports = {
     oninvite: "Mit Einladung",
     deleted: "Gelöscht",
     member: "Teilnehmer",
+    day: "Tag",
+    month: "Monat",
+    year: "Jahr"
   },
   
   btn: {
@@ -90,6 +93,12 @@ let lang = module.exports = {
       deletetext: "Text entfernen",
       open: "Abst. öffnen",
       close: "Abst. schließen"
+    },
+    
+    bday: {
+      soon: "Kommende Geburtstage",
+      list: "Alle Geburtstage",
+      edit: "Geburtstag bearbeiten"
     }
   },
   
@@ -189,6 +198,16 @@ let lang = module.exports = {
       notowner: "Nur der Ersteller dieser Abstimmung kann diese bearbeiten.",
       
       help: "Mit Polls können dynamische Umfragen/Abstimmungen mit bis zu 10 Antworten erstellt werden. Es kann zusätzlich eingestellt werden, wie viele Auswahlmöglichkeiten die Benutzer zu Verfügung haben und ob die Umfrage anonym sein soll. Der Ersteller kann Umfragen auch schließen um keine weiteren Antworten zuzulassen.\n\nFolgende Befehle sind verfügbar:\n`/poll` : Hauptmenü\n`/poll <title>;<answer1>;<answer2>;...` : Schnell-Erstellung einer Abstimmung\n`/poll create` : Erstellung einer Abstimmung\n`/poll list` : Anzeigen aller Abstimmungen\n`/poll show <id>` : Anzeigen der Abstimmung mit der ID <id>\n`/poll edit <id>` : Bearbeiten der Abstimmung mit der ID <id>\n`/poll post <id>` : Posten der Abstimmung mit der ID <id> im aktuellen Channel\n`/poll help` : Anzeigen der Hilfe"
+    },
+    
+    bday: {
+      main: "",
+      
+      edit: "Bitte Geburtsdatum eingeben:",
+      
+      reminder: "### hat heute Geburtstag und wird %%% Jahre alt! :tada:",
+      
+      help: ""
     }
   }
 };
