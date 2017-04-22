@@ -256,9 +256,7 @@ module.exports = (app) => {
       json: true
     };
     
-    console.log(data.schedule);
-    
-    /*needle.post('beepboophq.com/api/v1/chronos/tasks', data, headers, (err, resp) => {
+    needle.post('beepboophq.com/api/v1/chronos/tasks', data, headers, (err, resp) => {
       if (resp.statusCode !== 201) console.log(resp.statusCode);
       if (err) console.log(err);
       else {
@@ -266,7 +264,7 @@ module.exports = (app) => {
           if (bday_db[i].user_id == user_id) bday_db[i].schedule_id = JSON.parse(resp.body).id;
         }
       };
-    });*/
+    });
   }
   
   function resetSchedule (msg, user_id) {
@@ -333,7 +331,7 @@ module.exports = (app) => {
         bday_db[msg.body.user.id].date.year = parseInt(msg.body.actions[0].selected_options[0].value);
         break;
       case 'done':
-        setSchedule(msg, msg.body.user.id);
+        resetSchedule(msg, msg.body.user.id);
         saveBdayDB();
         msg.respond({text: "", delete_original: true});
         return;
@@ -350,7 +348,6 @@ module.exports = (app) => {
       var users = team.getUserList();
       for (var i in users) {
         if (users[i][0] != 'B' && team.isActive(users[i]) && !team.isBot(users[i])) {
-          console.log(users[i] + " @" + team.getUserName(users[i]));
           //bday_db[users[i]] = {date: {}, schedule_id: ""};
           //team.sendDM(users[i], bday_edit_msg(users[i]));
         }
