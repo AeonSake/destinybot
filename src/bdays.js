@@ -334,6 +334,8 @@ module.exports = (app) => {
     switch (key) {
       case 'day':
         bday_db[msg.body.user.id].date.day = parseInt(msg.body.actions[0].selected_options[0].value);
+        console.log(msg.body.actions);
+        console.log(msg.body.actions[0].selected_options);
         break;
       case 'month':
         bday_db[msg.body.user.id].date.month = parseInt(msg.body.actions[0].selected_options[0].value) - 1;
