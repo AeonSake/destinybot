@@ -349,7 +349,7 @@ module.exports = (app) => {
     if (msg.body.user_id == config.admin_id) {
       var users = team.getUserList();
       for (var i in users) {
-        if (users[i][0] != 'B' && team.isActive(users[i]) && !bday_db.hasOwnProperty(users[i])) {
+        if (users[i][0] != 'B' && team.isActive(users[i]) && !team.isBot(users[i])) {
           console.log(users[i] + " @" + team.getUserName(users[i]));
           //bday_db[users[i]] = {date: {}, schedule_id: ""};
           //team.sendDM(users[i], bday_edit_msg(users[i]));
