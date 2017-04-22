@@ -59,8 +59,9 @@ module.exports = (slapp, kv, config, func) => {
             avatar_48: data.members[i].profile.image_48,
             avatar_192: data.members[i].profile.image_192,
             deleted: data.members[i].deleted,
-            admin: data.members[i].is_admin,
-            owner: data.members[i].is_owner
+            is_admin: data.members[i].is_admin,
+            is_owner: data.members[i].is_owner,
+            is_bot: ('bot_id' in data.members[i].profile)
           };
         }
         
@@ -132,7 +133,13 @@ module.exports = (slapp, kv, config, func) => {
   
   // Function to check if user is admin
   module.isAdmin = (user_id) => {
-    if (user_db.hasOwnProperty(user_id)) return user_db[user_id].admin;
+    if (user_db.hasOwnProperty(user_id)) return user_db[user_id].is_admin;
+    return false;
+  };
+  
+  // Function to check if user is a bot
+  module.isBot = (user_id) => {
+    if (user_db.hasOwnProperty(user_id)) return user_db[user_id].is_bot;
     return false;
   };
   
