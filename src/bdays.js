@@ -88,7 +88,7 @@ module.exports = (app) => {
     var day_options = [],
         month_options = [],
         year_options = [],
-        date = bday[user_id].date,
+        date = bday_db[user_id].date,
         day_max = 31;
     
     if ('month' in date) day_max = parseInt(moment().set('day', 1).set('month', date.month).endOf('month').format("M"));
