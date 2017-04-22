@@ -167,6 +167,22 @@ module.exports = (app) => {
     }
   }
   
+  // ===== MISC =====
+  
+  var bday_dismiss_att = {
+    text: "",
+    fallback: "",
+    callback_id: 'dismiss_callback',
+    actions: [
+      {
+        name: 'dismiss',
+        text: lang.btn.dismiss,
+        type: 'button'
+      }
+    ],
+    mrkdwn_in: ['text', 'pretext']
+  };
+  
   
   
 // ===================================
@@ -295,7 +311,10 @@ module.exports = (app) => {
   // ===== /bday test =====
   
   slapp.command('/bday', "test", (msg, cmd) => {
-    if (msg.body.user_id == config.admin_id) bday_db[msg.body.user_id] = {};
+    if (msg.body.user_id == config.admin_id) bday_db[msg.body.user_id] = {
+      date: {},
+      schedule_id: ""
+    };
     return;
   });
   
