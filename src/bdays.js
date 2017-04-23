@@ -348,7 +348,10 @@ module.exports = (app) => {
     needle.post('beepboophq.com/api/v1/chronos/tasks', data, headers, (err, resp) => {
       if (resp.statusCode !== 201) console.log(resp.statusCode);
       if (err) console.log(err);
-      else bday_db[user_id].schedule_id = JSON.parse(resp.body).id;
+      else {
+        bday_db[user_id].schedule_id = JSON.parse(resp.body).id;
+        saveBdayDB();
+      }
     });
   }
   
@@ -413,7 +416,6 @@ module.exports = (app) => {
         break;
       case 'done':
         resetSchedule(msg, msg.body.user.id);
-        saveBdayDB();
         msg.respond({text: "", delete_original: true});
         return;
     }
@@ -452,9 +454,10 @@ module.exports = (app) => {
   
   // ===== /bday debug =====
   
-  slapp.command('/bday', "debug1", (msg, cmd) => {
+  slapp.command('/bday', "debug1 (.*)", (msg, cmd) => {
     if (msg.body.user_id == config.admin_id) {
-      for (var key in bday_db) if ('year' in bday_db[key].date) resetSchedule(msg, key);
+      console.log(cmd.substr(7));
+      saveBdayDB();
     }
     return;
   });
