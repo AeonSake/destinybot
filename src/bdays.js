@@ -90,11 +90,16 @@ module.exports = (app) => {
       var date = bday_db[key].date;
       if ('day' in date && 'month' in date && 'year' in date) {
         var user = team.getUserInfo(key);
-        users += "*" + user.real_name + "* (@" + user.id + "): " + date.day + "." + date.month + "." + date.year +"(" + (parseInt(moment().format("YYYY")) - parseInt(date.year)) + ")\n";
+        users += "*" + user.real_name + "* (@" + user.id + "): " + date.day + "." + date.month + "." + date.year +" (" + (parseInt(moment().format("YYYY")) - parseInt(date.year)) + ")\n";
       }
     }
     
-    return users;
+    return {
+      text: users,
+      attachments: [bday_dismiss_att],
+      response_type: 'ephemeral',
+    replace_original: true
+    };
   }
   
   // ===== SOON =====
@@ -105,11 +110,16 @@ module.exports = (app) => {
       var date = bday_db[key].date;
       if ('day' in date && 'month' in date && 'year' in date && moment().add(1, 'M') >= moment(date)) {
         var user = team.getUserInfo(key);
-        users += "*" + user.real_name + "* (@" + user.id + "): " + date.day + "." + date.month + "." + date.year +"(" + (parseInt(moment().format("YYYY")) - parseInt(date.year)) + ")\n";
+        users += "*" + user.real_name + "* (@" + user.id + "): " + date.day + "." + date.month + "." + date.year +" (" + (parseInt(moment().format("YYYY")) - parseInt(date.year)) + ")\n";
       }
     }
     
-    return users;
+    return {
+      text: users,
+      attachments: [bday_dismiss_att],
+      response_type: 'ephemeral',
+    replace_original: true
+    };
   }
   
   // ===== EDIT =====
