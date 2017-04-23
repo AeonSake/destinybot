@@ -229,6 +229,9 @@ module.exports = (app) => {
     var bday = moment(bday_db[user_id].date),
         curr = moment();
     
+    console.log(bday.format() + "   " + curr.format());
+    console.log(moment(curr.diff(bday)).format());
+    
     return moment(curr.diff(bday)).year();
   }
   
