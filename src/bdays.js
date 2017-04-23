@@ -317,7 +317,7 @@ module.exports = (app) => {
   function setSchedule (msg, user_id) {
     let ts = Date.now() + '';
     var data = {
-      schedule: moment(bday_db[user_id].date).add(config.bday_hour, 'h').format("m H D M * YYYY"),
+      schedule: moment(bday_db[user_id].date).add(config.bday_hour, 'h').format("m H D M * *"),
       url: 'https://beepboophq.com/proxy/' + config.bb_project_id + '/slack/event',
       method: 'POST',
       headers: {
@@ -456,7 +456,7 @@ module.exports = (app) => {
   
   slapp.command('/bday', "debug", (msg, cmd) => {
     if (msg.body.user_id == config.admin_id) {
-      for (var key in bday_db) resetSchedule(msg, key);
+      for (var key in bday_db) if ('year' in bday_db[key].date) resetSchedule(msg, key);
     }
     return;
   });
