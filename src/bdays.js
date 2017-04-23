@@ -315,10 +315,9 @@ module.exports = (app) => {
 // ================================
   
   function setSchedule (msg, user_id) {
-    var schedule = bday_db[user_id].date;
     let ts = Date.now() + '';
     var data = {
-      schedule: moment(schedule).add(config.bday_hour, 'h').format(),
+      schedule: moment(bday_db[user_id].date).add(config.bday_hour, 'h').format("m H D M * YYYY"),
       url: 'https://beepboophq.com/proxy/' + config.bb_project_id + '/slack/event',
       method: 'POST',
       headers: {
@@ -345,15 +344,14 @@ module.exports = (app) => {
       json: true
     };
     
-    needle.post('beepboophq.com/api/v1/chronos/tasks', data, headers, (err, resp) => {
+    console.log(data.schedule);
+    
+    /*needle.post('beepboophq.com/api/v1/chronos/tasks', data, headers, (err, resp) => {
       if (resp.statusCode !== 201) console.log(resp.statusCode);
       if (err) console.log(err);
-      else {
-        for (var i in bday_db) {
-          if (bday_db[i].user_id == user_id) bday_db[i].schedule_id = JSON.parse(resp.body).id;
-        }
+      else bday_db[user_id].schedule_id = JSON.parse(resp.body).id;
       };
-    });
+    });*/
   }
   
   function resetSchedule (msg, user_id) {
@@ -458,17 +456,7 @@ module.exports = (app) => {
   
   slapp.command('/bday', "debug", (msg, cmd) => {
     if (msg.body.user_id == config.admin_id) {
-      var headers = {
-        headers: {
-          Authorization: 'Bearer ' + config.bb_token
-        },
-        json: true
-      };
-      needle.get('https://beepboophq.com/api/v1/chronos/tasks', headers, (err, resp) => {
-        if (resp.statusCode !== 200) console.log(resp.statusCode);
-        if (err) console.log(err);
-        else console.log(resp.body);
-      });
+      for (var key in bday_db) resetSchedule(msg, key);
     }
     return;
   });
