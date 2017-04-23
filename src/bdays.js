@@ -345,14 +345,11 @@ module.exports = (app) => {
       json: true
     };
     
-    console.log(data.schedule);
-    
-    /*needle.post('beepboophq.com/api/v1/chronos/tasks', data, headers, (err, resp) => {
+    needle.post('beepboophq.com/api/v1/chronos/tasks', data, headers, (err, resp) => {
       if (resp.statusCode !== 201) console.log(resp.statusCode);
       if (err) console.log(err);
       else bday_db[user_id].schedule_id = JSON.parse(resp.body).id;
-      };
-    });*/
+    });
   }
   
   function resetSchedule (msg, user_id) {
@@ -455,9 +452,27 @@ module.exports = (app) => {
   
   // ===== /bday debug =====
   
-  slapp.command('/bday', "debug", (msg, cmd) => {
+  slapp.command('/bday', "debug1", (msg, cmd) => {
     if (msg.body.user_id == config.admin_id) {
       for (var key in bday_db) if ('year' in bday_db[key].date) resetSchedule(msg, key);
+    }
+    return;
+  });
+  
+    slapp.command('/bday', "debug2", (msg, cmd) => {
+    if (msg.body.user_id == config.admin_id) {
+      console.log(bday_db);
+      var headers = {
+        headers: {
+          Authorization: 'Bearer ' + config.bb_token
+        },
+        json: true
+      };
+      needle.get('https://beepboophq.com/api/v1/chronos/tasks?inactive=false', headers, (err, resp) => {
+        if (resp.statusCode !== 200) console.log(resp.statusCode);
+        if (err) console.log(err);
+        else msg.respond(resp.body);
+      });
     }
     return;
   });
