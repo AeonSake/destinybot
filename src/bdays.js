@@ -110,8 +110,7 @@ module.exports = (app) => {
           actions: [{name: 'dismiss', text: lang.btn.dismiss, type: 'button'}],
           color: "#E63C32",
           mrkdwn_in: ['text', 'pretext', 'fields']
-        },
-        event_edit_menu_att
+        }
       ],
       response_type: 'ephemeral',
       replace_original: true
@@ -146,8 +145,7 @@ module.exports = (app) => {
           actions: [{name: 'dismiss', text: lang.btn.dismiss, type: 'button'}],
           color: "#E63C32",
           mrkdwn_in: ['text', 'pretext', 'fields']
-        },
-        event_edit_menu_att
+        }
       ],
       response_type: 'ephemeral',
       replace_original: true
