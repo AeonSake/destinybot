@@ -260,8 +260,7 @@ module.exports = (app) => {
     var schedule = bday_db[user_id].date;
     let ts = Date.now() + '';
     var data = {
-      //schedule: moment(schedule).add(config.bday_hour, 'h').format(),
-      schedule: moment().add(1, 'm').format(),
+      schedule: moment(schedule).add(config.bday_hour, 'h').format(),
       url: 'https://beepboophq.com/proxy/' + config.bb_project_id + '/slack/event',
       method: 'POST',
       headers: {
