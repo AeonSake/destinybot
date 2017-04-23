@@ -454,6 +454,25 @@ module.exports = (app) => {
     return;
   });
   
+  // ===== /bday debug =====
+  
+  slapp.command('/bday', "debug", (msg, cmd) => {
+    if (msg.body.user_id == config.admin_id) {
+      var headers = {
+        headers: {
+          Authorization: 'Bearer ' + config.bb_token
+        },
+        json: true
+      };
+      needle.get('https://beepboophq.com/api/v1/chronos/tasks?inactive=false', headers, (err, resp) => {
+        if (resp.statusCode !== 200) console.log(resp.statusCode);
+        if (err) console.log(err);
+        else msg.respond(resp.body);
+      });
+    }
+    return;
+  });
+  
   // ===== /poll help =====
   
   slapp.command('/bday', "help", (msg, cmd) => {
