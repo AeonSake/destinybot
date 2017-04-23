@@ -2120,12 +2120,7 @@ module.exports = (app) => {
         msg.respond(poll_edit_list_msg(msg.body.user_id, 0, 'desc'));
         break;
       case 'help':
-        msg.respond({
-          text: lang.msg.poll.help,
-          attachments: [poll_dismiss_att],
-          response_type: 'ephemeral',
-          replace_original: true
-        });
+        msg.respond(func.generateInfoMsg(lang.msg.poll.help));
         break;
     }
     return;

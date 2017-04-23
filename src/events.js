@@ -2117,12 +2117,7 @@ module.exports = (app) => {
         msg.respond(event_edit_list_msg(msg.body.user_id, 0, 'desc'));
         break;
       case 'help':
-        msg.respond({
-          text: lang.msg.evt.help,
-          attachments: [event_dismiss_att],
-          response_type: 'ephemeral',
-          replace_original: true
-        });
+        msg.respond(func.generateInfoMsg(lang.msg.evt.help));
         break;
     }
     return;
