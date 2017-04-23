@@ -94,7 +94,7 @@ module.exports = (app) => {
       }
     }
     
-    return func.generateInfoMsg(users, "#cc0000");
+    return func.generateInfoMsg(users, "#E63C32");
   }
   
   // ===== SOON =====
@@ -109,7 +109,7 @@ module.exports = (app) => {
       }
     }
     
-    return func.generateInfoMsg(users, "#cc0000");
+    return func.generateInfoMsg(users, "#E63C32");
   }
   
   // ===== EDIT =====
