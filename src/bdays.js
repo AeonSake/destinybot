@@ -94,12 +94,7 @@ module.exports = (app) => {
       }
     }
     
-    return {
-      text: users,
-      attachments: [bday_dismiss_att],
-      response_type: 'ephemeral',
-    replace_original: true
-    };
+    return func.generateInfoMsg(users, "#cc0000");
   }
   
   // ===== SOON =====
@@ -114,12 +109,7 @@ module.exports = (app) => {
       }
     }
     
-    return {
-      text: users,
-      attachments: [bday_dismiss_att],
-      response_type: 'ephemeral',
-    replace_original: true
-    };
+    return func.generateInfoMsg(users, "#cc0000");
   }
   
   // ===== EDIT =====
@@ -434,12 +424,7 @@ module.exports = (app) => {
         msg_text = bday_edit_msg(msg.body.user.id);
         break;
       case 'help':
-        msg.respond({
-          text: lang.msg.bday.help,
-          attachments: [bday_dismiss_att],
-          response_type: 'ephemeral',
-          replace_original: true
-        });
+        msg.respond(func.generateInfoMsg(lang.msg.bday.help));
         break;
     }
     msg.respond(msg_text);
