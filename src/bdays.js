@@ -279,6 +279,7 @@ module.exports = (app) => {
   }
   
   
+  
 // ===================================
 // ========== BDAY DATABASE ==========
 // ===================================
@@ -317,7 +318,7 @@ module.exports = (app) => {
   function setSchedule (msg, user_id) {
     let ts = Date.now() + '';
     var data = {
-      schedule: moment(bday_db[user_id].date).add(config.bday_hour - moment().utcOffset()/60, 'h').format("m H D M * *"),
+      schedule: moment(bday_db[user_id].date).add(config.bday_hour - moment(bday_db[user_id].date).utcOffset()/60, 'h').format("m H D M * *"),
       url: 'https://beepboophq.com/proxy/' + config.bb_project_id + '/slack/event',
       method: 'POST',
       headers: {
