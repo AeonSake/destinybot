@@ -58,8 +58,7 @@ slapp.message("(.*)", (msg) => {
     slapp.client.chat.delete({
       token: config.bot_token,
       ts: msg.body.event.ts,
-      channel: msg.body.event.channel,
-      as_user: true
+      channel: msg.body.event.channel
     }, (err, data) => {
       console.log(err);
     });
