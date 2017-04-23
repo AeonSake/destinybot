@@ -404,7 +404,7 @@ module.exports = (app) => {
     return;
   });
   
-  slapp.event('(team_join|user_change)', (msg) => {
+  slapp.event('team_join', (msg) => {
   var users = team.getUserList();
     for (var i in users) {
       if (!bday_db.hasOwnProperty(users[i]) && team.isActive(users[i]) && !team.isBot(users[i])) {
