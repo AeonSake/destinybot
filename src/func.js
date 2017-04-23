@@ -29,7 +29,7 @@ module.exports = (slapp, config, lang) => {
   };
   
   // Function to create a message + dismiss button
-  module.generateInfoMsg = (text) => {
+  module.generateInfoMsg = (text, color) => {
     return {
       text: "",
       attachments: [{
@@ -37,6 +37,7 @@ module.exports = (slapp, config, lang) => {
         fallback: text,
         callback_id: 'dismiss_callback',
         actions: [{name: 'dismiss', text: lang.btn.dismiss, type: 'button'}],
+        color: color || "",
         mrkdwn_in: ['text', 'pretext']
       }],
       response_type: 'ephemeral',
