@@ -106,7 +106,7 @@ module.exports = (app) => {
       var date = bday_db[key].date;
       if ('day' in date && 'month' in date && 'year' in date && moment() < moment(date).year(moment().year()) && moment().add(1, 'M') >= moment(date).year(moment().year())) {
         var user = team.getUserInfo(key);
-        users += "*" + user.real_name + "* (<@" + user.id + ">): " + calcBday(user.id).format("D.M.YYYY") + " (" + (calcAge(user.id) + 1) + ")\n";
+        users += "*" + user.real_name + "* (<@" + user.id + ">): " + calcBday(user.id).format("D.M.") + " (" + (calcAge(user.id) + 1) + ")\n";
       }
     }
     if (users.length == 0) users = lang.msg.bday.nobdays;
