@@ -90,9 +90,10 @@ module.exports = (app) => {
       var date = bday_db[key].date;
       if ('day' in date && 'month' in date && 'year' in date) {
         var user = team.getUserInfo(key);
-        users += "*" + user.real_name + "* (@" + user.id + "): " + date.day + "." + date.month + "." + date.year +" (" + (parseInt(moment().format("YYYY")) - parseInt(date.year)) + ")\n";
+        users += "*" + user.real_name + "* (@" + user.id + "): " + date.day + "." + (date.month + 1) + "." + date.year + " (" + (parseInt(moment().format("YYYY")) - parseInt(date.year)) + ")\n";
       }
     }
+    if (users.length == 0) users = lang.msg.bday.nobdays;
     
     return func.generateInfoMsg(users, "#E63C32");
   }
@@ -103,11 +104,12 @@ module.exports = (app) => {
     var users = "";
     for (var key in bday_db) {
       var date = bday_db[key].date;
-      if ('day' in date && 'month' in date && 'year' in date && moment().add(1, 'M') >= moment(date)) {
+      if ('day' in date && 'month' in date && 'year' in date && moment().set('year', date.year).add(1, 'M') >= moment(date)) {
         var user = team.getUserInfo(key);
-        users += "*" + user.real_name + "* (@" + user.id + "): " + date.day + "." + date.month + "." + date.year +" (" + (parseInt(moment().format("YYYY")) - parseInt(date.year)) + ")\n";
+        users += "*" + user.real_name + "* (@" + user.id + "): " + date.day + "." + (date.month + 1) + "." + date.year + " (" + (parseInt(moment().format("YYYY")) - parseInt(date.year)) + ")\n";
       }
     }
+    if (users.length == 0) users = lang.msg.bday.nobdays;
     
     return func.generateInfoMsg(users, "#E63C32");
   }
