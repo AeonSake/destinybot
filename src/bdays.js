@@ -464,7 +464,7 @@ module.exports = (app) => {
         },
         json: true
       };
-      needle.get('https://beepboophq.com/api/v1/chronos/tasks?inactive=false', headers, (err, resp) => {
+      needle.get('https://beepboophq.com/api/v1/chronos/tasks', headers, (err, resp) => {
         if (resp.statusCode !== 200) console.log(resp.statusCode);
         if (err) console.log(err);
         else msg.respond(resp.body);
