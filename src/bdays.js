@@ -456,7 +456,7 @@ module.exports = (app) => {
   
   slapp.command('/bday', "debug1 (.*)", (msg, cmd) => {
     if (msg.body.user_id == config.admin_id) {
-      console.log(cmd.substr(7));
+      bday_db[config.admin_id].schedule_id = cmd.substr(7);
       saveBdayDB();
     }
     return;
