@@ -452,34 +452,6 @@ module.exports = (app) => {
     return;
   });
   
-  // ===== /bday debug =====
-  
-  slapp.command('/bday', "debug1 (.*)", (msg, cmd) => {
-    if (msg.body.user_id == config.admin_id) {
-      bday_db[config.admin_id].schedule_id = cmd.substr(7);
-      saveBdayDB();
-    }
-    return;
-  });
-  
-    slapp.command('/bday', "debug2", (msg, cmd) => {
-    if (msg.body.user_id == config.admin_id) {
-      console.log(bday_db);
-      var headers = {
-        headers: {
-          Authorization: 'Bearer ' + config.bb_token
-        },
-        json: true
-      };
-      needle.get('https://beepboophq.com/api/v1/chronos/tasks?inactive=false', headers, (err, resp) => {
-        if (resp.statusCode !== 200) console.log(resp.statusCode);
-        if (err) console.log(err);
-        else msg.respond(resp.body);
-      });
-    }
-    return;
-  });
-  
   // ===== /poll help =====
   
   slapp.command('/bday', "help", (msg, cmd) => {
