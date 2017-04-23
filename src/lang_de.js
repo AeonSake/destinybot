@@ -204,6 +204,8 @@ let lang = module.exports = {
       main: "Das ist das Hauptmenü für Geburtstage.",
       
       edit: "Bitte Geburtsdatum eingeben:",
+      listtitle: "Liste aller Geburtstage",
+      soontitle: "Liste aller kommenden Geburtstage",
       nobdays: "Keine Geburtstage verfügbar.",
       
       reminder: "### hat heute Geburtstag und wird %%% Jahre alt! :tada:",

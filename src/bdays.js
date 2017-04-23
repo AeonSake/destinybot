@@ -85,33 +85,73 @@ module.exports = (app) => {
   // ===== LIST =====
   
   function bday_list_msg () {
-    var users = "";
+    var users = [];
     for (var key in bday_db) {
       var date = bday_db[key].date;
       if ('day' in date && 'month' in date && 'year' in date) {
         var user = team.getUserInfo(key);
-        users += "*" + user.real_name + "* (<@" + user.id + ">): " + moment(date).format("D.M.YYYY") + " (" + calcAge(user.id) + ")\n";
+        users.push({
+          title: user.real_name + " (" + user.name + ")",
+          value: moment(date).format("D.M.YYYY") + " (" + calcAge(user.id) + ")",
+          short: true
+        });
       }
     }
-    if (users.length == 0) users = lang.msg.bday.nobdays;
     
-    return func.generateInfoMsg(users, "#E63C32");
+    return {
+      text: "",
+      attachments: [
+        {
+          title: lang.msg.bday.listtitle,
+          text: (users.length == 0 ? lang.msg.bday.nobdays : ""),
+          fallback: lang.msg.bday.listtitle,
+          fields: users,
+          callback_id: 'dismiss_callback',
+          actions: [{name: 'dismiss', text: lang.btn.dismiss, type: 'button'}],
+          color: "#E63C32",
+          mrkdwn_in: ['text', 'pretext', 'fields']
+        },
+        event_edit_menu_att
+      ],
+      response_type: 'ephemeral',
+      replace_original: true
+    };
   }
   
   // ===== SOON =====
   
   function bday_soon_msg () {
-    var users = "";
+    var users = [];
     for (var key in bday_db) {
       var date = bday_db[key].date;
       if ('day' in date && 'month' in date && 'year' in date && moment() < moment(date).year(moment().year()) && moment().add(1, 'M') >= moment(date).year(moment().year())) {
         var user = team.getUserInfo(key);
-        users += "*" + user.real_name + "* (<@" + user.id + ">): " + calcBday(user.id).format("D.M.") + " (" + (calcAge(user.id) + 1) + ")\n";
+        users.push({
+          title: user.real_name + " (" + user.name + ")",
+          value: calcBday(user.id).format("D.M.") + " (" + (calcAge(user.id) + 1) + ")",
+          short: true
+        });
       }
     }
-    if (users.length == 0) users = lang.msg.bday.nobdays;
     
-    return func.generateInfoMsg(users, "#E63C32");
+    return {
+      text: "",
+      attachments: [
+        {
+          title: lang.msg.bday.soontitle,
+          text: (users.length == 0 ? lang.msg.bday.nobdays : ""),
+          fallback: lang.msg.bday.soontitle,
+          fields: users,
+          callback_id: 'dismiss_callback',
+          actions: [{name: 'dismiss', text: lang.btn.dismiss, type: 'button'}],
+          color: "#E63C32",
+          mrkdwn_in: ['text', 'pretext', 'fields']
+        },
+        event_edit_menu_att
+      ],
+      response_type: 'ephemeral',
+      replace_original: true
+    };
   }
   
   // ===== EDIT =====
