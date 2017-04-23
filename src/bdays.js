@@ -226,13 +226,7 @@ module.exports = (app) => {
 // =============================
   
   function calcAge (user_id) {
-    var bday = moment(bday_db[user_id].date),
-        curr = moment();
-    
-    console.log(bday.format() + "   " + curr.format());
-    console.log(moment(curr.diff(bday)).format());
-    
-    return moment(curr.diff(bday)).year();
+    return moment().diff(moment(bday_db[user_id].date), 'years');
   }
   
   
