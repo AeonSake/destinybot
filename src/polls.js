@@ -30,7 +30,7 @@ module.exports = (app) => {
 // ========== MESSAGES ==========
 // ==============================
 
-// ===== MAIN =====
+  // ===== MAIN =====
 
   module.poll_main_msg = {
     text: "",
