@@ -96,9 +96,9 @@ let lang = module.exports = {
     },
     
     bday: {
-      soon: "Kommende Geburtstage",
+      soon: "Kommende Geb.",
       list: "Alle Geburtstage",
-      edit: "Geburtstag bearbeiten"
+      edit: "Geb. bearbeiten"
     }
   },
   

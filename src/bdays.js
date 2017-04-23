@@ -37,8 +37,8 @@ module.exports = (app) => {
     text: "",
     attachments: [
       {
-        text: "",
-        fallback: "",
+        text: lang.msg.bday.main,
+        fallback: lang.msg.bday.main,
         callback_id: 'bday_main_callback',
         actions: [
           {
