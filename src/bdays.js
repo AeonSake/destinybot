@@ -31,7 +31,7 @@ module.exports = (app) => {
 // ========== MESSAGES ==========
 // ==============================
 
-// ===== MAIN =====
+  // ===== MAIN =====
 
   module.bday_main_msg = {
     text: "",
@@ -82,7 +82,37 @@ module.exports = (app) => {
     replace_original: true
   };
   
-// ===== EDIT =====
+  // ===== LIST =====
+  
+  function bday_list_msg () {
+    var users = "";
+    for (var key in bday_db) {
+      var date = bday_db[key].date;
+      if ('day' in date && 'month' in date && 'year' in date) {
+        var user = team.getUserInfo(key);
+        users += "*" + user.real_name + "* (@" + user.id + "): " + date.day + "." + date.month + "." + date.year +"(" + (parseInt(moment().format("YYYY")) - parseInt(date.year)) + ")\n";
+      }
+    }
+    
+    return users;
+  }
+  
+  // ===== SOON =====
+  
+  function bday_soon_msg () {
+    var users = "";
+    for (var key in bday_db) {
+      var date = bday_db[key].date;
+      if ('day' in date && 'month' in date && 'year' in date && moment().add(1, 'M') >= moment(date)) {
+        var user = team.getUserInfo(key);
+        users += "*" + user.real_name + "* (@" + user.id + "): " + date.day + "." + date.month + "." + date.year +"(" + (parseInt(moment().format("YYYY")) - parseInt(date.year)) + ")\n";
+      }
+    }
+    
+    return users;
+  }
+  
+  // ===== EDIT =====
   
   function bday_edit_msg (user_id) {
     var day_options = [],
@@ -150,7 +180,7 @@ module.exports = (app) => {
     }
   }
   
-// ===== REMINDER =====
+  // ===== REMINDER =====
   
   function bday_reminder_msg (user_id) {
     var user = team.getUserInfo(user_id);
@@ -295,18 +325,14 @@ module.exports = (app) => {
   // ===== /bday list =====
   
   slapp.command('/bday', "list", (msg, cmd) => {
-    
-    
-    //msg.respond(msg_text);
+    msg.respond(bday_list_msg());
     return;
   });
   
   // ===== /bday soon =====
   
   slapp.command('/bday', "soon", (msg, cmd) => {
-    
-    
-    //msg.respond(msg_text);
+    msg.respond(bday_soon_msg());
     return;
   });
   
@@ -348,12 +374,10 @@ module.exports = (app) => {
       var users = team.getUserList();
       for (var i in users) {
         if (users[i][0] != 'B' && team.isActive(users[i]) && !team.isBot(users[i])) {
-          //bday_db[users[i]] = {date: {}, schedule_id: ""};
-          //team.sendDM(users[i], bday_edit_msg(users[i]));
+          bday_db[users[i]] = {date: {}, schedule_id: ""};
+          team.sendDM(users[i], bday_edit_msg(users[i]));
         }
       }
-      bday_db[config.admin_id] = {date: {}, schedule_id: ""};
-      team.sendDM(config.admin_id, bday_edit_msg(config.admin_id));
       saveBdayDB();
     }
     return;
@@ -362,10 +386,10 @@ module.exports = (app) => {
   slapp.event('(team_join|user_change)', (msg) => {
   var users = team.getUserList();
     for (var i in users) {
-      if (users[i][0] != 'B' && team.isActive(users[i]) && !bday_db.hasOwnProperty(users[i])) {
+      if (users[i][0] != 'B' && team.isActive(users[i]) && !team.isBot(users[i])) {
         console.log(team.getUserName(users[i]));
-        //bday_db[users[i]] = {date: {}, schedule_id: ""};
-        //team.sendDM(users[i], bday_edit_msg(users[i]));
+        bday_db[users[i]] = {date: {}, schedule_id: ""};
+        team.sendDM(users[i], bday_edit_msg(users[i]));
       }
     }
     saveBdayDB();
@@ -391,8 +415,10 @@ module.exports = (app) => {
     
     switch (msg.body.actions[0].name) {
       case 'soon':
+        msg_text = bday_soon_msg();
         break;
       case 'list':
+        msg_text = bday_list_msg();
         break;
       case 'edit':
         msg_text = bday_edit_msg(msg.body.user.id);

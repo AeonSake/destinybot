@@ -201,13 +201,14 @@ let lang = module.exports = {
     },
     
     bday: {
-      main: "",
+      main: "Das ist das Hauptmenü für Geburtstage.",
       
       edit: "Bitte Geburtsdatum eingeben:",
       
       reminder: "### hat heute Geburtstag und wird %%% Jahre alt! :tada:",
+      reminderalt: "### hat heute Geburtstag! :tada:",
       
-      help: ""
+      help: "Mit Bdays werden automatisch Erinnerungen an Geburtstage der Benutzer erstellt.\n\nFolgende Befehle sind verfügbar:\n`/bday` : Hauptmenü\n`/bday list` : Liste aller Geburtstage\n`/bday soon` : Liste aller im nächsten Monat kommenden Geburtstage\n`/bday edit` : Bearbeiten des eigenen Geburtsdatums\n`/bday help` : Anzeigen der Hilfe"
     }
   }
 };
