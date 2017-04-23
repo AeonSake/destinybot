@@ -90,7 +90,7 @@ module.exports = (app) => {
       var date = bday_db[key].date;
       if ('day' in date && 'month' in date && 'year' in date) {
         var user = team.getUserInfo(key);
-        users += "*" + user.real_name + "* (<@" + user.id + ">): " + date.day + "." + (date.month + 1) + "." + date.year + " (" + calcAge(user.id) + ")\n";
+        users += "*" + user.real_name + "* (<@" + user.id + ">): " + moment(date).format("D.M.YYYY") + " (" + calcAge(user.id) + ")\n";
       }
     }
     if (users.length == 0) users = lang.msg.bday.nobdays;
@@ -106,7 +106,7 @@ module.exports = (app) => {
       var date = bday_db[key].date;
       if ('day' in date && 'month' in date && 'year' in date && moment() < moment(date).year(moment().year()) && moment().add(1, 'M') >= moment(date).year(moment().year())) {
         var user = team.getUserInfo(key);
-        users += "*" + user.real_name + "* (<@" + user.id + ">): " + date.day + "." + (date.month + 1) + "." + date.year + " (" + calcAge(user.id) + ")\n";
+        users += "*" + user.real_name + "* (<@" + user.id + ">): " + calcBday(user.id).format("D.M.YYYY") + " (" + (calcAge(user.id) + 1) + ")\n";
       }
     }
     if (users.length == 0) users = lang.msg.bday.nobdays;
@@ -229,7 +229,16 @@ module.exports = (app) => {
     return moment().diff(moment(bday_db[user_id].date), 'years');
   }
   
+  function calcBday (user_id) {
+    return moment(bday_db[user_id].date).add(calcAge(user_id), 'y');
+  }
   
+  function calcSoon (user_id) {
+    var bday = calcBday(user_id),
+        curr = moment();
+    
+    return bday.diff(curr, 'months', true) > 0 && bday.diff(curr, 'months', true) <= 1;
+  }
   
   
 // ===================================
