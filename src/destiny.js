@@ -512,7 +512,7 @@ module.exports = (app) => {
             let fields = [];
             
             if ('skullCategories' in act.activityTiers[i] && act.activityTiers[i].skullCategories.length != 0) fields.push({
-              title: act.activityTiers[i].skullCategories[0].title,
+              title: act.activityTiers[i].skullCategories[0].title + ":",
               value: getSkullsFull(act.activityTiers[i].skullCategories),
               short: false
             });
