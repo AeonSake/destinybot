@@ -161,7 +161,7 @@ module.exports = (app) => {
   function getActivities (callback) {
     var options = {
       host: 'www.bungie.net',
-      path: '/Platform/Destiny/Advisors/V2/?lc=' + config.lang,
+      path: '/d1/Platform/Destiny/Advisors/V2/?lc=' + config.lang,
       headers: {'X-API-Key': config.destiny_key}
     };
     
@@ -182,7 +182,7 @@ module.exports = (app) => {
   function getXurItems (callback) {
     var options = {
       host: 'www.bungie.net',
-      path: '/Platform/Destiny/Advisors/Xur/',
+      path: '/d1/Platform/Destiny/Advisors/Xur/',
       headers: {'X-API-Key': config.destiny_key}
     };
     
@@ -648,7 +648,7 @@ module.exports = (app) => {
     if (msg.body.user_id == config.admin_id) {
       var options = {
         host: 'www.bungie.net',
-        path: '/Platform/Destiny/' + cmd.substring(5),
+        path: '/d1/Platform/Destiny/' + cmd.substring(5),
         headers: {'X-API-Key': config.destiny_key}
       }
       
@@ -946,29 +946,31 @@ module.exports = (app) => {
   });
   
   slapp.event('destiny_weekly_update', (msg) => {
-    getActivities(function(){
+    /*getActivities(function(){
       var msg_text = destiny_summary_msg(lang.msg.dest.weeklyreset);
       msg_text.attachments.push(destiny_moreinfo_att());
       msg_text.attachments[msg_text.attachments.length - 1].callback_id = 'destiny_public_moreinfo_callback';
       msg_text.channel = config.destiny_ch;
       msg.say(msg_text);
-    });
+    });*/
+    getActivities();
     return;
   });
   
   slapp.event('destiny_special_update', (msg) => {
-    getActivities(function(){
+    /*getActivities(function(){
       var msg_text = destiny_list_msg(lang.msg.dest.specialupdate, ['ironbanner', 'srl']);
       if ('attachments' in msg_text && msg_text.attachments.length > 0) {
         msg_text.channel = config.destiny_ch;
         msg.say(msg_text);
       }
-    });
+    });*/
+    getActivities();
     return;
   });
   
   slapp.event('destiny_armsday_update', (msg) => {
-    getActivities(function(){
+    /*getActivities(function(){
       var msg_text = destiny_single_msg(lang.msg.dest.armsdayupdate, 'armsday', true);
       if ('attachments' in msg_text && msg_text.attachments.length > 0) {
         msg_text.attachments[0].callback_id = 'destiny_public_moreinfo_callback';
@@ -980,12 +982,13 @@ module.exports = (app) => {
         msg_text.channel = config.destiny_ch;
         msg.say(msg_text);
       }
-    });
+    });*/
+    getActivities();
     return;
   });
   
   slapp.event('destiny_xur_update', (msg) => {
-    getActivities(function(){
+    /*getActivities(function(){
       var msg_text = destiny_single_msg(lang.msg.dest.xurupdate, 'xur', true);
       if ('attachments' in msg_text && msg_text.attachments.length > 0) {
         msg_text.attachments[0].callback_id = 'destiny_public_moreinfo_callback';
@@ -997,18 +1000,20 @@ module.exports = (app) => {
         msg_text.channel = config.destiny_ch;
         msg.say(msg_text);
       }
-    });
+    });*/
+    getActivities();
     return;
   });
   
   slapp.event('destiny_trials_update', (msg) => {
-    getActivities(function(){
+    /*getActivities(function(){
       var msg_text = destiny_single_msg(lang.msg.dest.trialsupdate, 'trials');
       if ('attachments' in msg_text && msg_text.attachments.length > 0) {
         msg_text.channel = config.destiny_ch;
         msg.say(msg_text);
       }
-    });
+    });*/
+    getActivities();
     return;
   });
   
