@@ -451,7 +451,7 @@ module.exports = (app) => {
     var user_name = cmd.substring(5);
     if (user_name != "" && team.isAdmin(msg.body.user_id)) {
       var user_id = team.getUserIdByUsername(user_name);
-      if (user_id != "") msg.respond(bday_edit_msg(user_id);
+      if (user_id != "") msg.respond(bday_edit_msg(user_id));
     } else msg.respond(bday_edit_msg(msg.body.user_id));
     return;
   });
