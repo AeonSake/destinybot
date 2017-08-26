@@ -54,7 +54,7 @@ module.exports = (slapp, kv, config, func) => {
             name: data.members[i].name,
             first_name: data.members[i].profile.first_name,
             last_name: data.members[i].profile.last_name,
-            full_name: this.first_name + " " + this.last_name,
+            full_name: data.members[i].profile.first_name + " " + data.members[i].profile.last_name,
             tz_offset: data.members[i].tz_offset,
             color: data.members[i].color,
             avatar_24: data.members[i].profile.image_24,
@@ -65,7 +65,6 @@ module.exports = (slapp, kv, config, func) => {
             is_owner: data.members[i].is_owner,
             is_bot: ('bot_id' in data.members[i].profile)
           };
-          console.log(user_db[data.members[i].id]);
         }
         
         console.log("INFO: Team | User info loaded");
