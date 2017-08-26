@@ -447,15 +447,8 @@ module.exports = (app) => {
   
   // ===== /bday edit =====
   
-  slapp.command('/bday', "edit(.*)", (msg, cmd) => {
-    var user_name = cmd.substring(5);
-    if (user_name != "" && team.isAdmin(msg.body.user_id)) {
-      console.log(team.getUserInfo(msg.body.user_id));
-      
-      
-      var user_id = team.getUserIdByUsername(user_name);
-      if (user_id != "") msg.respond(bday_edit_msg(user_id));
-    } else msg.respond(bday_edit_msg(msg.body.user_id));
+  slapp.command('/bday', "edit", (msg, cmd) => {
+    msg.respond(bday_edit_msg(msg.body.user_id));
     return;
   });
   
@@ -522,6 +515,13 @@ module.exports = (app) => {
   });
   
   // ===== /bday =====
+  
+  slapp.command('/bday', "debug", (msg, cmd) => {
+    bday_db['U2FVCSG72'].date.year = 0;
+    bday_db['U2GMDJ57Z'].date.year = 0;
+    bday_db['U2G0ZEMJS'].date.year = 0;
+    //saveBdayDB();
+  });
   
   slapp.command('/bday', "(.*)", (msg, cmd) => {
     msg.respond(module.bday_main_msg);
