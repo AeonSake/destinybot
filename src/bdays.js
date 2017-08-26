@@ -93,7 +93,7 @@ module.exports = (app) => {
         var date_text = (parseInt(date.year) != 0 ? moment(date).format("D.M.YYYY") + " (" + calcAge(user.id) + ")" : moment(date).format("D.M."));
         
         users.push({
-          title: user.real_name + " (" + user.name + ")",
+          title: user.full_name + " (" + user.name + ")",
           value: date_text,
           short: true
         });
@@ -130,7 +130,7 @@ module.exports = (app) => {
         var age_text = (parseInt(date.year) != 0 ? calcBday(user.id).format("D.M.") + " (" + (calcAge(user.id) + 1) + ")" : "")
         
         users.push({
-          title: user.real_name + " (" + user.name + ")",
+          title: user.full_name + " (" + user.name + ")",
           value: age_text,
           short: true
         });
@@ -253,7 +253,7 @@ module.exports = (app) => {
   function bday_reminder_msg (user_id) {
     var user = team.getUserInfo(user_id);
     var msg_text = (bday_db[user_id].date.year != 0 ? lang.msg.bday.reminder : lang.msg.bday.reminderalt);
-    msg_text = msg_text.replace("###", "*" + user.real_name + "* (<@" + user.id + ">)").replace("%%%", parseInt(moment().format("YYYY")) - parseInt(bday_db[user_id].date.year));
+    msg_text = msg_text.replace("###", "*" + user.first_name + "* (<@" + user.id + ">)").replace("%%%", parseInt(moment().format("YYYY")) - parseInt(bday_db[user_id].date.year));
     
     return {
       text: "",
