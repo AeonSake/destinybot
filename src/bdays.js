@@ -450,7 +450,7 @@ module.exports = (app) => {
   slapp.command('/bday', "edit(.*)", (msg, cmd) => {
     var user_name = cmd.substring(5);
     if (user_name != "" && team.isAdmin(msg.body.user_id)) {
-      console.log(team.getUserInfo(msg.body.user_id)));
+      console.log(team.getUserInfo(msg.body.user_id));
       
       
       var user_id = team.getUserIdByUsername(user_name);
