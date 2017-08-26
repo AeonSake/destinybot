@@ -98,7 +98,8 @@ let lang = module.exports = {
     bday: {
       soon: "Kommende Geb.",
       list: "Alle Geburtstage",
-      edit: "Geb. bearbeiten"
+      edit: "Geb. bearbeiten",
+      noyear: "Kein Jahr anzeigen"
     }
   },
   
@@ -207,6 +208,9 @@ let lang = module.exports = {
       listtitle: "Liste aller Geburtstage",
       soontitle: "Liste aller kommenden Geburtstage",
       nobdays: "Keine Geburtstage verfügbar.",
+      
+      confirmdelete: "Sind Sie sicher, dass Sie Ihren Geburtstag löschen wollen?",
+      deleted: "Geburtstag wurde erfolgreich gelöscht.",
       
       reminder: "### hat heute Geburtstag und wird %%% Jahre alt! :tada:",
       reminderalt: "### hat heute Geburtstag! :tada:",

@@ -125,6 +125,15 @@ module.exports = (slapp, kv, config, func) => {
     return arr;
   };
   
+  // Function to retrieve the user id by username
+  module.getUserIdByUsername = (user_name) => {
+    var arr = [];
+    for (var key in user_db) {
+      if (key.name == user_name) return key.id;
+    }
+    return "";
+  };
+  
   // Function to check if user is active
   module.isActive = (user_id) => {
     if (user_db.hasOwnProperty(user_id)) return !user_db[user_id].deleted;

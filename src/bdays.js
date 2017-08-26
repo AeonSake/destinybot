@@ -90,9 +90,11 @@ module.exports = (app) => {
       var date = bday_db[key].date;
       if ('day' in date && 'month' in date && 'year' in date) {
         var user = team.getUserInfo(key);
+        var date_text = (parseInt(date.year) != 0 ? moment(date).format("D.M.YYYY") + " (" + calcAge(user.id) + ")" : moment(date).format("D.M."));
+        
         users.push({
           title: user.real_name + " (" + user.name + ")",
-          value: moment(date).format("D.M.YYYY") + " (" + calcAge(user.id) + ")",
+          value: date_text,
           short: true
         });
       }
@@ -125,9 +127,11 @@ module.exports = (app) => {
       var date = bday_db[key].date;
       if ('day' in date && 'month' in date && 'year' in date && moment() < moment(date).year(moment().year()) && moment().add(1, 'M') >= moment(date).year(moment().year())) {
         var user = team.getUserInfo(key);
+        var age_text = (parseInt(date.year) != 0 ? calcBday(user.id).format("D.M.") + " (" + (calcAge(user.id) + 1) + ")" : "")
+        
         users.push({
           title: user.real_name + " (" + user.name + ")",
-          value: calcBday(user.id).format("D.M.") + " (" + (calcAge(user.id) + 1) + ")",
+          value: age_text,
           short: true
         });
       }
@@ -162,7 +166,7 @@ module.exports = (app) => {
         day_max = 31;
     
     if ('month' in date) {
-      if ('year' in date) day_max = parseInt(moment().set('day', 1).set('month', date.month).set('year', date.year).endOf('month').format("D"));
+      if ('year' in date && parseInt(date.year) != 0) day_max = parseInt(moment().set('day', 1).set('month', date.month).set('year', date.year).endOf('month').format("D"));
       else day_max = parseInt(moment().set('day', 1).set('month', date.month).endOf('month').format("D"));
       if (date.day > day_max) bday_db[user_id].date.day = day_max;
     }
@@ -171,6 +175,7 @@ module.exports = (app) => {
     
     for (var i = 0; i <= 11; i++) month_options.push({text: i + 1, value: i});
     
+    year_options.push({text: lang.btn.bday.noyear, value: 0});
     for (var i = parseInt(moment().format("YYYY")); i > 1900; i--) year_options.push({text: i, value: i});
     
     var actions = [
@@ -202,7 +207,10 @@ module.exports = (app) => {
     
     if ('day' in date) actions[0].text = date.day;
     if ('month' in date) actions[1].text = date.month + 1;
-    if ('year' in date) actions[2].text = date.year;
+    if ('year' in date) {
+      if (parseInt(date.year) != 0) actions[2].text = date.year;
+      else actions[2].text = lang.btn.bday.noyear;
+    }
     
     return {
       text: "",
@@ -212,6 +220,26 @@ module.exports = (app) => {
           fallback: lang.msg.bday.edit,
           callback_id: 'bday_edit_callback',
           actions: actions,
+          mrkdwn_in: ['text', 'pretext']
+        },
+        {
+          text: "",
+          fallback: "",
+          callback_id: 'bday_edit_callback',
+          actions: [
+            {
+              name: 'delete',
+              text: lang.btn.delete,
+              type: 'button',
+              style: 'danger',
+              confirm: {
+                title: lang.msg.confirm,
+                text: lang.msg.bday.confirmdelete,
+                ok_text: lang.btn.yes,
+                dismiss_text: lang.btn.no
+              }
+            }
+          ],
           mrkdwn_in: ['text', 'pretext']
         }
       ],
@@ -224,13 +252,15 @@ module.exports = (app) => {
   
   function bday_reminder_msg (user_id) {
     var user = team.getUserInfo(user_id);
+    var msg_text = (bday_db[user_id].date.year != 0 ? lang.msg.bday.reminder : lang.msg.bday.reminderalt);
+    msg_text = msg_text.replace("###", "*" + user.real_name + "* (<@" + user.id + ">)").replace("%%%", parseInt(moment().format("YYYY")) - parseInt(bday_db[user_id].date.year));
     
     return {
       text: "",
       attachments: [
         {
-          text: lang.msg.bday.reminder.replace("###", "*" + user.real_name + "* (<@" + user.id + ">)").replace("%%%", parseInt(moment().format("YYYY")) - parseInt(bday_db[user_id].date.year)),
-          fallback: lang.msg.bday.reminder.replace("###", "*" + user.real_name + "* (<@" + user.id + ">)").replace("%%%", parseInt(moment().format("YYYY")) - parseInt(bday_db[user_id].date.year)),
+          text: msg_text,
+          fallback: msg_text,
           footer: moment().format("dd, D.M.YYYY"),
           color: func.getRandomColor(),
           mrkdwn_in: ['text', 'pretext']
@@ -355,6 +385,27 @@ module.exports = (app) => {
     });
   }
   
+  function deleteSchedule (msg, user_id) {
+    var schedule_id = bday_db[user_id].schedule_id;
+    if (schedule_id != "") {
+      var headers = {
+        headers: {
+          Authorization: 'Bearer ' + config.bb_token
+        },
+        json: true
+      };
+
+      needle.delete('https://beepboophq.com/api/v1/chronos/tasks/' + schedule_id, null, headers, (err, resp) => {
+          if (err) console.log(err);
+          else if (resp.statusCode !== 200) console.log(resp.statusCode);
+          else {
+            bday_db[user_id].date = {};
+            saveBdayDB();
+          }
+      });
+    }
+  }
+  
   function resetSchedule (msg, user_id) {
     var schedule_id = bday_db[user_id].schedule_id;
     if (schedule_id == "") setSchedule(msg, user_id);
@@ -396,8 +447,12 @@ module.exports = (app) => {
   
   // ===== /bday edit =====
   
-  slapp.command('/bday', "edit", (msg, cmd) => {
-    msg.respond(bday_edit_msg(msg.body.user_id));
+  slapp.command('/bday', "edit(.*)", (msg, cmd) => {
+    var user_name = cmd.substring(5);
+    if (user_name != "" && team.isAdmin(msg.body.user_id)) {
+      var user_id = team.getUserIdByUsername(user_name);
+      if (user_id != "") msg.respond(bday_edit_msg(user_id);
+    } else msg.respond(bday_edit_msg(msg.body.user_id));
     return;
   });
   
@@ -417,6 +472,10 @@ module.exports = (app) => {
       case 'done':
         resetSchedule(msg, msg.body.user.id);
         msg.respond({text: "", delete_original: true});
+        return;
+      case 'delete':
+        deleteSchedule(msg, msg.body.user.id);
+        msg.respond(func.generateInfoMsg(lang.msg.bday.deleted));
         return;
     }
     
