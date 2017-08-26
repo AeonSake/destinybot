@@ -1374,7 +1374,7 @@ module.exports = (app) => {
   
   function getNextId () {
     if (poll_db.length == 0) return 0;
-    else return poll_db[poll_db.length].getData().id + 1;
+    else return poll_db[poll_db.length - 1].getData().id + 1;
   }
 
 
