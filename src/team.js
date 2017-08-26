@@ -129,7 +129,6 @@ module.exports = (slapp, kv, config, func) => {
   module.getUserIdByUsername = (user_name) => {
     var arr = [];
     for (var key in user_db) {
-      console.log(key.name);
       if (key.name == user_name) return key.id;
     }
     return "";
