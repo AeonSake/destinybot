@@ -398,10 +398,6 @@ module.exports = (app) => {
       needle.delete('https://beepboophq.com/api/v1/chronos/tasks/' + schedule_id, null, headers, (err, resp) => {
           if (err) console.log(err);
           else if (resp.statusCode !== 200) console.log(resp.statusCode);
-          else {
-            bday_db[user_id].date = {};
-            saveBdayDB();
-          }
       });
     }
   }
@@ -471,6 +467,8 @@ module.exports = (app) => {
         return;
       case 'delete':
         deleteSchedule(msg, msg.body.user.id);
+        bday_db[msg.body.user.id].date = {};
+        saveBdayDB();
         msg.respond(func.generateInfoMsg(lang.msg.bday.deleted));
         return;
     }
@@ -515,13 +513,6 @@ module.exports = (app) => {
   });
   
   // ===== /bday =====
-  
-  slapp.command('/bday', "debug", (msg, cmd) => {
-    bday_db['U2FVCSG72'].date.year = 0;
-    bday_db['U2GMDJ57Z'].date.year = 0;
-    bday_db['U2G0ZEMJS'].date.year = 0;
-    //saveBdayDB();
-  });
   
   slapp.command('/bday', "(.*)", (msg, cmd) => {
     msg.respond(module.bday_main_msg);
