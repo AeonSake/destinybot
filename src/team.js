@@ -131,7 +131,7 @@ module.exports = (slapp, kv, config, func) => {
   module.getUserIdByUsername = (user_name) => {
     var arr = [];
     for (var key in user_db) {
-      if (key.name == user_name) return key.id;
+      if (user_db.hasOwnProperty(key) && user_db[key].name == user_name) return user_db[key].id;
     }
     return "";
   };
