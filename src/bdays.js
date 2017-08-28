@@ -501,10 +501,6 @@ module.exports = (app) => {
     return;
   });
   
-  slapp.command('/bday', 'debug', (msg, cmd) => {
-    console.log(bday_db);
-  });
-  
   // ===== /bday =====
   
   slapp.command('/bday', "(.*)", (msg, cmd) => {
