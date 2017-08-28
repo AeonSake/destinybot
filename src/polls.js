@@ -1146,6 +1146,7 @@ module.exports = (app) => {
       var total_votes = 0;
 
       for (var i in this.answers) {
+        console.log(i);//
         var votes = "";
         var percent = 0;
         
