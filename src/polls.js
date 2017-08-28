@@ -6,7 +6,7 @@
 
 var poll_db = [];
 
-var emoji_num = [":one:", ":two:", ":three:", ":four:", ":five:", ":six:", ":seven:", ":eight:", ":nine:", ":keycap_ten:"];
+var emoji_num = [":zero:", ":one:", ":two:", ":three:", ":four:", ":five:", ":six:", ":seven:", ":eight:", ":nine:", ":keycap_ten:"];
 
 
 
@@ -890,7 +890,7 @@ module.exports = (app) => {
     for (var i in answers) {
       if (answers[i].state != 3) {
         msg_text.attachments.push({
-          text: "*" + emoji_num[msg_text.attachments.length] + " " + answers[i].text + "*",
+          text: numToEmoji(msg_text.attachments.length + 1) + " *" + answers[i].text + "*",
           fallback: answers[i].text,
           callback_id: 'poll_edit_answers_callback',
           actions: [
@@ -1161,9 +1161,8 @@ module.exports = (app) => {
         if (this.answers[i].votes.length == 0) votes = lang.msg.poll.novotes;
         else percent = Math.round((this.answers[i].votes.length / voter_count) * 100);
         
-        var emoji = (i <= 10 ? emoji_num[i] : emoji_num[~~(i / 10)] + emoji_num[i % 10]);
         att_fields.push({
-          value: emoji + " *" + this.answers[i].text + " (" + this.answers[i].votes.length + " | " + percent + "%)*\n" + votes,
+          value: numToEmoji(i + 1) + " *" + this.answers[i].text + " (" + this.answers[i].votes.length + " | " + percent + "%)*\n" + votes,
           short: false
         });
       }
@@ -1196,10 +1195,7 @@ module.exports = (app) => {
       
       if (this.state == 0) {
         for (var i in this.answers) {
-          var j = i % 5;
-          var emoji = (i <= 10 ? emoji_num[i] : emoji_num[~~(i / 10)] + emoji_num[i % 10]);
-        
-          if (j == 0) atts.push({
+          if (i % 5 == 0) atts.push({
             text: "",
             fallback: "",
             callback_id: 'poll_answer_callback',
@@ -1207,7 +1203,7 @@ module.exports = (app) => {
             mrkdwn_in: ['text', 'pretext']
           });
           
-          atts[atts.length - 1].actions.push({name: i, value: this.id, text: emoji, type: 'button'});
+          atts[atts.length - 1].actions.push({name: i, value: this.id, text: numToEmoji(i + 1), type: 'button'});
         }
         
         var prtxt = "";
@@ -1237,11 +1233,11 @@ module.exports = (app) => {
       
       var att_fields = [];
       att_fields[0] = {
-        value: emoji_num[0] + " *<answer1> (2 | 100%)*\n" + "user1, user2",
+        value: emoji_num[1] + " *<answer1> (2 | 100%)*\n" + "user1, user2",
         short: false
       };
       att_fields[1] = {
-        value: emoji_num[1] + " *<answer2> (1 | 50%)*\n" + "user2",
+        value: emoji_num[2] + " *<answer2> (1 | 50%)*\n" + "user2",
         short: false
       };
       
@@ -1258,11 +1254,8 @@ module.exports = (app) => {
             
             if (data.answers[i].state != 3) {
               for (var j in data.answers[i].votes) {
-                if (data.options.names) {
-                  votes += team.getUserName(data.answers[i].votes[j]) + ", ";
-                } else {
-                  votes = (j + 1);
-                }
+                if (data.options.names) votes += team.getUserName(data.answers[i].votes[j]) + ", ";
+                else votes = (j + 1);
               }
 
               if (data.options.names) votes = votes.slice(0, -2);
@@ -1270,20 +1263,20 @@ module.exports = (app) => {
               else votes += " " + lang.wrd.votes;
               if (data.answers[i].votes.length == 0) votes = lang.msg.poll.novotes;
               else percent = Math.round((data.answers[i].votes.length / voter_count) * 100);
-
-              att_fields.push({
-                value: emoji_num[activeanswers] + " *" + data.answers[i].text + " (" + data.answers[i].votes.length + " | " + percent + "%)*\n" + votes,
+              
+              att_fields[i] = {
+                value: numToEmoji(activeanswers + 1) + " *" + data.answers[i].text + " (" + data.answers[i].votes.length + " | " + percent + "%)*\n" + votes,
                 short: false
-              });
+              };
               activeanswers++;
             }
           }
         } else {
           for (var i in data.answers) {
-            att_fields.push({
-              value: emoji_num[i] + " *" + data.answers[i].text + " (0 | 0%)*\n" + lang.msg.poll.novotes,
+            att_fields[i] = {
+              value: numToEmoji(i + 1) + " *" + data.answers[i].text + " (0 | 0%)*\n" + lang.msg.poll.novotes,
               short: false
-            });
+            };
           }
         }
       }
@@ -1376,6 +1369,10 @@ module.exports = (app) => {
   function getNextId () {
     if (poll_db.length == 0) return 0;
     else return poll_db[poll_db.length - 1].getData().id + 1;
+  }
+  
+  function numToEmoji (num) {
+    return (num <= 10 ? emoji_num[num] : emoji_num[~~(num / 10)] + emoji_num[num % 10]);
   }
 
 
