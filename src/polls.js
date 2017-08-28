@@ -1168,7 +1168,7 @@ module.exports = (app) => {
       }
       
       att_fields.push({
-        value: lang.poll.totalvotes.replace("###", total_votes).replace("%%%", voter_count),
+        value: lang.msg.poll.totalvotes.replace("###", total_votes).replace("%%%", voter_count),
         short: false
       });
       
