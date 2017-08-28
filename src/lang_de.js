@@ -177,12 +177,13 @@ let lang = module.exports = {
       entertitle: "Abstimmungs-Titel eingeben: `/poll <title>`",
       entertext: "Abstimmungs-Text eingeben: `/poll <text>` (optional)",
       enteranswer: "Abstimmungs-Antwort eingeben: `/poll <answer>`",
-      enteranswers: "Abstimmungs-Antwort eingeben: `/poll <answer>` (mind. 2, max. 10)\nEs können auch mehrere Antworten auf einmal eingegeben werden: `/poll <answer1>;<answer2>;...`",
+      enteranswers: "Abstimmungs-Antwort eingeben: `/poll <answer>` (mind. 2, max. 99)\nEs können auch mehrere Antworten auf einmal eingegeben werden: `/poll <answer1>;<answer2>;...`",
       entermax: "Wie viele Antworten sollen auswählbar sein? (Standard: 1)",
       shownames: "Sollen Nutzernamen angezeigt werden? (Standard: Ja)",
       
       newpollcreated: "Eine neue Abstimmung wurde erstellt:",
       novotes: "Keine Stimmen",
+      totalvotes: "Gesamt: ### Stimmen von %%% Nutzern",
       pollclosed: "Abstimmung wurde geschlossen.",
       
       editlist: "Liste Ihrer Abstimmungen:",

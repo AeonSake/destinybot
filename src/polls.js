@@ -1143,17 +1143,16 @@ module.exports = (app) => {
     generateAttachment () {
       var att_fields = [];
       var voter_count = this.collectVoters().length;
+      var total_votes = 0;
 
       for (var i in this.answers) {
         var votes = "";
         var percent = 0;
         
         for (var j in this.answers[i].votes) {
-          if (this.options.names) {
-            votes += team.getUserName(this.answers[i].votes[j]) + ", ";
-          } else {
-            votes = (j + 1);
-          }
+          if (this.options.names)votes += team.getUserName(this.answers[i].votes[j]) + ", ";
+          else votes = (j + 1);
+          total_votes++;
         }
 
         if (this.options.names) votes = votes.slice(0, -2);
@@ -1161,12 +1160,18 @@ module.exports = (app) => {
         else votes += " " + lang.wrd.votes;
         if (this.answers[i].votes.length == 0) votes = lang.msg.poll.novotes;
         else percent = Math.round((this.answers[i].votes.length / voter_count) * 100);
-
-        att_fields[i] = {
-          value: emoji_num[i] + " *" + this.answers[i].text + " (" + percent + "%)*\n" + votes,
+        
+        var emoji = (i <= 10 ? emoji_num[i] : emoji_num[~~(i / 10)] + emoji_num[i % 10]);
+        att_fields.push({
+          value: emoji + " *" + this.answers[i].text + " (" + this.answers[i].votes.length + " | " + percent + "%)*\n" + votes,
           short: false
-        };
+        });
       }
+      
+      att_fields.push({
+        value: lang.poll.totalvotes.replace("###", total_votes).replace("%%%", voter_count),
+        short: false
+      });
       
       var temp_state = "";
       if (this.state == 1) temp_state = " [" + lang.wrd.closed + "]";
@@ -1186,42 +1191,38 @@ module.exports = (app) => {
     }
 
     generatePoll () {
-      var prtxt = "";
-      if (this.options.max != 0) {
-        if (this.options.max == 1) prtxt = "Max. " + this.options.max + " " + lang.wrd.vote + " " + lang.wrd.allowed + ".";
-        else prtxt = "Max. " + this.options.max + " " + lang.wrd.votes + " " + lang.wrd.allowed + ".";
-      }
+      var atts = [];
+      atts.push(this.generateAttachment());
       
-      var btn1 = {
-        text: prtxt,
-        fallback: prtxt,
-        callback_id: 'poll_answer_callback',
-        actions: [],
-        mrkdwn_in: ['text', 'pretext']
-      };
-      var btn2 = {
-        text: "",
-        fallback: "",
-        callback_id: 'poll_answer_callback',
-        actions: [],
-        mrkdwn_in: ['text', 'pretext']
-      };
-
-      for (var i in this.answers) {
-        if (i < 5) btn1.actions[i] = {name: i, value: this.id, text: emoji_num[i], type: 'button'};
-        else btn2.actions[i - 5] = {name: i, value: this.id, text: emoji_num[i], type: 'button'};
+      if (this.state == 0) {
+        for (var i in this.answers) {
+          var j = i % 5;
+          var emoji = (i <= 10 ? emoji_num[i] : emoji_num[~~(i / 10)] + emoji_num[i % 10]);
+        
+          if (j == 0) atts.push({
+            text: "",
+            fallback: "",
+            callback_id: 'poll_answer_callback',
+            actions: [],
+            mrkdwn_in: ['text', 'pretext']
+          });
+          
+          atts[atts.length - 1].actions.push({name: i, value: this.id, text: emoji, type: 'button'});
+        }
+        
+        var prtxt = "";
+        if (this.options.max != 0) {
+          if (this.options.max == 1) prtxt = "Max. " + this.options.max + " " + lang.wrd.vote + " " + lang.wrd.allowed + ".";
+          else prtxt = "Max. " + this.options.max + " " + lang.wrd.votes + " " + lang.wrd.allowed + ".";
+        }
+        atts[1].text = prtxt;
+        atts[1].fallback = prtxt;
       }
 
       var msg_text = {
         text: lang.msg.poll.newpollcreated,
-        attachments: [],
+        attachments: atts,
         delete_original: true
-      }
-
-      msg_text.attachments[0] = this.generateAttachment();
-      if (this.state == 0) {
-        msg_text.attachments[1] = btn1;
-        if (btn2.actions.length > 0) msg_text.attachments[2] = btn2;
       }
 
       return msg_text;
@@ -1236,11 +1237,11 @@ module.exports = (app) => {
       
       var att_fields = [];
       att_fields[0] = {
-        value: emoji_num[0] + " *<answer1> (100%)*\n" + "user1, user2",
+        value: emoji_num[0] + " *<answer1> (2 | 100%)*\n" + "user1, user2",
         short: false
       };
       att_fields[1] = {
-        value: emoji_num[1] + " *<answer2> (50%)*\n" + "user2",
+        value: emoji_num[1] + " *<answer2> (1 | 50%)*\n" + "user2",
         short: false
       };
       
@@ -1270,19 +1271,19 @@ module.exports = (app) => {
               if (data.answers[i].votes.length == 0) votes = lang.msg.poll.novotes;
               else percent = Math.round((data.answers[i].votes.length / voter_count) * 100);
 
-              att_fields[i] = {
-                value: emoji_num[activeanswers] + " *" + data.answers[i].text + " (" + percent + "%)*\n" + votes,
+              att_fields.push({
+                value: emoji_num[activeanswers] + " *" + data.answers[i].text + " (" + data.answers[i].votes.length + " | " + percent + "%)*\n" + votes,
                 short: false
-              };
+              });
               activeanswers++;
             }
           }
         } else {
           for (var i in data.answers) {
-            att_fields[i] = {
-              value: emoji_num[i] + " *" + data.answers[i].text + " (0%)*\n" + lang.msg.poll.novotes,
+            att_fields.push({
+              value: emoji_num[i] + " *" + data.answers[i].text + " (0 | 0%)*\n" + lang.msg.poll.novotes,
               short: false
-            };
+            });
           }
         }
       }
@@ -1528,9 +1529,9 @@ module.exports = (app) => {
       if (temp[temp.length - 1].trim() == "") temp = temp.slice(0, -1);
       
       if (!('answers' in data)) data.answers = [];
-      for (var i = 0; i < temp.length && data.answers.length < 10; i++) data.answers.push({text: temp[i].trim(), votes: [], state: 2});
+      for (var i = 0; i < temp.length && data.answers.length < 99; i++) data.answers.push({text: temp[i].trim(), votes: [], state: 2});
       
-      if (data.answers.length < 10) {
+      if (data.answers.length < 99) {
         if (data.answers.length >= 2) var msg_text = poll_create_answers_n_msg;
         else var msg_text = poll_create_answers_msg;
         msg_text.attachments[0] = Poll.generateDummy(data);
@@ -1945,7 +1946,7 @@ module.exports = (app) => {
         if (data.answers[i].state != 3) active++;
       }
       
-      for (var i = 0; i < temp.length && i + active < 10; i++) {
+      for (var i = 0; i < temp.length && i + active < 99; i++) {
         data.answers.push({
           text: temp[i],
           votes: [],
@@ -2090,7 +2091,7 @@ module.exports = (app) => {
     
     if (temp.length >= 3) {
       var data = {id: getNextId(), title: temp[0], text: "", answers: [], creator: msg.body.user_id};
-      for (var i = 1; i < temp.length && data.answers.length < 10; i++) data.answers.push({text: temp[i].trim(), votes: [], state: 2});
+      for (var i = 1; i < temp.length && data.answers.length < 99; i++) data.answers.push({text: temp[i].trim(), votes: [], state: 2});
       
       var msg_text = poll_create_final_msg;
       msg_text.attachments[0] = Poll.generateDummy(data);
