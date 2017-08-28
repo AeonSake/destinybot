@@ -1372,7 +1372,7 @@ module.exports = (app) => {
   }
   
   function numToEmoji (num) {
-    return (num <= 10 ? emoji_num[num] : emoji_num[~~(num / 10)] + emoji_num[num % 10]);
+    return (num <= 10 ? emoji_num[num] : (emoji_num[~~(num / 10)] + emoji_num[num % 10]));
   }
 
 
