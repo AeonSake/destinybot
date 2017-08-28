@@ -1146,7 +1146,6 @@ module.exports = (app) => {
       var total_votes = 0;
 
       for (var i in this.answers) {
-        console.log(i);//
         var votes = "";
         var percent = 0;
         
@@ -1161,6 +1160,9 @@ module.exports = (app) => {
         else votes += " " + lang.wrd.votes;
         if (this.answers[i].votes.length == 0) votes = lang.msg.poll.novotes;
         else percent = Math.round((this.answers[i].votes.length / voter_count) * 100);
+        
+        
+        console.log(i + 1);
         
         att_fields.push({
           value: numToEmoji(i + 1) + " *" + this.answers[i].text + " (" + this.answers[i].votes.length + " | " + percent + "%)*\n" + votes,
