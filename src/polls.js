@@ -1161,11 +1161,8 @@ module.exports = (app) => {
         if (this.answers[i].votes.length == 0) votes = lang.msg.poll.novotes;
         else percent = Math.round((this.answers[i].votes.length / voter_count) * 100);
         
-        
-        console.log(i + 1);
-        
         att_fields.push({
-          value: numToEmoji(i + 1) + " *" + this.answers[i].text + " (" + this.answers[i].votes.length + " | " + percent + "%)*\n" + votes,
+          value: numToEmoji(parseInt(i) + 1) + " *" + this.answers[i].text + " (" + this.answers[i].votes.length + " | " + percent + "%)*\n" + votes,
           short: false
         });
       }
@@ -1206,7 +1203,7 @@ module.exports = (app) => {
             mrkdwn_in: ['text', 'pretext']
           });
           
-          atts[atts.length - 1].actions.push({name: i, value: this.id, text: numToEmoji(i + 1), type: 'button'});
+          atts[atts.length - 1].actions.push({name: i, value: this.id, text: numToEmoji(parseInt(i) + 1), type: 'button'});
         }
         
         var prtxt = "";
@@ -1277,7 +1274,7 @@ module.exports = (app) => {
         } else {
           for (var i in data.answers) {
             att_fields[i] = {
-              value: numToEmoji(i + 1) + " *" + data.answers[i].text + " (0 | 0%)*\n" + lang.msg.poll.novotes,
+              value: numToEmoji(parseInt(i) + 1) + " *" + data.answers[i].text + " (0 | 0%)*\n" + lang.msg.poll.novotes,
               short: false
             };
           }
@@ -1375,11 +1372,6 @@ module.exports = (app) => {
   }
   
   function numToEmoji (num) {
-    console.log(num <= 10);
-    console.log(emoji_num[num]);
-    console.log(emoji_num[~~(num / 10)]);
-    console.log(emoji_num[num % 10]);
-    
     return (num <= 10 ? emoji_num[num] : (emoji_num[~~(num / 10)] + emoji_num[num % 10]));
   }
 
