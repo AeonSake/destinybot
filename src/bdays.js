@@ -198,12 +198,26 @@ module.exports = (app) => {
         options: year_options
       }
     ];
-    if (('day' in date) && ('month' in date) && ('year' in date)) actions.push({
-      name: 'done',
-      text: lang.btn.done,
-      type: 'button',
-      style: 'primary'
-    });
+    if (('day' in date) && ('month' in date) && ('year' in date)) {
+      actions.push({
+        name: 'done',
+        text: lang.btn.done,
+        type: 'button',
+        style: 'primary'
+      });
+      actions.push({
+        name: 'delete',
+        text: lang.btn.delete,
+        type: 'button',
+        style: 'danger',
+        confirm: {
+          title: lang.msg.confirm,
+          text: lang.msg.bday.confirmdelete,
+          ok_text: lang.btn.yes,
+          dismiss_text: lang.btn.no
+        }
+      });
+    }
     
     if ('day' in date) actions[0].text = date.day;
     if ('month' in date) actions[1].text = date.month + 1;
@@ -220,26 +234,6 @@ module.exports = (app) => {
           fallback: lang.msg.bday.edit,
           callback_id: 'bday_edit_callback',
           actions: actions,
-          mrkdwn_in: ['text', 'pretext']
-        },
-        {
-          text: "",
-          fallback: "",
-          callback_id: 'bday_edit_callback',
-          actions: [
-            {
-              name: 'delete',
-              text: lang.btn.delete,
-              type: 'button',
-              style: 'danger',
-              confirm: {
-                title: lang.msg.confirm,
-                text: lang.msg.bday.confirmdelete,
-                ok_text: lang.btn.yes,
-                dismiss_text: lang.btn.no
-              }
-            }
-          ],
           mrkdwn_in: ['text', 'pretext']
         }
       ],
@@ -306,6 +300,17 @@ module.exports = (app) => {
         curr = moment();
     
     return bday.diff(curr, 'months', true) > 0 && bday.diff(curr, 'months', true) <= 1;
+  }
+  
+  function askUsers () {
+    var users = team.getUserList();
+    for (var i in users) {
+      if (!bday_db.hasOwnProperty(users[i]) && team.isActive(users[i]) && !team.isBot(users[i])) {
+        bday_db[users[i]] = {date: {}, schedule_id: ""};
+        team.sendDM(users[i], bday_edit_msg(users[i]));
+      }
+    }
+    saveBdayDB();
   }
   
   
@@ -480,28 +485,12 @@ module.exports = (app) => {
   // ===== /bday init =====
   
   slapp.command('/bday', "init", (msg, cmd) => {
-    if (msg.body.user_id == config.admin_id) {
-      var users = team.getUserList();
-      for (var i in users) {
-        if (!bday_db.hasOwnProperty(users[i]) && team.isActive(users[i]) && !team.isBot(users[i])) {
-          bday_db[users[i]] = {date: {}, schedule_id: ""};
-          team.sendDM(users[i], bday_edit_msg(users[i]));
-        }
-      }
-      saveBdayDB();
-    }
+    if (msg.body.user_id == config.admin_id) askUsers();
     return;
   });
   
   slapp.event('team_join', (msg) => {
-  var users = team.getUserList();
-    for (var i in users) {
-      if (!bday_db.hasOwnProperty(users[i]) && team.isActive(users[i]) && !team.isBot(users[i])) {
-        bday_db[users[i]] = {date: {}, schedule_id: ""};
-        team.sendDM(users[i], bday_edit_msg(users[i]));
-      }
-    }
-    saveBdayDB();
+    setTimeout(askUsers, 3000);
     return;
   });
   
@@ -510,6 +499,10 @@ module.exports = (app) => {
   slapp.command('/bday', "help", (msg, cmd) => {
     msg.respond(func.generateInfoMsg(lang.msg.bday.help));
     return;
+  });
+  
+  slapp.command('/bday', 'debug', (msg, cmd) => {
+    console.log(bday_db);
   });
   
   // ===== /bday =====
