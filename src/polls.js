@@ -1150,14 +1150,12 @@ module.exports = (app) => {
         var percent = 0;
         
         for (var j in this.answers[i].votes) {
-          if (this.options.names)votes += team.getUserName(this.answers[i].votes[j]) + ", ";
-          else votes = (j + 1);
+          votes += team.getUserName(this.answers[i].votes[j]) + ", ";
           total_votes++;
         }
 
         if (this.options.names) votes = votes.slice(0, -2);
-        else if (votes == 1) votes += " " + lang.wrd.vote;
-        else votes += " " + lang.wrd.votes;
+        else votes = this.answers[i].votes.length + " " + (this.answers[i].votes.length == 1 ? lang.wrd.vote : lang.wrd.votes);
         if (this.answers[i].votes.length == 0) votes = lang.msg.poll.novotes;
         else percent = Math.round((this.answers[i].votes.length / voter_count) * 100);
         
@@ -1252,15 +1250,21 @@ module.exports = (app) => {
             var votes = "";
             var percent = 0;
             
+            for (var j in this.answers[i].votes) {
+          votes += team.getUserName(this.answers[i].votes[j]) + ", ";
+          total_votes++;
+        }
+
+        if (this.options.names) votes = votes.slice(0, -2);
+        else votes = this.answers[i].votes.length + " " + (votes == 1 ? lang.wrd.vote : lang.wrd.votes);
+            
             if (data.answers[i].state != 3) {
               for (var j in data.answers[i].votes) {
-                if (data.options.names) votes += team.getUserName(data.answers[i].votes[j]) + ", ";
-                else votes = (j + 1);
+                votes += team.getUserName(data.answers[i].votes[j]) + ", ";
               }
 
               if (data.options.names) votes = votes.slice(0, -2);
-              else if (votes == 1) votes += " " + lang.wrd.vote;
-              else votes += " " + lang.wrd.votes;
+              else votes = data.answers[i].votes.length + " " + (data.answers[i].votes.length == 1 ? lang.wrd.vote : lang.wrd.votes);
               if (data.answers[i].votes.length == 0) votes = lang.msg.poll.novotes;
               else percent = Math.round((data.answers[i].votes.length / voter_count) * 100);
               
