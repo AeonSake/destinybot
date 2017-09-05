@@ -1250,8 +1250,8 @@ module.exports = (app) => {
             var votes = "";
             var percent = 0;
 
-            if (this.options.names) votes = votes.slice(0, -2);
-            else votes = this.answers[i].votes.length + " " + (votes == 1 ? lang.wrd.vote : lang.wrd.votes);
+            if (data.options.names) votes = votes.slice(0, -2);
+            else votes = data.answers[i].votes.length + " " + (votes == 1 ? lang.wrd.vote : lang.wrd.votes);
             
             if (data.answers[i].state != 3) {
               for (var j in data.answers[i].votes) {
