@@ -64,7 +64,7 @@ module.exports = (slapp, kv, config, func) => {
             deleted: data.members[i].deleted,
             is_admin: data.members[i].is_admin,
             is_owner: data.members[i].is_owner,
-            is_bot: ata.members[i].is_bot
+            is_bot: data.members[i].is_bot
           };
         }
         
