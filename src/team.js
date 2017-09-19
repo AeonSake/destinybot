@@ -52,9 +52,10 @@ module.exports = (slapp, kv, config, func) => {
           user_db[data.members[i].id] = {
             id: data.members[i].id,
             name: data.members[i].name,
-            first_name: data.members[i].profile.first_name,
-            last_name: data.members[i].profile.last_name,
-            full_name: data.members[i].profile.first_name + " " + data.members[i].profile.last_name,
+            first_name: data.members[i].profile.first_name || "",
+            last_name: data.members[i].profile.last_name || "",
+            full_name: data.members[i].profile.real_name,
+            display_name: data.members[i].profile.display_name,
             tz_offset: data.members[i].tz_offset,
             color: data.members[i].color,
             avatar_24: data.members[i].profile.image_24,
@@ -63,7 +64,7 @@ module.exports = (slapp, kv, config, func) => {
             deleted: data.members[i].deleted,
             is_admin: data.members[i].is_admin,
             is_owner: data.members[i].is_owner,
-            is_bot: ('bot_id' in data.members[i].profile)
+            is_bot: ata.members[i].is_bot
           };
         }
         

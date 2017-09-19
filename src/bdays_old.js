@@ -25,8 +25,6 @@ module.exports = (app) => {
   
   var module = {};
   
-  //if (!config.post_ch.hasOwnProperty(bday)) config.post_ch.bday = ""; //TODO
-  
   
   
 // ==============================
@@ -92,12 +90,10 @@ module.exports = (app) => {
       var date = bday_db[key].date;
       if ('day' in date && 'month' in date && 'year' in date) {
         var user = team.getUserInfo(key);
-        var date_text = (parseInt(date.year) != 0
-          ? moment(date).format("D.M.YYYY") + " (" + calcAge(user.id) + ")"
-          : moment(date).format("D.M."));
+        var date_text = (parseInt(date.year) != 0 ? moment(date).format("D.M.YYYY") + " (" + calcAge(user.id) + ")" : moment(date).format("D.M."));
         
         users.push({
-          title: user.full_name + " (" + user.display_name + ")",
+          title: user.full_name + " (" + user.name + ")",
           value: date_text,
           short: true
         });
@@ -129,14 +125,12 @@ module.exports = (app) => {
     var users = [];
     for (var key in bday_db) {
       var date = bday_db[key].date;
-      if ('day' in date && 'month' in date && 'year' in date && calcSoon(key)) {
+      if ('day' in date && 'month' in date && 'year' in date && moment() < moment(date).year(moment().year()) && moment().add(1, 'M') >= moment(date).year(moment().year())) {
         var user = team.getUserInfo(key);
-        var age_text = (parseInt(date.year) != 0
-          ? calcBday(user.id).format("D.M.") + " (" + (calcAge(user.id) + 1) + ")"
-          : "");
+        var age_text = (parseInt(date.year) != 0 ? calcBday(user.id).format("D.M.") + " (" + (calcAge(user.id) + 1) + ")" : "")
         
         users.push({
-          title: user.full_name + " (" + user.display_name + ")",
+          title: user.full_name + " (" + user.name + ")",
           value: age_text,
           short: true
         });
@@ -179,7 +173,7 @@ module.exports = (app) => {
     
     for (var i = 1; i <= day_max; i++) day_options.push({text: i, value: i});
     
-    for (var i = 0; i <= 11; i++) month_options.push({text: lang.wrd.months[i], value: i});
+    for (var i = 0; i <= 11; i++) month_options.push({text: i + 1, value: i});
     
     year_options.push({text: lang.btn.bday.noyear, value: 0});
     for (var i = parseInt(moment().format("YYYY")); i > 1900; i--) year_options.push({text: i, value: i});
@@ -253,10 +247,7 @@ module.exports = (app) => {
   function bday_reminder_msg (user_id) {
     var user = team.getUserInfo(user_id);
     var msg_text = (bday_db[user_id].date.year != 0 ? lang.msg.bday.reminder : lang.msg.bday.reminderalt);
-    var user_name = (user.first_name != "" ? user.first_name : user.display_name);
-    
-    
-    msg_text = msg_text.replace("###", "*" + user_name + "* (<@" + user.id + ">)").replace("%%%", parseInt(moment().format("YYYY")) - parseInt(bday_db[user_id].date.year)); //todo: random msg
+    msg_text = msg_text.replace("###", "*" + user.first_name + "* (<@" + user.id + ">)").replace("%%%", parseInt(moment().format("YYYY")) - parseInt(bday_db[user_id].date.year));
     
     return {
       text: "",
@@ -274,6 +265,22 @@ module.exports = (app) => {
     }
   }
   
+  // ===== MISC =====
+  
+  var bday_dismiss_att = {
+    text: "",
+    fallback: "",
+    callback_id: 'dismiss_callback',
+    actions: [
+      {
+        name: 'dismiss',
+        text: lang.btn.dismiss,
+        type: 'button'
+      }
+    ],
+    mrkdwn_in: ['text', 'pretext']
+  };
+  
   
   
 // =============================
@@ -289,13 +296,10 @@ module.exports = (app) => {
   }
   
   function calcSoon (user_id) {
-    var curr = moment(bday_db[user_id].date);
-    if (parseInt(bday_db[user_id].date.year) != 0) {
-      var bday = calcBday(user_id);
-      return bday.diff(curr, 'months', true) > 0 && bday.diff(curr, 'months', true) <= 1;
-    } else {
-      //todo: calc for hidden year
-    }
+    var bday = calcBday(user_id),
+        curr = moment();
+    
+    return bday.diff(curr, 'months', true) > 0 && bday.diff(curr, 'months', true) <= 1;
   }
   
   function askUsers () {
@@ -308,8 +312,6 @@ module.exports = (app) => {
     }
     saveBdayDB();
   }
-  
-  askUsers();
   
   
   
@@ -399,12 +401,8 @@ module.exports = (app) => {
       };
 
       needle.delete('https://beepboophq.com/api/v1/chronos/tasks/' + schedule_id, null, headers, (err, resp) => {
-        if (err) console.log(err);
-        else if (resp.statusCode !== 200) console.log(resp.statusCode);
-        else {
-          bday_db[user_id].schedule_id = "";
-          saveBdayDB();
-        }
+          if (err) console.log(err);
+          else if (resp.statusCode !== 200) console.log(resp.statusCode);
       });
     }
   }
@@ -421,7 +419,7 @@ module.exports = (app) => {
       };
 
       needle.delete('https://beepboophq.com/api/v1/chronos/tasks/' + schedule_id, null, headers, (err, resp) => {
-        if (err) console.log(err);
+          if (err) console.log(err);
           else if (resp.statusCode !== 200) console.log(resp.statusCode);
           else setSchedule(msg, user_id);
       });
@@ -433,7 +431,21 @@ module.exports = (app) => {
 // ==============================
 // ========== COMMANDS ==========
 // ==============================
-
+  
+  // ===== /bday list =====
+  
+  slapp.command('/bday', "list", (msg, cmd) => {
+    msg.respond(bday_list_msg());
+    return;
+  });
+  
+  // ===== /bday soon =====
+  
+  slapp.command('/bday', "soon", (msg, cmd) => {
+    msg.respond(bday_soon_msg());
+    return;
+  });
+  
   // ===== /bday edit =====
   
   slapp.command('/bday', "edit", (msg, cmd) => {
@@ -470,17 +482,15 @@ module.exports = (app) => {
     return;
   });
   
-  // ===== /bday list =====
+  // ===== /bday init =====
   
-  slapp.command('/bday', "list", (msg, cmd) => {
-    msg.respond(bday_list_msg());
+  slapp.command('/bday', "init", (msg, cmd) => {
+    if (msg.body.user_id == config.admin_id) askUsers();
     return;
   });
   
-  // ===== /bday soon =====
-  
-  slapp.command('/bday', "soon", (msg, cmd) => {
-    msg.respond(bday_soon_msg());
+  slapp.event('team_join', (msg) => {
+    setTimeout(askUsers, 3000);
     return;
   });
   
@@ -516,13 +526,6 @@ module.exports = (app) => {
         break;
     }
     msg.respond(msg_text);
-    return;
-  });
-  
-  // ===== Ask users =====
-  
-  slapp.event('team_join', (msg) => {
-    setTimeout(askUsers, 3000);
     return;
   });
   
