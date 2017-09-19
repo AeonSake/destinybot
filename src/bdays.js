@@ -86,12 +86,9 @@ module.exports = (app) => {
   
   function bday_list_msg () {
     var users = [];
-    console.log(bday_db);
     
     for (var key in bday_db) {
-      console.log(key);//
       var date = bday_db[key].date;
-      console.log(date);//
       if ('day' in date && 'month' in date && 'year' in date) {
         var user = team.getUserInfo(key);
         var date_text = (parseInt(date.year) != 0 ? moment(date).format("D.M.YYYY") + " (" + calcAge(user.id) + ")" : moment(date).format("D.M."));
@@ -495,7 +492,7 @@ module.exports = (app) => {
   });
   
   slapp.event('team_join', (msg) => {
-    setTimeout(askUsers, 3000);
+    setTimeout(askUsers, 10000);
     return;
   });
   
