@@ -43,7 +43,7 @@ var app = {
   team
 };
 
-require('./src/destiny')(app);
+//require('./src/destiny')(app);
 require('./src/events')(app);
 require('./src/polls')(app);
 require('./src/bdays')(app);
