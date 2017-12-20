@@ -4,8 +4,11 @@
   "description": "DestinyBot",
   "author": "AeonSake",
   "main": "main.js",
-    "scripts": {
+  "scripts": {
     "start": "node --expose_gc main.js"
+  },
+  "engines": {
+    "node": "^6.2.0"
   },
   "dependencies": {
     "beepboop-slapp-presence-polyfill": "^1.1.1",
